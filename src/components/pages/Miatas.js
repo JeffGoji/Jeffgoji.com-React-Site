@@ -18,7 +18,7 @@ const Miatas = () => {
                                 <img src={NA} className="card-img-top img-fluid" alt="NA Miata" />
                                 <div className="card-body">
                                     <h5 className="card-title text-center">NA6 Miata</h5>
-                                    <p clasNames="card-text">I bought this NA6 in 2003 as my first car and it has been with me ever since. Primarily used as a daily driver it has been heavily modified including bushings, suspension, exhaust, intake, and a few other goodies that make it a fun and reliable daily driver that still gets complimented daily from fellow auto enthusiast.</p>
+                                    <p className="card-text">I bought this NA6 in 2003 as my first car and it has been with me ever since. Primarily used as a daily driver it has been heavily modified including bushings, suspension, exhaust, intake, and a few other goodies that make it a fun and reliable daily driver that still gets complimented daily from fellow auto enthusiast.</p>
 
                                 </div>
                                 <div className="card-footer">
@@ -57,8 +57,6 @@ const Miatas = () => {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>

@@ -3,11 +3,11 @@ import data from '../../assets/Data/MsmBlog.json';
 function MsmBlog() {
 
     const msmBlogList = data.map((data) =>
-        <div class="col-lg-10 col-md-10 col-sm-12 mt-5" key={data.id}>
+        <div className="col-lg-10 col-md-10 col-sm-12 mt-5" key={data.id}>
             <div className='card bg-dark rounded p-2 img-shadow-red '>
-                <center>
-                    <img src={data.picture} class="img-fluid rounded" alt="this post's pic" />
-                </center>
+                <div className='text-center'>
+                    <img src={data.picture} className="img-fluid rounded" alt="this post's pic" />
+                </div>
                 <ul className='mt-3 rounded'>
                     <li className='p-1 rounded'>Date: {data.date}</li>
                     <li className='p-1 rounded'>Mileage: {data.mileage}  miles</li>
@@ -15,11 +15,11 @@ function MsmBlog() {
                 </ul>
                 <hr />
                 <p style={{ whiteSpace: "pre-line" }}>{data.entry}</p>
-                <p>
-                    <center><a href="#top">Back to top</a></center>
-                </p>
 
-                <hr class="bloghr">
+                <p className='text-center'><a href="#top">Back to top</a></p>
+
+
+                <hr className="bloghr">
                 </hr>
             </div>
         </div>
@@ -27,7 +27,7 @@ function MsmBlog() {
 
     return (
         <div className='row justify-content-center'>
-            <h2 className='text-center mt-5'>Mazdaspeed Miata Blog</h2>
+            <h2 className='text-center text-shadow bg-dark p-3'>Mazdaspeed Miata Blog</h2>
             {msmBlogList}
         </div>
     )
