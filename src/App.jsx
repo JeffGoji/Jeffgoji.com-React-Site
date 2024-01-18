@@ -17,9 +17,11 @@ import Home from './components/pages/Home';
 import Garage from './components/Garage';
 import Intro from './components/pages/Intro';
 import Fireball from './components/blog/Fireball';
+import Gallery from "./components/Gallery";
 import Footer from './components/Footer'
 
 import './assets/css/style.css';
+
 
 function App() {
   return (
@@ -36,6 +38,7 @@ function App() {
           <Route path="msm-blog" element={<MsmBlog />} />
           <Route path="youtube" element={<YouTube />} />
           <Route path="fireball" element={<Fireball />} />
+          <Route path="gallery" element={<Gallery />} />
 
         </Routes>
         <Footer />

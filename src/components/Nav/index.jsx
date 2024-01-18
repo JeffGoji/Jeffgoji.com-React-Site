@@ -24,6 +24,7 @@ function Nav() {
                         <li><NavLink className="dropdown-item" to="msm-blog">2004 Mazdaspeed MX5</NavLink></li>
                         <li><a className="dropdown-item" href="#">2013 Mazda MX5</a></li>
                         <li><NavLink className="dropdown-item" to="fireball">Fireball</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="gallery">Gallery</NavLink></li>
                     </ul>
                 </li>
                 {/* <li className="nav-item">
