@@ -1,0 +1,52 @@
+{
+  "cars": [
+    {
+      "id": 1,
+      "make": "Mazda",
+      "model": "NA6 Miata",
+      "year": 1991,
+      "description": "I bought this NA6 in 2003 as my first car and it has been with me ever since. Primarily used as a daily driver it has been heavily modified including bushings, suspension, exhaust, intake, and a few other goodies that make it a fun and reliable daily driver that still gets complimented daily from fellow auto enthusiast.",
+      "name": "Miyoshi"
+    },
+    {
+      "id": 2,
+      "make": "Mazdaspeed",
+      "model": "NB Mazdaspeed",
+      "year": 2004,
+      "description": "This 2004 Mazdaspeed Miata was my second car. It served as a daily driver until 2012 when I began modifying it for Solo Autocross racing. With a nice bump and power, wide wheels and tires and stiff racing suspension, it has won two SCCA championships locally with me driving and is always competing for fastest time of day at BMW and PCA events.",
+      "name": "Kiryu"
+    },
+    {
+      "id": 3,
+      "make": "Mazda",
+      "model": "NC Club",
+      "year": 2013,
+      "description": "One of my more compulsive buys, this was my third Miata and one of my absolute favorite cars of all time. The only modifications it ever needed was a new catback exhaust and a set of Progress swaybars. The power retractable hardtop, larger 2.0 engine, and refined interior made it the best Miata for traveling I have ever driven. I toured the United States coast to coast in it back in 2015.",
+      "name": "Ryoko"
+    },
+    {
+      "id": 4,
+      "make": "Mazda",
+      "model": "ND GTS RF",
+      "year": 2023,
+      "description": "My fourth Miata. This 2023 ND GTS RF is my newest Miata in the garage and is a little bit of a departure from my norm. I wanted to give the Retractable Fastback design a shot instead of my usual soft-top regime, and I have been pleasantly surprised as it is proving to be not just an amazingly fun car to drive, but an economical one at that.",
+      "name": "Kasumi"
+    },
+    {
+      "id": 5,
+      "make": "Chevrolet",
+      "model": "C8 Corvette Z51",
+      "year": 2023,
+      "description": "Our first non-Miata in 17 years, this 2023 C8 Corvette is a blast to drive and is a huge leap forward in performance and technology. We decided on the name 'Panda' with its white and black color scheme. The current plan is to keep it stock and use it for Autocross and road trips.",
+      "name": "Panda"
+    },
+    {
+      "id": 6,
+      "make": "Porsche",
+      "model": "Cayenne Coupe",
+      "year": 2022,
+      "description": "This 2022 Porsche Cayenne Coupe is my beautiful wife's daily driver. It is a blast to drive and has a gracious amount of power from it's 3.6 liter V6. She decided on the name 'Fireball' with its red and black color scheme. The current plan is to keep it stock for daily driving and road trips.",
+      "name": "Fireball"
+    }
+  ]
+}
