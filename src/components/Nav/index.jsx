@@ -14,10 +14,10 @@ function Nav() {
                     <a className="nav-link active" aria-current="page" href="#">Menu</a>
                 </li> */}
                 <li className="nav-item dropdown bg-dark">
-                    <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">MENU</a>
+                    <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="/" role="button" aria-expanded="false">MENU</a>
                     <ul className="dropdown-menu">
-                        <li><a className="dropdown-item"
-                            href="#">Home</a></li>
+                        <li><NavLink className="dropdown-item"
+                            to="/">Home</NavLink></li>
                         <li><a className="dropdown-item" href="#">Site News</a></li>
                         <li><NavLink className='dropdown-item' to="miatas">Mazda Miatas</NavLink></li>
                         <li><NavLink className="dropdown-item" to="na-miata">1991 Mazda MX5</NavLink></li>

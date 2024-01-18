@@ -5,14 +5,14 @@ import images from "./images";
 
 import "react-image-gallery/styles/css/image-gallery.css";
 
-function EastCoast15() {
+function Yellowstone15() {
 
 
     return (
-        <div className="Gallery">
+        <div className="Gallery mt-2">
             <ReactImageGallery items={images} className='img-fluid' />
         </div>
     );
 }
 
-export default EastCoast15;
+export default Yellowstone15;

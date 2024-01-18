@@ -1,11 +1,12 @@
-import NC from "./NC/EastCoast15"
+import GallerySwitcher from "./NC"
+
 
 function Gallery() {
     return (
         <div className="container-fluid">
-            <div className="row justify-content-center mt-2 bg-dark rounded">
+            <div className="row justify-content-center mt-1 bg-dark rounded">
                 <div className="col-12 col-md-12 col-lg-8">
-                    <NC />
+                    <GallerySwitcher />
                 </div>
             </div>
         </div>
