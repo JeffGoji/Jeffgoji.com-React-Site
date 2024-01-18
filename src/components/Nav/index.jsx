@@ -18,8 +18,8 @@ function Nav() {
                     <ul className="dropdown-menu">
                         <li><NavLink className="dropdown-item"
                             to="/">Home</NavLink></li>
-                        <li><a className="dropdown-item" href="#">Site News</a></li>
-                        <li><NavLink className='dropdown-item' to="miatas">Mazda Miatas</NavLink></li>
+                        {/* <li><a className="dropdown-item" href="#">Site News</a></li> */}
+                        {/* <li><NavLink className='dropdown-item' to="miatas">Mazda Miatas</NavLink></li> */}
                         <li><NavLink className="dropdown-item" to="na-miata">1991 Mazda MX5</NavLink></li>
                         <li><NavLink className="dropdown-item" to="msm-blog">2004 Mazdaspeed MX5</NavLink></li>
                         <li><a className="dropdown-item" href="#">2013 Mazda MX5</a></li>
