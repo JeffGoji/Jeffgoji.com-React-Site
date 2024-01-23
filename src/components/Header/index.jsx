@@ -4,7 +4,7 @@ function Header() {
 
     return (
 
-        <header className='row'>
+        <header className='container-fluid p-0'>
             <Nav />
         </header >
 

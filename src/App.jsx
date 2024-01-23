@@ -26,7 +26,7 @@ import './assets/css/style.css';
 function App() {
   return (
     <BrowserRouter>
-      <div className='container-fluid'>
+      <div className='container-fluid m-0 p-0'>
         <Header />
         <Routes>
 

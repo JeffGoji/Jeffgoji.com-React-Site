@@ -1,7 +1,5 @@
 import { NavLink } from 'react-router-dom'
 
-
-
 //Import logo:
 import logo from '../../assets/images/logo.gif'
 

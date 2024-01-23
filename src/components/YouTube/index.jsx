@@ -2,8 +2,8 @@
 function YouTube() {
     return (
         <div className="container-fluid mt-4 pt-4 pb-4 bg-black text-white">
-            <div className="row">
-                <div className="row">
+            <div className="row justify-content-center">
+                <div className="row justify-content-center">
                     <div className="col-lg-4 col-md-4 col-sm-4">
                         <hr />
                         <hr />
@@ -16,7 +16,7 @@ function YouTube() {
                         <hr />
                     </div>
                 </div>
-                <div className='row text-center'>
+                <div className='row justify-content-center p-0 m-0'>
                     <div className="col-lg-4 col-md-4 col-sm-12">
                         <div className="ratio ratio-16x9">
                             <iframe src="https://www.youtube.com/embed/Q2B8mA3vgP0?si=tQI2IKl5x7PlfD8y" title="Houston BMW/PCA Autocross" allowFullScreen={true}></iframe>

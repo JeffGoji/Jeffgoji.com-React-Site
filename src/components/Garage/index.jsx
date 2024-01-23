@@ -23,7 +23,7 @@ import Cards from './Cards';
 const Garage = () => {
     return (
         <div className="container-fluid mt-4">
-            <div className="row">
+            <div className="row justify-content-center p-0 m-0">
                 <div className="col-lg-5 col-md-4 col-sm-4">
                     <hr />
                     <hr />
@@ -36,7 +36,7 @@ const Garage = () => {
                     <hr />
                 </div>
             </div>
-            <div className="row">
+            <div className="row p-0 m-0">
                 {carsData.cars.map((car) => (
                     <Cards
                         key={car.id}
