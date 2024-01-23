@@ -8,6 +8,7 @@ import ND from '../../assets/images/nd/nd-002.jpg';
 import C8 from '../../assets/images/c8/c8-002.jpg';
 import Fireball from '../../assets/images/fireball/fireball-2.jpg';
 
+
 // Create a map of card IDs to images
 const cardImages = {
     1: NA,
