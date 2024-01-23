@@ -3,7 +3,7 @@ import data from '../../assets/Data/MsmBlog.json';
 function MsmBlog() {
 
     const msmBlogList = data.map((data) =>
-        <div className='row justify-content-center mb-2' key={data.id}>
+        <div className='row justify-content-center mb-4' key={data.id}>
             <div className="col-lg-6 col-md-10 col-sm-12 mt-3">
                 <div className='card bg-dark rounded p-2 img-shadow-red  text-white'>
                     <div className='text-center'>
@@ -26,7 +26,7 @@ function MsmBlog() {
     )
 
     return (
-        <div className='row justify-content-center text-white mt-1'>
+        <div className='row justify-content-center text-white mt-0 bg-primary-1'>
             <div className='col-lg-9 col-md-12 col-sm-12'>
                 <h2 className='text-center text-shadow text-black'>Mazdaspeed Miata Blog</h2>
                 {msmBlogList}
