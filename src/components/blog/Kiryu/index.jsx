@@ -3,7 +3,9 @@ import data from '../../../assets/Data/MsmBlog.json';
 
 function MsmBlog() {
 
-    const msmBlogList = data.map((data) =>
+    const msmBlogList = [...data]
+        .sort((a, b) => (b.id - a.id))
+        .map((data) =>
         <Row className='justify-content-center mb-4' key={data.id}>
             <Col lg={6} md={10} sm={12} className="mt-3">
                 <Card className='bg-dark rounded p-2 img-shadow-red text-white'>
