@@ -8,7 +8,6 @@ import {
 
 //Pages to import:
 import Header from './components/Header';
-import Miatas from './components/pages/Miatas'
 import NaMiata from './components/pages/NaMiata'
 import MsmBlog from './components/blog/Kiryu'
 import YouTube from './components/YouTube'
@@ -33,7 +32,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="garage" element={<Garage />} />
           <Route path="intro" element={<Intro />} />
-          <Route path="miatas" element={<Miatas />} />
           <Route path="na-miata" element={<NaMiata />} />
           <Route path="msm-blog" element={<MsmBlog />} />
           <Route path="youtube" element={<YouTube />} />
