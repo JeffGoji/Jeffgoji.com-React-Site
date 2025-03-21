@@ -11,7 +11,6 @@ import Header from './components/Header';
 import NaMiata from './components/pages/NaMiata'
 import MsmBlog from './components/blog/Kiryu'
 import YouTube from './components/YouTube'
-// import Nav from './components/Nav';
 import Home from './components/pages/Home';
 import Garage from './components/Garage';
 import Intro from './components/pages/Intro';
