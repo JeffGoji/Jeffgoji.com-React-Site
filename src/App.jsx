@@ -10,7 +10,7 @@ import {
 import Header from './components/Header';
 import Miatas from './components/pages/Miatas'
 import NaMiata from './components/pages/NaMiata'
-import MsmBlog from './components/MsmBlog'
+import MsmBlog from './components/blog/Kiryu'
 import YouTube from './components/YouTube'
 // import Nav from './components/Nav';
 import Home from './components/pages/Home';

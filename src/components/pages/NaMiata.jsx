@@ -1,10 +1,11 @@
+/* eslint-disable react/no-unescaped-entities */
 import Pic2 from '../../assets/images/na/12370920_10207027821827335_8393944522748518224_o.jpg'
 
 const NaMiata = () => {
     return (
         <div className='container-fluid na-background'>
             <div className='row mb-5'>
-                <h1 className='text-center mb-5'>1991 NA 1.6 Miata - "Miyoshi"</h1>
+                <h1 className='text-center mb-5'>1991 NA 1.6 Miata - &quot;Miyoshi&quot;</h1>
                 <div className="col-lg-6 col-sm-12 mt-5">
                     <p>I bought this 1991 Miata on February 23rd 2003, and I'm the third owner. The car is pretty amazing
                     </p>
