@@ -10,11 +10,13 @@ import {
 import Header from './components/Header';
 import NaMiata from './components/pages/NaMiata'
 import MsmBlog from './components/blog/Kiryu'
+import NDBlog from "./components/blog/Kasumi";
 import YouTube from './components/YouTube'
 import Home from './components/pages/Home';
 import Garage from './components/Garage';
 import Intro from './components/pages/Intro';
 import Fireball from './components/blog/Fireball';
+import C8Blog from "./components/blog/Panda";
 import Gallery from "./components/Gallery";
 import Footer from './components/Footer'
 
@@ -33,6 +35,8 @@ function App() {
           <Route path="intro" element={<Intro />} />
           <Route path="na-miata" element={<NaMiata />} />
           <Route path="msm-blog" element={<MsmBlog />} />
+          <Route path="nd-blog" element={<NDBlog />} />
+          <Route path="c8-blog" element={<C8Blog />} />
           <Route path="youtube" element={<YouTube />} />
           <Route path="fireball" element={<Fireball />} />
           <Route path="gallery" element={<Gallery />} />

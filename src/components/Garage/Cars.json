@@ -34,7 +34,7 @@
       "year": 2023,
       "description": "My fourth Miata. This 2023 ND GTS RF is my newest Miata in the garage and is a little bit of a departure from my norm. I wanted to give the Retractable Fastback design a shot instead of my usual soft-top regime, and I have been pleasantly surprised as it is proving to be not just an amazingly fun car to drive, but an economical one at that.",
       "name": "Kasumi",
-      "bloglink": "/"
+      "bloglink": "../nd-blog"
     },
     {
       "id": 5,
@@ -43,7 +43,7 @@
       "year": 2023,
       "description": "Our first non-Miata in 17 years, this 2023 C8 Corvette is a blast to drive and is a huge leap forward in performance and technology. We decided on the name 'Panda' with its white and black color scheme. The current plan is to keep it stock and use it for Autocross and road trips.",
       "name": "Panda",
-      "bloglink": "/"
+      "bloglink": "../c8-blog"
     },
     {
       "id": 6,

@@ -1,9 +1,9 @@
 import { Container, Row, Col, Card, Image, ListGroup } from 'react-bootstrap';
-import data from '../../../assets/Data/MsmBlog.json';
+import data from '../../../assets/Data/c8Blog.json';
 
-function MsmBlog() {
+function C8Blog() {
 
-    const msmBlogList = [...data]
+    const c8BlogList = [...data]
         .sort((a, b) => (b.id - a.id))
         .map((data) =>
             <Row className='justify-content-center mb-4' key={data.id}>
@@ -30,12 +30,12 @@ function MsmBlog() {
         <Container fluid>
             <Row className='justify-content-center text-white mt-0 bg-primary-1'>
                 <Col lg={12} md={12} sm={12}>
-                    <h2 className='text-center mt-3'>Mazdaspeed Miata Blog</h2>
-                    {msmBlogList}
+                    <h2 className='text-center mt-3'>C8 Z51 Corvette Blog</h2>
+                    {c8BlogList}
                 </Col>
             </Row>
         </Container>
     );
 }
 
-export default MsmBlog;
+export default C8Blog;
