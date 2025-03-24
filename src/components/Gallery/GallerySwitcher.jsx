@@ -23,15 +23,17 @@ const GallerySwitcher = () => {
             <Row className="mb-3 text-light">
                 <Col>
                     <h4>NA Galleries</h4>
-                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className='mb-2'>Autocross</Button>
+                    <p>coming soon</p>
+                    {/* <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className='mb-2'>Autocross</Button>
                     <br />
-                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className=''>Scenery Shots</Button>
+                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className=''>Scenery Shots</Button> */}
                 </Col>
                 <Col>
                     <h4>Mazdaspeed Galleries</h4>
-                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className='mb-2'>Autocross</Button>
+                    <p>coming soon</p>
+                    {/* <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className='mb-2'>Autocross</Button>
                     <br />
-                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className=''>Scenery Shots</Button>
+                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className=''>Scenery Shots</Button> */}
                 </Col>
                 <Col>
                     <h4>NC Galleries</h4>
@@ -42,11 +44,12 @@ const GallerySwitcher = () => {
                     <h4>ND Galleries</h4>
                     <Button onClick={() => handleSwitchGallery('NDHillCountry')} variant="danger" className='mb-2'>Texas Hill Country</Button>
                     <br />
-                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className=''>Scenery Shots</Button>
+                    {/* <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className=''>Scenery Shots</Button> */}
                 </Col>
                 <Col>
                     <h4>C8 Corvette Galleries</h4>
-                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className='mb-2'>Autocross</Button>
+                    <p>coming soon</p>
+                    {/* <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className='mb-2'>Autocross</Button> */}
                 </Col>
             </Row>
             <Row>
