@@ -1,26 +1,34 @@
 [
-    {
-        "id": 1,
-        "date": "6/23/2021",
-        "mileage": "133,650",
-        "picture": "/images/nb/62321.jpg",
-        "cost": "To be determined",
-        "entry": "This entry is a few months late and well overdue. \n Unfortunately our racing season came to an abrupt end on March 14th at a PCA Autocross event. The engine fan relay had burnt out and fortunately I caught it before I took my second run on the course.\n The bad news is it did lose some compression and will need to be rebuilt before I can go racing with it again. The good news is that the head gasket is still intact and the car is drivable for daily driving.\n\n I suppose it was just a matter of time before something like this happened, and I really can't be upset about it as I was going to retire the car at the end of this year. The car has had an amazing run over the last few years and has won three championships to it's credit. I wish I had been able to finish the 2021 season and get one more trophy on the wall before I decided if I was going to reitre it or not, but these things do happen. \n\n The current plan is to rebuild it when I have the time. I really can't see myself parting with the car anytime soon, I mean why would I give up my Mona Lisa that I have worked so hard and corrected almost every single factory issue it came with."
-    },
-    {
-        "id": 2,
-        "date": "7/19/2021",
-        "mileage": "133,924",
-        "picture": "/images/nb/7192021.jpg",
-        "cost": "$80.66",
-        "entry": "I took some time out to get some much needed maintenance done on the car today. The car was throwing a check engine light for a faulty gas cap. I tried cleaning it and the code ended up coming back, so I had to bite the bullet on a OEM replacement. The AC/power steering belt was also looking a bit chewed up after well over 8 years of use so it had to be replaced as well. Thank goodness replacing the belt on a Miata is a remarkably simple affair requiring one deep well socket and a few wrenches. \n\n I wish I had more of an update to share with you, but so far it’s been a pretty uneventful month. I have been using the car quite a bit more to make sure it doesn’t sit and because it has an amazing AC system (Gas Head Motorworks made a few modifications to it for me a few years ago). \n\n I can say that every single time I drive it I find the thought of selling it to be more and more absurd. I think once school is finished I’ll go ahead and plunk the money down on a full engine rebuild and a rollbar and start hitting up a few track events next year."
-    },
-    {
-        "id": 3,
-        "date": "7/27/2021",
-        "mileage": "134,336",
-        "picture": "/images/nb/72721.jpg",
-        "cost": "$45",
-        "entry": "Since Kiryu is acting as a daily driver again I thought it would be nice to have a full trunk interior again. Only problem is I gave away the spare wheel a few years ago to a friend who needed one and he has since sold his Miata with said spare. \n \n So I ended up taking a drive out to Sealy Texas to see my buddy Austin Snader who owns SR Enterprises, a shop and Miata part supplier. $40 dollars later I had a spare wheel and tire and a few essential clips and bolts I was missing. \n\n One issue is that the spare wheel itself probably won't fit over the big-brake kit in the front, so it's only real purpose is to level out the trunk area and make it OEM. \n Also the tire is slashed, so that would need to be replaced at some point. Before installation began, I made a cut out in the upper left section of the metal panel and the interior carpet to access the damper adjuster on the top of the shock body, and I found on the passenger's side that the interior hard plastic has an elevated section that fits just above the Xida adjuster on the passenger's side. \n I need to come up with some kind of re-enforcement for that area to keep the adjuster safe. I also picked up some interior push pins from O'Reilly's to replace all the missing plastic push buttons."
-    }
+  {
+    "id": 1,
+    "date": "6/23/2021",
+    "mileage": "133,650",
+    "picture": "/images/nb/62321.jpg",
+    "cost": "To be determined",
+    "entry": "This entry is a few months late and well overdue. \n Unfortunately our racing season came to an abrupt end on March 14th at a PCA Autocross event. The engine fan relay had burnt out and fortunately I caught it before I took my second run on the course.\n The bad news is it did lose some compression and will need to be rebuilt before I can go racing with it again. The good news is that the head gasket is still intact and the car is drivable for daily driving.\n\n I suppose it was just a matter of time before something like this happened, and I really can't be upset about it as I was going to retire the car at the end of this year. The car has had an amazing run over the last few years and has won three championships to it's credit. I wish I had been able to finish the 2021 season and get one more trophy on the wall before I decided if I was going to reitre it or not, but these things do happen. \n\n The current plan is to rebuild it when I have the time. I really can't see myself parting with the car anytime soon, I mean why would I give up my Mona Lisa that I have worked so hard and corrected almost every single factory issue it came with."
+  },
+  {
+    "id": 2,
+    "date": "7/19/2021",
+    "mileage": "133,924",
+    "picture": "/images/nb/7192021.jpg",
+    "cost": "$80.66",
+    "entry": "I took some time out to get some much needed maintenance done on the car today. The car was throwing a check engine light for a faulty gas cap. I tried cleaning it and the code ended up coming back, so I had to bite the bullet on a OEM replacement. The AC/power steering belt was also looking a bit chewed up after well over 8 years of use so it had to be replaced as well. Thank goodness replacing the belt on a Miata is a remarkably simple affair requiring one deep well socket and a few wrenches. \n\n I wish I had more of an update to share with you, but so far it’s been a pretty uneventful month. I have been using the car quite a bit more to make sure it doesn’t sit and because it has an amazing AC system (Gas Head Motorworks made a few modifications to it for me a few years ago). \n\n I can say that every single time I drive it I find the thought of selling it to be more and more absurd. I think once school is finished I’ll go ahead and plunk the money down on a full engine rebuild and a rollbar and start hitting up a few track events next year."
+  },
+  {
+    "id": 3,
+    "date": "7/27/2021",
+    "mileage": "134,336",
+    "picture": "/images/nb/72721.jpg",
+    "cost": "$45",
+    "entry": "Since Kiryu is acting as a daily driver again I thought it would be nice to have a full trunk interior again. Only problem is I gave away the spare wheel a few years ago to a friend who needed one and he has since sold his Miata with said spare. \n \n So I ended up taking a drive out to Sealy Texas to see my buddy Austin Snader who owns SR Enterprises, a shop and Miata part supplier. $40 dollars later I had a spare wheel and tire and a few essential clips and bolts I was missing. \n\n One issue is that the spare wheel itself probably won't fit over the big-brake kit in the front, so it's only real purpose is to level out the trunk area and make it OEM. \n Also the tire is slashed, so that would need to be replaced at some point. Before installation began, I made a cut out in the upper left section of the metal panel and the interior carpet to access the damper adjuster on the top of the shock body, and I found on the passenger's side that the interior hard plastic has an elevated section that fits just above the Xida adjuster on the passenger's side. \n I need to come up with some kind of re-enforcement for that area to keep the adjuster safe. I also picked up some interior push pins from O'Reilly's to replace all the missing plastic push buttons."
+  },
+  {
+    "id": 4,
+    "date": "11/12/2022",
+    "mileage": "134,336",
+    "picture": "/images/nb/20221112-001.jpg",
+    "cost": "$0",
+    "entry": "Kiryu has been enjoying the retirement from racing here lately. On my birthday in 2022 my wonderful partner and I took a trip to the Texas Hill Country to run the Twisted Sisters. The infamous route of fm 337, 336, and 335. \n Strangely, this was Kiryu's second trip to the sisters, her first one being a month prior in October but was plagued with rain, so we didn't really get to run it properly. \n This time however, the sun was shining, the weather was cool, the turbo was singing, and the autocross focused 200 treadwear Falken Azenis 660s were grippy, so we had an absolute blast. \n \n I kept the Xidas at 5 clicks from full stiff on the front and 7 clicks from full stiff in the rear, and the chassis handled every single bump with grace and poise, while mainting it's track-focused handling on the snaking and winding route of the sisters. \n I've driven the sisters in a few different cars, but I have to say, Kiryu is by far the most fun car I've had on that route. The autocross build really makes it handle exceptionally on 337 in particular up on the mountain where the turns become 15 mph affairs and you are easily doing 35 to 45 mph through them. \n The turbochager making 10.5 pounds of boost also means you can keep it in 5th gear with the 5-speed transmission while cruising and have plenty of power on tap for handling steep grades and hills. With so much grip and power on tap, when compared to my 2023 all-stock ND Miata, Kiryu is actually the easier car to navigate the sisters in. \n \n We did a couple of runs over the course of two days while we were there. The car was flawless the entire time, and the weather was amazing. We also discovered a new Brew Pub called the Pint and Plow, that make an excellent seasonal Octoberfest beer. The rest of there offerings were also quite good, and the food was excellent."
+  }
 ]

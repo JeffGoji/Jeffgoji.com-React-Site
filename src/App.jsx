@@ -9,6 +9,7 @@ import {
 //Pages to import:
 import Header from './components/Header';
 import NaMiata from './components/pages/NaMiata'
+import NABlog from "./components/blog/Miyoshi";
 import MsmBlog from './components/blog/Kiryu'
 import NDBlog from "./components/blog/Kasumi";
 import YouTube from './components/YouTube'
@@ -34,6 +35,7 @@ function App() {
           <Route path="garage" element={<Garage />} />
           <Route path="intro" element={<Intro />} />
           <Route path="na-miata" element={<NaMiata />} />
+          <Route path="na-blog" element={<NABlog />} />
           <Route path="msm-blog" element={<MsmBlog />} />
           <Route path="nd-blog" element={<NDBlog />} />
           <Route path="c8-blog" element={<C8Blog />} />
