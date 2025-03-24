@@ -712,8 +712,8 @@
 // galleryImages.js
 
 // Import all images and their optimized thumbnails
-import hc001 from '../../../../assets/images/nd/hillcountry/20230609_195905.jpg';
-import hc001Thumb from '../../../../assets/images/nd/hillcountry/20230609_195905.jpg?width=200&as=src';
+// import hc001 from '../../../../assets/images/nd/hillcountry/20230609_195905.jpg';
+// import hc001Thumb from '../../../../assets/images/nd/hillcountry/20230609_195905.jpg?width=200&as=src';
 
 import hc002 from '../../../../assets/images/nd/hillcountry/20230610_084825.jpg';
 import hc002Thumb from '../../../../assets/images/nd/hillcountry/20230610_084825.jpg?width=200&as=src';
@@ -947,14 +947,14 @@ import hc078 from '../../../../assets/images/nd/hillcountry/20240706_124345.jpg'
 import hc078Thumb from '../../../../assets/images/nd/hillcountry/20240706_124345.jpg?width=200&as=src';
 
 const images = [
-    {
-        original: hc001,
-        thumbnail: hc001Thumb,
-        alt: 'hc001',
-        loading: 'lazy',
-        originalAlt: "Alternate text",
-        description: "Driving and having fun"
-    },
+    // {
+    //     original: hc001,
+    //     thumbnail: hc001Thumb,
+    //     alt: 'hc001',
+    //     loading: 'lazy',
+    //     originalAlt: "Alternate text",
+    //     description: "Driving and having fun"
+    // },
     {
         original: hc002,
         thumbnail: hc002Thumb,
