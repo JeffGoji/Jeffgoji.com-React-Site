@@ -1,4 +1,4 @@
-import GallerySwitcher from "./NC"
+import GallerySwitcher from "./GallerySwitcher"
 
 
 function Gallery() {
