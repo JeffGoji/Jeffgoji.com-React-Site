@@ -119,6 +119,7 @@ a:visited {
 /*Footer Section*/
 
 footer {
+  background-color: rgb(184, 184, 184);
   padding-top: 3rem;
   text-shadow: 1px 1px 1px red;
   /* margin-top: 200px; */
