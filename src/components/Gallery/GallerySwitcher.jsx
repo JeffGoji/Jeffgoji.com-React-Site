@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
+// NB Miata
+import NBHillCountry23 from './NB/HillCountry';
+// NC Miata
 import EastCoast15 from './NC/EastCoast15';
 import Yellowstone15 from './NC/Yellowstone15';
 // Nd Miata
@@ -30,10 +33,8 @@ const GallerySwitcher = () => {
                 </Col>
                 <Col>
                     <h4>Mazdaspeed Galleries</h4>
-                    <p>coming soon</p>
-                    {/* <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className='mb-2'>Autocross</Button>
+                    <Button onClick={() => handleSwitchGallery('NBHillCountry23')} variant="danger" className='mb-2'>Texas Hill Country Trip 2023</Button>
                     <br />
-                    <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className=''>Scenery Shots</Button> */}
                 </Col>
                 <Col>
                     <h4>NC Galleries</h4>
@@ -57,6 +58,7 @@ const GallerySwitcher = () => {
                     {gallery === 'EastCoast15Gallery' && <EastCoast15Gallery />}
                     {gallery === 'Yellowstone15Gallery' && <Yellowstone15Gallery />}
                     {gallery === 'NDHillCountry' && <NDHillCountry />}
+                    {gallery === 'NBHillCountry23' && <NBHillCountry23 />}
                 </Col>
             </Row>
         </Container>
