@@ -30,7 +30,7 @@ function YouTube() {
                     </Col>
                     <Col lg={4} md={4} sm={12}>
                         <div className="ratio ratio-16x9">
-                            <iframe src="https://youtu.be/UySrXUfHA_k" title="Jeff's fastest run, LSR PCA Autocross, March 23rd, 2025" allowFullScreen={true}></iframe>
+                            <iframe src="https://www.youtube.com/embed/UySrXUfHA_k" title="Jeff's fastest run, LSR PCA Autocross, March 23rd, 2025" allowFullScreen={true}></iframe>
                         </div>
                     </Col>
                 </Row>
