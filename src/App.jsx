@@ -20,6 +20,7 @@ import Fireball from './components/blog/Fireball';
 import C8Blog from "./components/blog/Panda";
 import Gallery from "./components/Gallery";
 import Footer from './components/Footer'
+import ScrollToTop from "./components/CustomComponents/ScrollToTop";
 
 import './assets/css/style.css';
 
@@ -27,6 +28,7 @@ import './assets/css/style.css';
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className='container-fluid m-0 p-0'>
         <Header />
         <Routes>
