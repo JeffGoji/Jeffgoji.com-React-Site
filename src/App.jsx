@@ -19,6 +19,10 @@ import Intro from './components/pages/Intro';
 import Fireball from './components/blog/Fireball';
 import C8Blog from "./components/blog/Panda";
 import Gallery from "./components/Gallery";
+import MSMGallery from "./components/Gallery/NB/HillCountry";
+import EastCoast15 from "./components/Gallery/NC/EastCoast15";
+import Yellowstone15 from "./components/Gallery/NC/Yellowstone15";
+import NDHillCountry from "./components/Gallery/ND/HillCountry";
 import Footer from './components/Footer'
 import ScrollToTop from "./components/CustomComponents/ScrollToTop";
 
@@ -44,6 +48,11 @@ function App() {
           <Route path="youtube" element={<YouTube />} />
           <Route path="fireball" element={<Fireball />} />
           <Route path="gallery" element={<Gallery />} />
+          <Route path="msm-gallery" element={<MSMGallery />} />
+          <Route path="nc-eastcoast15" element={<EastCoast15 />} />
+          <Route path="nc-yellowstone15" element={<Yellowstone15 />} />
+          <Route path="nd-hillcountry" element={<NDHillCountry />} />
+
 
         </Routes>
         <Footer />

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Navbar, Container, Nav, Image } from 'react-bootstrap'
+import { Navbar, Container, Nav, Image, NavDropdown, Dropdown } from 'react-bootstrap'
 
 //Import logo:
 import logo from '../../assets/images/logo.gif'
@@ -17,7 +17,38 @@ function NavMenu() {
                             <Nav.Link as={NavLink} to="/garage">Garage</Nav.Link>
                             <Nav.Link as={NavLink} to="/youtube">Videos</Nav.Link>
                             {/* <Nav.Link as={NavLink} to="/blogs">Blogs</Nav.Link> */}
-                            <Nav.Link as={NavLink} to="/gallery">Galleries</Nav.Link>
+                            {/* <Nav.Link as={NavLink} to="/gallery">Galleries</Nav.Link> */}
+                            <NavDropdown title="Galleries" id="basic-nav-dropdown">
+                                <NavDropdown.Item>NA Miata (coming soon)</NavDropdown.Item>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="text" id="dropdown-basic">
+                                        NB Mazdaspeed Miata
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={NavLink} to="/msm-gallery">Texas Hill Country Trip 2023</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="text" id="dropdown-basic">
+                                        NC Miata
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={NavLink} to="/nc-eastcoast15">East Coast Trip 2015</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to="/nc-yellowstone15">Yellowstone West Coast Trip 2015</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="text" id="dropdown-basic">
+                                        ND Miata
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={NavLink} to="/nd-hillcountry">Texas Hill Country</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                <NavDropdown.Item>
+                                    C8 Z51 Corvette (Coming Soon)
+                                </NavDropdown.Item>
+                            </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
