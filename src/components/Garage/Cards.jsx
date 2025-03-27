@@ -24,10 +24,11 @@ function Cards({ id, model, description, name }) {
     const car = carsData.cars.find(car => car.id === id);
     return (
         <div className="col-lg-3 col-md-4 col-sm-6 mt-2">
+            <Link to={car.bloglink} className='no-underline'>
             <div className="card h-100 img-hover">
-                <Link to={car.bloglink}>
+                
                     <img src={cardImages[id]} className="card-img-top img-fluid" alt={model} />
-                </Link>
+               
                 <div className="card-body">
                     <h5 className="card-title text-center">{model}</h5>
                     <p className="card-text">{description}</p>
@@ -35,7 +36,8 @@ function Cards({ id, model, description, name }) {
                 <div className="card-footer">
                     <small className="text-muted">{name}</small>
                 </div>
-            </div>
+                </div>
+                 </Link>
         </div>
     );
 }

@@ -26,6 +26,7 @@ import MSMGallery from "./components/Gallery/NB/HillCountry";
 import EastCoast15 from "./components/Gallery/NC/EastCoast15";
 import Yellowstone15 from "./components/Gallery/NC/Yellowstone15";
 import NDHillCountry from "./components/Gallery/ND/HillCountry";
+import C8AutoxGallery from "./components/Gallery/C8/autocross";
 import Footer from './components/Footer'
 import ScrollToTop from "./components/CustomComponents/ScrollToTop";
 
@@ -55,6 +56,7 @@ function App() {
           <Route path="nc-eastcoast15" element={<EastCoast15 />} />
           <Route path="nc-yellowstone15" element={<Yellowstone15 />} />
           <Route path="nd-hillcountry" element={<NDHillCountry />} />
+          <Route path="c8-autox" element={<C8AutoxGallery />}/>
 
 
         </Routes>

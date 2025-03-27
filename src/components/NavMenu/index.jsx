@@ -45,9 +45,14 @@ function NavMenu() {
                                         <Dropdown.Item as={NavLink} to="/nd-hillcountry">Texas Hill Country</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
-                                <NavDropdown.Item>
-                                    C8 Z51 Corvette (Coming Soon)
-                                </NavDropdown.Item>
+                                <Dropdown drop="end">
+                                    <Dropdown.Toggle variant="text" id="dropdown-basic">
+                                        C8 Corvette
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={NavLink} to="/c8-autox">Autocross</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
