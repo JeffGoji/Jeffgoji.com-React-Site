@@ -6,18 +6,21 @@ import {
 
 } from "react-router-dom";
 
-//Pages to import:
+//Components and Pages
 import Header from './components/Header';
+import Garage from './components/Garage';
+import Home from './components/pages/Home';
+import Intro from './components/pages/Intro';
+import YouTube from './components/YouTube'
+// Blog links
 import NaMiata from './components/pages/NaMiata'
 import NABlog from "./components/blog/Miyoshi";
 import MsmBlog from './components/blog/Kiryu'
 import NDBlog from "./components/blog/Kasumi";
-import YouTube from './components/YouTube'
-import Home from './components/pages/Home';
-import Garage from './components/Garage';
-import Intro from './components/pages/Intro';
+
 import Fireball from './components/blog/Fireball';
 import C8Blog from "./components/blog/Panda";
+// Gallery links
 import Gallery from "./components/Gallery";
 import MSMGallery from "./components/Gallery/NB/HillCountry";
 import EastCoast15 from "./components/Gallery/NC/EastCoast15";
