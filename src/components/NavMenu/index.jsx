@@ -20,7 +20,7 @@ function NavMenu() {
                             {/* <Nav.Link as={NavLink} to="/gallery">Galleries</Nav.Link> */}
                             <NavDropdown title="Galleries" id="basic-nav-dropdown">
                                 <NavDropdown.Item>NA Miata (coming soon)</NavDropdown.Item>
-                                <Dropdown>
+                                <Dropdown drop="end">
                                     <Dropdown.Toggle variant="text" id="dropdown-basic">
                                         NB Mazdaspeed Miata
                                     </Dropdown.Toggle>
@@ -28,7 +28,7 @@ function NavMenu() {
                                         <Dropdown.Item as={NavLink} to="/msm-gallery">Texas Hill Country Trip 2023</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
-                                <Dropdown>
+                                <Dropdown drop="end">
                                     <Dropdown.Toggle variant="text" id="dropdown-basic">
                                         NC Miata
                                     </Dropdown.Toggle>
@@ -37,7 +37,7 @@ function NavMenu() {
                                         <Dropdown.Item as={NavLink} to="/nc-yellowstone15">Yellowstone West Coast Trip 2015</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
-                                <Dropdown>
+                                <Dropdown drop="end">
                                     <Dropdown.Toggle variant="text" id="dropdown-basic">
                                         ND Miata
                                     </Dropdown.Toggle>
