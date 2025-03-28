@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import Pic2 from '../../assets/images/na/12370920_10207027821827335_8393944522748518224_o.jpg'
+
 
 const NaMiata = () => {
     return (
@@ -11,9 +11,6 @@ const NaMiata = () => {
                     </p>
                 </div>
 
-                <div className="col-lg-6 col-sm-12 mt-5">
-                    <img src={Pic2} alt="91 Miata" className="img-rounded img-fluid" style={{ maxHeight: "30srem" }} />
-                </div>
                 <div className='col-lg-6 col-sm-6 col-sm-12 text-center'>
                     <h3 className="text-center">Modifications</h3>
                     <ul>
