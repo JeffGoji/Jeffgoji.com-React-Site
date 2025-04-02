@@ -1,24 +1,6 @@
-
-
-//Images
-// import NA from '../../assets/images/na/night4.jpg';
-// import NB from '../../assets/images/nb/41923629_10215428433037365_6642417182418403328_o.jpg';
-// import NC from '../../assets/images/ncEdit.jpg';
-// import ND from '../../assets/images/nd/nd-002.jpg';
-// import C8 from '../../assets/images/c8/c8-002.jpg';
-
 // Import JSON data
 import carsData from './Cars.json';
 import Cards from './Cards';
-
-// Create a map of card IDs to images
-// const cardImages = {
-//     1: NA,
-//     2: NB,
-//     3: NC,
-//     4: ND,
-//     5: C8,
-// };
 
 const Garage = () => {
     return (
