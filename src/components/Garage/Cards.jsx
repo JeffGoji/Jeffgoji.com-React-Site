@@ -27,7 +27,7 @@ function Cards({ id, model, description, name }) {
             <Link to={car.bloglink} className='no-underline'>
             <div className="card h-100 img-hover">
                 
-                    <img src={cardImages[id]} className="card-img-top img-fluid" alt={model} />
+                    <img src={cardImages[id]} className="card-img-top img-fluid" alt={model}/>
                
                 <div className="card-body">
                     <h5 className="card-title text-center">{model}</h5>
