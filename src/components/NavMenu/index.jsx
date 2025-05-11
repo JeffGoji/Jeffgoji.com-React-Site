@@ -9,7 +9,7 @@ function NavMenu() {
         <>
             <Navbar bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg">
                 <Container fluid>
-                    <Navbar.Brand href="#home"><Image src={logo} /></Navbar.Brand>
+                    <Navbar.Brand href="#home" className='ps-5 ms-2'><Image src={logo} /></Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
