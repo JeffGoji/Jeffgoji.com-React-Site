@@ -31,7 +31,7 @@ function Suspension() {
                           </Accordion.Body>
                       </Accordion.Item>
                       <Accordion.Item eventKey="2">
-                          <Accordion.Header><strong>Combining it together</strong></Accordion.Header>
+                          <Accordion.Header><strong>Combined Damping</strong></Accordion.Header>
         <Accordion.Body>
         <Combined />
                           </Accordion.Body>
