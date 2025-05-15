@@ -9,7 +9,7 @@ function Suspension() {
       <Container fluid>
           <Row>
               <Col lg={12} className="text-center">
-                  <h1 className="text-center">Suspension Tuning</h1>
+                  <h1 className="text-center"><strong>Suspension Tuning</strong></h1>
                     <p className="text-center">
                       This is my section on suspension tuning, and even more specifically dampers. Please have a look and enjoy.
                       </p>
