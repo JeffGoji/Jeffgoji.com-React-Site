@@ -11,7 +11,8 @@ import Header from './components/Header';
 import Garage from './components/Garage';
 import Home from './components/pages/Home';
 import Intro from './components/pages/Intro';
-import YouTube from './components/YouTube'
+import YouTube from './components/YouTube';
+import Suspension from "./components/Suspension";
 // Blog links
 import NaMiata from './components/pages/NaMiata'
 import NABlog from "./components/blog/Miyoshi";
@@ -33,6 +34,7 @@ import ScrollToTop from "./components/CustomComponents/ScrollToTop";
 import './assets/css/style.css';
 
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -50,6 +52,7 @@ function App() {
           <Route path="nd-blog" element={<NDBlog />} />
           <Route path="c8-blog" element={<C8Blog />} />
           <Route path="youtube" element={<YouTube />} />
+          <Route path="suspension" element={<Suspension />} />
           <Route path="fireball" element={<Fireball />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="msm-gallery" element={<MSMGallery />} />

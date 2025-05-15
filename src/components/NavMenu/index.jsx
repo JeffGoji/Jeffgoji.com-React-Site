@@ -16,6 +16,7 @@ function NavMenu() {
                             <Nav.Link as={NavLink} to="/">Home</Nav.Link>
                             <Nav.Link as={NavLink} to="/garage">Garage</Nav.Link>
                             <Nav.Link as={NavLink} to="/youtube">Videos</Nav.Link>
+                            <Nav.Link as={NavLink} to="/suspension">Suspension</Nav.Link>
                             {/* <Nav.Link as={NavLink} to="/blogs">Blogs</Nav.Link> */}
                             {/* <Nav.Link as={NavLink} to="/gallery">Galleries</Nav.Link> */}
                             <NavDropdown title="Galleries" id="basic-nav-dropdown">
