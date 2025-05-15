@@ -1,7 +1,7 @@
 
 function Combined() {
     return (
-<div className="text-start">
+<div className="text-start mb-5">
             <p>
                 The magic of a well-tuned suspension lies in how bump (compression) and rebound damping work <strong>together</strong> to control both <strong>how quickly</strong> the wheel moves up <em>and</em> how quickly it comes back down. It’s not enough to dial each in isolation—what feels right on the bump stroke will only stay right if the rebound stroke is matched to it.
             </p>

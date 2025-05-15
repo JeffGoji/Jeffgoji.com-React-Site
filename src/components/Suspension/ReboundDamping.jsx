@@ -1,7 +1,7 @@
 
 function ReboundDamping() {
     return (
-        <div className="text-start">
+        <div className="text-start mb-5">
                 <p>
                     <strong>Rebound damping</strong> is the resistance a shock absorber provides when its piston is pulled outward—i.e., when the wheel moves downward relative to the car body (after compressing, as the suspension “re‐extends”). Inside the damper, hydraulic fluid must flow back through orifices or shim stacks; restricting that flow controls how quickly the suspension returns toward its ride height.
                 </p>

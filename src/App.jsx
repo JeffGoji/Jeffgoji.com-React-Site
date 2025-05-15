@@ -28,7 +28,7 @@ import EastCoast15 from "./components/Gallery/NC/EastCoast15";
 import Yellowstone15 from "./components/Gallery/NC/Yellowstone15";
 import NDHillCountry from "./components/Gallery/ND/HillCountry";
 import C8AutoxGallery from "./components/Gallery/C8/autocross";
-import Footer from './components/Footer'
+// import Footer from './components/Footer'
 import ScrollToTop from "./components/CustomComponents/ScrollToTop";
 
 import './assets/css/style.css';
@@ -63,7 +63,7 @@ function App() {
 
 
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
       </div>
 
     </BrowserRouter>
