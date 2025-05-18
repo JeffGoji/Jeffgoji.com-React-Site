@@ -38,7 +38,7 @@ function CompDamping() {
                         <strong>Low-speed vs. high-speed damping</strong>
                         <ul>
                             <li>
-                                Many performance shock systems split bump damping into <strong>low-speed</strong> (motions under ~0.1 m/s piston velocity—body roll, brake dive, pitch) and <strong>high-speed</strong> (quick hits like potholes or curbs). Tuning each separately lets you dial in a composed, responsive feel without making the ride punishing on broken pavement.
+                                Many performance shock systems split bump damping into <strong>low-speed</strong> (motions under ~0.08 m/s (3 in/s) piston velocity—body roll, brake dive, pitch) and <strong>high-speed</strong> (quick hits like potholes or curbs). Tuning each separately lets you dial in a composed, responsive feel without making the ride punishing on broken pavement.
                             </li>
                         </ul>
                     </li>
