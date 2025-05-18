@@ -3,6 +3,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import CompDamping from "./CompDamping";
 import ReboundDamping from "./ReboundDamping";
 import Combined from "./Combined";
+import CriticalDamping from "./CriticalDamping";
 
 function Suspension() {
   return (
@@ -16,7 +17,7 @@ function Suspension() {
               </Col>
           </Row>
           <Row>   
-              <Col lg={12} className="text-center">
+              {/* <Col lg={12} className="text-center">
                     <h4 className="text-center">Springs</h4>
               </Col>
               <Col lg={12} className="text-center">
@@ -24,7 +25,7 @@ function Suspension() {
               </Col>
               <Col lg={12} className="text-center">
                     <h4 className="text-center">Bumpstops</h4>
-              </Col>
+              </Col> */}
               <Col lg={12} className="text-center">
                   <h4>Dampers</h4>
               <Accordion>
@@ -48,7 +49,13 @@ function Suspension() {
                       </Accordion.Item>
                       <Accordion.Item eventKey="3">
                       </Accordion.Item>
-                      </Accordion>
+                      <Accordion.Item eventKey="4">
+                          <Accordion.Header><strong>Critical Damping</strong></Accordion.Header>
+                          <Accordion.Body className=' mb-5'>
+                              <CriticalDamping />
+                            </Accordion.Body>
+                        </Accordion.Item>      
+                  </Accordion>
               </Col>
         </Row>
     </Container>
