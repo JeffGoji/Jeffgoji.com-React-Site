@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { Container, Row, Col, Card, Image, ListGroup, Button } from 'react-bootstrap';
 import data from '../../../assets/Data/ndBlog.json';
 
@@ -15,6 +15,10 @@ function NDBlog() {
         (page - 1) * POST_PER_PAGE,
         page * POST_PER_PAGE
     );
+
+        useEffect(() => {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }, [page]);
 
 
     const ndBlogList = paginatedData.map((data) => (

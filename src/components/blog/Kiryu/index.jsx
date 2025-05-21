@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Image, ListGroup, Button } from 'react-bootstrap';
 import data from '../../../assets/Data/MsmBlog.json';
 
@@ -14,6 +14,10 @@ function MsmBlog() {
         (page - 1) * POSTS_PER_PAGE,
         page * POSTS_PER_PAGE
     );
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+    }, [page]);
 
     const msmBlogList = paginatedData.map((data) => (
         <Row className='justify-content-center mb-4' key={data.id}>
@@ -37,6 +41,7 @@ function MsmBlog() {
     ));
 
     return (
+        
         <Container fluid>
             <Row className='justify-content-center text-white mt-0 bg-primary-1'>
                 <Col lg={12} md={12} sm={12}>
