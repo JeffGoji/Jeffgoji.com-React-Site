@@ -1,11 +1,24 @@
-import { Container, Row, Col, Card, Image, ListGroup } from 'react-bootstrap';
+import {useState} from 'react';
+import { Container, Row, Col, Card, Image, ListGroup, Button } from 'react-bootstrap';
 import data from '../../../assets/Data/ndBlog.json';
+
+const POST_PER_PAGE = 3;
 
 function NDBlog() {
 
-    const ndBlogList = [...data]
-        .sort((a, b) => (b.id - a.id))
-        .map((data) =>
+    const [page, setPage] = useState(1);
+
+    const sortedData = [...data].sort((a, b) => b.id - a.id);
+    const totalPages = Math.ceil(sortedData.length / POST_PER_PAGE);
+
+    const paginatedData = sortedData.slice(
+        (page - 1) * POST_PER_PAGE,
+        page * POST_PER_PAGE
+    );
+
+
+    const ndBlogList = paginatedData.map((data) => (
+
             <Row className='justify-content-center mb-4' key={data.id}>
                 <Col lg={6} md={10} sm={12} className="mt-3">
                     <Card className='bg-dark rounded p-2 text-white'>
@@ -24,7 +37,7 @@ function NDBlog() {
                     </Card>
                 </Col>
             </Row>
-        );
+        ));
 
     return (
         <Container fluid>
@@ -32,6 +45,31 @@ function NDBlog() {
                 <Col lg={12} md={12} sm={12}>
                     <h2 className='text-center mt-3'>Mazda MX5 RF GTS Blog</h2>
                     {ndBlogList}
+                    {totalPages > 1 && (
+                        <div className="d-flex justify-content-center my-3">
+                            <Button
+                                variant="secondary"
+                                className="mx-1"
+                                style={{width:"100px"}}
+                                disabled={page === 1}
+                                onClick={() => setPage(page - 1)}
+                            >
+                                Previous
+                            </Button>
+                            <span className="align-self-center mx-2">
+                                Page {page} of {totalPages}
+                            </span>
+                            <Button
+                                variant="secondary"
+                                className="mx-1"
+                                style={{width:"100px"}}
+                                disabled={page === totalPages}
+                                onClick={() => setPage(page + 1)}
+                            >
+                                Next
+                            </Button>
+                        </div>
+                    )}
                 </Col>
             </Row>
         </Container>

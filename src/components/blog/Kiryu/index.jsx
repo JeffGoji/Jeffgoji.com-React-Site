@@ -47,6 +47,7 @@ function MsmBlog() {
                             <Button
                                 variant="secondary"
                                 className="mx-1"
+                                style={{width:"100px"}}
                                 disabled={page === 1}
                                 onClick={() => setPage(page - 1)}
                             >
@@ -58,6 +59,7 @@ function MsmBlog() {
                             <Button
                                 variant="secondary"
                                 className="mx-1"
+                                style={{width:"100px"}}
                                 disabled={page === totalPages}
                                 onClick={() => setPage(page + 1)}
                             >
