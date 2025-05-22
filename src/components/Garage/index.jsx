@@ -11,7 +11,7 @@ const Garage = () => {
                     <hr />
                 </div>
                 <div className="col-lg-2 col-md-4 col-sm-4">
-                    <h1 className="text-center mb-3 text-outline fw-bold">The Garage</h1>
+                    <h1 className="text-center mb-3 text-outline fw-bold">Car Blogs</h1>
                 </div>
                 <div className="col-lg-5 col-md-4 col-sm-4">
                     <hr />
