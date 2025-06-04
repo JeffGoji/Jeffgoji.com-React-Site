@@ -1,20 +1,18 @@
+// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import prerender from 'vite-prerender-plugin';
+import { htmlPrerender } from 'vite-plugin-html-prerender';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
     react(),
 
-    prerender({
-      // Folder where Vite will output built files:
-      staticDir: path.join(__dirname, 'dist'),
+    htmlPrerender({
+      staticDir: path.join(path.dirname(fileURLToPath(import.meta.url)), 'dist'),
 
-      // List of routes to prerender so Googlebot sees content + <ins> immediately:
+      // Prerender each route so crawlers see content + <ins> together:
       routes: [
         '/',                 // Home
         '/garage',
@@ -34,9 +32,12 @@ export default defineConfig({
         '/nd-hillcountry',
         '/c8-autox',
       ],
+
+      // (Optional) Wait for a selector before snapshotting (e.g. <main>)
+      // selector: 'main'
     }),
   ],
 
-  // If you use a custom base path, adjust this. Otherwise leave as '/'.
+  // If you have a custom base, adjust; otherwise '/' is fine.
   base: '/',
 });

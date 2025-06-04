@@ -30,6 +30,7 @@
     "sass": "^1.69.7",
     "vite": "^4.4.5",
     "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-html-prerender": "^0.2.0",
     "vite-plugin-prerender": "^1.0.8"
   }
 }
