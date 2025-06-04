@@ -11,7 +11,6 @@ function Home() {
                     <Intro />
                     <Garage />
                     <YouTube />
-
                 </div>
             </div>
         </div>
