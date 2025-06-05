@@ -1,12 +1,8 @@
-
-import AdSenseSlot from "../AdSense/AdSenseSlot";
-
 function Intro() {
 
     return (
         <div className="container-fluid splash-background text-white">
             <div className="row mt-5 justify-content-center">
-            <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' />
                 <div className="col-lg-8 col-md-12 text-center">
                     <div className='row mt-5 justify-content-center'>
                         <div className='col-lg-12'>
