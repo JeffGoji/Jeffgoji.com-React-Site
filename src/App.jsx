@@ -18,8 +18,6 @@ import NaMiata from './components/pages/NaMiata'
 import NABlog from "./components/blog/Miyoshi";
 import MsmBlog from './components/blog/Kiryu'
 import NDBlog from "./components/blog/Kasumi";
-
-import Fireball from './components/blog/Fireball';
 import C8Blog from "./components/blog/Panda";
 // Gallery links
 import Gallery from "./components/Gallery";
@@ -53,7 +51,6 @@ function App() {
           <Route path="c8-blog" element={<C8Blog />} />
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
-          <Route path="fireball" element={<Fireball />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="msm-gallery" element={<MSMGallery />} />
           <Route path="nc-eastcoast15" element={<EastCoast15 />} />
