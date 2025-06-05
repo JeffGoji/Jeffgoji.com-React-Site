@@ -2,6 +2,8 @@ import {useState, useEffect} from 'react';
 import { Container, Row, Col, Card, Image, ListGroup, Button } from 'react-bootstrap';
 import data from '../../../assets/Data/c8Blog.json';
 
+import AdSenseSlot from '../../AdSense/AdSenseSlot';
+
 const POST_PER_PAGE = 3;
 
 function C8Blog() {
@@ -44,6 +46,7 @@ function C8Blog() {
         <Container fluid>
             <Row className='justify-content-center text-white mt-0 bg-primary-1'>
                 <Col lg={12} md={12} sm={12}>
+                <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' />
                     <h2 className='text-center mt-3'>C8 Z51 Corvette Blog</h2>
                     {c8BlogList}
                     {totalPages > 1 && (
