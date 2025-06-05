@@ -1,13 +1,19 @@
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
 
-const AdSenseSlot = ({ client = 'ca-pub-8417979887134577', slot = '1042016675' }) => {
+/**
+ * Reads VITE_AD_CLIENT and VITE_AD_SLOT from environment.
+ * Falls back to empty string if they’re undefined.
+ */
+const AdSenseSlot = () => {
+  // In Vite, any variable that begins with VITE_ is injected at build time:
+  const client = import.meta.env.VITE_AD_CLIENT || '';
+  const slot   = import.meta.env.VITE_AD_SLOT   || '';
+
   useEffect(() => {
-    // Don't run on the server
     if (typeof window !== 'undefined' && window.adsbygoogle) {
       window.adsbygoogle.push({});
     }
-  }, []); // <-- empty deps: run once after mount
+  }, []); // run once after mount
 
   return (
     <ins
@@ -22,8 +28,8 @@ const AdSenseSlot = ({ client = 'ca-pub-8417979887134577', slot = '1042016675' }
 };
 
 AdSenseSlot.propTypes = {
-  client: PropTypes.string,
-  slot: PropTypes.string,
+  // We’re not passing client/slot as props anymore,
+  // so you can remove them from PropTypes if you like.
 };
 
 export default AdSenseSlot;
