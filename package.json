@@ -6,8 +6,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
+        "build:ssg": "vite-ssg build",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-        "build:ssg": "vite-ssg build --config vite.config.js",
         "preview": "vite preview"
     },
     "dependencies": {
