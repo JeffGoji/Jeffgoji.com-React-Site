@@ -1,6 +1,5 @@
+// src/App.jsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-// Components and Pages
 import Header from "./components/Header";
 import Garage from "./components/Garage";
 import Home from "./components/pages/Home";
@@ -28,7 +27,9 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <main className="container-fluid m-0 p-0">
+
+      {/* This root container must render immediately (no data-fetching delays) */}
+      <div className="container-fluid m-0 p-0">
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -48,7 +49,7 @@ function App() {
           <Route path="nd-hillcountry" element={<NDHillCountry />} />
           <Route path="c8-autox" element={<C8AutoxGallery />} />
         </Routes>
-      </main>
+      </div>
     </BrowserRouter>
   );
 }

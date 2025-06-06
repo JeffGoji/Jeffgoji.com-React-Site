@@ -10,12 +10,12 @@ export default defineConfig({
     react(),
 
     htmlPrerender({
-      // Point at the same "dist" folder that Vite will emit
+      // Point at the exact dist folder that Vite outputs
       staticDir: path.join(path.dirname(fileURLToPath(import.meta.url)), 'dist'),
 
-      // All of your routes exactly as React Router sees them
+      // List every React Router route exactly as you wrote <Route path="…">
       routes: [
-        '/',
+        '/',             // Home
         '/garage',
         '/intro',
         '/na-blog',
@@ -31,9 +31,11 @@ export default defineConfig({
         '/c8-autox',
       ],
 
-      // Instead of waiting for <main>, wait 2 seconds (2000 ms) for React to mount:
+      // Remove ANY "selector" option. Instead, wait exactly 2000 ms:
       renderAfterTime: 2000,
     }),
   ],
+
+  // Make sure base is "/"
   base: '/',
 });
