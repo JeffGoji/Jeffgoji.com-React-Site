@@ -1,7 +1,10 @@
+import AdSenseSlot from "../AdSense/AdSenseSlot";
+
 /* eslint-disable react/no-unescaped-entities */
 function Bumpstops() {
   return (
     <div>
+      <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' />
       <p className="text-start">
         <strong>Bumpstops</strong> are a crucial component of a vehicle's suspension system, designed to limit the travel of the suspension and prevent damage to the vehicle's components. They are typically made of rubber or foam and are located at the end of the suspension travel, where they compress when the suspension reaches its maximum extension. Bumpstops help to absorb shock and provide a smoother ride by preventing metal-to-metal contact between suspension components.
       </p>

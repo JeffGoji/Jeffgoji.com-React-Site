@@ -27,9 +27,6 @@ const AdSenseSlot = () => {
   );
 };
 
-AdSenseSlot.propTypes = {
-  // We’re not passing client/slot as props anymore,
-  // so you can remove them from PropTypes if you like.
-};
+
 
 export default AdSenseSlot;

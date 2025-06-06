@@ -7,14 +7,12 @@ import ReboundDamping from "./ReboundDamping";
 import Combined from "./Combined";
 import CriticalDamping from "./CriticalDamping";
 import Swaybars from "./Swaybars";
-import AdSenseSlot from "../AdSense/AdSenseSlot";
 
 function Suspension() {
   return (
       <Container fluid>
           <Row>
               <Col lg={12} className="text-center">
-              <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' />
                   <h1 className="text-center"><strong>Suspension Tuning</strong></h1>
                     <p className="text-center">
                       This is my section on suspension tuning, and even more specifically dampers. Please have a look and enjoy.

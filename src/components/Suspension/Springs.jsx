@@ -1,6 +1,9 @@
+import AdSenseSlot from "../AdSense/AdSenseSlot";
+
 function Springs() {
     return (
         <div className="text-start mb-5">
+            <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' />
             <p>
                 The <strong>spring rate</strong> (or spring constant) describes how much force is needed to compress a spring a given distance, usually expressed in <strong>lb/in</strong> or <strong>N/mm</strong>. A higher spring rate means a stiffer spring; a lower rate is softer. Springs may be <strong>linear</strong> (constant rate) or <strong>progressive</strong> (rate increases with compression).
             </p>
