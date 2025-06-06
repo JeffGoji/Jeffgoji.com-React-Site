@@ -37,34 +37,37 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className='container-fluid m-0 p-0'>
-        <Header />
-        <Routes>
 
-          <Route path="/" element={<Home />} />
-          <Route path="garage" element={<Garage />} />
-          <Route path="intro" element={<Intro />} />
-          <Route path="na-miata" element={<NaMiata />} />
-          <Route path="na-blog" element={<NABlog />} />
-          <Route path="msm-blog" element={<MsmBlog />} />
-          <Route path="nd-blog" element={<NDBlog />} />
-          <Route path="c8-blog" element={<C8Blog />} />
-          <Route path="youtube" element={<YouTube />} />
-          <Route path="suspension" element={<Suspension />} />
-          <Route path="gallery" element={<Gallery />} />
-          <Route path="msm-gallery" element={<MSMGallery />} />
-          <Route path="nc-eastcoast15" element={<EastCoast15 />} />
-          <Route path="nc-yellowstone15" element={<Yellowstone15 />} />
-          <Route path="nd-hillcountry" element={<NDHillCountry />} />
-          <Route path="c8-autox" element={<C8AutoxGallery />}/>
-
-
-        </Routes>
-        {/* <Footer /> */}
-      </div>
-
+-     <div className="container-fluid m-0 p-0">
+-       <Header />
+-       <Routes>
+-         {/* …your routes… */}
+-       </Routes>
+-     </div>
++     <main className="container-fluid m-0 p-0">
++       <Header />
++       <Routes>
++         <Route path="/" element={<Home />} />
++         <Route path="garage" element={<Garage />} />
++         <Route path="intro" element={<Intro />} />
++         <Route path="na-miata" element={<NaMiata />} />
++         <Route path="na-blog" element={<NABlog />} />
++         <Route path="msm-blog" element={<MsmBlog />} />
++         <Route path="nd-blog" element={<NDBlog />} />
++         <Route path="c8-blog" element={<C8Blog />} />
++         <Route path="youtube" element={<YouTube />} />
++         <Route path="suspension" element={<Suspension />} />
++         <Route path="gallery" element={<Gallery />} />
++         <Route path="msm-gallery" element={<MSMGallery />} />
++         <Route path="nc-eastcoast15" element={<EastCoast15 />} />
++         <Route path="nc-yellowstone15" element={<Yellowstone15 />} />
++         <Route path="nd-hillcountry" element={<NDHillCountry />} />
++         <Route path="c8-autox" element={<C8AutoxGallery />} />
++       </Routes>
++     </main>
     </BrowserRouter>
   );
 }
+
 
 export default App;

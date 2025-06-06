@@ -31,7 +31,7 @@ export default defineConfig({
       ],
 
       // (Optional) Wait for a selector before snapshotting (e.g. <main>)
-      // selector: 'main'
+      selector: 'main'
     }),
   ],
 
