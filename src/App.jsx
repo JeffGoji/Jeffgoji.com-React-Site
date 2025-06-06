@@ -37,13 +37,6 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-
--     <div className="container-fluid m-0 p-0">
--       <Header />
--       <Routes>
--         {/* …your routes… */}
--       </Routes>
--     </div>
 +     <main className="container-fluid m-0 p-0">
 +       <Header />
 +       <Routes>
