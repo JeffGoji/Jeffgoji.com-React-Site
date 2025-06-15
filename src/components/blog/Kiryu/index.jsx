@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Image, ListGroup, Button } from 'react-bootstrap';
 import data from '../../../assets/Data/MsmBlog.json';
-import AdSenseSlot from '../../AdSense/AdSenseSlot';
+// import AdSenseSlot from '../../AdSense/AdSenseSlot';
 
 const POSTS_PER_PAGE = 3;
 
@@ -42,11 +42,11 @@ function MsmBlog() {
     ));
 
     return (
-        
+
         <Container fluid>
             <Row className='justify-content-center text-white mt-0 bg-primary-1'>
                 <Col lg={12} md={12} sm={12}>
-                <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' />
+                    {/* <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' /> */}
                     <h2 className='text-center mt-3'>Mazdaspeed Miata Blog</h2>
                     {msmBlogList}
                     {totalPages > 1 && (
@@ -54,7 +54,7 @@ function MsmBlog() {
                             <Button
                                 variant="secondary"
                                 className="mx-1"
-                                style={{width:"100px"}}
+                                style={{ width: "100px" }}
                                 disabled={page === 1}
                                 onClick={() => setPage(page - 1)}
                             >
@@ -66,7 +66,7 @@ function MsmBlog() {
                             <Button
                                 variant="secondary"
                                 className="mx-1"
-                                style={{width:"100px"}}
+                                style={{ width: "100px" }}
                                 disabled={page === totalPages}
                                 onClick={() => setPage(page + 1)}
                             >

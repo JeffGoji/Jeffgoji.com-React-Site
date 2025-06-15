@@ -4,9 +4,6 @@
 
 [[plugins]]
   package = "netlify-plugin-prerender-spa"
-
   [plugins.inputs]
-    prerenderRoutes    = [ "/", "/garage", "/intro", "/na-blog", "/msm-blog", "/nd-blog", "/c8-blog", "/suspension", "/gallery", "/msm-gallery", "/nc-eastcoast15", "/nc-yellowstone15", "/nd-hillcountry", "/c8-autox" ]
-    renderAfterDocumentEvent = "custom-render-ready"
-    headless = true
-    timeout  = 5000
+    # point at your built files
+    source = "dist"
