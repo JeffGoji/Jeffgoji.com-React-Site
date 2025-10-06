@@ -16,6 +16,9 @@ import MsmBlog from './components/blog/Kiryu'
 import NDBlog from './components/blog/Kasumi'
 import C8Blog from './components/blog/Panda'
 
+// Article links
+import TailOfTheDragon from './components/Articles/2025/tailofthedragon'
+
 // Gallery links
 import Gallery from './components/Gallery'
 import MSMGallery from './components/Gallery/NB/HillCountry'
@@ -48,6 +51,7 @@ function App() {
           <Route path="msm-blog" element={<MsmBlog />} />
           <Route path="nd-blog" element={<NDBlog />} />
           <Route path="c8-blog" element={<C8Blog />} />
+          <Route path="tail-of-the-dragon" element={<TailOfTheDragon />} />
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
           <Route path="gallery" element={<Gallery />} />
