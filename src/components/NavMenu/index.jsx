@@ -44,6 +44,7 @@ function NavMenu() {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={NavLink} to="/nd-hillcountry">Texas Hill Country</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to="/totdgallery">Tail of the Dragon 2025</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                                 <Dropdown drop="end">
