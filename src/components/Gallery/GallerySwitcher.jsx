@@ -7,6 +7,7 @@ import EastCoast15 from './NC/EastCoast15';
 import Yellowstone15 from './NC/Yellowstone15';
 // Nd Miata
 import NDHillCountry from './ND/HillCountry';
+import TailOfTheDragonGallery from './ND/TailOfTheDragon';
 
 const GallerySwitcher = () => {
     const [gallery, setGallery] = useState('');
@@ -45,7 +46,7 @@ const GallerySwitcher = () => {
                     <h4>ND Galleries</h4>
                     <Button onClick={() => handleSwitchGallery('NDHillCountry')} variant="danger" className='mb-2'>Texas Hill Country</Button>
                     <br />
-                    {/* <Button onClick={() => handleSwitchGallery('EastCoast15Gallery')} variant="danger" className=''>Scenery Shots</Button> */}
+                    <Button onClick={() => handleSwitchGallery('TailOfTheDragon')} variant="danger" className='mb-2'>Tail of the Dragon</Button>
                 </Col>
                 <Col>
                     <h4>C8 Corvette Galleries</h4>
@@ -58,6 +59,7 @@ const GallerySwitcher = () => {
                     {gallery === 'EastCoast15Gallery' && <EastCoast15Gallery />}
                     {gallery === 'Yellowstone15Gallery' && <Yellowstone15Gallery />}
                     {gallery === 'NDHillCountry' && <NDHillCountry />}
+                    {gallery === 'TailOfTheDragon' && <TailOfTheDragonGallery />}
                     {gallery === 'NBHillCountry23' && <NBHillCountry23 />}
                 </Col>
             </Row>
