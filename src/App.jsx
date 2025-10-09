@@ -16,6 +16,9 @@ import MsmBlog from './components/blog/Kiryu'
 import NDBlog from './components/blog/Kasumi'
 import C8Blog from './components/blog/Panda'
 
+// Article links
+// import TailOfTheDragon from './components/Articles/2025/tailofthedragon'
+
 // Gallery links
 import Gallery from './components/Gallery'
 import MSMGallery from './components/Gallery/NB/HillCountry'
@@ -23,6 +26,7 @@ import EastCoast15 from './components/Gallery/NC/EastCoast15'
 import Yellowstone15 from './components/Gallery/NC/Yellowstone15'
 import NDHillCountry from './components/Gallery/ND/HillCountry'
 import C8AutoxGallery from './components/Gallery/C8/autocross'
+import TailOfTheDragonGallery from './components/Gallery/ND/TailOfTheDragon';
 
 import ScrollToTop from './components/CustomComponents/ScrollToTop'
 
@@ -48,14 +52,17 @@ function App() {
           <Route path="msm-blog" element={<MsmBlog />} />
           <Route path="nd-blog" element={<NDBlog />} />
           <Route path="c8-blog" element={<C8Blog />} />
+          {/* <Route path="tail-of-the-dragon" element={<TailOfTheDragon />} /> */}
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
           <Route path="gallery" element={<Gallery />} />
+          <Route path="totdtrip" element={ <TailOfTheDragonGallery/>} />
           <Route path="msm-gallery" element={<MSMGallery />} />
           <Route path="nc-eastcoast15" element={<EastCoast15 />} />
           <Route path="nc-yellowstone15" element={<Yellowstone15 />} />
           <Route path="nd-hillcountry" element={<NDHillCountry />} />
           <Route path="c8-autox" element={<C8AutoxGallery />} />
+          <Route path="totdgallery" element={<TailOfTheDragonGallery/>} />
         </Routes>
       </div>
     </BrowserRouter>
