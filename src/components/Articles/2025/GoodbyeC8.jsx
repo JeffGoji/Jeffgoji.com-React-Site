@@ -6,10 +6,9 @@ function GoodbyeC8() {
     
     return (
         <Container fluid className="article-page">
-            <Row className="justify-content-center mt-5">
+            <Row className="justify-content-center mt-5 text-center">
                 <h1>Goodbye, Panda</h1>
-                <Col>
-                   
+                <Col className="text-start">
                     <p>Here at the end of a short but fun road. After three years and 16,000 miles, it is time to say goodbye to the C8 Corvette.
                         <br />
                     So as the car departs, I want give an end of life report on it and fill you in on the positives and negatives of owning the first mid-engine Corvette.

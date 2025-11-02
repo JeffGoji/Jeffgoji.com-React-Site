@@ -19,6 +19,9 @@ function NavMenu() {
                             <Nav.Link as={NavLink} to="/suspension">Suspension</Nav.Link>
                             {/* <Nav.Link as={NavLink} to="/blogs">Blogs</Nav.Link> */}
                             {/* <Nav.Link as={NavLink} to="/gallery">Galleries</Nav.Link> */}
+                            <NavDropdown title="Articles" id="basic-nav-dropdown">
+                                <NavDropdown.Item as={NavLink} to="/goodbye-c8">Goodbye C8</NavDropdown.Item>
+                                </NavDropdown>
                             <NavDropdown title="Galleries" id="basic-nav-dropdown">
                                 <NavDropdown.Item>NA Miata (coming soon)</NavDropdown.Item>
                                 <Dropdown drop="end">
