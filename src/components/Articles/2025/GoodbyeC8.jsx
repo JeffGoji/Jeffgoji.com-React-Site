@@ -96,21 +96,36 @@ function GoodbyeC8() {
             <Row className="justify-content-center text-center mt-5">
                 <Col lg={12} md={12} sm={12}>
                     <h2>The Negatives</h2>
+                    <p className="">
+                        While there are many positives to owning a C8 Corvette, there are also some negatives to consider. Here are a few of the downsides I've experienced during my ownership of Panda
+                    </p>
                     <img src={c82} alt="Panda" className="img-fluid rounded" />
-                    <p className="text-start mt-3">
-                        No car is perfect, and the C8 has a few negatives that are worth mentioning. First, the car is fairly large and wide, which can make it difficult to maneuver in tight spaces or park in small spots. This problem is only worse when you try to open the doors and find that you have to pull a cortortionist maneuver to get the car just to go grocery shopping.
-                        <br />
-                        The car's low ground clearance can also be a challenge on steep driveways or speed bumps, requiring careful approach angles to avoid scraping the front splitter. Panda has the nose lift option which is a MUST HAVE in general.
-                        <br />
+                    <ul className="text-start mt-3">
+                        <li> First, the car is fairly large and wide, which can make it difficult to maneuver in tight spaces or park in small spots. This problem is only worse when you try to open what are probably the widest doors in existence and find that you have to pull a cortortionist maneuver to get the car just to go grocery shopping.
+                            <br />
+                            In retrospect, it becomes obvious why a lot of exotic cars have gullwing or scissor doors. Howver, this Corvette was designed for a lower price point and mass production, so such door designs were not feasible. 
+                        </li>
+                        <li>
+                            The car's low ground clearance can also be a challenge on steep driveways or speed bumps, requiring careful approach angles to avoid scraping the front splitter. Panda has the nose lift option which is a MUST HAVE in general.
+                        </li>
+                        <li>
                         Another negative is the car's fuel economy... Yeah, it's virtually non-existent.
                         I'm not sure if it's the HTC (Hard Top Convertible) and it's aerodynamics, the lower gearing of the Z51 package, or a combination of both, but 12 mpg combined is pretty much the norm.
                         Best I've seen ont he highway is around 24 mpg.
-                        <br />
+                        </li>
+                        <li>
                         Stock class autocross is Super Street class. And unfortunately, the C8 Stingray just can't compete with the higher performance cars in class, including two of it's brothers the C8 Z06 and C8 E-Ray. Both with wider wheel bases and much more power and wider/stickier tires. So if you're looking to win consistently at local events, hope the faster cars don't show up. If you're looking to win Nationals, forget about it. The car is still a blast to drive and have fun in, but it's not a consistent winner in stock class.
-                        <br />
-                        Finally, the C8's price point is higher than previous generations of the Corvette, which may put it out of reach for some buyers. However, considering the performance and
-                        features, it's hard to argue with the value.
-                    </p>
+                        </li>
+                        <li>                
+                            The final issue which is a bit of a silly one, the Corvette sterotype. 
+                            <br />
+                            Even though the C8 is basically a supercar in terms of performance and design, it still carries the image of an owner who wears over-sized New Balance shoes, Jorts (shorts made from denim), and has a large collection of Hawain shirts in their closet. 
+                            <br />
+                            I would say it's a ridiculous stereotype, but I've actually seen this exact outfit in person more than once at car meets and autocross events.
+                            <br />
+                            So if you own a C8, be prepared for some interesting assumptions about your fashion sense and lifestyle from time to time.
+                        </li>
+                    </ul>
                 </Col>
             </Row>
         </Container> 
