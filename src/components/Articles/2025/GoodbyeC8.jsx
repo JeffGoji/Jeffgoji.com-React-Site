@@ -8,11 +8,15 @@ function GoodbyeC8() {
         <Container fluid className="article-page">
             <Row className="justify-content-center mt-5 text-center">
                 <h1>Goodbye, Panda</h1>
-                <Col className="text-start">
+                <Col>
                     <p>Here at the end of a short but fun road. After three years and 16,000 miles, it is time to say goodbye to the C8 Corvette.
                         <br />
                     So as the car departs, I want give an end of life report on it and fill you in on the positives and negatives of owning the first mid-engine Corvette.
                     </p>
+                    </Col>
+            </Row>
+            <Row className="justify-content-center mt-3">
+                <Col>
                     <p>First, the positives.
                         <br />
                         The C8 is a blast to drive in any situation and mode selected. The mid-engine layout gives it a handling characteristic that is unlike any previous Corvette, it stays planted and gets power down out of a corner in a brutally efficient manner as the torque piles on from the 6.2 liter LT2 V8.
