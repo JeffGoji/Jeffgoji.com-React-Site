@@ -1,10 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Container, Row, Col } from "react-bootstrap";
-import c81 from '../../../assets/images/c8/c8-001s.jpg';
-import c82 from '../../../assets/images/c8/autocross/c8s-002.jpg';   
+import c81 from '../../../assets/images/c8/c8-002.jpg';
+import c82 from '../../../assets/images/c8/autocross/1726961254977.jpg';   
 import c83 from '../../../assets/images/c8/club-001.jpg';
 import c84 from '../../../assets/images/c8/autocross/c84.jpg';
 import c85 from '../../../assets/images/c8/shoprally_03292025.jpg';
+import C86 from '../../../assets/images/c8/autocross/20240317_092336.jpg';
+import C87 from '../../../assets/images/c8/c8_and_nd-001.jpg';
 
 function GoodbyeC8() {
     return (
@@ -110,7 +112,7 @@ function GoodbyeC8() {
                     <p>
                         While there are many positives to owning a C8 Corvette, there are also some negatives to consider. Here are a few of the downsides I've experienced during my ownership of Panda.
                     </p>
-                    <img src={c82} alt="Panda" className="img-fluid rounded" />
+                    <img src={C86} alt="Panda" className="img-fluid rounded" />
                     <ul className="text-start mt-3">
                         <li>
                             First, the car is fairly large and wide, which can make it difficult to maneuver in tight spaces or park in small spots. This problem is only worse when you try to open what are probably the widest doors in existence and find that you have to pull a contortionist maneuver just to go grocery shopping.
@@ -139,6 +141,19 @@ function GoodbyeC8() {
                             So if you own a C8, be prepared for some interesting assumptions about your fashion sense and lifestyle from time to time.
                         </li>
                     </ul>
+                </Col>
+            </Row>
+            <Row>
+                <Col lg={12} md={12} sm={12} className="mt-5 mb-5 text-center">
+                    <h2>Final Thoughts</h2>
+                    <p>
+                        Overall, owning a C8 Corvette has been a fantastic experience. The car is a blast to drive, looks great, and has plenty of performance features that make it a joy to own.
+                        <br />
+                        While there are some negatives to consider, they are outweighed by the positives for me.
+                        <br />
+                        As I say goodbye to Panda, I will cherish the memories and experiences I've had with this amazing car.
+                    </p>
+<img src={C87} alt="Panda" className="img-fluid rounded" />
                 </Col>
             </Row>
         </Container>
