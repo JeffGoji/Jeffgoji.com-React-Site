@@ -18,6 +18,7 @@ import C8Blog from './components/blog/Panda'
 
 // Article links
 // import TailOfTheDragon from './components/Articles/2025/tailofthedragon'
+import GoodbyeC8 from './components/Articles/2025/GoodbyeC8';
 
 // Gallery links
 import Gallery from './components/Gallery'
@@ -53,6 +54,7 @@ function App() {
           <Route path="nd-blog" element={<NDBlog />} />
           <Route path="c8-blog" element={<C8Blog />} />
           {/* <Route path="tail-of-the-dragon" element={<TailOfTheDragon />} /> */}
+          <Route path="goodbye-c8" element={<GoodbyeC8 />} />
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
           <Route path="gallery" element={<Gallery />} />
