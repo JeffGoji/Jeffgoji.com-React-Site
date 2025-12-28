@@ -1,3 +1,9 @@
+if (!Object.hasOwn) {
+  Object.hasOwn = function (obj, prop) {
+    return Object.prototype.hasOwnProperty.call(obj, prop);
+  };
+}
+
 // src/entry-client.jsx = Formally main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
