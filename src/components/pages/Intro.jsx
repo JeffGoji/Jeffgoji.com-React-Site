@@ -1,23 +1,84 @@
-// import AdSenseSlot from "../AdSense/AdSenseSlot";
+import naData from '../../assets/Data/naBlog.json';
+import nbData from '../../assets/Data/MsmBlog.json';
+import ndData from '../../assets/Data/ndBlog.json'
+
+import { Card, Container, Row, Col } from 'react-bootstrap';
 
 function Intro() {
 
+    const latestNaBlog = [...naData].sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+    )[0];
+
+    const latestNbBlog = [...nbData].sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+    )[0];
+
+    const latestNdBlog = [...ndData].sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+    )[0];
+
     return (
-        <div className="container-fluid splash-background text-white">
-            <div className="row mt-5 justify-content-center">
-                <div className="col-lg-8 col-md-12 text-center">
-                    <div className='row mt-5 justify-content-center'>
-                        <div className='col-lg-12'>
-                            {/* <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' /> */}
-                            {/* <h1 className="text-center text-outline fw-bold mt-5">Jeff Goji&apos;s Car Blogs</h1> */}
-                            <h3 className='fw-bold mt-3'>
-                                Hey there! I’m Jeff, a lifelong car enthusiast with a soft spot for Miatas and Autocross. Here you will find my thoughts on modifications, event recaps, and the joys (and headaches) of driving. Dive into a car blog, or catch up on my latest autocross videos below!
-                            </h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Container fluid className="splash-background text-white">
+            <Row className='justify-content-center mt-5'>
+                <Col lg={3}>            
+                            {latestNaBlog && (
+                                <Card className="text-dark h-75">
+                                    {latestNaBlog.picture && (
+                                        <Card.Img
+                                            variant="top"
+                                            src={latestNaBlog.picture}
+                                            alt={latestNaBlog.title ?? 'Blog image'}
+                                        />
+                                    )}
+                                    <Card.Body>
+                                        <Card.Text>{latestNaBlog.intro}</Card.Text>
+                            </Card.Body>
+                            <Card.Footer>
+                            </Card.Footer>
+                                </Card>
+                    )}
+                    </Col>
+                    <Col lg={3}>
+                            {latestNbBlog && (
+                                <Card className="text-dark mx-auto h-75">
+                                    {latestNbBlog.picture && (
+                                        <Card.Img
+                                            variant="top"
+                                            src={latestNbBlog.picture}
+                                            alt={latestNbBlog.title ?? 'Blog image'}
+                                        />
+                                    )}
+                                    <Card.Body>
+                                        <Card.Text>{latestNbBlog.intro}</Card.Text>
+                            </Card.Body>
+                            <Card.Footer>
+                                </Card.Footer>
+                                </Card>
+                            )}
+                </Col>
+                <Col lg={3}>
+                    <Card className="text-dark mx-auto h-75">
+                        {latestNdBlog && (
+                            <>
+                                {latestNdBlog.picture && (
+                                    <Card.Img
+                                        variant="top"
+                                        src={latestNdBlog.picture}
+                                        alt={latestNdBlog.title ?? 'Blog image'}
+                                    />
+                                )}
+                                <Card.Body>
+                                    <Card.Text>{latestNdBlog.intro}</Card.Text>
+                                </Card.Body>
+                                <Card.Footer>
+                                </Card.Footer>
+                            </>
+                        )}
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 
