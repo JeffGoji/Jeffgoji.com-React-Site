@@ -48,12 +48,14 @@ function NABlog() {
                                     // Make markdown images match your bootstrap styling
                                     img: function Img(props) {
                                       return (
+                                        <div className='text-center'>
                                         <img
                                           {...props}
-                                          className="img-fluid rounded"
+                                          className="img-fluid rounded "
                                           alt={props.alt || "blog image"}
                                           loading="lazy"
-                                        />
+                                          />
+                                          </div>
                                       );
                                     },
                                     // Make links safe/consistent
