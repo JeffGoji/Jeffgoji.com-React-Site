@@ -1,52 +1,57 @@
 import { useEffect, useMemo, useState } from "react";
 import ReactImageGallery from "react-image-gallery";
-import images from "./images";
-import { hydrateThumbnails } from "../../_thumbs/thumbs";
-import { buildChunkMap } from "../../_thumbs/chunk";
+import { buildChunkMap } from "../../../Gallery/_thumbs/chunk";
 import "react-image-gallery/styles/css/image-gallery.css";
 
 function TailOfTheDragonGallery() {
-  const chunkSize = 25;
+  const chunkSize = 120;
 
-  const chunkMap = useMemo(() => {
-    return buildChunkMap(images, chunkSize, "Tail of the Dragon - Gallery");
-  }, [chunkSize]);
+  const [allImages, setAllImages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const chunkLabels = useMemo(() => Object.keys(chunkMap), [chunkMap]);
-
-  const [selectedLabel, setSelectedLabel] = useState(chunkLabels[0]);
-  const [items, setItems] = useState(chunkMap[chunkLabels[0]] || []);
-
+  // Load manifest on mount
   useEffect(() => {
     let alive = true;
 
     (async () => {
-      const current = chunkMap[selectedLabel] || [];
+      try {
+        const resp = await fetch("/gallery/nd-totd2025/manifest.json");
+        const json = await resp.json();
 
-      setItems(current); // show immediately; thumbs will hydrate
-
-      const hydrated = await hydrateThumbnails(current, {
-        namespace: `nd-totd2025-${selectedLabel}`,
-        batchSize: 10,
-        width: 320,
-        height: 213,
-        quality: 65,
-      });
-
-      if (alive) setItems(hydrated);
+        if (alive) {
+          setAllImages(json.items || []);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Failed to load gallery manifest:", err);
+      }
     })();
 
     return () => {
       alive = false;
     };
-  }, [selectedLabel, chunkMap]);
+  }, []);
 
-  if (!chunkLabels.length) {
-    return (
-      <div className="Gallery mt-2 text-white">
-        No images found for this gallery.
-      </div>
-    );
+  // Build chunk map AFTER images load
+  const chunkMap = useMemo(() => {
+    return buildChunkMap(allImages, chunkSize, "Tail of the Dragon - Gallery");
+  }, [allImages]);
+
+  const chunkLabels = useMemo(() => Object.keys(chunkMap), [chunkMap]);
+
+  const [selectedLabel, setSelectedLabel] = useState("");
+
+  // Select first chunk once available
+  useEffect(() => {
+    if (!selectedLabel && chunkLabels.length) {
+      setSelectedLabel(chunkLabels[0]);
+    }
+  }, [chunkLabels, selectedLabel]);
+
+  const items = chunkMap[selectedLabel] || [];
+
+  if (loading) {
+    return <div className="text-white mt-2">Loading gallery…</div>;
   }
 
   return (
@@ -60,14 +65,14 @@ function TailOfTheDragonGallery() {
           onChange={(e) => setSelectedLabel(e.target.value)}
         >
           {chunkLabels.map((label) => (
-            <option value={label} key={label}>
+            <option key={label} value={label}>
               {label}
             </option>
           ))}
         </select>
       </div>
 
-      <ReactImageGallery items={items} className="img-fluid" />
+      <ReactImageGallery items={items} />
     </div>
   );
 }
