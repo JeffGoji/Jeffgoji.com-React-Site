@@ -1,0 +1,15 @@
+{
+  "name": "strap-html-render",
+  "version": "1.0.0",
+  "description": "STRAP markdown-to-HTML render pipeline. Invoked at /strap-in and /strap-refresh closing phases to produce the project-docs HTML companion alongside the three markdowns. Also invoked at STRAP CI packaging time to produce Welcome-to-STRAP.html.",
+  "private": true,
+  "scripts": {
+    "render:welcome": "node render.js configs/welcome.json"
+  },
+  "dependencies": {
+    "marked": "^14.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

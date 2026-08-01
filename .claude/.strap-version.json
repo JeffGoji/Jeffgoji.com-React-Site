@@ -1,0 +1,8 @@
+﻿{
+    "version":  "2.6.0",
+    "channel":  "stable",
+    "distributionUrl":  "https://lmgstrapdist.blob.core.windows.net/releases",
+    "installedAt":  "2026-08-01T19:50:10Z",
+    "tarballSha256":  "2d90caefa7a8ed4f17efbd4efaa748162d7f96bc11459b12fa21e2f2bffbd0c3",
+    "installedBy":  "install.ps1"
+}

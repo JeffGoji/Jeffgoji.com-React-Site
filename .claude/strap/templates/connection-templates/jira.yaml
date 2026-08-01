@@ -1,0 +1,159 @@
+# Starter operation_templates for Jira Cloud (Jira Software / Service Management).
+# Copy the relevant blocks into .claude/strap/state/devops-connection.yaml.
+# Adopter overrides individual templates as needed.
+#
+# Auth model: API token via Atlassian account ID. Token created at
+# https://id.atlassian.com/manage-profile/security/api-tokens; auth header is
+# `Authorization: Basic base64({{user_email}}:{{token}})`.
+#
+# Placeholders: {{site}} (e.g., yourcompany.atlassian.net), {{project_key}},
+# {{id}} (issue key like PROJ-123), {{host_type}}, {{title}}, {{description}},
+# {{labels}}, {{components}}, {{source_id}}, {{target_id}}, {{link_type}},
+# {{body}}, {{jql}}, {{token_auth_header}} (pre-computed Basic auth value),
+# {{token}}.
+
+schema_version: "2.5"
+host: jira
+
+operation_templates:
+
+  work_item_create:
+    type: rest
+    method: POST
+    path: https://{{site}}/rest/api/3/issue
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      {
+        "fields": {
+          "project": { "key": "{{project_key}}" },
+          "summary": "{{title}}",
+          "description": {{description_adf}},
+          "issuetype": { "name": "{{host_type}}" },
+          "labels": [{{labels}}]
+          {{extra_fields_kv_pairs}}
+        }
+      }
+    # description_adf renders the description as Atlassian Document Format (ADF) JSON.
+    # When the consumer passes plain text, wrap in: {"type":"doc","version":1,"content":[
+    # {"type":"paragraph","content":[{"type":"text","text":"<plain>"}]}]}.
+
+  work_item_read:
+    type: rest
+    method: GET
+    path: https://{{site}}/rest/api/3/issue/{{id}}?expand=names,renderedFields,changelog
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Accept: application/json
+
+  work_item_update:
+    type: rest
+    method: PUT
+    path: https://{{site}}/rest/api/3/issue/{{id}}
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      {
+        "fields": { {{extra_fields_kv_pairs}} }
+      }
+    # State transitions are NOT done via field update -- use /rest/api/3/issue/{id}/transitions
+    # with the workflow transition id. See work_item_transition below.
+
+  work_item_transition:
+    # State changes are workflow transitions, not field writes. The connect skill probes
+    # the workflow at Step 4 and maps STRAP-logical states to transition ids.
+    type: rest
+    method: POST
+    path: https://{{site}}/rest/api/3/issue/{{id}}/transitions
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      { "transition": { "id": "{{transition_id}}" } }
+
+  work_item_delete:
+    type: rest
+    method: DELETE
+    path: https://{{site}}/rest/api/3/issue/{{id}}
+    headers:
+      Authorization: "{{token_auth_header}}"
+    # Requires Delete Issues permission. Soft-delete (move to trash) is not available via REST.
+
+  work_item_query:
+    type: rest
+    method: POST
+    path: https://{{site}}/rest/api/3/search
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      {
+        "jql": "{{jql}}",
+        "fields": [{{fields}}],
+        "maxResults": 100
+      }
+
+  work_item_link_add:
+    type: rest
+    method: POST
+    path: https://{{site}}/rest/api/3/issueLink
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      {
+        "type": { "name": "{{link_type}}" },
+        "inwardIssue": { "key": "{{target_id}}" },
+        "outwardIssue": { "key": "{{source_id}}" }
+      }
+    # link_type maps via mapping.link_types (parent_child -> "Blocks" or "Epic-Story" depending
+    # on the hierarchy choice; related -> "Relates", predecessor -> "Blocks").
+    # For Epic-Story parent links specifically, use the customfield_10014 (Epic Link) field
+    # via work_item_update instead -- different mechanism for Jira's Epic hierarchy.
+
+  work_item_comment_add:
+    type: rest
+    method: POST
+    path: https://{{site}}/rest/api/3/issue/{{id}}/comment
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      { "body": {{body_adf}} }
+    # body_adf wraps the comment body in ADF; see work_item_create for the pattern.
+
+  work_item_revisions:
+    type: rest
+    method: GET
+    path: https://{{site}}/rest/api/3/issue/{{id}}/changelog
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Accept: application/json
+    # /dora-collect parses changelog entries for state-transition history.
+
+  state_machine_probe:
+    # v2.5 #39697: per-issue-type state probe. Two-step: workflow scheme -> workflow -> statuses.
+    type: rest-recipe
+    steps:
+      - method: GET
+        path: https://{{site}}/rest/api/3/workflowscheme/project?projectKeyOrId={{project_key}}
+        headers:
+          Authorization: "{{token_auth_header}}"
+        capture:
+          workflow_name: "values[?issueTypeId=='{{issue_type_id}}'].workflow | [0]"
+      - method: GET
+        path: https://{{site}}/rest/api/3/workflow/search?workflowName={{captured.workflow_name}}&expand=statuses
+        headers:
+          Authorization: "{{token_auth_header}}"
+    # Returns workflow with statuses array; each status carries name + statusCategory.key
+    # (new / indeterminate / done) for the heuristic mapping.
+
+  field_existence_probe:
+    type: rest
+    method: GET
+    path: https://{{site}}/rest/api/3/field
+    headers:
+      Authorization: "{{token_auth_header}}"
+      Accept: application/json

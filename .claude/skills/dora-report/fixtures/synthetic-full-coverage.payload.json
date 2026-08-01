@@ -1,0 +1,1764 @@
+{
+  "reportTitle": "DORA Report",
+  "brandName": "",
+  "brandAccent": "DORA",
+  "workItemUrlTemplate": "#{id}",
+  "prUrlTemplate": "#{id}",
+  "layers": [
+    {
+      "name": "web-prod",
+      "pipeline_pattern": "web-*",
+      "product_layer": "web",
+      "excluded_from_dora": false
+    },
+    {
+      "name": "api-prod",
+      "pipeline_pattern": "api-*",
+      "product_layer": "api",
+      "excluded_from_dora": false
+    }
+  ],
+  "subRepos": [],
+  "deploymentTargets": [
+    {
+      "name": "vercel-prod",
+      "environment": "prod",
+      "deployKind": ""
+    },
+    {
+      "name": "azure-prod",
+      "environment": "prod",
+      "deployKind": ""
+    }
+  ],
+  "sprintMetrics": [
+    {
+      "name": "Synthetic Full",
+      "window": {
+        "start": "2026-05-17T00:00:00Z",
+        "end": "2026-05-31T00:00:00Z"
+      },
+      "counts": {
+        "totalWorkItems": 13,
+        "tasks": 3,
+        "tasksClosed": 3,
+        "tasksActive": 0,
+        "stories": 5,
+        "features": 3,
+        "enhancements": 0,
+        "bugs": 2,
+        "bugsByEnv": {
+          "prod": 2
+        },
+        "specs": 0,
+        "reqs": 0,
+        "prsInt": 3,
+        "prsIntCompleted": 2,
+        "prsIntAbandoned": 1,
+        "prsIntActive": 0,
+        "prsIntDrafts": 0,
+        "prsInterm": 0
+      },
+      "draftsByAuthor": {},
+      "contents": {
+        "features": [
+          {
+            "id": 100,
+            "title": "AI Feature shipped",
+            "assignee": null,
+            "isAi": true
+          },
+          {
+            "id": 200,
+            "title": "Human Feature shipped",
+            "assignee": null,
+            "isAi": false
+          }
+        ],
+        "stories": [
+          {
+            "id": 101,
+            "title": "AI Story A",
+            "assignee": null,
+            "isAi": true
+          },
+          {
+            "id": 201,
+            "title": "Human Story",
+            "assignee": null,
+            "isAi": false
+          },
+          {
+            "id": 500,
+            "title": "Pre-STRAP human story 1",
+            "assignee": null,
+            "isAi": false
+          },
+          {
+            "id": 501,
+            "title": "Pre-STRAP human story 2",
+            "assignee": null,
+            "isAi": false
+          },
+          {
+            "id": 502,
+            "title": "Pre-STRAP human story 3",
+            "assignee": null,
+            "isAi": false
+          }
+        ],
+        "enhancements": [],
+        "specs": [],
+        "bugsResolved": [
+          {
+            "id": 300,
+            "title": "Prod bug AI-caused",
+            "assignee": null,
+            "env": "prod",
+            "severity": "2",
+            "isAi": true
+          },
+          {
+            "id": 301,
+            "title": "Prod bug Human-caused",
+            "assignee": null,
+            "env": "prod",
+            "severity": "2",
+            "isAi": false
+          }
+        ]
+      },
+      "prsWithWeight": [
+        {
+          "id": 5001,
+          "title": "AI PR",
+          "createdBy": "agent-backend",
+          "iterationCount": 2,
+          "weight": {
+            "commits": 8,
+            "commit_authors": [
+              "agent-backend",
+              "Claude Opus 4.7 (1M context)"
+            ],
+            "files_changed": 24,
+            "lines_added": 580,
+            "lines_deleted": 92,
+            "lines_total": 672,
+            "work_items": [
+              102,
+              103
+            ],
+            "work_items_count": 2,
+            "merge_base": "a1b2c3d",
+            "merge_base_method": "merge-base",
+            "last_merge_commit": "e4f5g6h",
+            "computed_at": "2026-05-22T14:01:23Z",
+            "computation_method": "git-diff-numstat"
+          },
+          "isAi": true
+        },
+        {
+          "id": 5002,
+          "title": "Human PR",
+          "createdBy": "alice",
+          "iterationCount": 3,
+          "weight": {
+            "commits": 3,
+            "commit_authors": [
+              "alice"
+            ],
+            "files_changed": 6,
+            "lines_added": 142,
+            "lines_deleted": 38,
+            "lines_total": 180,
+            "work_items": [
+              202
+            ],
+            "work_items_count": 1,
+            "merge_base": "i7j8k9l",
+            "merge_base_method": "merge-base",
+            "last_merge_commit": "m0n1o2p",
+            "computed_at": "2026-05-24T14:01:45Z",
+            "computation_method": "git-diff-numstat"
+          },
+          "isAi": false
+        }
+      ],
+      "prWeightStats": {
+        "filesP50": 15,
+        "filesP90": 22.2,
+        "filesMax": 24,
+        "linesP50": 426,
+        "linesP90": 622.8,
+        "linesMax": 672,
+        "commitsP50": 5.5,
+        "commitsP90": 7.5,
+        "witP50": 1.5,
+        "witMax": 2,
+        "coverage": 0.6666666666666666
+      },
+      "prReviewersRanked": [],
+      "agentVsHuman": {
+        "agent": 2,
+        "human": 1,
+        "tagged": 2,
+        "audited": 0,
+        "agentShare": 0.6666666666666666,
+        "taggedShare": 0.6666666666666666,
+        "agentByOrchestrator": {
+          "unknown": 2
+        },
+        "humanByAssignee": {
+          "alice": 1
+        },
+        "byAgentRole": {}
+      },
+      "ai": {
+        "all": {
+          "count": 3,
+          "p50": 2,
+          "mean": 1.3675213675213673,
+          "p90": 2,
+          "sampleConfidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "ai": {
+          "count": 2,
+          "p50": 2,
+          "mean": 2,
+          "p90": 2,
+          "sampleConfidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "human": {
+          "count": 1,
+          "p50": 0.10256410256410256,
+          "mean": 0.10256410256410256,
+          "p90": 0.10256410256410256,
+          "sampleConfidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "confidence": "high",
+        "sampleConfidence": "no-signal",
+        "threshold": 5,
+        "thresholdKey": "ai_eff_sample"
+      },
+      "funnel": {
+        "itemCycles": {
+          "requirement": {
+            "newToActive": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 0,
+                "p50": null
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 0,
+                "p50": null
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "spec": {
+            "newToActive": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 0,
+                "p50": null
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 0,
+                "p50": null
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "feature": {
+            "createdToActive": {
+              "ai": {
+                "count": 1,
+                "p50": 24
+              },
+              "human": {
+                "count": 1,
+                "p50": 48
+              },
+              "all": {
+                "count": 3,
+                "p50": 24
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 48
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 1,
+                "p50": 248
+              },
+              "human": {
+                "count": 1,
+                "p50": 248
+              },
+              "all": {
+                "count": 2,
+                "p50": 248
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 248
+              }
+            }
+          },
+          "story": {
+            "createdToActive": {
+              "ai": {
+                "count": 1,
+                "p50": 1
+              },
+              "human": {
+                "count": 1,
+                "p50": 1
+              },
+              "all": {
+                "count": 5,
+                "p50": 24
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 1
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 1,
+                "p50": 223
+              },
+              "human": {
+                "count": 1,
+                "p50": 223
+              },
+              "all": {
+                "count": 5,
+                "p50": 2913
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 223
+              }
+            }
+          },
+          "task": {
+            "createdToActive": {
+              "ai": {
+                "count": 2,
+                "p50": 1
+              },
+              "human": {
+                "count": 1,
+                "p50": 1
+              },
+              "all": {
+                "count": 3,
+                "p50": 1
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 1
+              }
+            },
+            "activeToClosed": {
+              "ai": {
+                "count": 2,
+                "p50": 0.875
+              },
+              "human": {
+                "count": 1,
+                "p50": 78
+              },
+              "all": {
+                "count": 3,
+                "p50": 1
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 78
+              }
+            }
+          }
+        },
+        "crossStage": {
+          "reqToSpec": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "specToFeature": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "featureCreatedToFirstTask": {
+            "all": {
+              "p50": 50,
+              "p90": 50,
+              "count": 2,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 50,
+              "p90": 50,
+              "count": 1,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 50,
+              "p90": 50,
+              "count": 1,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "counts": {
+          "reqsResolved": 0,
+          "specsResolved": 0,
+          "featuresResolved": 2,
+          "storiesResolved": 5,
+          "tasksClosed": 3
+        }
+      },
+      "pr": {
+        "cycle": {
+          "all": {
+            "p50": 64,
+            "p90": 73.6,
+            "mean": 64,
+            "count": 2
+          },
+          "ai": {
+            "p50": 52,
+            "p90": 52,
+            "mean": 52,
+            "count": 1
+          },
+          "human": {
+            "p50": 76,
+            "p90": 76,
+            "mean": 76,
+            "count": 1
+          }
+        },
+        "sizeBuckets": {
+          "Small": 1,
+          "Medium": 2,
+          "Large": 0,
+          "XL": 0
+        },
+        "sizeBucketsByMode": {
+          "ai": {
+            "Small": 0,
+            "Medium": 1,
+            "Large": 0,
+            "XL": 0
+          },
+          "human": {
+            "Small": 1,
+            "Medium": 1,
+            "Large": 0,
+            "XL": 0
+          }
+        },
+        "outliers": [],
+        "total": 3
+      },
+      "deployByLayer": {
+        "web-prod": {
+          "total": 4,
+          "succeeded": 3,
+          "failed": 1,
+          "canceled": 0,
+          "byMode": {
+            "ai": 0,
+            "human": 4
+          }
+        },
+        "api-prod": {
+          "total": 2,
+          "succeeded": 2,
+          "failed": 0,
+          "canceled": 0,
+          "byMode": {
+            "ai": 0,
+            "human": 2
+          }
+        }
+      },
+      "deployByTarget": {
+        "vercel-prod": {
+          "total": 2,
+          "eventCount": 2,
+          "byMode": {
+            "ai": 2,
+            "human": 0
+          }
+        },
+        "azure-prod": {
+          "total": 2,
+          "eventCount": 2,
+          "byMode": {
+            "ai": 0,
+            "human": 2
+          }
+        }
+      },
+      "clusterCycleTime": {
+        "all": {
+          "median": 64,
+          "mean": 64,
+          "p90": 73.6,
+          "sampleSize": 2,
+          "inFlightCount": 0,
+          "brokenCount": 0,
+          "distribution": [
+            {
+              "featureId": 100,
+              "cycleSeconds": 187200,
+              "prCount": 1,
+              "isAi": true
+            },
+            {
+              "featureId": 200,
+              "cycleSeconds": 273600,
+              "prCount": 1,
+              "isAi": false
+            }
+          ]
+        },
+        "ai": {
+          "median": 52,
+          "mean": 52,
+          "p90": 52,
+          "sampleSize": 1,
+          "inFlightCount": 0,
+          "brokenCount": 0,
+          "distribution": [
+            {
+              "featureId": 100,
+              "cycleSeconds": 187200,
+              "prCount": 1,
+              "isAi": true
+            }
+          ]
+        },
+        "human": {
+          "median": 76,
+          "mean": 76,
+          "p90": 76,
+          "sampleSize": 1,
+          "inFlightCount": 0,
+          "brokenCount": 0,
+          "distribution": [
+            {
+              "featureId": 200,
+              "cycleSeconds": 273600,
+              "prCount": 1,
+              "isAi": false
+            }
+          ]
+        }
+      },
+      "cfrByLayer": {
+        "web-prod": {
+          "all": {
+            "rate": 0.5,
+            "numerator": 2,
+            "denominator": 4,
+            "confidence": "high",
+            "threshold": 3,
+            "thresholdKey": "cfr_deploys"
+          },
+          "ai": {
+            "rate": null,
+            "numerator": 1,
+            "denominator": 0,
+            "confidence": "no-signal",
+            "threshold": 3,
+            "thresholdKey": "cfr_deploys"
+          },
+          "human": {
+            "rate": 0.25,
+            "numerator": 1,
+            "denominator": 4,
+            "confidence": "high",
+            "threshold": 3,
+            "thresholdKey": "cfr_deploys"
+          }
+        },
+        "api-prod": {
+          "all": {
+            "rate": 1,
+            "numerator": 2,
+            "denominator": 2,
+            "confidence": "no-signal",
+            "threshold": 3,
+            "thresholdKey": "cfr_deploys"
+          },
+          "ai": {
+            "rate": null,
+            "numerator": 1,
+            "denominator": 0,
+            "confidence": "no-signal",
+            "threshold": 3,
+            "thresholdKey": "cfr_deploys"
+          },
+          "human": {
+            "rate": 0.5,
+            "numerator": 1,
+            "denominator": 2,
+            "confidence": "no-signal",
+            "threshold": 3,
+            "thresholdKey": "cfr_deploys"
+          }
+        }
+      },
+      "mttr": {
+        "all": {
+          "p50": 5,
+          "count": 2,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        },
+        "ai": {
+          "p50": 4,
+          "count": 1,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        },
+        "human": {
+          "p50": 6,
+          "count": 1,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        }
+      },
+      "pipelineRunRateMode": "deployment-frequency",
+      "throughputByType": {
+        "Requirement": {
+          "all": 0,
+          "ai": 0,
+          "human": 0
+        },
+        "Spec": {
+          "all": 0,
+          "ai": 0,
+          "human": 0
+        },
+        "Feature": {
+          "all": 2,
+          "ai": 1,
+          "human": 1
+        },
+        "Story": {
+          "all": 5,
+          "ai": 1,
+          "human": 1
+        },
+        "Task": {
+          "all": 3,
+          "ai": 2,
+          "human": 1
+        },
+        "Bug": {
+          "all": 2,
+          "ai": 1,
+          "human": 1
+        },
+        "Enhancement": {
+          "all": 0,
+          "ai": 0,
+          "human": 0
+        }
+      },
+      "qualityCycleTimes": {
+        "requirement": {
+          "newToActive": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "resolvedToNextSpecCreated": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "spec": {
+          "newToActive": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "resolvedToFirstFeatureCreated": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "feature": {
+          "newToActive": {
+            "all": {
+              "p50": 24,
+              "p90": 43.2,
+              "count": 3,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 24,
+              "p90": 24,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 48,
+              "p90": 48,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 248,
+              "p90": 248,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 248,
+              "p90": 248,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 248,
+              "p90": 248,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 284,
+              "p90": 293.6,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 272,
+              "p90": 272,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 296,
+              "p90": 296,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "createdToFirstTaskActive": {
+            "all": {
+              "p50": 50,
+              "p90": 50,
+              "count": 2,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 50,
+              "p90": 50,
+              "count": 1,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 50,
+              "p90": 50,
+              "count": 1,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "story": {
+          "newToActive": {
+            "all": {
+              "p50": 1,
+              "p90": 1,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 1,
+              "p90": 1,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 1,
+              "p90": 1,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 2913,
+              "p90": 3066.6,
+              "count": 5,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 223,
+              "p90": 223,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 223,
+              "p90": 223,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 2937,
+              "p90": 3090.6,
+              "count": 5,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 224,
+              "p90": 224,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 224,
+              "p90": 224,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "task": {
+          "newToActive": {
+            "all": {
+              "p50": 1,
+              "p90": 1,
+              "count": 3,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 1,
+              "p90": 1,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 1,
+              "p90": 1,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToClosed": {
+            "all": {
+              "p50": 1,
+              "p90": 62.6,
+              "count": 3,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.875,
+              "p90": 0.975,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 78,
+              "p90": 78,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 2,
+              "p90": 63.6,
+              "count": 3,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 1.875,
+              "p90": 1.975,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 79,
+              "p90": 79,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        }
+      },
+      "aiVsHumanGlance": {
+        "aiEfficiency": {
+          "ai": 2,
+          "human": 0.10256410256410256,
+          "spreadDeltaVsPrior": null
+        },
+        "prCycleHours": {
+          "ai": 52,
+          "human": 76,
+          "spreadDeltaVsPrior": null
+        },
+        "tasksClosed": {
+          "ai": 2,
+          "human": 1,
+          "spreadDeltaVsPrior": null
+        },
+        "deploys": {
+          "ai": 0,
+          "human": 6,
+          "spreadDeltaVsPrior": null
+        },
+        "authorshipShare": {
+          "pct": 33.33333333333333,
+          "deltaVsPrior": null
+        }
+      },
+      "aiContributionShare": {
+        "overall": 0.3333333333333333,
+        "byLayer": {
+          "web-prod": 0.5,
+          "api-prod": 0.5
+        },
+        "byTarget": {
+          "vercel-prod": 1,
+          "azure-prod": 0
+        }
+      },
+      "intermediateShare": 0,
+      "devRows": [
+        {
+          "name": "agent-backend",
+          "intPrs": 2,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 1.5,
+          "avgCmt": 2.5,
+          "avgFiles": 24,
+          "avgLines": 672,
+          "totalLines": 672,
+          "heaviestPr": {
+            "pr_id": 5001,
+            "title": "AI PR",
+            "files": 24,
+            "lines_total": 672
+          },
+          "maxIter": 2,
+          "buckets": {
+            "Small": 1,
+            "Medium": 1,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Focused",
+          "tasksClosed": 1,
+          "tasksActive": 0,
+          "taskP50": 1,
+          "aiP50": 2,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        },
+        {
+          "name": "agent-frontend",
+          "intPrs": 0,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": null,
+          "avgCmt": null,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": null,
+          "buckets": {
+            "Small": 0,
+            "Medium": 0,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Moderate",
+          "tasksClosed": 1,
+          "tasksActive": 0,
+          "taskP50": 0.75,
+          "aiP50": 2,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        },
+        {
+          "name": "alice",
+          "intPrs": 1,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 3,
+          "avgCmt": 6,
+          "avgFiles": 6,
+          "avgLines": 180,
+          "totalLines": 180,
+          "heaviestPr": {
+            "pr_id": 5002,
+            "title": "Human PR",
+            "files": 6,
+            "lines_total": 180
+          },
+          "maxIter": 3,
+          "buckets": {
+            "Small": 0,
+            "Medium": 1,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Moderate",
+          "tasksClosed": 1,
+          "tasksActive": 0,
+          "taskP50": 78,
+          "aiP50": 0.10256410256410256,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        }
+      ],
+      "dq": {
+        "flags": {
+          "revisions_unavailable": true,
+          "pr_threads_unavailable": false,
+          "reverts_unavailable": false,
+          "cw_oe_degeneracy": true,
+          "possible_missing_audit_share": 0,
+          "pre_strap_human_backlog_share": 0.42857142857142855
+        },
+        "fieldCoverage": {
+          "tasksWithActivatedDate": {
+            "covered": 3,
+            "total": 3,
+            "pct": 1
+          },
+          "tasksWithOriginalEstimate": {
+            "covered": 3,
+            "total": 3,
+            "pct": 1
+          },
+          "tasksWithCompletedWork": {
+            "covered": 3,
+            "total": 3,
+            "pct": 1
+          },
+          "tasksWithWallclockComputable": {
+            "covered": 3,
+            "total": 3,
+            "pct": 1
+          },
+          "bugsWithEnvironment": {
+            "covered": 2,
+            "total": 2,
+            "pct": 1
+          },
+          "aiTaggedItems": {
+            "covered": 5,
+            "total": 13,
+            "pct": 0.38
+          },
+          "prThreadsAvailable": {
+            "covered": 0,
+            "total": 0,
+            "pct": 0
+          },
+          "pipelineRunsClassified": {
+            "covered": 6,
+            "total": 6,
+            "pct": 1
+          }
+        },
+        "overallPct": 0.78
+      }
+    }
+  ],
+  "sprintLabels": [
+    "Synthetic Full"
+  ],
+  "sprintShort": [
+    "SYN"
+  ],
+  "series": {
+    "tasksClosed": [
+      3
+    ],
+    "prsInt": [
+      3
+    ],
+    "prsCompleted": [
+      2
+    ],
+    "deploysByLayer": {
+      "web-prod": [
+        4
+      ],
+      "api-prod": [
+        2
+      ]
+    },
+    "deploysByTarget": {
+      "vercel-prod": [
+        2
+      ],
+      "azure-prod": [
+        2
+      ]
+    },
+    "aiP50": [
+      2
+    ],
+    "aiMean": [
+      1.3675213675213673
+    ],
+    "aiP90": [
+      2
+    ],
+    "prCycleP50": [
+      64
+    ],
+    "prCycleP90": [
+      73.6
+    ],
+    "abandonPct": [
+      0.3333333333333333
+    ],
+    "bugsByEnv": {
+      "prod": [
+        2
+      ]
+    },
+    "cwOeAntiPattern": [
+      1
+    ],
+    "clusterCycleP50": [
+      64
+    ],
+    "untargetedDeployRuns": [
+      0
+    ]
+  },
+  "movement": {
+    "improvements": [],
+    "regressions": []
+  },
+  "trendByDev": [
+    {
+      "name": "agent-backend",
+      "prs": [
+        2
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        1
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        1.5
+      ],
+      "maxIter": [
+        2
+      ],
+      "avgCmt": [
+        2.5
+      ],
+      "avgFiles": [
+        24
+      ],
+      "avgLines": [
+        672
+      ],
+      "totalLines": [
+        672
+      ],
+      "heaviestPr": [
+        {
+          "pr_id": 5001,
+          "title": "AI PR",
+          "files": 24,
+          "lines_total": 672
+        }
+      ]
+    },
+    {
+      "name": "agent-frontend",
+      "prs": [
+        0
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        1
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        null
+      ],
+      "maxIter": [
+        null
+      ],
+      "avgCmt": [
+        null
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "alice",
+      "prs": [
+        1
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        1
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        3
+      ],
+      "maxIter": [
+        3
+      ],
+      "avgCmt": [
+        6
+      ],
+      "avgFiles": [
+        6
+      ],
+      "avgLines": [
+        180
+      ],
+      "totalLines": [
+        180
+      ],
+      "heaviestPr": [
+        {
+          "pr_id": 5002,
+          "title": "Human PR",
+          "files": 6,
+          "lines_total": 180
+        }
+      ]
+    }
+  ],
+  "devTotals": [
+    {
+      "name": "agent-backend",
+      "prs": 2,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 1,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": 2,
+      "avgFilesPerPr": 24,
+      "avgLinesPerPr": 672,
+      "totalLines": 672,
+      "heaviestPr": {
+        "pr_id": 5001,
+        "title": "AI PR",
+        "files": 24,
+        "lines_total": 672
+      }
+    },
+    {
+      "name": "agent-frontend",
+      "prs": 0,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 1,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": null,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "alice",
+      "prs": 1,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 1,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": 3,
+      "avgFilesPerPr": 6,
+      "avgLinesPerPr": 180,
+      "totalLines": 180,
+      "heaviestPr": {
+        "pr_id": 5002,
+        "title": "Human PR",
+        "files": 6,
+        "lines_total": 180
+      }
+    }
+  ],
+  "verdicts": {
+    "milestone": {
+      "headline": "Stable sprint",
+      "context": "No metric moved more than 5% from the prior sprint.",
+      "detail": "A flat sprint can mean steady-state delivery or it can mean noise drowning signal -- check the Data Quality flags below to confirm field coverage is holding up before reading the flatness as good news.",
+      "action": "Hold cadence. If multiple sprints in a row read stable, consider whether the +/-5% threshold is masking small but real drift -- the configurable threshold lives in build-payload.js."
+    },
+    "watch": {
+      "headline": "No regressions",
+      "context": "No metric regressed more than 5% from the prior sprint.",
+      "detail": "Sustained absence of regressions is rare; verify the snapshot covers the expected window and that PR + work-item collection isn't silently dropping items.",
+      "action": "Spot-check the Data Quality section -- a zero-regression sprint with degraded coverage is a hidden regression."
+    },
+    "context": {
+      "headline": "Human metrics include 43% pre-STRAP backlog",
+      "context": "A substantial share of Human-classified work predates STRAP adoption and is dragging the Human-side cycle-time + throughput downward.",
+      "detail": "AI vs Human comparisons in this sprint are non-apples-to-apples. Legacy work tends to be larger, older, and less-frequently-touched than STRAP-tracked work -- the Human partition inherits that drag whether or not human authors are actually slower today.",
+      "action": "Run `/dora-collect --since <strap-adoption-date>` for a post-STRAP-only view. Compare the two reports side-by-side to see which signals are real and which are artifacts of the backlog mix."
+    }
+  },
+  "currentMetrics": null,
+  "inactiveMembers": [],
+  "agentAttribution": {
+    "available": false,
+    "totalTasks": 0,
+    "byAgent": {},
+    "sprintNames": [
+      "Synthetic Full"
+    ],
+    "message": "No agent attribution available (no agent:* role tags in window)."
+  },
+  "excludedClusters": [
+    {
+      "featureId": 600,
+      "title": "Validation cycle feature",
+      "exclusionReason": "strap:validation-cycle (Feature tag)",
+      "prCount": 1,
+      "subRepos": [
+        "web-frontend"
+      ],
+      "lifecycleDates": {
+        "openedAt": "2026-05-26T10:00:00Z",
+        "mergedAt": null
+      }
+    }
+  ]
+}

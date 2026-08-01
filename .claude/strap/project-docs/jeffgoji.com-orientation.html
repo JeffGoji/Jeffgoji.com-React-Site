@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jeffgoji.com — Project Orientation</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f8fafc;
+  --bg-sidebar: #0f172a;
+  --bg-code: #f1f5f9;
+  --bg-callout: #f0f9ff;
+  --bg-callout-invariant: #fef3c7;
+  --bg-callout-warn: #fee2e2;
+  --bg-card-ops: #ecfdf5;
+  --bg-card-devs: #eef2ff;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --text-sidebar: #cbd5e1;
+  --text-sidebar-strong: #f1f5f9;
+  --text-sidebar-active: #ffffff;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --accent-ops: #0d9488;
+  --accent-devs: #4f46e5;
+  --accent-callout: #0ea5e9;
+  --accent-invariant: #d97706;
+  --accent-warn: #dc2626;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --border-sidebar: #1e293b;
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1120;
+    --bg-alt: #111827;
+    --bg-sidebar: #050816;
+    --bg-code: #1e293b;
+    --bg-callout: #0c2440;
+    --bg-callout-invariant: #3f2d05;
+    --bg-callout-warn: #3b0e0e;
+    --bg-card-ops: #052e2b;
+    --bg-card-devs: #1e1b4b;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-sidebar: #94a3b8;
+    --text-sidebar-strong: #f1f5f9;
+    --text-sidebar-active: #ffffff;
+    --accent: #60a5fa;
+    --accent-strong: #93c5fd;
+    --accent-ops: #5eead4;
+    --accent-devs: #a5b4fc;
+    --accent-callout: #38bdf8;
+    --accent-invariant: #fbbf24;
+    --accent-warn: #f87171;
+    --border: #1e293b;
+    --border-strong: #334155;
+    --border-sidebar: #1e293b;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 290px;
+  flex-shrink: 0;
+  background: var(--bg-sidebar);
+  color: var(--text-sidebar);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 28px 22px 32px;
+  border-right: 1px solid var(--border-sidebar);
+}
+
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+
+.brand {
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border-sidebar);
+}
+
+.brand .logo {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--text-sidebar-strong);
+  display: inline-block;
+}
+
+.brand .version {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 3px 10px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  letter-spacing: 0.4px;
+  vertical-align: 4px;
+}
+
+.brand .tagline {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-sidebar);
+  letter-spacing: 0.2px;
+}
+
+.toc {
+  font-size: 14px;
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc > ul > li { margin: 2px 0; }
+
+.toc a {
+  display: block;
+  padding: 6px 10px;
+  color: var(--text-sidebar);
+  text-decoration: none;
+  border-radius: 6px;
+  border-left: 2px solid transparent;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.toc a:hover {
+  background: rgba(96, 165, 250, 0.08);
+  color: var(--text-sidebar-strong);
+}
+
+.toc .top {
+  color: var(--text-sidebar-strong);
+  font-weight: 600;
+  margin-top: 14px;
+  margin-bottom: 2px;
+  padding: 6px 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #64748b;
+}
+
+.toc .sub {
+  padding-left: 22px;
+  font-size: 13px;
+}
+
+.toc .sub-sub {
+  padding-left: 38px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* Main */
+main {
+  flex: 1;
+  padding: 56px 64px 96px;
+  max-width: 1100px;
+  min-width: 0;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+  color: var(--text);
+  line-height: 1.25;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-top: 56px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.3px;
+}
+
+h3 {
+  font-size: 19px;
+  font-weight: 700;
+  margin-top: 32px;
+  margin-bottom: 10px;
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 22px;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+p, ul, ol { margin: 12px 0; }
+
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+a:hover { border-bottom-color: var(--accent); }
+
+strong { font-weight: 700; color: var(--text); }
+
+code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  background: var(--bg-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.88em;
+  color: var(--text);
+}
+
+pre {
+  background: var(--bg-code);
+  padding: 16px 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 18px 0;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+
+blockquote {
+  margin: 18px 0;
+  padding: 8px 18px;
+  border-left: 3px solid var(--border-strong);
+  background: var(--bg-alt);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+blockquote p { margin: 6px 0; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0;
+}
+
+/* Hero */
+.hero {
+  margin-bottom: 36px;
+  padding: 40px 36px;
+  background: linear-gradient(135deg, var(--bg-alt) 0%, var(--bg) 100%);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.hero .eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 17px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+  max-width: 700px;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--bg-alt);
+  font-weight: 700;
+  color: var(--text);
+}
+
+tr:nth-child(even) td { background: var(--bg-alt); }
+
+/* Callouts */
+.callout {
+  margin: 22px 0;
+  padding: 18px 22px;
+  border-radius: 10px;
+  border-left: 4px solid var(--accent-callout);
+  background: var(--bg-callout);
+  line-height: 1.6;
+}
+
+.callout p { margin: 6px 0; }
+
+.callout .label {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent-callout);
+}
+
+.callout.invariant {
+  border-left-color: var(--accent-invariant);
+  background: var(--bg-callout-invariant);
+}
+.callout.invariant .label { color: var(--accent-invariant); }
+
+.callout.warn {
+  border-left-color: var(--accent-warn);
+  background: var(--bg-callout-warn);
+}
+.callout.warn .label { color: var(--accent-warn); }
+
+/* Principle cards */
+.principles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 22px 0;
+}
+
+.principle {
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-alt);
+  position: relative;
+}
+
+.principle .num {
+  display: inline-block;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.principle h4 {
+  margin: 0 0 6px 0;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 15px;
+}
+
+.principle p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* Agent grid */
+.team-section { margin: 24px 0; }
+
+.team-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.team-pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.team-pill.ops {
+  background: var(--bg-card-ops);
+  color: var(--accent-ops);
+}
+
+.team-pill.devs {
+  background: var(--bg-card-devs);
+  color: var(--accent-devs);
+}
+
+.agent-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.agent {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.agent .name {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.agent.ops { border-left: 3px solid var(--accent-ops); }
+.agent.devs { border-left: 3px solid var(--accent-devs); }
+.agent.ops .name { color: var(--accent-ops); }
+.agent.devs .name { color: var(--accent-devs); }
+
+.agent .desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* Workflow cards */
+.workflows {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 22px 0;
+}
+
+.workflow {
+  padding: 18px 22px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+}
+
+.workflow h4 {
+  margin: 0 0 6px 0;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.workflow .skills {
+  margin: 6px 0;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.workflow p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* Persistence stack table */
+.stack-table td:first-child {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* Install option cards (Mac/Linux vs Windows on Quick Start step 1) */
+.install-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 18px 0 6px;
+}
+
+.install-card {
+  padding: 18px 22px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.install-card h4 {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.install-card.mac-linux {
+  background: var(--bg-card-ops);
+  border-color: var(--accent-ops);
+}
+
+.install-card.mac-linux h4 {
+  color: var(--accent-ops);
+}
+
+.install-card.windows {
+  background: var(--bg-card-devs);
+  border-color: var(--accent-devs);
+}
+
+.install-card.windows h4 {
+  color: var(--accent-devs);
+}
+
+.install-card pre {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+}
+
+.install-card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Inline path-label highlight for the install-root examples block */
+.path-label {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Quick start steps */
+.steps {
+  counter-reset: step;
+  margin: 22px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps > li {
+  counter-increment: step;
+  padding: 16px 20px 16px 56px;
+  margin: 10px 0;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  position: relative;
+}
+
+.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 28px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.steps h4 {
+  margin: 0 0 4px 0;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.steps p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Footer */
+footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+footer p { margin: 6px 0; }
+
+/* Responsive */
+/* Wide screens (laptops 1440+) -- bump max-width and use 3-column principles grid */
+@media (min-width: 1400px) {
+  main {
+    max-width: 1300px;
+  }
+  .principles {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* Ultra-wide screens (desktop monitors 1800+) -- give prose more room, keep principles at 3-col */
+@media (min-width: 1800px) {
+  main {
+    max-width: 1500px;
+  }
+}
+
+/* Mobile / narrow viewports */
+@media (max-width: 960px) {
+  body { flex-direction: column; }
+  .install-options { grid-template-columns: 1fr; }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 20px 24px;
+  }
+  main { padding: 32px 24px 64px; }
+  .principles { grid-template-columns: 1fr; }
+  .agent { grid-template-columns: 1fr; }
+  .agent .name { margin-bottom: 4px; }
+}
+
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <span class="logo"></span><span class="version"></span>
+    <div class="tagline"></div>
+  </div>
+  <nav class="toc">
+    <ul>
+      <li class="top">Project</li>
+      <li><a href="#project">Project</a></li>
+      <li class="sub"><a href="#what-this-project-is">What this project is</a></li>
+      <li class="sub"><a href="#who-it-serves">Who it serves</a></li>
+      <li class="sub"><a href="#how-to-get-started">How to get started</a></li>
+      <li class="sub"><a href="#repository-layout">Repository layout</a></li>
+      <li class="sub"><a href="#where-to-learn-more">Where to learn more</a></li>
+      <li class="sub"><a href="#status">Status</a></li>
+      <li class="top">Architecture</li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li class="sub"><a href="#system-shape">System shape</a></li>
+      <li class="sub"><a href="#active-domains">Active domains</a></li>
+      <li class="sub-sub"><a href="#client-ui">client-ui</a></li>
+      <li class="sub-sub"><a href="#infrastructure">infrastructure</a></li>
+      <li class="sub-sub"><a href="#dormant-domains">Dormant domains</a></li>
+      <li class="sub"><a href="#data-flow">Data flow</a></li>
+      <li class="sub"><a href="#key-boundaries">Key boundaries</a></li>
+      <li class="sub"><a href="#layering">Layering</a></li>
+      <li class="sub"><a href="#architectural-conventions-worth-knowing">Architectural conventions worth knowing</a></li>
+      <li class="sub-sub"><a href="#json-as-cms-blog-content">JSON-as-CMS blog content</a></li>
+      <li class="sub-sub"><a href="#local-state-only">Local state only</a></li>
+      <li class="sub-sub"><a href="#folder-per-component-layout">Folder-per-component layout</a></li>
+      <li class="sub-sub"><a href="#markdown-only-content-rendering">Markdown-only content rendering</a></li>
+      <li class="sub"><a href="#anti-patterns-and-gotchas">Anti-patterns and gotchas</a></li>
+      <li class="sub-sub"><a href="#entry-ssrjsx-is-a-trap">`entry-ssr.jsx` is a trap</a></li>
+      <li class="sub-sub"><a href="#three-unconsolidated-gallery-wiring-patterns">Three unconsolidated gallery-wiring patterns</a></li>
+      <li class="sub-sub"><a href="#three-styling-systems">Three styling systems</a></li>
+      <li class="sub-sub"><a href="#duplicate-orphaned-route">Duplicate / orphaned route</a></li>
+      <li class="sub-sub"><a href="#adsense-is-100-inert">AdSense is 100% inert</a></li>
+      <li class="sub-sub"><a href="#four-near-identical-blog-components">Four near-identical blog components</a></li>
+      <li class="sub-sub"><a href="#dead-files-to-be-aware-of">Dead files to be aware of</a></li>
+      <li class="sub-sub"><a href="#security-hardening-low">Security hardening (Low)</a></li>
+      <li class="sub"><a href="#diagrams">Diagrams</a></li>
+      <li class="sub"><a href="#where-to-learn-more">Where to learn more</a></li>
+      <li class="top">Stack</li>
+      <li><a href="#stack">Stack</a></li>
+      <li class="sub"><a href="#languages">Languages</a></li>
+      <li class="sub"><a href="#frameworks">Frameworks</a></li>
+      <li class="sub-sub"><a href="#client-ui">client-ui</a></li>
+      <li class="sub-sub"><a href="#infrastructure">infrastructure</a></li>
+      <li class="sub"><a href="#data-stores">Data stores</a></li>
+      <li class="sub"><a href="#package-managers-and-dependency-management">Package managers and dependency management</a></li>
+      <li class="sub"><a href="#build-and-test">Build and test</a></li>
+      <li class="sub"><a href="#dev-environment-setup">Dev environment setup</a></li>
+      <li class="sub"><a href="#cicd-overview">CI/CD overview</a></li>
+      <li class="sub"><a href="#hosting-and-infrastructure">Hosting and infrastructure</a></li>
+      <li class="sub"><a href="#external-integrations">External integrations</a></li>
+      <li class="sub-sub"><a href="#google-adsense-inert">Google AdSense (inert)</a></li>
+      <li class="sub-sub"><a href="#youtube-embeds">YouTube embeds</a></li>
+      <li class="sub-sub"><a href="#firebase-declared-but-unused">Firebase (declared but unused)</a></li>
+      <li class="sub"><a href="#where-to-learn-more">Where to learn more</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main>
+
+<section id="project">
+<h1 id="jeffgojicom">jeffgoji.com</h1>
+<p>A single-author car-enthusiast blog and showcase, built as a client-only React single-page app.</p>
+<h2 id="what-this-project-is">What this project is</h2>
+<p>jeffgoji.com is the personal website of Jeff &quot;Goji&quot; Anderson-Lester -- a car-enthusiast blog and showcase covering Mazda Miata builds (NA / MSM / ND), a Corvette C8, autocross recaps, tuning and suspension technical articles, photo galleries, and embedded YouTube videos. It is live at <a href="https://jeffgoji.com/">https://jeffgoji.com/</a>.</p>
+<p>Technically, it is a small React 18 + Vite single-page application with <strong>no backend, no database, and no authentication</strong>. Blog content is authored as markdown strings inside JSON data files (a &quot;JSON-as-CMS&quot; model) and rendered client-side. Photo galleries are served from static assets, with one gallery consuming a build-time image pipeline. The site is deployed as static files to Netlify.</p>
+<p>Because there is no server, no user input, and no stored data, the trust surface is small: this is a public content site, not an application with an internal trust boundary.</p>
+<h2 id="who-it-serves">Who it serves</h2>
+<p>Two audiences, both simple:</p>
+<ul>
+<li><strong>Readers</strong> -- car enthusiasts and visitors browsing build logs, technical articles, galleries, and videos. No accounts, no interaction beyond navigation.</li>
+<li><strong>The author</strong> -- Jeff, the sole content author and maintainer. Content is added by hand-editing the JSON data files; there is no admin UI or CMS. The authoring path is owner-only.</li>
+</ul>
+<p>This is a personal site with a single maintainer; there is no team, no external contributor pipeline, and no customer-facing SLA.</p>
+<h2 id="how-to-get-started">How to get started</h2>
+<p>From a fresh checkout:</p>
+<pre><code class="language-bash">npm install        # pulls sharp (native binary) + fast-glob for the gallery pipeline
+npm run dev        # start the Vite dev server
+</code></pre>
+<p><code>npm run dev</code> serves the app without rebuilding galleries. Use <code>npm run dev:gallery</code> to run the sharp gallery build first, then start the dev server. A full production build is <code>npm run build</code> (gallery build -&gt; <code>vite build</code> -&gt; <code>dist/</code>).</p>
+<p>Note: the <code>sharp</code> native binary requires <strong>Node &gt;= 18.17</strong>. The project does not currently pin a Node version, so use a recent Node 18+ (Node 20 recommended). See <a href="./STACK.md"><code>STACK.md</code></a> for the full dev-environment walkthrough.</p>
+<h2 id="repository-layout">Repository layout</h2>
+<pre><code>/
+├── index.html              # HTML shell; loads /src/main.jsx and the SCSS/Bootstrap bundle; hosts the (inert) AdSense script
+├── netlify.toml            # Netlify build config (command: npm run build, publish: dist)
+├── package.json            # deps + npm scripts (dev / build / gallery:build)
+├── vite.config.js          # Vite config (react plugin, eslint plugin, target es2015)
+├── scripts/
+│   └── build-gallery.mjs   # sharp + fast-glob build-time image pipeline -&gt; public/gallery/
+├── public/
+│   ├── _redirects          # SPA fallback: /* /index.html 200
+│   ├── _headers            # cache headers (security headers not yet set)
+│   ├── images/             # blog + car photos, served root-relative
+│   └── gallery/            # generated webp thumbs/display + manifest.json (gitignored, rebuilt)
+└── src/
+    ├── main.jsx            # REAL entry point (ReactDOM.createRoot) -- authoritative
+    ├── App.jsx             # &lt;BrowserRouter&gt; + flat route table (source of truth for routes)
+    ├── entry-ssr.jsx       # DEAD/broken SSG entry -- do not wire against it (see ARCHITECTURE.md)
+    ├── assets/
+    │   ├── Data/           # blog JSON (naBlog/MsmBlog/ndBlog/c8Blog) + Cars.json
+    │   ├── css/            # legacy style.css
+    │   └── images/         # bundled image assets
+    ├── scss/               # custom SCSS (styles.scss) compiled via a separate script tag
+    └── components/         # AdSense, Articles, blog, CustomComponents, Footer, Gallery,
+                            #   Garage, Header, NavMenu, pages, Suspension, YouTube
+</code></pre>
+<p>Components predominantly follow a folder-per-component layout (<code>components/&lt;Name&gt;/index.jsx</code>), with some flat single-file components.</p>
+<h2 id="where-to-learn-more">Where to learn more</h2>
+<ul>
+<li><strong>Architecture</strong>: <a href="./ARCHITECTURE.md"><code>ARCHITECTURE.md</code></a> -- how the code is structured, how the pieces fit together, key boundaries and data flows.</li>
+<li><strong>Stack</strong>: <a href="./STACK.md"><code>STACK.md</code></a> -- languages, frameworks, runtimes, build/test commands, dev environment setup.</li>
+<li><strong>Agent context</strong>: <a href="../strap/contexts/project-profile.md"><code>.claude/strap/contexts/project-profile.md</code></a> -- the canonical record every STRAP agent reads on every invocation. The source of truth this document is distilled from.</li>
+<li><strong>Onboarding the dev pipeline</strong>: <a href="../../CLAUDE.md"><code>CLAUDE.md</code></a> -- the super-pair model + how the agent stack works on this project.</li>
+</ul>
+<h2 id="status">Status</h2>
+<p>Live in production at <a href="https://jeffgoji.com/">https://jeffgoji.com/</a>, deployed via Netlify. Actively authored by a single owner. STRAP onboarding completed 2026-08-01 with deep-dives by the frontend, security, test, and devops specialists.</p>
+<p>Not yet wired: this is <strong>not yet a git repository</strong> (<code>/connect-code-repo</code> will establish this) and DevOps/work-tracking integration is pending (<code>/connect-devops-project</code>). There are <strong>no automated tests</strong> today; a Vitest + React Testing Library stack is recommended (see <a href="./STACK.md"><code>STACK.md</code></a>). Known cleanup targets (dead SSG code, a duplicate route, inert AdSense, three unconsolidated gallery patterns, three styling systems, unused dependencies, and an unpinned Node version) are documented in <a href="./ARCHITECTURE.md"><code>ARCHITECTURE.md</code></a>.</p>
+<hr>
+<p><em>This document is maintained by the STRAP <code>tech-writer</code> agent through <code>/strap-in</code> (initial population) and <code>/strap-refresh</code> (surgical updates when project shape drifts). Edit through the dev-lead per the single-curator rule; direct in-place edits will surface on the next <code>/strap-refresh</code> drift detection.</em></p>
+
+</section>
+
+<section id="architecture">
+<h1 id="architecture">Architecture</h1>
+<p>This document describes how jeffgoji.com is structured. It is the human-readable companion to <code>.claude/strap/contexts/project-profile.md</code>, which is the agent-facing canonical record.</p>
+<h2 id="system-shape">System shape</h2>
+<p>jeffgoji.com is a <strong>client-only React single-page application</strong>. There is no backend, no database, no authentication, and no user input -- the entire application runs in the visitor&#39;s browser and is served as static files from Netlify&#39;s CDN.</p>
+<p><code>index.html</code> is the HTML shell. It loads two things: <code>/src/main.jsx</code> (the React application) and <code>/src/scss/js/main.js</code> (which pulls in Bootstrap&#39;s CSS/JS and compiles the custom SCSS). <code>main.jsx</code> mounts the app via <code>ReactDOM.createRoot</code>. <code>App.jsx</code> wraps everything in a single <code>&lt;BrowserRouter&gt;</code>, renders a <code>&lt;Header/&gt;</code>, and dispatches to a <strong>flat <code>&lt;Routes&gt;</code> table</strong> (<code>App.jsx:47-68</code>) that is the single source of truth for routing. The <code>Home</code> route composes <code>Intro + Garage + YouTube</code> directly as components rather than as nested routes.</p>
+<p>Content is not fetched from a server. Blog posts live as markdown-in-JSON inside the bundle, and galleries are either bundled image arrays or static assets fetched from the CDN. The only runtime network calls to third parties are the Google AdSense script (currently inert) and static YouTube embed iframes.</p>
+<h2 id="active-domains">Active domains</h2>
+<p>The logical concerns the codebase is decomposed into. Each domain has a defined specialist roster (in <code>project-profile.md</code>&#39;s <code>Domains</code> section) and a <code>Source-of-truth</code> set of paths where that domain&#39;s code lives.</p>
+<h3 id="client-ui">client-ui</h3>
+<p><strong>Status:</strong> active. <strong>Specialists:</strong> frontend-engineer, security-reviewer, test-strategist.</p>
+<p>The browser-facing React application: routing, page composition, the blog renderer, galleries, navigation, and styling. Built with React 18.2 + Vite 4.4, plain JSX (no TypeScript), React Router v6, React-Bootstrap 2.10 + Bootstrap 5.3, <code>react-markdown</code> + <code>remark-gfm</code> for blog content, and <code>react-image-gallery</code> for photo galleries. State is local <code>useState</code> only -- there is no Redux, Context store, or global state library, which is appropriate at this size.</p>
+<p>Conventions that matter here: the real entry is <code>src/main.jsx</code> and the authoritative route table is <code>App.jsx:47-68</code> (ignore <code>src/entry-ssr.jsx</code>, which is dead). Components follow a folder-per-component layout (<code>components/&lt;Name&gt;/index.jsx</code>). Blog content is authored as markdown inside JSON data files and must be rendered <strong>only</strong> through <code>react-markdown</code> + <code>remark-gfm</code> -- do not introduce raw-HTML rendering without sanitization (see <a href="#anti-patterns-and-gotchas">Anti-patterns and gotchas</a>).</p>
+<p>Source of truth: <code>src/App.jsx</code>, <code>src/main.jsx</code>, <code>src/components/blog/*/index.jsx</code>, <code>src/assets/Data/*Blog.json</code>, <code>src/components/Gallery/</code>.</p>
+<h3 id="infrastructure">infrastructure</h3>
+<p><strong>Status:</strong> active. <strong>Specialists:</strong> devops-lead.</p>
+<p>The build and deploy layer: the Vite build, the custom Node gallery pipeline, and Netlify static hosting. Built around Vite build, a custom Node build script (<code>scripts/build-gallery.mjs</code>, using <code>sharp</code> + <code>fast-glob</code>), and Netlify&#39;s static hosting with per-push builds.</p>
+<p>The key convention: <strong>Netlify&#39;s own per-push build is the CI/CD</strong> -- do not add GitHub Actions, which would duplicate the build and create a second config to drift. The build chain is <code>gallery:build</code> (sharp image resize) -&gt; <code>vite build</code> -&gt; <code>dist/</code>. <code>sharp</code> is a native binary and is the single most fragile link in the build.</p>
+<p>Source of truth: <code>netlify.toml</code>, <code>public/_redirects</code>, <code>public/_headers</code>, <code>scripts/build-gallery.mjs</code>, <code>vite.config.js</code>.</p>
+<h3 id="dormant-domains">Dormant domains</h3>
+<p>No signal at onboarding, so these are not activated: backend-engineer, database-engineer, integration-specialist, designer, ux-test-engineer. They can be activated later via <code>/strap-refresh</code> if the project grows into them.</p>
+<h2 id="data-flow">Data flow</h2>
+<p>How information moves through the system. Request paths, event paths, batch paths.</p>
+<p>There is no server round-trip -- all data flow is client-side and build-time. Three paths matter:</p>
+<ul>
+<li><strong>Client render.</strong> <code>main.jsx</code> boots React; <code>App.jsx</code> reads the current URL and renders the matching route from its flat table. Pages compose presentational components directly.</li>
+<li><strong>Blog content (markdown-in-JSON).</strong> Each blog component imports its JSON data file (<code>src/assets/Data/{naBlog,MsmBlog,ndBlog,c8Blog}.json</code>), an array of <code>{id, date, mileage, picture, cost, entry}</code> objects. Posts are sorted by <code>id</code> descending, paginated client-side (3 per page), and each post&#39;s markdown <code>entry</code> field is rendered by <code>react-markdown</code> + <code>remark-gfm</code> with custom <code>p/img/a</code> renderers. <code>picture</code> paths are root-relative without a leading slash and resolve against <code>public/images/</code>.</li>
+<li><strong>Gallery manifest fetch.</strong> The ND/TailOfTheDragon gallery fetches <code>/gallery/nd-totd2025/manifest.json</code> at runtime -- a file produced at build time by the <code>sharp</code> pipeline in <code>scripts/build-gallery.mjs</code>, which emits webp thumbs/display derivatives plus the manifest into <code>public/gallery/</code>. Other galleries do not use this path (see <a href="#architectural-conventions-worth-knowing">Architectural conventions</a>).</li>
+</ul>
+<h2 id="key-boundaries">Key boundaries</h2>
+<p>Where one part of the system hands off to another. Internal service boundaries, external integration surfaces, trust boundaries, transactional boundaries.</p>
+<ul>
+<li><strong>Build-time vs. runtime.</strong> The <code>sharp</code> gallery pipeline runs at build time and writes static webp assets + a manifest into <code>public/gallery/</code>; the browser consumes those artifacts at runtime via <code>fetch</code>. This is the only real producer/consumer handoff in the system.</li>
+<li><strong>Content-authoring boundary.</strong> Blog content enters the system only by hand-editing JSON data files in the repo -- an owner-only path. There is no runtime write path, so no user-supplied content reaches the DOM.</li>
+<li><strong>External integration surface.</strong> Two outbound third-party surfaces: Google AdSense (<code>pagead2.googlesyndication.com</code>, script in <code>index.html</code>, currently inert) and hardcoded YouTube embed iframes (<code>src/components/YouTube/index.jsx</code>). Both use hardcoded, non-user-controlled URLs.</li>
+<li><strong>Trust boundary.</strong> Effectively none internal to the app: no backend, no auth, no database, no user input, no secrets in source. The markdown blog renderer is the one place content becomes DOM, and it is safe only as long as it stays configured without raw-HTML rendering.</li>
+</ul>
+<h2 id="layering">Layering</h2>
+<p>The system is a single deployable: static assets built by Vite and served by Netlify. There is no service tier, no API layer, and no persistence tier. The meaningful layering is thin -- a presentation layer (React components + styling) sitting on top of a bundled content layer (JSON data + image assets), with a build-time asset-generation step feeding the CDN. DORA and multi-layer reporting degrade gracefully to this single Netlify deploy target.</p>
+<h2 id="architectural-conventions-worth-knowing">Architectural conventions worth knowing</h2>
+<p>Patterns that recur across the codebase and inform new work. Pulled from the curated <code>Architecture notes</code> in <code>project-profile.md</code> and from specialist deep-dives.</p>
+<h3 id="json-as-cms-blog-content">JSON-as-CMS blog content</h3>
+<p>Blog posts are arrays of objects in <code>src/assets/Data/{naBlog,MsmBlog,ndBlog,c8Blog}.json</code> with fields <code>id / date / mileage / picture / cost / entry</code>. The <code>entry</code> field is markdown, rendered client-side. The <code>id</code> must be a <strong>unique number</strong> -- both the sort (<code>b.id - a.id</code>) and the React <code>key={data.id}</code> depend on it, and a duplicate id silently breaks rendering. Pagination sorts by <code>id</code> descending, 3 posts per page.</p>
+<h3 id="local-state-only">Local state only</h3>
+<p>The app uses local <code>useState</code> exclusively -- no Redux, no Context store, no external state library. This is deliberate and appropriate for the site&#39;s size; do not introduce a state library without a clear driver.</p>
+<h3 id="folder-per-component-layout">Folder-per-component layout</h3>
+<p>Components predominantly follow <code>components/&lt;Name&gt;/index.jsx</code>, with some flat single-file components. New components should follow the folder-per-component pattern.</p>
+<h3 id="markdown-only-content-rendering">Markdown-only content rendering</h3>
+<p>Blog markdown is rendered strictly through <code>react-markdown</code> + <code>remark-gfm</code> with custom <code>p/img/a</code> renderers -- no <code>rehype-raw</code>, no <code>dangerouslySetInnerHTML</code>, no <code>DOMPurify</code>. This keeps raw HTML in a JSON <code>entry</code> escaped as text. Outbound links from the blog renderers correctly set <code>target=&quot;_blank&quot; rel=&quot;noreferrer&quot;</code>, with props spread before target/rel so markdown cannot override them.</p>
+<h2 id="anti-patterns-and-gotchas">Anti-patterns and gotchas</h2>
+<p>Things the codebase has been bitten by before. Surfaces inferred from history, from specialist findings, from CPO correction.</p>
+<h3 id="entry-ssrjsx-is-a-trap"><code>entry-ssr.jsx</code> is a trap</h3>
+<p><code>src/entry-ssr.jsx</code> looks like the SSR/SSG entry but is <strong>dead and broken</strong>: it imports <code>vite-react-ssg</code> (which is not declared in <code>package.json</code>), uses wrong component paths, and carries a stale route list. Nothing loads it. The real entry is <code>main.jsx</code>. Do not wire against <code>entry-ssr.jsx</code> without a deliberate decision to revive SSG (add the dep, fix paths, restore route parity). Vestiges of this abandoned prerender attempt remain across the codebase: the <code>Object.hasOwn</code> polyfill (<code>main.jsx:1-5</code>), the <code>custom-render-ready</code> dispatch (<code>App.jsx:38-40</code>), and <code>vite.config.js:8</code> forcing <code>target:&#39;es2015&#39;</code> &quot;so JSDOM can parse it&quot; -- which now just ships a larger down-transpiled bundle to every real visitor for a prerender that never runs.</p>
+<h3 id="three-unconsolidated-gallery-wiring-patterns">Three unconsolidated gallery-wiring patterns</h3>
+<p>Galleries use <code>react-image-gallery</code> wired three different ways: (a) a static <code>images.js</code> array of Vite-imported jpgs; (b) <code>images.js</code> + <code>_thumbs/chunk.js</code> + client-side canvas thumbnailing (ND/HillCountry); (c) a <code>fetch(&#39;/gallery/nd-totd2025/manifest.json&#39;)</code> from the sharp build pipeline (ND/TailOfTheDragon). Only (c) consumes the build pipeline. Worse, <code>nd-hillcountry</code> is configured in <code>build-gallery.mjs</code> but its component ignores the built output -- wasted build time and CDN storage -- and it relies on the <strong>deprecated</strong> <code>import.meta.globEager</code>, removed in Vite 5. Consolidating toward the build-pipeline approach (c) is the desirable direction.</p>
+<h3 id="three-styling-systems">Three styling systems</h3>
+<p>Styling is a three-way split: Bootstrap utilities (primary) + custom SCSS (<code>src/scss/styles.scss</code>, loaded via a separate script tag) + legacy <code>src/assets/css/style.css</code> (imported at <code>App.jsx:34</code>), plus scattered inline <code>style={{}}</code>. The SCSS <code>$theme-colors</code> override at <code>styles.scss:2</code> is <strong>ineffective</strong> (it imports Bootstrap before defining the map); custom colors work only because they are also hand-declared. Reconcile these before any theming work.</p>
+<h3 id="duplicate-orphaned-route">Duplicate / orphaned route</h3>
+<p><code>App.jsx:61</code> (<code>/totdtrip</code>) and <code>App.jsx:67</code> (<code>/totdgallery</code>) both render <code>TailOfTheDragonGallery</code>, but only <code>/totdgallery</code> is linked in <code>NavMenu</code>. <code>/totdtrip</code> is orphaned.</p>
+<h3 id="adsense-is-100-inert">AdSense is 100% inert</h3>
+<p>Every <code>AdSenseSlot</code> call site is commented out. <code>AdSenseSlot.jsx</code> reads <code>VITE_AD_CLIENT</code> / <code>VITE_AD_SLOT</code> env vars (undefined -- there is no <code>.env</code>), while the commented call sites pass <code>client=</code> / <code>slot=</code> props. The prop contract is mismatched -- reconcile <code>AdSenseSlot.jsx</code> to accept props (or add a <code>.env</code>) before re-enabling any slot.</p>
+<h3 id="four-near-identical-blog-components">Four near-identical blog components</h3>
+<p><code>blog/{Panda,Miyoshi,Kiryu,Kasumi}/index.jsx</code> differ only by JSON import and <code>&lt;h2&gt;</code> heading. <code>Miyoshi</code> (the NA blog) even names its map variable <code>ndBlogList</code> -- a copy-paste leftover. The top refactor target is collapsing these to a single data-driven <code>&lt;BlogList data title /&gt;</code>.</p>
+<h3 id="dead-files-to-be-aware-of">Dead files to be aware of</h3>
+<p>Verify with the owner before deleting: <code>src/entry-ssr.jsx</code>, <code>components/Footer/</code> (fully built, never rendered), <code>Gallery/NB/index.jsx</code> (unreferenced switcher), <code>src/assets/images/{nb,nd}/HillCountry/index.jsx</code> (gallery components misplaced in the assets tree), <code>Articles/2025/tailofthedragon.jsx</code> (import + route commented out), the root <code>ads.txt</code> (only <code>public/ads.txt</code> is published), the <code>/totdtrip</code> route, and the <code>firebase</code> / <code>react-image-file-resizer</code> dependencies.</p>
+<h3 id="security-hardening-low">Security hardening (Low)</h3>
+<p>No Critical or High findings at onboarding. Open low-risk items: <code>public/_headers</code> sets only <code>Cache-Control</code> -- no CSP, <code>X-Frame-Options</code>/<code>frame-ancestors</code>, <code>X-Content-Type-Options: nosniff</code>, <code>Referrer-Policy</code>, or HSTS. A CSP is non-trivial because of the Google ad stack; introduce it in report-only mode first, tuned against <code>pagead2.googlesyndication.com</code> + <code>youtube.com/embed</code>, before enforcing. The unused <code>firebase</code> SDK is a dead supply-chain surface (tree-shaken out today) and a candidate for removal.</p>
+<h2 id="diagrams">Diagrams</h2>
+<p><em>To be populated in a future /strap-refresh once an architecture diagram is authored. The system is small enough that the <a href="#system-shape">System shape</a> and <a href="#data-flow">Data flow</a> prose describe it fully in the interim.</em></p>
+<h2 id="where-to-learn-more">Where to learn more</h2>
+<ul>
+<li><strong>Project orientation</strong>: <a href="./PROJECT.md"><code>PROJECT.md</code></a> -- what this project IS and who it serves.</li>
+<li><strong>Stack</strong>: <a href="./STACK.md"><code>STACK.md</code></a> -- languages, frameworks, build commands.</li>
+<li><strong>Agent context</strong>: <a href="../strap/contexts/project-profile.md"><code>.claude/strap/contexts/project-profile.md</code></a> -- the canonical record agents read on every invocation; source of truth for active domains, conventions, build/test, layers.</li>
+</ul>
+<hr>
+<p><em>Maintained by the STRAP <code>tech-writer</code> agent through <code>/strap-in</code> (initial population) and <code>/strap-refresh</code> (surgical updates when project shape drifts). Edit through the dev-lead per the single-curator rule.</em></p>
+
+</section>
+
+<section id="stack">
+<h1 id="stack">Stack</h1>
+<p>This document describes what jeffgoji.com is built with. It is the human-readable companion to <code>.claude/strap/contexts/project-profile.md</code>, which is the agent-facing canonical record.</p>
+<h2 id="languages">Languages</h2>
+<p><strong>JavaScript / JSX only.</strong> There is no TypeScript, despite <code>@types/react</code> and <code>@types/react-dom</code> being declared in <code>devDependencies</code> -- those type packages are present but unused. Styling is authored in a mix of SCSS (<code>src/scss/styles.scss</code>), plain CSS (<code>src/assets/css/style.css</code>), and Bootstrap utility classes. The build-time gallery script (<code>scripts/build-gallery.mjs</code>) is plain ESM <code>.mjs</code>.</p>
+<h2 id="frameworks">Frameworks</h2>
+<p>Per active domain. Pulled from each <code>Domains</code> entry&#39;s <code>Stack</code> field in <code>project-profile.md</code>.</p>
+<h3 id="client-ui">client-ui</h3>
+<ul>
+<li><strong>React 18.2</strong> (plain JSX, no TypeScript), rendered via <code>ReactDOM.createRoot</code> in <code>src/main.jsx</code>.</li>
+<li><strong>Vite 4.4</strong> as the build tool and dev server (<code>@vitejs/plugin-react</code>, <code>vite-plugin-eslint</code>).</li>
+<li><strong>React Router DOM v6</strong> -- a single <code>&lt;BrowserRouter&gt;</code> with a flat route table in <code>src/App.jsx</code>. Client-only routing; no SSR/SSG in effect.</li>
+<li><strong>React-Bootstrap 2.10 + Bootstrap 5.3</strong> for UI components and utility classes.</li>
+<li><strong>react-markdown v10 + remark-gfm v4</strong> for rendering markdown blog content client-side with custom <code>p/img/a</code> renderers.</li>
+<li><strong>react-image-gallery 1.3</strong> for photo galleries.</li>
+</ul>
+<h3 id="infrastructure">infrastructure</h3>
+<ul>
+<li><strong>Vite build</strong> producing static assets into <code>dist/</code>.</li>
+<li><strong>Custom Node build script</strong> (<code>scripts/build-gallery.mjs</code>) using <strong>sharp 0.34</strong> (native image processing) + <strong>fast-glob 3.3</strong> to generate webp gallery derivatives and a manifest.</li>
+<li><strong>Netlify</strong> static hosting with per-push builds.</li>
+</ul>
+<h2 id="data-stores">Data stores</h2>
+<p><strong>None.</strong> There is no database, no key-value store, and no server-side persistence. The closest thing to a datastore is the &quot;JSON-as-CMS&quot; content model: blog posts are stored as arrays of objects in <code>src/assets/Data/{naBlog,MsmBlog,ndBlog,c8Blog}.json</code>, bundled into the app at build time. There is no runtime write path and no user data.</p>
+<h2 id="package-managers-and-dependency-management">Package managers and dependency management</h2>
+<p><strong>npm</strong> (a <code>package-lock.json</code> is committed). Dependencies are declared in <code>package.json</code>.</p>
+<p>Be aware of three dependency oddities:</p>
+<ul>
+<li><strong><code>firebase</code> (^10.7.1)</strong> -- declared but never imported. Dead supply-chain surface; a safe-to-remove candidate.</li>
+<li><strong><code>react-image-file-resizer</code> (^0.1.0)</strong> -- declared but never imported. Also a safe-to-remove candidate.</li>
+<li><strong><code>vite-react-ssg</code></strong> -- <em>referenced</em> by the dead <code>src/entry-ssr.jsx</code> but <strong>not declared</strong> in <code>package.json</code> at all, which is one reason that SSG entry is broken and non-functional.</li>
+</ul>
+<p>The <code>@types/react*</code> packages are also present but unused (no TypeScript). See <a href="./ARCHITECTURE.md#dead-files-to-be-aware-of"><code>ARCHITECTURE.md</code></a> for the full dead-code inventory.</p>
+<h2 id="build-and-test">Build and test</h2>
+<p>Commands the team runs locally and the pipeline runs in CI. Source of truth: <code>project-profile.md</code>&#39;s <code>Build and test</code> section.</p>
+<p><strong>Build:</strong></p>
+<ul>
+<li><code>npm run build</code> = <code>npm run gallery:build &amp;&amp; vite build</code> -- runs the sharp gallery pipeline, then produces the static bundle in <code>dist/</code>.</li>
+<li><code>npm run gallery:build</code> = <code>node scripts/build-gallery.mjs</code> -- generates webp thumbs/display derivatives + <code>manifest.json</code> into <code>public/gallery/</code> (gitignored, rebuilt from scratch each run).</li>
+<li><code>npm run dev</code> -- Vite dev server without rebuilding galleries.</li>
+<li><code>npm run dev:gallery</code> -- rebuild galleries, then start the dev server.</li>
+<li><code>npm run preview</code> -- serve a production build locally.</li>
+</ul>
+<p><strong>Lint:</strong> ESLint is configured (<code>.eslintrc.cjs</code>) but runs <strong>only as a Vite plugin</strong> -- there is no standalone <code>lint</code> npm script.</p>
+<p><strong>Tests:</strong> <strong>None currently.</strong> There is no test runner, no test files, and no <code>test</code> script. The recommended stack (per the test-strategist) is <strong>Vitest + React Testing Library + jsdom</strong> -- a native fit for Vite 4, able to run the <code>.mjs</code> build script and pure ESM helpers directly. Target scope is proportional: roughly 15-20 targeted tests, no e2e (Playwright/Cypress), no coverage-threshold gates, no snapshot testing. Highest-value targets, ranked:</p>
+<ol>
+<li>Pure helpers in <code>scripts/build-gallery.mjs</code> (<code>parseDateAlt</code>, <code>sortKeys</code>, <code>cleanName</code>) -- highest ROI, but they must be exported and <code>main()</code> guarded behind an entry check first.</li>
+<li><code>src/components/Gallery/_thumbs/chunk.js</code> (<code>chunkItems</code> / <code>buildChunkMap</code>).</li>
+<li>Blog JSON data-integrity across the four data files (every entry has all fields; <code>id</code> is a unique number; <code>picture</code> is non-empty and convention-consistent).</li>
+<li>Route-parity guard (keep <code>App.jsx</code> routes in sync, or formally retire <code>entry-ssr.jsx</code>).</li>
+<li>Blog pagination behavior (3/page, newest-id-first, Prev/Next disabling).</li>
+</ol>
+<p>Once tests exist, the centralized-execution gate is <code>npm test</code> (= <code>vitest run</code>), run only by the dev-lead.</p>
+<h2 id="dev-environment-setup">Dev environment setup</h2>
+<p>What a new contributor needs to do to get a working local environment from a fresh clone.</p>
+<ol>
+<li>Install a recent <strong>Node 18+</strong> (Node 20 recommended). The <code>sharp</code> native binary requires <strong>Node &gt;= 18.17</strong> -- this is the one hard version constraint, and it is currently <strong>unpinned</strong> (no <code>.nvmrc</code>, no <code>NODE_VERSION</code> in <code>netlify.toml</code>).</li>
+<li><code>npm install</code> -- pulls all dependencies, including the <code>sharp</code> native binary and <code>fast-glob</code>.</li>
+<li><code>npm run dev</code> to start the app, or <code>npm run dev:gallery</code> to build galleries first.</li>
+</ol>
+<p>Notes: this is a Windows dev host and is <strong>not currently a git repository</strong> (<code>/connect-code-repo</code> will establish this). <code>.env</code> files are gitignored and absent; none are required to run the site (the only env vars referenced -- <code>VITE_AD_CLIENT</code> / <code>VITE_AD_SLOT</code> for AdSense -- are unused because every ad slot is commented out).</p>
+<h2 id="cicd-overview">CI/CD overview</h2>
+<p>How code moves from a developer&#39;s branch through to deployable artifacts.</p>
+<p><strong>Netlify&#39;s own per-push build is the CI/CD</strong> -- there is no separate CI service, no GitHub Actions, no containers, and no IaC, which is correct for a personal SPA. Do <strong>not</strong> add GitHub Actions: it would duplicate the per-push build and create a second config to drift.</p>
+<p>The pipeline: a <code>git push</code> triggers a Netlify build image that runs <code>npm install</code> (pulling the <code>sharp</code> native binary + <code>fast-glob</code>), then <code>npm run build</code> (<code>gallery:build</code> sharp resize -&gt; <code>public/gallery/</code>, then <code>vite build</code> -&gt; <code>dist/</code>), then publishes <code>dist/</code>. <code>netlify.toml</code> sets the command (<code>npm run build</code>) and publish directory (<code>dist</code>). SPA routing fallback comes from <code>public/_redirects</code> (<code>/* /index.html 200</code>).</p>
+<p><code>sharp</code> is the single most fragile link -- a native, Node-version-sensitive binary -- and Node is unpinned, so pinning the Node version (<code>[build.environment] NODE_VERSION=&quot;20&quot;</code> or a <code>.nvmrc</code>) is the highest-value hardening for the pipeline.</p>
+<p><em>Work-tracking / DevOps integration is not yet wired; <code>/connect-devops-project</code> is pending. DORA and release-window reporting will populate once that connection exists.</em></p>
+<h2 id="hosting-and-infrastructure">Hosting and infrastructure</h2>
+<p>Where the code runs in production (and lower environments). IaC tooling. Cloud surface.</p>
+<p><strong>Netlify</strong>, single static deploy target. The site is served as static files from Netlify&#39;s CDN at <a href="https://jeffgoji.com/">https://jeffgoji.com/</a>. There is no server, no container, no lower environment, and no infrastructure-as-code -- the entire &quot;infrastructure&quot; is <code>netlify.toml</code> plus two static config files:</p>
+<ul>
+<li><code>public/_redirects</code> -- <code>/* /index.html 200</code> SPA fallback (correct).</li>
+<li><code>public/_headers</code> -- currently sets <strong>cache policy only</strong> (no security headers yet; see <a href="./ARCHITECTURE.md#security-hardening-low"><code>ARCHITECTURE.md</code></a>). Note the <code>immutable</code> cache header is applied to <code>/gallery/*</code> including non-content-hashed <code>original/</code> filenames, which can serve stale for a year -- <code>immutable</code> is only safe on the hashed <code>thumbs/</code> + <code>display/</code> webp derivatives.</li>
+</ul>
+<h2 id="external-integrations">External integrations</h2>
+<p>Third-party services, SDKs, APIs, and external systems the codebase depends on.</p>
+<h3 id="google-adsense-inert">Google AdSense (inert)</h3>
+<p>The Google AdSense script (<code>pagead2.googlesyndication.com</code>) is loaded globally in <code>index.html</code>, and there is an <code>AdSenseSlot</code> component. However, <strong>every ad slot call site is currently commented out</strong>, so AdSense is 100% inert at runtime. The publisher IDs (<code>ca-pub-*</code>) in <code>index.html</code> and <code>public/ads.txt</code> are public by design. Before re-enabling any slot, reconcile the prop contract: <code>AdSenseSlot.jsx</code> reads <code>VITE_AD_CLIENT</code>/<code>VITE_AD_SLOT</code> env vars (undefined), while the commented call sites pass <code>client=</code>/<code>slot=</code> props.</p>
+<h3 id="youtube-embeds">YouTube embeds</h3>
+<p>Static YouTube embed iframes in <code>src/components/YouTube/index.jsx</code>. URLs are hardcoded and not user-controlled.</p>
+<h3 id="firebase-declared-but-unused">Firebase (declared but unused)</h3>
+<p><code>firebase</code> (^10.7.1) is declared in <code>package.json</code> but <strong>never imported</strong> -- it is not an active integration. It is tree-shaken out of the bundle today (zero runtime surface) but remains a dead supply-chain dependency and a future footgun (someone could paste a Firebase config with keys). Recommended for removal.</p>
+<h2 id="where-to-learn-more">Where to learn more</h2>
+<ul>
+<li><strong>Project orientation</strong>: <a href="./PROJECT.md"><code>PROJECT.md</code></a> -- what this project IS and who it serves.</li>
+<li><strong>Architecture</strong>: <a href="./ARCHITECTURE.md"><code>ARCHITECTURE.md</code></a> -- how the pieces fit together.</li>
+<li><strong>Agent context</strong>: <a href="../strap/contexts/project-profile.md"><code>.claude/strap/contexts/project-profile.md</code></a> -- the canonical record agents read on every invocation; source of truth for <code>Stack</code>, <code>Build and test</code>, <code>DevOps integration</code>.</li>
+<li><strong>DevOps integration profile</strong>: <a href="../strap/state/devops-connection.yaml"><code>.claude/strap/state/devops-connection.yaml</code></a>, <a href="../strap/state/code-connection.yaml"><code>.claude/strap/state/code-connection.yaml</code></a> -- host wire-up details (read-only references; credentials live in env vars only).</li>
+</ul>
+<hr>
+<p><em>Maintained by the STRAP <code>tech-writer</code> agent through <code>/strap-in</code> (initial population) and <code>/strap-refresh</code> (surgical updates when project shape drifts). Edit through the dev-lead per the single-curator rule.</em></p>
+
+</section>
+
+<footer>
+<p>Rendered 2026-08-01 from jeffgoji.com's curated persistence stack via the STRAP html-render pipeline.</p>
+<p>The three markdown sources in <code>.claude/strap/project-docs/</code> are the source of truth; this HTML is regenerated at every /strap-in and /strap-refresh.</p>
+</footer>
+
+</main>
+
+</body>
+</html>

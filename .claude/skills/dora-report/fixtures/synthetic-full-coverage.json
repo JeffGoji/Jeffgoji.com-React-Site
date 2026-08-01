@@ -1,0 +1,144 @@
+{
+  "metadata": {
+    "snapshot_id": "20260531-synthetic-full",
+    "collected_at": "2026-05-31T12:00:00Z",
+    "collected_by": "dev-lead",
+    "skill_version": "v2.5",
+    "window": {"start": "2026-05-17T00:00:00Z", "end": "2026-05-31T00:00:00Z"},
+    "sprint_name": "Synthetic Full",
+    "strap_adoption_date": "2026-02-01T00:00:00Z",
+    "layers_resolved": [
+      {"name": "web-prod", "pipeline_pattern": "web-*", "product_layer": "web", "excluded_from_dora": false},
+      {"name": "api-prod", "pipeline_pattern": "api-*", "product_layer": "api", "excluded_from_dora": false}
+    ],
+    "batch_used": false
+  },
+  "work_items": [
+    {"id": 100, "type": "Feature", "state": "Resolved", "title": "AI Feature shipped", "tags": "AI; strap:feature",
+     "created_date": "2026-05-17T08:00:00Z", "activated_date": "2026-05-18T08:00:00Z", "resolved_date": "2026-05-28T16:00:00Z"},
+    {"id": 101, "type": "Story", "state": "Resolved", "title": "AI Story A", "tags": "AI; strap:story", "parent_id": 100,
+     "created_date": "2026-05-18T09:00:00Z", "activated_date": "2026-05-18T10:00:00Z", "resolved_date": "2026-05-27T17:00:00Z"},
+    {"id": 102, "type": "Task", "state": "Closed", "title": "AI Task A", "tags": "AI; strap:task", "parent_id": 101,
+     "created_date": "2026-05-19T09:00:00Z", "activated_date": "2026-05-19T10:00:00Z", "closed_date": "2026-05-19T11:00:00Z",
+     "original_estimate": 2.0, "completed_work": 2.0, "assigned_to": "agent-backend"},
+    {"id": 103, "type": "Task", "state": "Closed", "title": "AI Task B", "tags": "AI; strap:task", "parent_id": 101,
+     "created_date": "2026-05-20T09:00:00Z", "activated_date": "2026-05-20T10:00:00Z", "closed_date": "2026-05-20T10:45:00Z",
+     "original_estimate": 1.5, "completed_work": 1.5, "assigned_to": "agent-frontend"},
+    {"id": 200, "type": "Feature", "state": "Resolved", "title": "Human Feature shipped", "tags": "",
+     "created_date": "2026-05-17T08:00:00Z", "activated_date": "2026-05-19T08:00:00Z", "resolved_date": "2026-05-29T16:00:00Z"},
+    {"id": 201, "type": "Story", "state": "Resolved", "title": "Human Story", "tags": "", "parent_id": 200,
+     "created_date": "2026-05-19T09:00:00Z", "activated_date": "2026-05-19T10:00:00Z", "resolved_date": "2026-05-28T17:00:00Z"},
+    {"id": 202, "type": "Task", "state": "Closed", "title": "Human Task A", "tags": "", "parent_id": 201,
+     "created_date": "2026-05-19T09:00:00Z", "activated_date": "2026-05-19T10:00:00Z", "closed_date": "2026-05-22T16:00:00Z",
+     "original_estimate": 8.0, "completed_work": 8.0, "assigned_to": "alice"},
+    {"id": 300, "type": "Bug", "state": "Resolved", "title": "Prod bug AI-caused", "tags": "AI", "environment": "prod",
+     "created_date": "2026-05-20T08:00:00Z", "resolved_date": "2026-05-20T12:00:00Z", "severity": "2"},
+    {"id": 301, "type": "Bug", "state": "Resolved", "title": "Prod bug Human-caused", "tags": "", "environment": "prod",
+     "created_date": "2026-05-21T08:00:00Z", "resolved_date": "2026-05-21T14:00:00Z", "severity": "2"},
+    {"id": 500, "type": "Story", "state": "Resolved", "title": "Pre-STRAP human story 1", "tags": "", "parent_id": 200,
+     "created_date": "2026-01-15T08:00:00Z", "activated_date": "2026-01-16T08:00:00Z", "resolved_date": "2026-05-25T17:00:00Z"},
+    {"id": 501, "type": "Story", "state": "Resolved", "title": "Pre-STRAP human story 2", "tags": "", "parent_id": 200,
+     "created_date": "2026-01-20T08:00:00Z", "activated_date": "2026-01-21T08:00:00Z", "resolved_date": "2026-05-26T17:00:00Z"},
+    {"id": 502, "type": "Story", "state": "Resolved", "title": "Pre-STRAP human story 3", "tags": "", "parent_id": 200,
+     "created_date": "2026-01-25T08:00:00Z", "activated_date": "2026-01-26T08:00:00Z", "resolved_date": "2026-05-27T17:00:00Z"},
+    {"id": 600, "type": "Feature", "state": "Active", "title": "Validation cycle feature", "tags": "AI; strap:feature; strap:validation-cycle",
+     "created_date": "2026-05-25T08:00:00Z", "activated_date": "2026-05-26T08:00:00Z"}
+  ],
+  "revisions": [],
+  "pipeline_runs": [
+    {"id": 9001, "definition_name": "web-build", "layer": "web-prod", "status": "succeeded", "finish_time": "2026-05-25T12:00:00Z"},
+    {"id": 9002, "definition_name": "web-deploy", "layer": "web-prod", "status": "succeeded", "finish_time": "2026-05-26T12:00:00Z", "deployment_target": "vercel-prod"},
+    {"id": 9003, "definition_name": "web-deploy", "layer": "web-prod", "status": "failed", "finish_time": "2026-05-27T12:00:00Z", "deployment_target": "vercel-prod"},
+    {"id": 9004, "definition_name": "api-deploy", "layer": "api-prod", "status": "succeeded", "finish_time": "2026-05-26T14:00:00Z", "deployment_target": "azure-prod"},
+    {"id": 9005, "definition_name": "api-deploy", "layer": "api-prod", "status": "succeeded", "finish_time": "2026-05-27T14:00:00Z", "deployment_target": "azure-prod"},
+    {"id": 9006, "definition_name": "web-deploy", "layer": "web-prod", "status": "succeeded", "finish_time": "2026-05-28T12:00:00Z", "deployment_target": "vercel-prod"}
+  ],
+  "funnels": [
+    {"scope": "layer", "identifier": "web-prod", "total_runs": 4, "succeeded": 3, "failed": 1, "canceled": 0},
+    {"scope": "layer", "identifier": "api-prod", "total_runs": 2, "succeeded": 2, "failed": 0, "canceled": 0},
+    {"scope": "deployment-target", "identifier": "vercel-prod", "total_runs": 3, "succeeded": 2, "failed": 1, "canceled": 0},
+    {"scope": "deployment-target", "identifier": "azure-prod", "total_runs": 2, "succeeded": 2, "failed": 0, "canceled": 0}
+  ],
+  "prs_integration": [
+    {"id": 5001, "title": "AI PR", "status": "completed", "creation_date": "2026-05-20T10:00:00Z", "closed_date": "2026-05-22T14:00:00Z",
+     "source": "feature/ai", "target": "main", "author": "agent-backend", "iterations": 2, "comments": 4, "votes": 1,
+     "work_item_refs": [102, 103],
+     "weight": {
+       "commits": 8,
+       "commit_authors": ["agent-backend", "Claude Opus 4.7 (1M context)"],
+       "files_changed": 24,
+       "lines_added": 580,
+       "lines_deleted": 92,
+       "lines_total": 672,
+       "work_items": [102, 103],
+       "work_items_count": 2,
+       "merge_base": "a1b2c3d",
+       "merge_base_method": "merge-base",
+       "last_merge_commit": "e4f5g6h",
+       "computed_at": "2026-05-22T14:01:23Z",
+       "computation_method": "git-diff-numstat"
+     }},
+    {"id": 5002, "title": "Human PR", "status": "completed", "creation_date": "2026-05-21T10:00:00Z", "closed_date": "2026-05-24T14:00:00Z",
+     "source": "feature/human", "target": "main", "author": "alice", "iterations": 3, "comments": 6, "votes": 1,
+     "work_item_refs": [202],
+     "weight": {
+       "commits": 3,
+       "commit_authors": ["alice"],
+       "files_changed": 6,
+       "lines_added": 142,
+       "lines_deleted": 38,
+       "lines_total": 180,
+       "work_items": [202],
+       "work_items_count": 1,
+       "merge_base": "i7j8k9l",
+       "merge_base_method": "merge-base",
+       "last_merge_commit": "m0n1o2p",
+       "computed_at": "2026-05-24T14:01:45Z",
+       "computation_method": "git-diff-numstat"
+     }},
+    {"id": 5003, "title": "Validation-cycle PR (abandoned)", "status": "abandoned", "creation_date": "2026-05-26T10:00:00Z", "closed_date": "2026-05-28T14:00:00Z",
+     "source": "feature/validation", "target": "main", "author": "agent-backend", "iterations": 1, "comments": 1, "votes": 0,
+     "work_item_refs": [],
+     "weight": null}
+  ],
+  "prs_intermediate": [],
+  "feature_clusters": [
+    {"feature_id": 100, "cluster_pr_ids": [{"id": 5001, "sub_repo": "web-frontend"}], "cluster_pr_count": 1,
+     "cluster_open_at": "2026-05-20T10:00:00Z", "cluster_merge_at": "2026-05-22T14:00:00Z",
+     "cluster_cycle_time_seconds": 187200},
+    {"feature_id": 200, "cluster_pr_ids": [{"id": 5002, "sub_repo": "api-backend"}], "cluster_pr_count": 1,
+     "cluster_open_at": "2026-05-21T10:00:00Z", "cluster_merge_at": "2026-05-24T14:00:00Z",
+     "cluster_cycle_time_seconds": 273600}
+  ],
+  "excluded_clusters": [
+    {"feature_id": 600, "cluster_pr_ids": [{"id": 5003, "sub_repo": "web-frontend"}], "cluster_pr_count": 1,
+     "cluster_open_at": "2026-05-26T10:00:00Z", "cluster_merge_at": null,
+     "cluster_cycle_time_seconds": null,
+     "exclusion_reason": "strap:validation-cycle (Feature tag)"}
+  ],
+  "deployments": [
+    {"target": "vercel-prod", "environment": "prod", "events": [
+      {"timestamp": "2026-05-26T12:00:00Z", "feature_id": 100, "pr_ids": [5001]},
+      {"timestamp": "2026-05-28T12:00:00Z", "feature_id": 100, "pr_ids": [5001]}
+    ]},
+    {"target": "azure-prod", "environment": "prod", "events": [
+      {"timestamp": "2026-05-26T14:00:00Z", "feature_id": 200, "pr_ids": [5002]},
+      {"timestamp": "2026-05-27T14:00:00Z", "feature_id": 200, "pr_ids": [5002]}
+    ]}
+  ],
+  "reverts": [],
+  "skill_logs": {"dora_reconcile_runs": 0, "close_ceremonies": 0, "agent_memory_modifications": 0},
+  "data_quality": {
+    "tasks_with_activated_date": {"covered": 3, "total": 3, "pct": 1.0},
+    "tasks_with_original_estimate": {"covered": 3, "total": 3, "pct": 1.0},
+    "tasks_with_completed_work": {"covered": 3, "total": 3, "pct": 1.0},
+    "tasks_with_wallclock_computable": {"covered": 3, "total": 3, "pct": 1.0},
+    "bugs_with_environment": {"covered": 2, "total": 2, "pct": 1.0},
+    "ai_tagged_items": {"covered": 5, "total": 13, "pct": 0.38},
+    "pipeline_runs_classified": {"covered": 6, "total": 6, "pct": 1.0},
+    "overall_pct": 0.78,
+    "cw_oe_degeneracy": true,
+    "revisions_unavailable": true,
+    "pr_threads_unavailable": false
+  }
+}

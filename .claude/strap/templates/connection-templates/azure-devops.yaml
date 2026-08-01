@@ -1,0 +1,256 @@
+# Starter operation_templates for Azure DevOps (Boards + Repos).
+# Copy the relevant blocks into .claude/strap/state/devops-connection.yaml
+# (work-item operations) or .claude/strap/state/code-connection.yaml
+# (repo operations). Adopter overrides individual templates as needed.
+#
+# Auth model: bearer token from `az account get-access-token --resource 499b84ac-1321-427f-aa17-267ca6975798`.
+# The connect skills capture {{ADO_PAT}} or rely on az CLI session; the templates below assume
+# `Authorization: Bearer {{token}}` header injection at runtime.
+#
+# Placeholders: {{organization}}, {{project}}, {{id}}, {{host_type}}, {{title}}, {{description}},
+# {{state}}, {{area_path}}, {{iteration_path}}, {{tags}}, {{extra_fields_kv_pairs}}, {{wiql}},
+# {{source_id}}, {{target_id}}, {{link_type}}, {{body}}, {{ids}}, {{fields}}, {{repo_id}},
+# {{branch_name}}, {{repo_path}}, {{token}}.
+
+schema_version: "2.5"
+host: azure-devops
+
+# --- Work-item operations (consumed by /connect-devops-project) ---
+
+operation_templates:
+
+  work_item_create:
+    type: rest
+    method: POST
+    path: /{{organization}}/{{project}}/_apis/wit/workitems/${{host_type}}?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+      Content-Type: application/json-patch+json
+    body_template: |
+      [
+        { "op": "add", "path": "/fields/System.Title", "value": "{{title}}" },
+        { "op": "add", "path": "/fields/System.Description", "value": "{{description}}" },
+        { "op": "add", "path": "/fields/System.AreaPath", "value": "{{area_path}}" },
+        { "op": "add", "path": "/fields/System.IterationPath", "value": "{{iteration_path}}" },
+        { "op": "add", "path": "/fields/System.Tags", "value": "{{tags}}" }
+        {{extra_fields_kv_pairs}}
+      ]
+    # extra_fields_kv_pairs renders as a leading-comma JSON-patch tail for additional fields
+    # (e.g., severity, priority, environment, original_estimate). When empty, the consumer
+    # strips the placeholder cleanly.
+
+  work_item_read:
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/_apis/wit/workitems/{{id}}?$expand=all&api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+
+  work_item_read_batch:
+    type: rest
+    method: POST
+    path: /{{organization}}/{{project}}/_apis/wit/workitemsbatch?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+      Content-Type: application/json
+    body_template: |
+      {
+        "ids": [{{ids}}],
+        "fields": [{{fields}}],
+        "$expand": "none"
+      }
+    # /dora-collect calls this with windowed snapshots (200+ items). Falls back to per-id
+    # work_item_read when this template is absent.
+
+  work_item_update:
+    type: rest
+    method: PATCH
+    path: /{{organization}}/{{project}}/_apis/wit/workitems/{{id}}?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+      Content-Type: application/json-patch+json
+    body_template: |
+      [{{extra_fields_kv_pairs}}]
+    # Consumer constructs the patch ops list (add/replace) for whichever fields are being
+    # updated. Empty when called with no field changes (e.g., state-only updates pass
+    # /fields/System.State as the only entry).
+
+  work_item_delete:
+    type: rest
+    method: DELETE
+    path: /{{organization}}/{{project}}/_apis/wit/workitems/{{id}}?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+    # Soft-delete (moves to Recycle Bin). Hard delete requires destroy=true query param +
+    # different permission. Adopter overrides when destroy semantics are required.
+
+  work_item_query:
+    type: rest
+    method: POST
+    path: /{{organization}}/{{project}}/_apis/wit/wiql?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+      Content-Type: application/json
+    body_template: |
+      { "query": "{{wiql}}" }
+
+  work_item_link_add:
+    type: rest
+    method: PATCH
+    path: /{{organization}}/{{project}}/_apis/wit/workitems/{{source_id}}?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+      Content-Type: application/json-patch+json
+    body_template: |
+      [{
+        "op": "add",
+        "path": "/relations/-",
+        "value": {
+          "rel": "{{link_type}}",
+          "url": "https://dev.azure.com/{{organization}}/{{project}}/_apis/wit/workItems/{{target_id}}"
+        }
+      }]
+    # link_type maps via mapping.link_types (parent_child -> System.LinkTypes.Hierarchy-Forward,
+    # related -> System.LinkTypes.Related, etc.).
+
+  work_item_comment_add:
+    type: rest
+    method: POST
+    path: /{{organization}}/{{project}}/_apis/wit/workitems/{{id}}/comments?api-version=7.1-preview.3
+    headers:
+      Authorization: Bearer {{token}}
+      Content-Type: application/json
+    body_template: |
+      { "text": "{{body}}" }
+
+  work_item_revisions:
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/_apis/wit/workitems/{{id}}/revisions?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+    # /dora-collect parses revisions for state-transition history + rework detection.
+
+  iteration_list:
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/{{team}}/_apis/work/teamsettings/iterations?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+    # Returns iterations the team is configured for. /plan-sprint + /rebalance-sprint consume.
+
+  iteration_get_capacity:
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/{{team}}/_apis/work/teamsettings/iterations/{{iteration_id}}/capacities?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+
+  state_machine_probe:
+    # v2.5 #39697: probe the host for state list per work-item type at Step 4.
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/_apis/wit/workitemtypes/{{host_type}}/states?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+    # Returns state objects { name, category }. category is one of Proposed, InProgress,
+    # Resolved, Completed, Removed -- used by the heuristic to map probed states to
+    # STRAP-logical states.
+
+  field_existence_probe:
+    # v2.4-polish: probe field set per work-item type.
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/_apis/wit/workitemtypes/{{host_type}}/fields?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+
+# --- Code-repo operations (consumed by /connect-code-repo for Azure Repos) ---
+
+  ref_get:
+    # Read a named ref + return objectId. Building block for verification (origin/main
+    # unchanged?) and optimistic-concurrency ops (REST branch delete with oldObjectId).
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/_apis/git/repositories/{{repo_id}}/refs?filter=heads/{{branch_name}}&api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+    # Response: { value: [{ name: "refs/heads/<branch>", objectId: "<sha>" }, ...] }
+    # Empty value array means the ref does not exist on the remote.
+
+  branch_delete_remote:
+    type: rest-recipe
+    steps:
+      - op: ref_get
+        capture:
+          objectId: "value[0].objectId"
+      - method: POST
+        path: /{{organization}}/{{project}}/_apis/git/repositories/{{repo_id}}/refs?api-version=7.1
+        headers:
+          Authorization: Bearer {{token}}
+          Content-Type: application/json
+        body: |
+          [{
+            "name": "refs/heads/{{branch_name}}",
+            "oldObjectId": "{{captured.objectId}}",
+            "newObjectId": "0000000000000000000000000000000000000000"
+          }]
+    # POST is correct (not PATCH) per ADO REST refs API; the zero-sha newObjectId signals delete.
+    # oldObjectId rejects stale operations with staleOldObjectId -- optimistic concurrency.
+
+  branch_push:
+    type: cli
+    command: 'git -c http.extraHeader="Authorization: Bearer {{token}}" -C {{repo_path}} push -u origin {{branch_name}}'
+    # Pure REST cannot replace push (git uploads pack data). The http.extraHeader pattern
+    # injects the bearer token, bypassing the credential helper entirely. Required for
+    # non-interactive Claude Code tool contexts where credential-helper prompts would stall.
+
+  pull_request_create:
+    type: rest
+    method: POST
+    path: /{{organization}}/{{project}}/_apis/git/repositories/{{repo_id}}/pullrequests?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+      Content-Type: application/json
+    body_template: |
+      {
+        "sourceRefName": "refs/heads/{{source_branch}}",
+        "targetRefName": "refs/heads/{{target_branch}}",
+        "title": "{{title}}",
+        "description": "{{description}}"
+      }
+
+  pull_request_list:
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/_apis/git/repositories/{{repo_id}}/pullrequests?searchCriteria.status={{status}}&searchCriteria.targetRefName={{target_branch}}&$top={{top}}&api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+    # Pagination via $top + $skip. Date filtering done client-side.
+
+  pull_request_get_comments:
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/_apis/git/repositories/{{repo_id}}/pullRequests/{{pr_id}}/threads?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+
+  pull_request_post_comment:
+    type: rest
+    method: POST
+    path: /{{organization}}/{{project}}/_apis/git/repositories/{{repo_id}}/pullRequests/{{pr_id}}/threads?api-version=7.1
+    headers:
+      Authorization: Bearer {{token}}
+      Content-Type: application/json
+    body_template: |
+      {
+        "comments": [{ "content": "{{body}}", "commentType": 1 }],
+        "status": 1
+      }
+
+  pull_request_get_check_status:
+    type: rest
+    method: GET
+    path: /{{organization}}/{{project}}/_apis/git/repositories/{{repo_id}}/pullRequests/{{pr_id}}/statuses?api-version=7.1-preview.1
+    headers:
+      Authorization: Bearer {{token}}

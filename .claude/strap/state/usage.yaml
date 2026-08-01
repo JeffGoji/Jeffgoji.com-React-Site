@@ -1,0 +1,45 @@
+session:
+  workflow: strap-in
+  workflow_instance: 2026-08-01-onboarding
+  started_at: 2026-08-01T00:00:00Z
+  completed_at: 2026-08-01T20:33:00Z
+  specialists_used: 272K
+  notes: "strap-in complete; CPO chose /connect-code-repo as next step"
+
+budgets:
+  strap-in:
+    per_agent: 500K
+    session_aggregate: 1M
+  strap-refresh:
+    per_agent: 200K
+    session_aggregate: 1M
+  decompose-feature:
+    per_agent: 200K
+    session_aggregate: 1M
+  execute-sprint:
+    per_agent: 200K
+    session_aggregate: 1M
+  execute-sprint-full-auto:
+    per_agent: 200K
+    session_aggregate: 2M
+  refine-pr:
+    per_agent: 200K
+    session_aggregate: 1M
+  fix-bugs:
+    per_agent: 200K
+    session_aggregate: 1M
+  quick:
+    per_agent: 200K
+    session_aggregate: 500K
+
+agents:
+  frontend-engineer:
+    used_in_current: 82K
+  security-reviewer:
+    used_in_current: 50K
+  test-strategist:
+    used_in_current: 48K
+  devops-lead:
+    used_in_current: 48K
+  tech-writer:
+    used_in_current: 44K

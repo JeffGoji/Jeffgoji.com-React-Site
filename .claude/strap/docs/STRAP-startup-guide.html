@@ -1,0 +1,2592 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STRAP Startup Guide</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS (DORA-report parity)
+   ============================================================ */
+:root[data-theme="light"] {
+  --bg: #fafafa; --bg-elev: #ffffff; --bg-sunk: #f3f3f3;
+  --ink: #161719; --ink-soft: #4a4d52; --ink-faint: #8a8d92;
+  --rule: rgba(15,17,20,0.10); --rule-soft: rgba(15,17,20,0.06);
+  --accent: #d97947; --accent-deep: #b35a2c; --accent-soft: #fff3ed;
+  --green: #5b9f7c; --green-deep: #3a7857; --green-soft: #ecf6ef;
+  --blue: #5b87d9; --blue-deep: #3a65b2; --blue-soft: #ebf2fc;
+  --red: #d9342b; --red-deep: #b81f1f; --red-soft: #fdecea;
+  --amber: #d99e2b; --amber-soft: #fdf6e5;
+  --azure: #6ab7c4;
+  --violet: #8b5cf6; --violet-deep: #6d28d9; --violet-soft: rgba(139,92,246,0.08);
+}
+:root[data-theme="dark"] {
+  --bg: #0e0f11; --bg-elev: #1a1c1f; --bg-sunk: #07080a;
+  --ink: #ececec; --ink-soft: #b8b9bc; --ink-faint: #6f7176;
+  --rule: rgba(255,255,255,0.10); --rule-soft: rgba(255,255,255,0.05);
+  --accent: #e2885a; --accent-deep: #d97947; --accent-soft: rgba(217,121,71,0.10);
+  --green: #7bbf99; --green-deep: #5b9f7c; --green-soft: rgba(91,159,124,0.10);
+  --blue: #82a4e2; --blue-deep: #5b87d9; --blue-soft: rgba(91,135,217,0.10);
+  --red: #e85c54; --red-deep: #d9342b; --red-soft: rgba(217,52,43,0.10);
+  --amber: #e4b75c; --amber-soft: rgba(228,183,92,0.10);
+  --azure: #82c6d2;
+  --violet: #a78bfa; --violet-deep: #8b5cf6; --violet-soft: rgba(167,139,250,0.10);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 400; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.2s ease, color 0.2s ease;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+.serif { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+.mono { font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace; }
+a { color: var(--blue-deep); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: 'JetBrains Mono', monospace; background: var(--bg-sunk); padding: 1px 6px; border-radius: 3px; font-size: 0.9em; border: 1px solid var(--rule-soft); }
+::selection { background: var(--accent-soft); color: var(--accent-deep); }
+
+/* ============================================================
+   SIDEBAR (collapsible)
+   ============================================================ */
+.sidebar {
+  background: var(--bg-elev);
+  border-right: 1px solid var(--rule);
+  padding: 24px 18px 32px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  font-size: 13px;
+  z-index: 40;
+}
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+.sidebar .brand {
+  display: flex; align-items: baseline; gap: 10px;
+  margin-bottom: 6px; padding: 0 6px;
+}
+.sidebar .brand-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink);
+}
+.sidebar .brand-name em { font-style: normal; color: var(--accent); }
+.sidebar .brand-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 1.3px; text-transform: uppercase;
+  color: var(--ink-faint); padding: 0 6px; margin-bottom: 24px;
+  display: block;
+}
+
+.nav details {
+  margin-bottom: 1px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.nav details:last-of-type { border-bottom: none; }
+.nav summary {
+  list-style: none; cursor: pointer;
+  padding: 11px 8px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500; font-size: 10.5px;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--ink); border-radius: 4px;
+  transition: background 120ms ease, color 120ms ease;
+}
+.nav summary::-webkit-details-marker { display: none; }
+.nav summary:hover { background: var(--accent-soft); color: var(--accent-deep); }
+.nav summary::after {
+  content: ''; width: 6px; height: 6px;
+  border-right: 1.5px solid var(--ink-faint);
+  border-bottom: 1.5px solid var(--ink-faint);
+  transform: rotate(-45deg);
+  transition: transform 180ms ease;
+  margin-left: 10px;
+}
+.nav details[open] summary::after { transform: rotate(45deg); }
+.nav details[open] summary { color: var(--accent-deep); }
+
+.nav ul { list-style: none; margin: 0 0 8px; padding: 2px 0 4px 8px; }
+.nav li a {
+  display: block; padding: 5px 10px; border-radius: 4px;
+  color: var(--ink-soft); font-size: 12.5px; font-weight: 500;
+  text-decoration: none;
+  transition: background 100ms ease, color 100ms ease;
+  border-left: 2px solid transparent;
+}
+.nav li a:hover {
+  background: var(--accent-soft); color: var(--accent-deep);
+  text-decoration: none;
+  border-left-color: var(--accent);
+}
+.nav li.nested a { padding-left: 22px; font-size: 12px; color: var(--ink-faint); }
+.nav li.placeholder a { color: var(--ink-faint); font-style: italic; }
+.nav li.placeholder a::after {
+  content: 'draft';
+  margin-left: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; font-weight: 500; font-style: normal;
+  color: var(--amber);
+  background: var(--amber-soft);
+  padding: 1px 6px; border-radius: 999px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+.sidebar-foot {
+  margin-top: 28px; padding: 14px 10px 0;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 11px; color: var(--ink-faint); line-height: 1.5;
+}
+.sidebar-foot strong { color: var(--ink-soft); font-weight: 500; }
+
+/* ============================================================
+   MAIN COLUMN + STICKY MASTHEAD
+   ============================================================ */
+.main {
+  position: relative;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--rule);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 0 var(--rule-soft), 0 4px 12px rgba(0,0,0,0.04);
+}
+:root[data-theme="dark"] .sticky-top { box-shadow: 0 1px 0 var(--rule-soft), 0 4px 12px rgba(0,0,0,0.4); }
+
+header.masthead { padding: 18px 48px 14px; }
+.brand-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 16px; margin-bottom: 6px;
+}
+.brand-row .brand {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink);
+}
+.brand-row .brand em { font-style: normal; color: var(--accent); }
+.brand-row .kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; letter-spacing: 1.3px; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.theme-toggle {
+  background: transparent; border: 1px solid var(--rule);
+  color: var(--ink-soft); padding: 4px 12px; border-radius: 14px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.theme-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+/* ============================================================
+   VIEW PICKER (top-of-main section overview)
+   ============================================================ */
+.view-picker {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 8px 48px 16px;
+  background: var(--bg-elev);
+}
+.view-card {
+  cursor: pointer;
+  padding: 12px 14px;
+  background: var(--bg-sunk);
+  border: 1px solid var(--rule-soft);
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.view-card:hover {
+  border-color: var(--ink-faint);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.view-card .vc-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.view-card .vc-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px; font-weight: 600; line-height: 1.15;
+  color: var(--ink); margin-top: 4px;
+  letter-spacing: -0.005em;
+}
+.view-card .vc-meta {
+  font-size: 11px; color: var(--ink-soft);
+  margin-top: 6px; line-height: 1.4;
+}
+
+/* ============================================================
+   CONTENT WRAP / BLOCKS
+   ============================================================ */
+.view-wrap { padding: 32px 48px 80px; max-width: 1280px; margin: 0 auto; }
+
+section.block {
+  padding: 36px 0; border-bottom: 1px solid var(--rule-soft);
+  scroll-margin-top: 16px;
+}
+section.block:last-child { border-bottom: none; }
+
+.block-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--ink-faint); margin-bottom: 4px;
+}
+.block-title {
+  font-family: 'Inter', sans-serif; font-weight: 700; font-size: 28px;
+  color: var(--ink); letter-spacing: -0.018em;
+  margin: 0 0 8px; line-height: 1.15;
+}
+.block-lede {
+  font-size: 15.5px; color: var(--ink-soft);
+  margin: 0 0 22px;
+  line-height: 1.55;
+}
+
+article.sub-block {
+  padding: 24px 0 12px;
+  scroll-margin-top: 16px;
+  border-top: 1px solid var(--rule-soft);
+}
+article.sub-block:first-of-type { border-top: none; padding-top: 8px; }
+
+.sub-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 1.1px; text-transform: uppercase;
+  color: var(--accent-deep);
+}
+.sub-title {
+  font-family: 'Inter', sans-serif; font-weight: 700; font-size: 21px;
+  color: var(--ink); letter-spacing: -0.012em;
+  margin: 2px 0 10px; line-height: 1.2;
+}
+.sub-lede {
+  font-size: 14.5px; color: var(--ink-soft);
+  margin: 0 0 14px; line-height: 1.6;
+}
+.sub-block p {
+  font-size: 14.5px; color: var(--ink-soft);
+  margin: 0 0 12px; line-height: 1.65;
+}
+.sub-block p strong { color: var(--ink); font-weight: 600; }
+.sub-block ul, .sub-block ol {
+  font-size: 14.5px; color: var(--ink-soft);
+  margin: 8px 0 16px; padding-left: 22px; line-height: 1.65;
+}
+.sub-block li { margin-bottom: 6px; }
+.sub-block li::marker { color: var(--accent); }
+.sub-block h5 {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 600;
+  margin: 18px 0 8px; color: var(--ink);
+  letter-spacing: -0.005em;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero { padding: 40px 0 20px; }
+.hero h1 {
+  font-family: 'Inter', sans-serif; font-weight: 800; font-size: 56px;
+  line-height: 1.02; letter-spacing: -0.028em; margin: 0 0 14px; color: var(--ink);
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lede {
+  font-size: 18px; color: var(--ink-soft);
+  margin: 0 0 24px;
+  line-height: 1.55;
+}
+.hero .lede strong { color: var(--ink); font-weight: 600; }
+.hero .signal-strip {
+  display: inline-flex; gap: 0;
+  border: 1px solid var(--rule); border-radius: 6px;
+  overflow: hidden; background: var(--bg-elev);
+  margin: 4px 0 0;
+}
+.hero .signal-strip .cell {
+  padding: 10px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--ink-soft);
+  border-right: 1px solid var(--rule-soft);
+}
+.hero .signal-strip .cell:last-child { border-right: none; }
+.hero .signal-strip .cell .lbl {
+  display: block;
+  color: var(--ink-faint); font-size: 9.5px;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.hero .signal-strip .cell .val {
+  font-size: 14px; color: var(--ink); font-weight: 500;
+}
+.hero .signal-strip .cell.accent .val { color: var(--accent-deep); }
+
+/* ============================================================
+   VERDICT-STYLE PRINCIPLE CARDS (3-col grid; colored top borders)
+   ============================================================ */
+.verdict-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px; margin: 18px 0 24px;
+}
+.verdict-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.verdict-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.verdict {
+  background: var(--bg-elev); border: 1px solid var(--rule);
+  border-radius: 10px; padding: 18px 20px;
+  border-top: 3px solid var(--accent);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.verdict.good { border-top-color: var(--green); }
+.verdict.watch { border-top-color: var(--amber); }
+.verdict.context { border-top-color: var(--blue); }
+.verdict.critical { border-top-color: var(--red); }
+.verdict.violet { border-top-color: var(--violet); }
+.verdict .v-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.verdict.good .v-label { color: var(--green-deep); }
+.verdict.watch .v-label { color: var(--amber); }
+.verdict.context .v-label { color: var(--blue-deep); }
+.verdict.critical .v-label { color: var(--red-deep); }
+.verdict.violet .v-label { color: var(--violet-deep); }
+.verdict .v-label.accent { color: var(--accent-deep); }
+.verdict .v-headline {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; font-size: 17px;
+  line-height: 1.2; color: var(--ink);
+  letter-spacing: -0.012em; margin: 0;
+}
+.verdict .v-body {
+  font-size: 13px; color: var(--ink-soft); margin: 0;
+  line-height: 1.55;
+}
+.verdict .v-body code { font-size: 11.5px; }
+.verdict .v-body strong { color: var(--ink); font-weight: 600; }
+
+/* ============================================================
+   KPI CARDS (auto-fit grid, mono labels, huge numbers)
+   ============================================================ */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px; margin: 18px 0;
+}
+.kpi {
+  background: var(--bg-elev); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 16px 18px;
+}
+.kpi .lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--ink-faint); margin-bottom: 6px;
+}
+.kpi .val {
+  font-family: 'Inter', sans-serif; font-weight: 700;
+  font-size: 30px; line-height: 1.05;
+  color: var(--ink); letter-spacing: -0.02em;
+}
+.kpi .val .unit {
+  font-family: 'Inter', sans-serif; font-size: 14px;
+  color: var(--ink-faint); font-weight: 400; margin-left: 2px;
+}
+.kpi .sub {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 8px; font-size: 12px; color: var(--ink-soft);
+}
+.kpi.accent .val { color: var(--accent-deep); }
+
+/* ============================================================
+   EDITORIAL TABLES
+   ============================================================ */
+table.editorial {
+  width: 100%; border-collapse: collapse;
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  border-radius: 8px; overflow: hidden;
+  font-size: 13.5px; margin: 16px 0;
+}
+table.editorial th {
+  background: var(--bg-sunk);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink-faint); font-weight: 500;
+  padding: 11px 14px; text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+table.editorial td {
+  padding: 11px 14px; border-bottom: 1px solid var(--rule-soft);
+  color: var(--ink); line-height: 1.55;
+}
+table.editorial td strong { color: var(--ink); font-weight: 600; }
+table.editorial td small { color: var(--ink-faint); font-size: 11px; display: block; margin-top: 2px; }
+table.editorial tr:last-child td { border-bottom: none; }
+table.editorial tr:hover td { background: var(--bg-sunk); }
+table.editorial td.num, table.editorial th.num {
+  text-align: right; font-variant-numeric: tabular-nums;
+  font-family: 'JetBrains Mono', monospace;
+}
+table.editorial td.mono, table.editorial th.mono {
+  font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--accent-deep);
+}
+
+/* ============================================================
+   CALLOUTS
+   ============================================================ */
+.callout {
+  background: var(--blue-soft);
+  border-left: 3px solid var(--blue-deep);
+  padding: 14px 18px; margin: 16px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px; color: var(--ink-soft);
+  line-height: 1.6;
+}
+.callout.good { background: var(--green-soft); border-left-color: var(--green-deep); }
+.callout.warn { background: var(--amber-soft); border-left-color: var(--amber); }
+.callout.critical { background: var(--red-soft); border-left-color: var(--red-deep); }
+.callout.violet { background: var(--violet-soft); border-left-color: var(--violet-deep); }
+.callout p { margin: 0 0 8px; }
+.callout p:last-child { margin-bottom: 0; }
+.callout strong { color: var(--ink); font-weight: 600; }
+.callout .label {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 1.3px; text-transform: uppercase;
+  color: var(--blue-deep); margin-bottom: 6px; font-weight: 500;
+}
+.callout.good .label { color: var(--green-deep); }
+.callout.warn .label { color: var(--amber); }
+.callout.critical .label { color: var(--red-deep); }
+.callout.violet .label { color: var(--violet-deep); }
+.callout.accent { background: var(--accent-soft); border-left-color: var(--accent); }
+.callout.accent .label { color: var(--accent-deep); }
+
+/* The Invariant - bigger, slower callout for foundational rules */
+.invariant {
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent);
+  padding: 22px 26px; margin: 22px 0;
+  border-radius: 0 10px 10px 0;
+  font-size: 14.5px; color: var(--ink); line-height: 1.65;
+}
+.invariant .label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--accent-deep); margin-bottom: 10px; font-weight: 500;
+}
+.invariant p { margin: 0 0 10px; }
+.invariant p:last-child { margin-bottom: 0; }
+.invariant strong { color: var(--ink); font-weight: 600; }
+
+/* Draft callout (Full Auto placeholder) */
+.draft-callout {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      var(--amber-soft) 0px, var(--amber-soft) 10px,
+      var(--bg-elev) 10px, var(--bg-elev) 20px
+    );
+  border: 2px dashed var(--amber);
+  padding: 22px 26px; margin: 22px 0;
+  border-radius: 8px;
+  color: var(--ink); line-height: 1.65;
+}
+.draft-callout .label {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--amber); background: var(--bg-elev);
+  padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--amber);
+  margin-bottom: 14px; font-weight: 600;
+}
+.draft-callout p { font-size: 14.5px; color: var(--ink-soft); margin: 0 0 10px; }
+.draft-callout p:last-child { margin-bottom: 0; }
+.draft-callout strong { color: var(--ink); font-weight: 600; }
+.draft-callout ul { margin: 12px 0; padding-left: 22px; color: var(--ink-soft); font-size: 14px; }
+.draft-callout ul li { margin-bottom: 4px; }
+.draft-callout ul li::marker { color: var(--amber); }
+
+/* ============================================================
+   PILLS / BUCKETS / SIG (color-coded inline tags)
+   ============================================================ */
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 9px; border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.4px;
+  background: var(--bg-sunk); color: var(--ink-soft);
+  border: 1px solid var(--rule-soft);
+}
+.pill.accent { background: var(--accent-soft); color: var(--accent-deep); border-color: var(--accent); }
+.pill.good { background: var(--green-soft); color: var(--green-deep); }
+.pill.blue { background: var(--blue-soft); color: var(--blue-deep); }
+.pill.amber { background: var(--amber-soft); color: var(--amber); }
+.pill.red { background: var(--red-soft); color: var(--red-deep); }
+.pill.violet { background: var(--violet-soft); color: var(--violet-deep); }
+
+.team-pill {
+  display: inline-block;
+  padding: 3px 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.8px; text-transform: lowercase;
+  border-radius: 6px;
+}
+.team-pill.ops { background: var(--blue-soft); color: var(--blue-deep); }
+.team-pill.devs { background: var(--accent-soft); color: var(--accent-deep); }
+
+/* ============================================================
+   AGENT GRID (two-column ops + devs)
+   ============================================================ */
+.teams { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 22px 0; }
+.team-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+.team-card .team-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.team-card .team-head .role {
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px; font-weight: 500;
+  color: var(--ink); letter-spacing: -0.005em;
+}
+.team-card .team-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.7px;
+  color: var(--ink-faint); text-transform: uppercase;
+}
+.team-card .team-tagline {
+  font-size: 12.5px; color: var(--ink-soft);
+  margin: 0 0 16px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule-soft);
+  line-height: 1.5;
+}
+.agent-list { display: flex; flex-direction: column; gap: 12px; }
+.agent {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.agent .agent-icon {
+  flex-shrink: 0; width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 600;
+  border: 1px solid var(--rule);
+  background: var(--bg-sunk); color: var(--ink-soft);
+  margin-top: 1px;
+}
+.team-card.ops .agent .agent-icon { background: var(--blue-soft); color: var(--blue-deep); border-color: var(--blue-deep); }
+.team-card.devs .agent .agent-icon { background: var(--accent-soft); color: var(--accent-deep); border-color: var(--accent); }
+.agent.dev-lead-row .agent-icon { background: var(--accent); color: white; border-color: var(--accent-deep); }
+.agent-body { flex: 1; min-width: 0; }
+.agent-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px; font-weight: 600;
+  color: var(--ink); margin: 0 0 2px;
+}
+.agent.dev-lead-row .agent-name { color: var(--accent-deep); }
+.agent-role {
+  font-size: 12.5px; color: var(--ink-soft); margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   SUPER-PAIR cards
+   ============================================================ */
+.pair-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+  margin: 18px 0 24px;
+}
+.pair {
+  background: var(--bg-elev); border: 1px solid var(--rule);
+  border-radius: 10px; padding: 22px 24px;
+  border-top: 3px solid var(--accent);
+}
+.pair.cpo { border-top-color: var(--blue); }
+.pair.dev-lead { border-top-color: var(--accent); }
+.pair .pair-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.pair.cpo .pair-role { color: var(--blue-deep); }
+.pair.dev-lead .pair-role { color: var(--accent-deep); }
+.pair h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 21px; font-weight: 700; color: var(--ink);
+  margin: 4px 0 10px; letter-spacing: -0.015em;
+}
+.pair p {
+  font-size: 13.5px; color: var(--ink-soft);
+  margin: 0 0 10px; line-height: 1.6;
+}
+.pair ul {
+  margin: 8px 0 0; padding-left: 18px;
+  font-size: 13px; color: var(--ink-soft);
+  line-height: 1.65;
+}
+.pair ul li { margin-bottom: 4px; }
+.pair ul li::marker { color: var(--accent); }
+.pair.cpo ul li::marker { color: var(--blue); }
+
+/* ============================================================
+   FLOW (numbered steps with arrows)
+   ============================================================ */
+.flow {
+  display: flex;
+  gap: 0; padding: 18px;
+  background: var(--bg-elev); border: 1px solid var(--rule);
+  border-radius: 8px;
+  align-items: stretch;
+  margin: 18px 0;
+}
+.flow-step {
+  flex: 1 1 0; padding: 14px 14px;
+  background: var(--bg-sunk); border: 1px solid var(--rule-soft);
+  border-radius: 6px; position: relative;
+  margin-right: 22px;
+  min-width: 0;
+}
+.flow-step:last-child { margin-right: 0; }
+.flow-step::after {
+  content: ''; position: absolute;
+  right: -22px; top: 50%; transform: translateY(-50%);
+  width: 22px; height: 1.5px; background: var(--accent);
+}
+.flow-step:last-child::after { display: none; }
+.flow-step::before {
+  content: ''; position: absolute;
+  right: -10px; top: 50%; transform: translateY(-50%) rotate(-45deg);
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--accent);
+  border-bottom: 1.5px solid var(--accent);
+}
+.flow-step:last-child::before { display: none; }
+.flow-step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; font-weight: 500;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--accent-deep);
+}
+.flow-step-cmd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 600;
+  color: var(--ink); margin: 4px 0 6px; display: block;
+  word-break: break-all;
+}
+.flow-step-desc {
+  font-size: 12px; color: var(--ink-soft);
+  margin: 0; line-height: 1.5;
+}
+
+.flow.vertical { flex-direction: column; }
+.flow.vertical .flow-step { margin-right: 0; margin-bottom: 22px; }
+.flow.vertical .flow-step:last-child { margin-bottom: 0; }
+.flow.vertical .flow-step::after {
+  top: auto; bottom: -22px; right: 50%;
+  transform: translateX(50%);
+  width: 1.5px; height: 22px;
+}
+.flow.vertical .flow-step::before {
+  top: auto; bottom: -10px; right: 50%;
+  transform: translateX(50%) rotate(45deg);
+}
+
+/* Colored flow-step variants (border-top accent) */
+.flow-step.blue { border-top: 3px solid var(--blue-deep); }
+.flow-step.accent { border-top: 3px solid var(--accent); }
+.flow-step.green { border-top: 3px solid var(--green-deep); }
+.flow-step.violet { border-top: 3px solid var(--violet-deep); }
+.flow-step.amber { border-top: 3px solid var(--amber); }
+.flow-step.blue .flow-step-num { color: var(--blue-deep); }
+.flow-step.accent .flow-step-num { color: var(--accent-deep); }
+.flow-step.green .flow-step-num { color: var(--green-deep); }
+.flow-step.violet .flow-step-num { color: var(--violet-deep); }
+.flow-step.amber .flow-step-num { color: var(--amber); }
+
+/* ============================================================
+   INSTALL OPTIONS (mac/linux + Windows side-by-side cards)
+   ============================================================ */
+.install-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+.install-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 20px 22px;
+  min-width: 0; /* allow grid track to shrink */
+}
+.install-card pre { overflow-x: auto; max-width: 100%; }
+
+/* Code-block wrapper with copy button (button sits above, right-aligned) */
+.code-block {
+  margin: 8px 0 12px;
+}
+.code-block pre { margin: 0; }
+.code-block-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 6px;
+}
+.copy-btn {
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  padding: 4px 11px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.6px; text-transform: lowercase;
+  cursor: pointer;
+  transition: all 120ms ease;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.copy-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  border-color: var(--accent);
+  opacity: 1;
+}
+.copy-btn .copy-icon {
+  display: inline-block;
+  width: 11px; height: 11px;
+  position: relative;
+}
+.copy-btn .copy-icon::before,
+.copy-btn .copy-icon::after {
+  content: '';
+  position: absolute;
+  border: 1.3px solid currentColor;
+  border-radius: 1.5px;
+  width: 7px; height: 8px;
+}
+.copy-btn .copy-icon::before { top: 0; left: 2px; }
+.copy-btn .copy-icon::after { top: 2.5px; left: 0; background: var(--bg-elev); }
+.copy-btn:hover .copy-icon::after { background: var(--accent-soft); }
+.copy-btn.copied {
+  background: var(--green-soft);
+  color: var(--green-deep);
+  border-color: var(--green);
+  opacity: 1;
+}
+.copy-btn.copied .copy-icon { display: none; }
+.install-card.mac-linux { border-top: 3px solid var(--blue); }
+.install-card.windows { border-top: 3px solid var(--accent); }
+.install-card .install-os {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 1.3px;
+  text-transform: uppercase; font-weight: 500;
+  margin-bottom: 4px;
+}
+.install-card.mac-linux .install-os { color: var(--blue-deep); }
+.install-card.windows .install-os { color: var(--accent-deep); }
+.install-card h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px; font-weight: 600;
+  color: var(--ink); margin: 2px 0 12px;
+  letter-spacing: -0.005em;
+}
+.install-card pre {
+  margin: 8px 0 12px;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  background: var(--bg-sunk);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+:root[data-theme="dark"] .install-card pre {
+  background: #07080a;
+  color: #ececec;
+}
+.install-card p {
+  font-size: 12.5px; color: var(--ink-soft);
+  line-height: 1.6; margin: 0;
+}
+.install-card p strong { color: var(--ink); font-weight: 600; }
+.install-card p code {
+  font-size: 11.5px;
+}
+
+/* ============================================================
+   WORKFLOW CARDS (used in Production Workflows + What's Next)
+   ============================================================ */
+.workflow-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 12px 0;
+}
+.workflow-card .wc-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 6px;
+}
+.workflow-card h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 15.5px; font-weight: 600;
+  color: var(--ink); margin: 0;
+  letter-spacing: -0.005em;
+}
+.workflow-card .skills {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+  padding: 6px 10px; border-radius: 4px;
+  margin: 6px 0 8px;
+  display: inline-block;
+}
+.workflow-card p {
+  font-size: 13.5px; color: var(--ink-soft);
+  margin: 4px 0 0; line-height: 1.6;
+}
+
+/* ============================================================
+   INFO TIP (i badge with hover popover)
+   ============================================================ */
+.info-tip {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px; margin-left: 4px;
+  border-radius: 50%; border: 1px solid var(--rule);
+  background: var(--bg-elev); color: var(--ink-faint);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; font-weight: 700;
+  font-style: italic; line-height: 1; vertical-align: middle;
+  cursor: pointer; user-select: none;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.info-tip:hover, .info-tip:focus {
+  color: var(--accent-deep); border-color: var(--accent); background: var(--accent-soft); outline: none;
+}
+.info-tip-popover {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px); left: 0;
+  width: 320px;
+  background: var(--bg-elev); border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal; font-weight: 400;
+  font-size: 12.5px; letter-spacing: 0;
+  text-transform: none; line-height: 1.55;
+  color: var(--ink); text-align: left;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+.info-tip-popover::before {
+  content: ''; position: absolute;
+  top: -7px; left: 6px;
+  width: 12px; height: 12px;
+  background: var(--bg-elev);
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+  transform: rotate(45deg);
+}
+.info-tip:hover .info-tip-popover,
+.info-tip:focus .info-tip-popover,
+.info-tip:focus-within .info-tip-popover { display: block; }
+
+/* ============================================================
+   GUIDE FOOTER
+   ============================================================ */
+.guide-footer {
+  margin-top: 56px; padding: 36px 0 0;
+  border-top: 1px solid var(--rule);
+  font-size: 13px; color: var(--ink-faint); line-height: 1.6;
+}
+.guide-footer p { margin: 0 0 8px; }
+.guide-footer .footer-meta {
+  display: flex; gap: 22px; margin-top: 14px; flex-wrap: wrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.4px; color: var(--ink-soft);
+}
+
+/* ============================================================
+   VIEW SWITCHING (tabbed sections; only one .view.active at a time)
+   ============================================================ */
+.view { display: none; }
+.view.active { display: block; }
+.nav details.active-view > summary {
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+}
+:root[data-theme="dark"] .nav details.active-view > summary {
+  background: rgba(217,121,71,0.12);
+}
+
+/* ============================================================
+   MANIFESTO HERO
+   ============================================================ */
+.manifesto { margin: 16px 0 30px; }
+.m-line {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; font-size: 34px; line-height: 1.18;
+  letter-spacing: -0.022em; color: var(--ink);
+  margin: 0 0 18px;
+}
+.m-line em { font-style: normal; color: var(--accent); }
+.m-line small {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; font-weight: 500;
+  color: var(--ink-faint);
+  margin-left: 10px; letter-spacing: 0.7px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  padding: 3px 9px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--bg-elev);
+}
+.m-line.cta {
+  font-weight: 800; font-size: 42px;
+  margin: 28px 0 0; line-height: 1.05;
+  letter-spacing: -0.026em;
+}
+.m-line.cta em {
+  display: inline-block;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 4px 16px;
+  border-radius: 10px;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   SIDEBAR THEME TOGGLE
+   ============================================================ */
+.sidebar-tools {
+  display: flex; gap: 6px;
+  margin: 18px 6px 22px;
+}
+.sidebar-theme-toggle {
+  flex: 1;
+  background: transparent; border: 1px solid var(--rule);
+  color: var(--ink-soft); padding: 6px 10px; border-radius: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; cursor: pointer;
+  letter-spacing: 0.8px; text-transform: uppercase;
+}
+.sidebar-theme-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+/* ============================================================
+   SCROLLSPY + SECTION NAVIGATION (single-file guide only;
+   not part of any rendered-by-pipeline doc surface)
+   ============================================================ */
+.nav li a.scroll-active {
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+:root[data-theme="dark"] .nav li a.scroll-active {
+  color: var(--accent);
+}
+
+.section-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 16px;
+  margin: 64px 0 8px;
+  padding: 28px 0 4px;
+  border-top: 1px solid var(--rule);
+}
+.section-nav .sn-spacer { flex: 1; }
+.section-nav-pill {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 14px 22px;
+  border-radius: 14px;
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease, transform 140ms ease;
+  max-width: 380px;
+  min-width: 220px;
+}
+.section-nav-pill .sn-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.section-nav-pill .sn-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+.section-nav-pill.next .sn-label { justify-content: flex-end; }
+.section-nav-pill.prev .sn-label { justify-content: flex-start; }
+.section-nav-pill .sn-arrow {
+  font-size: 17px;
+  line-height: 1;
+  color: var(--accent);
+  font-weight: 700;
+}
+.section-nav-pill:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-deep);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.section-nav-pill:hover .sn-kicker { color: var(--accent); }
+.section-nav-pill.prev { text-align: left; }
+.section-nav-pill.next { text-align: right; margin-left: auto; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1200px) {
+  body { grid-template-columns: 240px 1fr; }
+  .view-picker { grid-template-columns: repeat(3, 1fr); }
+  .verdict-grid { grid-template-columns: repeat(2, 1fr); }
+  .verdict-grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .hero h1 { font-size: 44px; }
+  .view-wrap { padding: 28px 32px 80px; }
+  header.masthead { padding: 16px 32px 12px; }
+  .view-picker { padding: 8px 32px 14px; }
+}
+
+@media (max-width: 880px) {
+  body { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; max-height: none; border-right: none; border-bottom: 1px solid var(--rule); }
+  .view-picker { grid-template-columns: repeat(2, 1fr); }
+  .verdict-grid, .verdict-grid.cols-2, .verdict-grid.cols-4 { grid-template-columns: 1fr; }
+  .teams, .pair-grid, .install-options { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; }
+  .flow .flow-step { margin-right: 0; margin-bottom: 22px; }
+  .flow .flow-step:last-child { margin-bottom: 0; }
+  .flow .flow-step::after { top: auto; bottom: -22px; right: 50%; transform: translateX(50%); width: 1.5px; height: 22px; }
+  .flow .flow-step::before { top: auto; bottom: -10px; right: 50%; transform: translateX(50%) rotate(45deg); }
+  .hero h1 { font-size: 36px; }
+  .view-wrap { padding: 24px 22px 80px; }
+  header.masthead { padding: 14px 22px 10px; }
+  .view-picker { padding: 8px 22px 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SIDEBAR (collapsible by section)
+     ============================================================ -->
+<aside class="sidebar">
+  <div class="brand">
+    <span class="brand-name">STR<em>AP</em></span>
+  </div>
+  <span class="brand-tag">v2.6 &middot; Startup Guide</span>
+
+  <div class="sidebar-tools">
+    <button class="sidebar-theme-toggle" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; this.textContent = 'theme: ' + document.documentElement.dataset.theme;">theme: light</button>
+  </div>
+
+  <nav class="nav">
+    <details open data-view="getting-started">
+      <summary>01 &middot; Getting Started</summary>
+      <ul>
+        <li><a href="#what-is-strap">What is STRAP?</a></li>
+        <li><a href="#executive-summary">Executive Summary</a></li>
+        <li><a href="#whats-in-the-box">What's in the Box?</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+      </ul>
+    </details>
+
+    <details data-view="core-principles">
+      <summary>02 &middot; Core Principles</summary>
+      <ul>
+        <li><a href="#super-pair">The Super-Pair</a></li>
+        <li><a href="#agent-team">Meet the Agent Team</a></li>
+        <li><a href="#single-curator">Single-Curator Rule</a></li>
+      </ul>
+    </details>
+
+    <details data-view="workflows">
+      <summary>03 &middot; Workflows</summary>
+      <ul>
+        <li><a href="#workflow-onboarding">Onboarding Workflow</a></li>
+        <li><a href="#workflow-production">Production Workflow</a></li>
+        <li><a href="#workflow-full-auto">Full Auto (Spec to PR)</a></li>
+      </ul>
+    </details>
+
+    <details data-view="dora-governance">
+      <summary>04 &middot; DORA Governance</summary>
+      <ul>
+        <li><a href="#dora-overview">Getting the most from reports</a></li>
+        <li><a href="#dora-4">DORA-4 Instruments</a></li>
+        <li><a href="#strap-instruments">STRAP Instruments</a></li>
+        <li><a href="#operational-disciplines">Operational Disciplines</a></li>
+        <li><a href="#dora-config">Configuration</a></li>
+      </ul>
+    </details>
+
+    <details data-view="upgrades-customization">
+      <summary>05 &middot; Upgrades &amp; Custom.</summary>
+      <ul>
+        <li><a href="#upgrading">Upgrading STRAP</a></li>
+        <li><a href="#customizing">Customizing STRAP</a></li>
+        <li class="nested"><a href="#tuning-project-shape">Tuning Project Shape</a></li>
+        <li class="nested"><a href="#tuning-specialists">Tuning Specialist Behavior</a></li>
+        <li class="nested"><a href="#tuning-budgets">Tuning Token Budgets</a></li>
+        <li class="nested"><a href="#adding-agents">Adding Custom Agents</a></li>
+      </ul>
+    </details>
+  </nav>
+
+  <div class="sidebar-foot">
+    <strong>STRAP v2.6</strong><br>
+    Spec-To-Release Agentic Pipeline<br>
+    A Leo Motion Group portfolio project.
+  </div>
+</aside>
+
+<!-- ============================================================
+     MAIN
+     ============================================================ -->
+<div class="main">
+
+  <div class="view-wrap">
+
+    <!-- ========================================================
+         SECTION 01: GETTING STARTED (default active view)
+         ======================================================== -->
+    <section id="getting-started" class="view active block">
+
+      <!-- HERO (manifesto) -->
+      <header class="hero">
+        <div class="block-num">Startup Guide &middot; v2.6</div>
+        <div class="manifesto">
+          <p class="m-line cta">Are you ready to <em>STRAP-IN</em>?</p>
+        </div>
+
+        <div class="verdict-grid">
+          <div class="verdict watch">
+            <span class="v-label">01 &middot; Claude Pipeline Orchestrator</span>
+            <p class="v-headline">CPO</p>
+            <p class="v-body">You. The human at the keyboard. Owns priority, approval, and merge authority. Cannot be impersonated by an agent. STRAP works for you, not around you.</p>
+          </div>
+          <div class="verdict context">
+            <span class="v-label">02 &middot; Agent Dev-Lead</span>
+            <p class="v-headline">Loyal Wingman</p>
+            <p class="v-body">The top-level Claude session &mdash; the CPO's working partner. Coordinates the 15-agent stack, runs every STRAP skill, curates rules and memory, talks to no one but the CPO.</p>
+          </div>
+          <div class="verdict violet">
+            <span class="v-label">03 &middot; The Agent Stack</span>
+            <p class="v-headline">Force Multiplier</p>
+            <p class="v-body">Fourteen specialists organized into two teams &mdash; agent-ops for planning, agent-devs for implementation. Dispatched in parallel via <code>CreateTeam</code> or serially via <code>Task</code>. Where the 5x-10x lives.</p>
+          </div>
+        </div>
+
+        <div class="signal-strip">
+          <div class="cell accent">
+            <span class="lbl">Velocity gain</span>
+            <span class="val">5x &ndash; 10x+</span>
+          </div>
+          <div class="cell">
+            <span class="lbl">Agents</span>
+            <span class="val">15</span>
+          </div>
+          <div class="cell">
+            <span class="lbl">Skills</span>
+            <span class="val">30+</span>
+          </div>
+          <div class="cell">
+            <span class="lbl">Connection starters</span>
+            <span class="val">5</span>
+          </div>
+          <div class="cell">
+            <span class="lbl">Onboard time</span>
+            <span class="val">~1 hr</span>
+          </div>
+        </div>
+      </header>
+      <div class="block-num">Section 01</div>
+      <h2 class="block-title">Getting Started</h2>
+      <p class="block-lede">A 90-second orientation, then the four commands that take you from a freshly-cloned project to a STRAP-aware workspace ready to ship Requirements end-to-end.</p>
+
+      <!-- 01.1 What is STRAP? -->
+      <article id="what-is-strap" class="sub-block">
+        <div class="sub-num">01.1</div>
+        <h3 class="sub-title">What is STRAP?</h3>
+        <p>STRAP &mdash; the <strong>Spec-To-Release Agentic Pipeline</strong> &mdash; is built to be installed. Drop it into any software project, run a single skill, and a complete software-development team comes online: a planning side that turns ideas into specifications, an implementation side that builds against those specifications, a review side that holds the line on security and infrastructure, and a documentation side that captures it all for the audiences who need to read it.</p>
+
+        <p>The point of STRAP is not to remove the human. The point is to <strong>give one human the leverage of a small team</strong>. The human stays in control: they decide priority, they approve work, they merge pull requests. The agents do the work the human directs them to do, in parallel, with discipline, and with memory that grows alongside the codebase.</p>
+
+        <p>And the leverage <strong>compounds when more humans join</strong>. Multiple humans can each operate their own STRAP super-pair in parallel &mdash; N orchestrators, N dev-leads, N agent teams &mdash; all working against the same source-controlled persistence stack. The output multiplier scales with the orchestrator count, not just the agent count. One human gets a small team's velocity; N humans get N teams in coordinated motion against shared context.</p>
+      </article>
+
+      <!-- 01.2 Executive Summary -->
+      <article id="executive-summary" class="sub-block">
+        <div class="sub-num">01.2</div>
+        <h3 class="sub-title">Executive Summary</h3>
+        <p><strong>STRAP turns a codebase you don't fully understand into one your team can move on &mdash; in an hour, not a quarter.</strong></p>
+
+        <p>The moment you install STRAP into a project, it spends about an hour reading the entire codebase the way a senior engineer would on their first week. It captures three things that normally take months to surface:</p>
+
+        <div class="verdict-grid">
+          <div class="verdict context">
+            <span class="v-label">01 &middot; Orientation</span>
+            <p class="v-headline">What the project is and who it serves</p>
+            <p class="v-body">A plain-language project orientation. Where the code lives, who built it, who it's for, what's in production today &mdash; the document new contributors usually have to assemble over their first sprint.</p>
+          </div>
+          <div class="verdict watch">
+            <span class="v-label">02 &middot; Architecture</span>
+            <p class="v-headline">How the system is built</p>
+            <p class="v-body">A real architectural map. System topology, the major boundaries, where data flows, which patterns recur, where the smells are. The kind of artifact that typically takes weeks of senior-engineer effort or an external consulting engagement.</p>
+          </div>
+          <div class="verdict critical">
+            <span class="v-label">03 &middot; Security</span>
+            <p class="v-headline">The risk picture</p>
+            <p class="v-body">Concrete findings with <code>file:line</code> citations. Exposed credentials, hardcoded keys, missing auth, injection surfaces, cross-tenant leaks. Not theoretical &mdash; specific lines in your binaries today. Two-to-four-week security-audit equivalent, same day.</p>
+          </div>
+        </div>
+
+        <p><strong>Then it stays.</strong> STRAP doesn't deliver an orientation document and walk away. It installs a coordinated team of 15 AI agents into your project. From the moment onboarding finishes, your team uses STRAP to take ideas through the full software lifecycle:</p>
+
+        <ul>
+          <li><strong>Idea to specification</strong> &mdash; the requirements lead interviews you, refines the idea, and the spec lead produces an implementable specification with technical depth.</li>
+          <li><strong>Specification to work plan</strong> &mdash; decomposes into features, stories, and tasks in your existing tracker (Azure DevOps / Jira / GitHub Issues &mdash; STRAP connects to what you already use).</li>
+          <li><strong>Work plan to PR-ready code</strong> &mdash; implementation specialists work in parallel against the codebase; security review runs as a gate; tests are authored alongside the code; the result is a pull request your developers review and merge.</li>
+        </ul>
+
+        <p><strong>What's different is the leverage shape.</strong> Traditional development optimizes for time-to-first-commit. Cost shows up later as rework: ambiguous specs produce ambiguous implementations, cross-layer issues surface late, PRs cycle through five rounds of review. STRAP inverts the curve &mdash; it invests deeply upfront in understanding the codebase and refining specifications, then runs implementation in parallel against that prepared ground. By the time a developer reviews a PR, the ambiguity is already gone.</p>
+
+        <p><strong>The economic shape is unusual too.</strong> STRAP runs inside Anthropic's Claude Code using a per-developer subscription. No separate infrastructure, no API keys to juggle, no SaaS tier. The cost scales with usage. Within that subscription, STRAP enforces explicit token budgets at workflow and session level: every onboarding, feature decomposition, sprint execution runs against a budget the CPO sets and the pipeline holds to. Per-project and per-team usage is forecastable in a way that ad-hoc AI tool use isn't.</p>
+
+        <div class="invariant">
+          <span class="label">The bar</span>
+          <p>Validation runs to date have shown a force multiplier in feature velocity in the <strong>5x to 10x+ range</strong>. The variance reflects how deeply a team integrates STRAP into their daily workflow and how mature the codebase is going in. Older codebases with significant accumulated context get more leverage from the discovery pass; greenfield projects get more leverage from the specification + decomposition pass &mdash; teams running STRAP at the pipeline level (not occasional use) routinely sit at the top of the range.</p>
+        </div>
+      </article>
+
+      <!-- 01.3 What's in the Box -->
+      <article id="whats-in-the-box" class="sub-block">
+        <div class="sub-num">01.3</div>
+        <h3 class="sub-title">What's in the Box?</h3>
+        <p>A quick tour of what makes STRAP distinctive. Each item has a deeper treatment further down; here is the shape in one pass.</p>
+
+        <h5>Discipline over cleverness</h5>
+        <p>STRAP refuses several patterns that other agent setups treat as features. The discipline pays compounding returns.</p>
+        <div class="verdict-grid cols-4">
+          <div class="verdict good">
+            <span class="v-label">01</span>
+            <p class="v-headline">Non-destructive Onboarding</p>
+            <p class="v-body">Specialists run read-only during <code>/strap-in</code> and <code>/strap-refresh</code>. Your production code cannot be modified during persistence-stack curation.</p>
+          </div>
+          <div class="verdict good">
+            <span class="v-label">02</span>
+            <p class="v-headline">Centralized Test Execution</p>
+            <p class="v-body">Only the dev-lead runs the test suite, in a single pass at PR preparation. Specialists author tests but never run them.</p>
+          </div>
+          <div class="verdict good">
+            <span class="v-label">03</span>
+            <p class="v-headline">Token Budgets</p>
+            <p class="v-body">Explicit per-agent + session-aggregate ceilings, set by the CPO once. Tune any time via <code>/revise-token-budget</code>.</p>
+          </div>
+          <div class="verdict good">
+            <span class="v-label">04</span>
+            <p class="v-headline">CPO Authority</p>
+            <p class="v-body">Every state transition requires explicit human approval. No agent merges PRs. The leverage is in what you can confidently delegate.</p>
+          </div>
+        </div>
+
+        <h5>Persistence as Code (PaC)</h5>
+        <p>Context lives where code lives. The persistence stack is <strong>source-controlled, PR-reviewable, branch-aware, and shared</strong> across every session, developer, and hand-off. STRAP doesn't get smarter by growing more agents; it gets smarter by growing what the agents read.</p>
+        <div class="verdict-grid cols-4">
+          <div class="verdict context">
+            <span class="v-label">PaC 01</span>
+            <p class="v-headline">Agent Context as Code</p>
+            <p class="v-body"><code>project-profile.md</code> records what your project IS &mdash; stack, conventions, active domains, build commands, sensitivities. Every agent reads it on every invocation.</p>
+          </div>
+          <div class="verdict context">
+            <span class="v-label">PaC 02</span>
+            <p class="v-headline">Agent Memory as Code</p>
+            <p class="v-body">Per-agent memory captures project-specific tradecraft; per-agent rules capture guardrails. Soft learnings vs hard constraints, both source-controlled.</p>
+          </div>
+          <div class="verdict context">
+            <span class="v-label">PaC 03</span>
+            <p class="v-headline">Single-Curator Rule</p>
+            <p class="v-body">Only the dev-lead writes to rules and memory. Specialists report findings; the dev-lead decides what gets persisted. No drift, no contradictions.</p>
+          </div>
+          <div class="verdict context">
+            <span class="v-label">PaC 04</span>
+            <p class="v-headline">Auto-Discovery</p>
+            <p class="v-body"><code>/strap-in</code> reads your codebase at shallow scope, infers the stack, dispatches relevant specialists for read-only deep-dive, and synthesizes findings.</p>
+          </div>
+        </div>
+
+        <h5>Drop-in integration</h5>
+        <p>Your work-tracking host. Your source-control host. Your existing docs directory. STRAP probes each at connect time and persists per-project profiles that the pipeline reads at runtime.</p>
+        <div class="verdict-grid cols-4">
+          <div class="verdict">
+            <span class="v-label accent">DI 01</span>
+            <p class="v-headline">DevOps Integration</p>
+            <p class="v-body">Azure DevOps Boards / Jira / GitHub Issues / Local <em>strap-agile</em> / Other. Probes, models, validates, persists. Graceful degradation for unsupported operations.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">DI 02</span>
+            <p class="v-headline">Source Control Integration</p>
+            <p class="v-body">Azure Repos / GitHub / Bitbucket / Local Git / Other. Code-immutability invariant releases when wired. Throwaway-branch probes validate end-to-end auth.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">DI 03</span>
+            <p class="v-headline">Work-Tracking as Code</p>
+            <p class="v-body">Optional <code>Local (strap-agile)</code> mode &mdash; work items become markdown files in git history. PR-reviewable, diffable, branch-aware. The right call for small teams.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">DI 04</span>
+            <p class="v-headline">Seven Logical Work-Item Types</p>
+            <p class="v-body">Requirement / Spec / Feature / Enhancement / Story / Task / Bug. Maps to each host's native types via Custom Map UX; <code>strap:&lt;type&gt;</code> tag preserves findability.</p>
+          </div>
+        </div>
+
+        <h5>Self-documenting outputs</h5>
+        <p>Beyond agent work, STRAP produces durable artifacts your team can review the same way they review code. Each is auditable, diffable, and meaningful at a glance.</p>
+        <div class="verdict-grid cols-4">
+          <div class="verdict violet">
+            <span class="v-label">SD 01</span>
+            <p class="v-headline">Project-Docs Pipeline</p>
+            <p class="v-body"><code>PROJECT.md</code> + <code>ARCHITECTURE.md</code> + <code>STACK.md</code> rendered from the curated persistence stack. Self-contained HTML companion alongside.</p>
+          </div>
+          <div class="verdict violet">
+            <span class="v-label">SD 02</span>
+            <p class="v-headline">Mockup-as-Contract</p>
+            <p class="v-body"><code>designer</code> produces deployable mockup code; <code>frontend-engineer</code> ports verbatim. The mockup IS the visual contract.</p>
+          </div>
+          <div class="verdict violet">
+            <span class="v-label">SD 03</span>
+            <p class="v-headline">DORA + AI Efficiency Ratio</p>
+            <p class="v-body">Editorial-quality reports comparing original estimates vs actual wall-clock cycle times. The wall-clock IS the primary AI-efficiency signal.</p>
+          </div>
+          <div class="verdict violet">
+            <span class="v-label">SD 04</span>
+            <p class="v-headline">Cross-Session Continuations</p>
+            <p class="v-body">Multi-session work survives via <code>/context-prep</code> + <code>/context-fetch</code>. Multi-developer hand-offs travel through these. No mid-feature work is stranded.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 01.4 Quick Start -->
+      <article id="quick-start" class="sub-block">
+        <div class="sub-num">01.4</div>
+        <h3 class="sub-title">Quick Start</h3>
+        <p>STRAP installs as a <code>.claude/</code> folder inside your project's root. From there, four skills bring the pipeline online. Total time: ~45 minutes for the first read-along.</p>
+
+        <div class="callout accent">
+          <span class="label">Before you start</span>
+          <p><strong>Close Claude Code if it's running.</strong> The installer writes to <code>.claude/settings.json</code>; an active session may hold a file lock or miss the new permissions until restart.</p>
+          <p><strong>Open a terminal in the directory where you want STRAP installed.</strong> The installer creates <code>.claude/</code> at your current working directory. Picking the wrong install root means STRAP curates the wrong project &mdash; choose carefully.</p>
+        </div>
+
+        <h5>The installer &mdash; choose your OS</h5>
+        <div class="install-options">
+          <div class="install-card mac-linux">
+            <div class="install-os">macOS &middot; Linux</div>
+            <h4>Pipe-to-shell installer</h4>
+            <div class="code-block">
+              <div class="code-block-toolbar">
+                <button class="copy-btn" onclick="copyCode(this)"><span class="copy-icon"></span><span class="copy-label">copy</span></button>
+              </div>
+<pre><code>curl -fsSL https://lmgstrapdist.blob.core.windows.net/releases/install.sh | bash</code></pre>
+            </div>
+            <p>Pipe-to-shell is the standard pattern. For the security-conscious, download first and inspect: <code>curl -fsSL .../install.sh -o strap-install.sh &amp;&amp; bash strap-install.sh</code>. Either way, <code>.claude/</code> lands in the current directory. To pin a specific version, swap the URL for <code>strap-install-&lt;version&gt;.sh</code> &mdash; filename-versioned aliases are published per release.</p>
+          </div>
+          <div class="install-card windows">
+            <div class="install-os">Windows</div>
+            <h4>PowerShell installer</h4>
+            <div class="code-block">
+              <div class="code-block-toolbar">
+                <button class="copy-btn" onclick="copyCode(this)"><span class="copy-icon"></span><span class="copy-label">copy</span></button>
+              </div>
+<pre><code>iwr https://lmgstrapdist.blob.core.windows.net/releases/install.ps1 -OutFile strap-install.ps1
+.\strap-install.ps1</code></pre>
+            </div>
+            <p>PowerShell 7+ recommended; PowerShell 5.1 works. If execution policy blocks the script, run <code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code> once for your account &mdash; one-time setup, not per-install. To pin a specific version, swap the URL for <code>strap-install-&lt;version&gt;.ps1</code>.</p>
+          </div>
+        </div>
+
+        <h5>The five-skill onboarding sequence</h5>
+        <div class="flow vertical">
+          <div class="flow-step blue">
+            <span class="flow-step-num">Step 01 &middot; Install</span>
+            <code class="flow-step-cmd">curl / iwr installer (commands above)</code>
+            <p class="flow-step-desc">Downloads a versioned STRAP package, verifies SHA-256, extracts to <code>.claude/</code>, seeds harness permissions in <code>settings.json</code>. Cross-platform; no elevation required.</p>
+          </div>
+          <div class="flow-step accent">
+            <span class="flow-step-num">Step 02 &middot; Onboard</span>
+            <code class="flow-step-cmd">/strap-in</code>
+            <p class="flow-step-desc">The first conversation. Dev-lead reads codebase at shallow scope, dispatches relevant specialists in parallel via <code>CreateTeam</code> for read-only deep-dive, curates the persistence stack. Code is immutable throughout.</p>
+          </div>
+          <div class="flow-step green">
+            <span class="flow-step-num">Step 03 &middot; Source Control</span>
+            <code class="flow-step-cmd">/connect-code-repo</code>
+            <p class="flow-step-desc">Wires up where git lives. Probes host, models branch + PR + auth, validates, persists profile. The code-immutability invariant releases when this clears.</p>
+          </div>
+          <div class="flow-step violet">
+            <span class="flow-step-num">Step 04 &middot; Work Tracking</span>
+            <code class="flow-step-cmd">/connect-devops-project</code>
+            <p class="flow-step-desc">Wires up where work items live. Same five-step discovery flow. After this, the pipeline can file Requirements, Specs, Features, Stories, Tasks, and Bugs.</p>
+          </div>
+          <div class="flow-step amber">
+            <span class="flow-step-num">Step 05 &middot; First Work</span>
+            <code class="flow-step-cmd">/new-requirement &lt;your idea&gt;</code>
+            <p class="flow-step-desc">Your first production-workflow invocation. <code>req-lead</code> drafts a Requirement work item, identifies open questions, iterates with you toward Resolved.</p>
+          </div>
+        </div>
+
+        <h5>Three install-root shapes STRAP recognizes</h5>
+        <table class="editorial">
+          <thead>
+            <tr><th>Shape</th><th>Where install lands</th><th>What <code>/strap-in</code> does</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Monorepo / single-repo</strong></td>
+              <td class="mono">~/source/repos/MyApp/</td>
+              <td>Treats the directory as one project, dispatches specialists against all of it.</td>
+            </tr>
+            <tr>
+              <td><strong>Polyrepo umbrella, bare</strong> <small>sub-repos are siblings, no umbrella git</small></td>
+              <td class="mono">~/source/repos/MyUmbrella/</td>
+              <td>Detects sub-repos at depth-1, offers three-way CPO choice (umbrella mode / per-sub-repo / single-project escape).</td>
+            </tr>
+            <tr>
+              <td><strong>Polyrepo umbrella, workspace</strong> <small>umbrella tracks shared config + .sln</small></td>
+              <td class="mono">~/source/repos/MyPlatform/</td>
+              <td>Same detection; umbrella may carry its own git for shared config / docs / CI.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <span class="label">Tip</span>
+          <p>You don't need to set anything up in your DevOps tool ahead of time. <code>/connect-devops-project</code> probes what's there, models it against STRAP's logical operations, and surfaces any gaps with degradation paths before you commit.</p>
+        </div>
+      </article>
+
+      <nav class="section-nav" aria-label="Section navigation">
+        <div class="sn-spacer"></div>
+        <a href="#core-principles" class="section-nav-pill next">
+          <span class="sn-kicker">Next &middot; Section 02</span>
+          <span class="sn-label">Core Principles <span class="sn-arrow">&rarr;</span></span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- ========================================================
+         SECTION 02: CORE PRINCIPLES
+         ======================================================== -->
+    <section id="core-principles" class="view block">
+      <div class="block-num">Section 02</div>
+      <h2 class="block-title">Core Principles</h2>
+      <p class="block-lede">The architecture rests on three invariants. Once you internalize the super-pair, the agent roster, and the single-curator rule, the rest of STRAP makes sense.</p>
+
+      <!-- 02.1 The Super-Pair -->
+      <article id="super-pair" class="sub-block">
+        <div class="sub-num">02.1</div>
+        <h3 class="sub-title">The Super-Pair</h3>
+        <p>Every STRAP session is operated by a two-entity super-pair. This identity is invariant &mdash; it does not change between sessions, between releases, or between adopters.</p>
+
+        <div class="invariant">
+          <span class="label">The Super-Pair Invariant</span>
+          <p><strong>You &mdash; the human typing the prompts &mdash; are the CPO.</strong> The Claude Pipeline Orchestrator. You set priority. You approve work. You decide. Your authority is non-negotiable; no agent can impersonate you and no skill can run a state transition without your sign-off.</p>
+          <p><strong>Claude itself &mdash; this session &mdash; is the dev-lead.</strong> Your working partner. The dev-lead does not write production code directly. It coordinates the team, dispatches specialists, synthesizes their work, curates their rules and memory, and brings everything back to you. It is the only agent that talks to you; everyone else routes through it.</p>
+        </div>
+
+        <div class="pair-grid">
+          <div class="pair cpo">
+            <div class="pair-role">Human authority</div>
+            <h4>The CPO</h4>
+            <p>The human typing the prompts. Owns priority, approval, and decision authority. Cannot be impersonated by an agent.</p>
+            <ul>
+              <li>Sets priority and approves work</li>
+              <li>Approves every meaningful gate</li>
+              <li>Merges every pull request</li>
+              <li>Directs persistence-stack curation</li>
+              <li>Cannot be impersonated by any agent</li>
+            </ul>
+          </div>
+          <div class="pair dev-lead">
+            <div class="pair-role">Top-level agent</div>
+            <h4>The dev-lead</h4>
+            <p>The top-level Claude session. The CPO's working partner. The only agent that talks directly to the CPO.</p>
+            <ul>
+              <li>Dispatches specialists via <code>Task</code> / <code>Agent</code> / <code>CreateTeam</code></li>
+              <li>Curates rules + memory under the single-curator rule</li>
+              <li>Synthesizes specialist findings</li>
+              <li>Runs every STRAP skill end-to-end</li>
+              <li>Reports back to the CPO at every gate</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>Everything else extends from this one relationship.</p>
+      </article>
+
+      <!-- 02.2 Meet the Agent Team -->
+      <article id="agent-team" class="sub-block">
+        <div class="sub-num">02.2</div>
+        <h3 class="sub-title">Meet the Agent Team</h3>
+        <p>Fifteen agents ship with STRAP. The roster is <strong>fixed</strong>: the same fifteen ship to every adopter, every install. They do not get renamed, replaced, or regenerated. They are dormant when not needed and active when work comes their way. Over time the dev-lead refines them &mdash; adding rules where guardrails are needed, adding memory where tradecraft is worth keeping &mdash; but the roster itself stays canonical.</p>
+
+        <div class="teams">
+          <div class="team-card ops">
+            <div class="team-head">
+              <div>
+                <span class="team-pill ops">agent-ops</span>
+                <span class="role" style="margin-left: 8px;">The planning &amp; coordination team</span>
+              </div>
+              <span class="team-count">7 specialists</span>
+            </div>
+            <p class="team-tagline">Authoring chains, mockups, documentation, sprint cadence, governance, testing.</p>
+            <div class="agent-list">
+              <div class="agent"><div class="agent-icon">RL</div><div class="agent-body"><p class="agent-name">req-lead</p><p class="agent-role">Owns Requirements. Refines raw ideas into structured Requirements with a clear Problem Statement, Desired Outcome, Success Criteria, and Scope. Allergic to vague problem statements.</p></div></div>
+              <div class="agent"><div class="agent-icon">SL</div><div class="agent-body"><p class="agent-name">spec-lead</p><p class="agent-role">Takes resolved Requirements and produces Specs with enough technical depth that implementation can decompose without coming back for clarifying questions. The bridge between "what" and "how."</p></div></div>
+              <div class="agent"><div class="agent-icon">DG</div><div class="agent-body"><p class="agent-name">designer</p><p class="agent-role">Interviews on intent, audience, scope, fidelity tier. Produces deployable mockup code &mdash; actual interactive mockups &mdash; that frontend ports verbatim. The mockup IS the visual contract.</p></div></div>
+              <div class="agent"><div class="agent-icon">TW</div><div class="agent-body"><p class="agent-name">tech-writer</p><p class="agent-role">Drafts feature pages, release notes, use-case guides, API docs, architecture docs, how-to guides. Adapts tone to configured audience: community vs code.</p></div></div>
+              <div class="agent"><div class="agent-icon">SP</div><div class="agent-body"><p class="agent-name">sprint-planner</p><p class="agent-role">Allocates Stories and Tasks into the current sprint (single-sprint constraint). Tracks velocity. Surfaces capacity conflicts rather than silently spilling.</p></div></div>
+              <div class="agent"><div class="agent-icon">DA</div><div class="agent-body"><p class="agent-name">dora-analyst</p><p class="agent-role">Tracks DORA-4 metrics plus an AI Efficiency Ratio that leverages the AI tag to distinguish AI-authored from human-authored work.</p></div></div>
+              <div class="agent"><div class="agent-icon">UX</div><div class="agent-body"><p class="agent-name">ux-test-engineer</p><p class="agent-role">Derives test plans from Spec acceptance criteria. Authors and runs E2E suites. Files structured Bug work items with reproduction steps + evidence.</p></div></div>
+            </div>
+          </div>
+
+          <div class="team-card devs">
+            <div class="team-head">
+              <div>
+                <span class="team-pill devs">agent-devs</span>
+                <span class="role" style="margin-left: 8px;">The implementation &amp; verification team</span>
+              </div>
+              <span class="team-count">8 specialists</span>
+            </div>
+            <p class="team-tagline">Coordination, implementation across all layers, OWASP gate, IaC, test strategy.</p>
+            <div class="agent-list">
+              <div class="agent dev-lead-row"><div class="agent-icon">DL</div><div class="agent-body"><p class="agent-name">dev-lead</p><p class="agent-role">The top-level Claude session. Never a subagent. Coordinates specialists, curates persistence, runs every STRAP skill. The only agent that talks to the CPO directly.</p></div></div>
+              <div class="agent"><div class="agent-icon">BE</div><div class="agent-body"><p class="agent-name">backend-engineer</p><p class="agent-role">Server-side code: domain entities, application services, transport handlers, data-access seams. Holds the line on clean architecture and DI. Authors tests; never runs them.</p></div></div>
+              <div class="agent"><div class="agent-icon">FE</div><div class="agent-body"><p class="agent-name">frontend-engineer</p><p class="agent-role">Client-side code across web, desktop, mobile, native, server-rendered form factors. Respects store-ownership and parent/child contracts. Ports mockups verbatim when they exist.</p></div></div>
+              <div class="agent"><div class="agent-icon">DB</div><div class="agent-body"><p class="agent-name">database-engineer</p><p class="agent-role">Owns the persistence layer: entity definitions, schema migrations, indexing. Applies migrations to local dev only. Production / UAT / shared-dev are pipeline-only. No exceptions.</p></div></div>
+              <div class="agent"><div class="agent-icon">OP</div><div class="agent-body"><p class="agent-name">devops-lead</p><p class="agent-role">Owns IaC, cloud fabric, pipeline definitions. Authors and surfaces defects. Never runs apply / deploy against environments with dependents.</p></div></div>
+              <div class="agent"><div class="agent-icon">SR</div><div class="agent-body"><p class="agent-name">security-reviewer</p><p class="agent-role">OWASP-aligned audit gate. Reviews authn, authz, tenant isolation, input validation, injection, secrets handling, error-response hygiene. Critical and High findings block merge.</p></div></div>
+              <div class="agent"><div class="agent-icon">IS</div><div class="agent-body"><p class="agent-name">integration-specialist</p><p class="agent-role">Owns external-system integration. Dynamic endpoints, per-tenant config stores, retry policies, bidirectional mapping at trust boundaries. Dormant when no external surface exists.</p></div></div>
+              <div class="agent"><div class="agent-icon">TS</div><div class="agent-body"><p class="agent-name">test-strategist</p><p class="agent-role">Authors test strategy at the Feature level, reviews coverage intent, triages failures the dev-lead redispatches. Does not run tests &mdash; that is the dev-lead's centralized responsibility.</p></div></div>
+            </div>
+          </div>
+        </div>
+
+        <p>The full stack is always present; what changes per install is the persistence stack the dev-lead curates over the project's lifetime. <strong>Agents stay simple. Intelligence accumulates in the persistence.</strong></p>
+
+        <div class="callout">
+          <span class="label">Three hard rules</span>
+          <p><strong>1. Specialists never talk to the CPO directly.</strong> They report through the dev-lead.</p>
+          <p><strong>2. Specialists never spawn other specialists.</strong> The dev-lead is the only fan-out layer.</p>
+          <p><strong>3. Specialists never run the test suite.</strong> The dev-lead is the centralized executor at PR preparation.</p>
+        </div>
+      </article>
+
+      <!-- 02.3 Single-Curator Rule -->
+      <article id="single-curator" class="sub-block">
+        <div class="sub-num">02.3</div>
+        <h3 class="sub-title">The Single-Curator Rule</h3>
+
+        <div class="invariant">
+          <span class="label">Single-Curator Invariant</span>
+          <p><strong>Only the dev-lead writes to rules and memory.</strong> Specialists report findings; the dev-lead decides what gets persisted. The CPO directs the dev-lead through normal conversation &mdash; <em>"save this learning to the backend-engineer's memory"</em> &mdash; or through the explicit <code>/memory-refine &lt;agent&gt;</code> skill.</p>
+        </div>
+
+        <p>This rule exists because curated context is what makes STRAP compound over time. If specialists could write their own rules and memory, the persistence stack would drift &mdash; contradictions accumulate, stale tradecraft persists, the project profile loses coherence. <strong>One curator keeps the persistence stack tight.</strong></p>
+
+        <h5>The persistence stack at a glance</h5>
+        <table class="editorial">
+          <thead>
+            <tr><th>Layer</th><th>Purpose</th><th>Lifetime</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Team rules</strong></td><td>Cross-cutting team-level guardrails. STRAP-wide conventions that ship verbatim to every adopter.</td><td>Stable</td></tr>
+            <tr><td><strong>Per-agent rules</strong></td><td>Per-agent guardrails added reactively when something needs preventing.</td><td>Reactive growth</td></tr>
+            <tr><td><strong>Per-agent memory</strong></td><td>Accumulated tradecraft for THIS project. Soft learnings, not rules.</td><td>Grows over time</td></tr>
+            <tr><td><strong>Project profile</strong></td><td>The canonical record of what THIS project IS. Stack, active domains, conventions, build/test commands.</td><td>Refined</td></tr>
+            <tr><td><strong>Dev-lead memory</strong></td><td>The dev-lead's own categorized notes, indexed by a master file.</td><td>Grows over time</td></tr>
+            <tr><td><strong>Continuations</strong></td><td>Cross-session topic snapshots. Workstreams that span sessions get a runbook captured by <code>/context-prep</code>.</td><td>Topic-scoped</td></tr>
+            <tr><td><strong>Connection profiles</strong></td><td>Per-project work-tracking + source-control wire-up. Env-var references only &mdash; credential values never enter tracked files.</td><td>Per host</td></tr>
+          </tbody>
+        </table>
+
+        <p>Six months into a project, the per-agent memory files describe how to do the job well on this specific codebase. New developers operating as the CPO inherit that institutional knowledge automatically &mdash; it is source-controlled, it travels with the repo, it survives staff changes.</p>
+
+        <p>The agents themselves stay simple. <strong>The intelligence is in the persistence stack.</strong></p>
+      </article>
+
+      <nav class="section-nav" aria-label="Section navigation">
+        <a href="#getting-started" class="section-nav-pill prev">
+          <span class="sn-kicker">Previous &middot; Section 01</span>
+          <span class="sn-label"><span class="sn-arrow">&larr;</span> Getting Started</span>
+        </a>
+        <a href="#workflows" class="section-nav-pill next">
+          <span class="sn-kicker">Next &middot; Section 03</span>
+          <span class="sn-label">Workflows <span class="sn-arrow">&rarr;</span></span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- ========================================================
+         SECTION 03: WORKFLOWS
+         ======================================================== -->
+    <section id="workflows" class="view block">
+      <div class="block-num">Section 03</div>
+      <h2 class="block-title">Workflows</h2>
+      <p class="block-lede">Three operational shapes. <strong>Onboarding</strong> (the super-pair meets the project), <strong>Production</strong> (the canonical pipeline from idea to PR), and <strong>Full Auto</strong> (the one-shot spec-to-PR motion).</p>
+
+      <!-- 03.1 Onboarding -->
+      <article id="workflow-onboarding" class="sub-block">
+        <div class="sub-num">03.1</div>
+        <h3 class="sub-title">Onboarding Workflow</h3>
+        <p>The onboarding sequence runs once per project (with a re-runnable refresh available later). It establishes the persistence stack, wires up the DevOps host, wires up source control, and releases the "satisfied" gate that transitions from onboarding mode to operational mode.</p>
+
+        <div class="flow">
+          <div class="flow-step">
+            <span class="flow-step-num">Phase 01</span>
+            <code class="flow-step-cmd">/strap-in</code>
+            <p class="flow-step-desc">Codebase discovery, specialist dispatch, persistence-stack curation, project-docs authoring.</p>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-num">Phase 02</span>
+            <code class="flow-step-cmd">/connect-code-repo</code>
+            <p class="flow-step-desc">Wire source control. Auth recipes per host. Branch protection capture. Code-immutability releases.</p>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-num">Phase 03</span>
+            <code class="flow-step-cmd">/connect-devops-project</code>
+            <p class="flow-step-desc">Probe host, model logical-to-host work-item mapping, probe state machines + fields, persist profile.</p>
+          </div>
+        </div>
+
+        <h5>What each phase produces</h5>
+        <table class="editorial">
+          <thead>
+            <tr><th>Phase</th><th>Writes</th><th>What it enables next</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="pill accent">/strap-in</span></td><td><code>project-profile.md</code>, per-agent rules + memory, project-docs HTML companion</td><td>The 15 agents come alive against this project's specific shape</td></tr>
+            <tr><td><span class="pill good">/connect-code-repo</span></td><td><code>code-connection.yaml</code> with branch-protection + operation_templates</td><td>The pipeline can open PRs; the satisfied gate releases the onboarding invariant</td></tr>
+            <tr><td><span class="pill blue">/connect-devops-project</span></td><td><code>devops-connection.yaml</code> with mapping + state asymmetries + operation_templates</td><td>Work-tracking resolves at runtime via the universal interface</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout violet">
+          <span class="label">Code Immutability Invariant</span>
+          <p>Throughout onboarding, the adopter's production code is immutable. Section 6 specialists run with a read-only tools palette (<code>Read</code>, <code>Grep</code>, <code>Glob</code>, <code>Bash</code> &mdash; no <code>Write</code>, no <code>Edit</code>); the source under inspection cannot be modified during onboarding. The Section 9 project-docs production phase is a narrow exception &mdash; <code>tech-writer</code> writes only to configured <code>Project docs paths</code>, never production source. The invariant fully releases when <code>/connect-code-repo</code> clears its satisfied gate.</p>
+        </div>
+
+        <div class="callout">
+          <span class="label">Re-runnable</span>
+          <p><code>/strap-refresh</code> reads the existing persistence stack as priors, runs a shallow scan against the current codebase, detects diffs, surfaces them for CPO approval <strong>before</strong> dispatching, then applies <strong>surgical</strong> edits. CPO edits, narrative additions, and prior-refresh curation are preserved. Whole-file rewrites at refresh time are a defect, not a feature.</p>
+        </div>
+      </article>
+
+      <!-- 03.2 Production -->
+      <article id="workflow-production" class="sub-block">
+        <div class="sub-num">03.2</div>
+        <h3 class="sub-title">Production Workflow</h3>
+        <p>Once onboarding is complete, the production pipeline runs through a tight set of skills. Each follows the same pattern: dev-lead owns the CPO conversation and host-side persistence; specialists are dispatched for focused work; every persisted item carries lifecycle metadata; every state transition is audited.</p>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Authoring chain</h4></div>
+          <div class="skills">/new-requirement &middot; /refine-requirement &middot; /create-spec &middot; /refine-spec &middot; /generate-features &middot; /decompose-feature</div>
+          <p>req-lead drafts Requirements; spec-lead authors Specs and Feature briefs; dev-lead persists. <code>/decompose-feature</code> activates required domains (CPO-gated structural precondition) and dispatches active-domain specialists in parallel via <code>CreateTeam</code> for read-only planning, then reconciles and persists Stories + Tasks.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Mockup tier <span class="pill amber" style="margin-left: 6px;">user-facing</span></h4></div>
+          <div class="skills">/create-mockups &middot; /analyze-mockups</div>
+          <p>Runs between Spec resolution and Feature generation when the Spec carries user-facing scope. <code>/create-mockups</code> dispatches designer to interview, build deployable mockup code, iterate (re-runnable; CPO approval at every gate), and write the Mockup Reference back to the Spec. <code>/analyze-mockups</code> dispatches spec-lead to audit completeness, map mockup data shapes to backend API declarations, and write the Mockup Wiring Guide. <code>/generate-features</code> refuses to run on user-facing Specs missing either section.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Test plan tier</h4></div>
+          <div class="skills">/create-test-plan</div>
+          <p>Authors an end-to-end test plan for a Spec or Feature and optionally scaffolds initial test files. Dev-lead dispatches ux-test-engineer as serial-Task specialist to read the Spec, codebase, and framework conventions; produce a structured plan; and scaffold runnable tests. ux-test-engineer is the third closing-phase write-exception alongside designer and tech-writer.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Execution</h4></div>
+          <div class="skills">/plan-sprint &middot; /rebalance-sprint &middot; /execute-sprint</div>
+          <p><code>/plan-sprint</code> allocates into the current sprint only (hard single-sprint rule; overflow stays unallocated). <code>/execute-sprint</code> creates the feature branch, dispatches active-domain specialists into per-agent worktrees, reviews each task branch, runs the centralized build-and-test pass, sets completion metadata at resolution, and prepares the PR.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Bug tier</h4></div>
+          <div class="skills">/file-bugs &middot; /fix-bugs</div>
+          <p><code>/file-bugs</code> accepts informal CPO input, dispatches an intake specialist read-only for investigation and classification. <code>/fix-bugs</code> is the lighter sibling of <code>/execute-sprint</code> for Bug + Enhancement work items &mdash; targeted fixes, no Story decomposition, same metadata round-trip at resolution.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>PR feedback</h4></div>
+          <div class="skills">/refine-pr</div>
+          <p>Reads reviewer comment threads and failed CI checks via the source-control connection profile, categorizes by domain, dispatches the relevant specialists in parallel (or serially for file-conflicting fixes), runs the centralized build-and-test pass, pushes updates to the existing feature branch. Thread resolution stays with the human reviewer.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Close ritual</h4></div>
+          <div class="skills">/close-ceremony</div>
+          <p>The deliberate CPO ritual for transitioning Resolved work items to Closed &mdash; the only authoritative manual gate. The execution skills stop at Resolved by design; this ritual is where the CPO walks Resolved Features, Enhancements, Bugs, and lingering Stories and decides per item: <strong>close / reject with rework tag / defer with reason tag / skip</strong>.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>DORA governance</h4></div>
+          <div class="skills">/dora-reconcile &middot; /dora-collect &middot; /dora-report</div>
+          <p><code>/dora-reconcile</code> runs daily (cascades) or weekly with <code>--auto-fix</code> (stamps derivable hygiene). 8 reconciliation passes keep the AI-tag + lifecycle-metadata wiring honest. <code>/dora-collect</code> writes a JSON snapshot of work items, pipeline runs, and PRs. <code>/dora-report</code> renders a self-contained HTML report with embedded Chart.js. Wall-clock as primary AI Efficiency Ratio.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>CPO tuning surfaces</h4></div>
+          <div class="skills">/memory-show &middot; /memory-refine &middot; /revise-token-budget</div>
+          <p><code>/memory-show</code> inspects per-agent memory; <code>/memory-refine</code> curates it under CPO direction. <code>/revise-token-budget</code> is the canonical surface for tuning STRAP's token budgets after <code>/strap-in</code>'s initial setup &mdash; per-workflow per-agent and session-aggregate budgets, plus per-agent overrides. Persists with an append-only audit trail.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Single-motion path</h4></div>
+          <div class="skills">/quick</div>
+          <p>The CPO "do now" lever. Free-form description through classification, work-item chain creation, specialist routing, implementation, centralized test pass, and draft PR &mdash; in one invocation. Five chain shapes; flags <code>--under</code>, <code>--into</code>, <code>--mockup</code>, <code>--investigation</code>, <code>--stacked</code>, <code>--draft</code>. Hard CPO approval gate after classification. Never refuses for size.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Recovery and continuation</h4></div>
+          <div class="skills">/team-cleanup &middot; /context-prep &middot; /context-fetch</div>
+          <p><code>/team-cleanup</code> recovers from wedged team state. <code>/context-prep</code> captures cross-session continuation runbooks; <code>/context-fetch</code> loads them as session-startup context. Multi-session and multi-developer workstreams travel through these.</p>
+        </div>
+      </article>
+
+      <!-- 03.3 Full Auto -->
+      <article id="workflow-full-auto" class="sub-block">
+        <div class="sub-num">03.3</div>
+        <h3 class="sub-title">Full Auto (Spec to PR)</h3>
+
+        <p>Full Auto is STRAP's autonomy uplift. You have a Resolved Spec. You want to walk away. The dev-lead takes the Spec end-to-end &mdash; generates Features, decomposes each, allocates everything into the current sprint, executes across all Features in parallel, opens a draft PR per Feature &mdash; without asking your permission at every phase boundary. The Resolved Spec IS the contract. You already approved the intent when you Resolved the Spec; re-approving the same intent at every step adds no signal.</p>
+
+        <p>What does <strong>not</strong> collapse: the safety perimeter. PRs land as drafts &mdash; you merge, never the skill. <code>security-reviewer</code> Critical/High blocks the affected Feature. Spec mutation during the run is forbidden. New domain activation halts. These are not "settings"; they are the contract.</p>
+
+        <div class="kpi-grid">
+          <div class="kpi accent">
+            <div class="lbl">Entry precondition</div>
+            <div class="val">Resolved <span class="unit">Spec</span></div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">CPO gates</div>
+            <div class="val">1 <span class="unit">entry contract</span></div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">Features per run</div>
+            <div class="val">N <span class="unit">parallel</span></div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">PRs produced</div>
+            <div class="val">N <span class="unit">drafts</span></div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">Auto-merge</div>
+            <div class="val">Never</div>
+          </div>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>When to reach for it <span class="pill good" style="margin-left: 6px;">good fit</span></h4></div>
+          <div class="skills">/execute-sprint-full-auto &lt;spec-id&gt;</div>
+          <p>The Spec is well-shaped &mdash; Constituent Parts are clear, acceptance criteria resolve to concrete behavior, mockups (if user-facing) are locked in, the Wiring Guide is written. The work is multi-Feature in scope but each Feature is independently executable. You trust the Spec to be the contract and you want the pipeline to run hands-off. You'll be reading the conversation as the dev-lead emits checkpoint summaries, but you don't intend to intervene unless something genuinely needs you.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>When NOT to reach for it <span class="pill amber" style="margin-left: 6px;">wrong tool</span></h4></div>
+          <div class="skills">/quick &middot; /execute-sprint &middot; /refine-spec</div>
+          <p>The Spec is rough or under-defined &mdash; use <code>/refine-spec</code> first; do not let Full Auto paper over Spec defects. The ask is free-form ("change the timeout from 5s to 10s") &mdash; use <code>/quick</code>; classification is what you need, not a multi-Feature run. The work is exactly one Feature already decomposed and sprint-allocated &mdash; use <code>/execute-sprint</code>; Full Auto is overkill. New specialist domains are required &mdash; activate them deliberately via <code>/decompose-feature</code> first, not mid-Full-Auto.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>The composed motion</h4></div>
+          <div class="skills">/generate-features &middot; /decompose-feature &middot; /plan-sprint &middot; /execute-sprint</div>
+          <p>Full Auto inlines four production-workflow skills. It does <strong>not</strong> invoke them as separate skills (that would reintroduce per-skill approval gates). It walks the same phases with the same primitives &mdash; spec-lead authoring, specialist parallel planning via <code>CreateTeam</code>, worktree mechanics, centralized test execution &mdash; and stamps the <code>full-auto</code> tag at every persist.</p>
+          <p><strong>Phase 4 (decomposition)</strong> is serial across Features but parallel within each &mdash; same as today's <code>/decompose-feature</code> baseline. <strong>Phase 6 (execution)</strong> is parallel across Features AND parallel within each &mdash; one team, one worktree, one feature branch, one draft PR per Feature, all running concurrently. The throughput uplift lives in Phase 6.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Gates that collapse <span class="pill blue" style="margin-left: 6px;">dev-lead authority</span></h4></div>
+          <div class="skills">Feature briefs &middot; Decomposition &middot; Sprint allocation &middot; Per-task review</div>
+          <p>Feature brief approval (per <code>/generate-features</code>), per-Feature decomposition approval (per <code>/decompose-feature</code>), sprint capacity review (per <code>/plan-sprint</code>) &mdash; all collapse to dev-lead authority. The dev-lead acts. You watch the checkpoints. Per-task review remains because it is a <em>quality</em> gate (did the specialist implement what the Task says?), not a CPO-approval gate &mdash; the dev-lead runs it inline.</p>
+        </div>
+
+        <div class="callout violet">
+          <span class="label">The Safety Perimeter &middot; never collapses</span>
+          <p style="margin: 0 0 10px;">The dev-lead halts and surfaces to you when ANY of the following trips. These are non-negotiable invariants, not configurable behaviors:</p>
+          <ul style="margin: 0; padding-left: 22px; font-size: 14.5px; color: var(--ink-soft);">
+            <li><strong>No auto-merge.</strong> PRs land as drafts. You convert to ready-for-review and merge.</li>
+            <li><strong><code>security-reviewer</code> Critical/High blocks.</strong> The affected Feature cannot Resolve until cleared. Other Features in the run continue independently.</li>
+            <li><strong>No Spec mutation during the run.</strong> The Spec is locked. Mid-run Spec edits happen only via the Ambiguity Halt "Clarify here" branch, which is explicit and audited.</li>
+            <li><strong>No silent new-domain activation.</strong> A Spec requiring an inactive specialist domain is a structural change to the project; the run refuses Phase 1 and surfaces.</li>
+            <li><strong>No skip of centralized test execution.</strong> Build + tests run per Feature; failures halt that Feature before its PR opens.</li>
+            <li><strong>No bypass of the per-task dev-lead review.</strong> Quality gate stays; specialists do not auto-land work without review.</li>
+          </ul>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Spec-Ambiguity Halt &mdash; the contract-protection interrupt</h4></div>
+          <div class="skills">Clarify here &middot; Pause to /refine-spec &middot; Proceed with logged assumption</div>
+          <p>The most important non-obvious behavior in Full Auto. A "well-scoped Resolved Spec" is the contract, but decomposition or execution may surface gaps the Spec author did not anticipate. When a specialist flags ambiguity, incompleteness, or contradiction in its finishing report, the dev-lead halts the affected scope and asks you to choose: <strong>edit the Spec inline</strong> (additive amendment with audit comment; Spec stays Resolved), <strong>pause Full Auto and return to manual <code>/refine-spec</code></strong> (the partial chain is preserved tagged <code>full-auto-partial</code>), or <strong>proceed with the dev-lead's best-judgment assumption</strong> (logged verbatim in the affected Feature description).</p>
+          <p>Three-strikes rule: if three Spec-Ambiguity Halts fire in one run, the dev-lead escalates and recommends cancelling + running <code>/refine-spec</code>. The Spec is likely not Full-Auto-ready; clarifying it to death mid-run is the wrong outcome.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Async observability &mdash; checkpoints without breaking flow</h4></div>
+          <div class="skills">Phase boundaries &middot; Per-Feature completion &middot; Token consumption</div>
+          <p>The dev-lead emits structured checkpoint summaries at every phase boundary &mdash; Run Contract drafted, Features generated, each Feature decomposed (one per Feature in Phase 4), sprint allocated, each Feature executed (one per Feature in Phase 6 as they complete in arrival order, not creation order), PRs opened. Each checkpoint lists items created, branches, tokens consumed, time elapsed, what comes next.</p>
+          <p>Checkpoints are conversation output only. They do not gate. They do not require acknowledgment. You read them in real-time if you want; you ignore them if the run is going clean. Per-Feature granularity is the default &mdash; per-Task checkpoints would drown the conversation on a 50-Task run.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Worked example &middot; single small Spec</h4></div>
+          <div class="skills">~2-3 Features &middot; ~6-15 Tasks &middot; one repo</div>
+          <p>You Resolved a Spec for a self-contained UI enhancement: refactor the audit-log filter chrome and add tenant-id scoping. Two Constituent Parts (<code>client-ui</code> for the chrome, <code>api</code> for the tenant-scoped query). Full Auto generates two Features, decomposes them in sequence (~4 minutes each), allocates 8 Tasks into the current sprint, then runs Phase 6 with two teams in parallel. ~25 minutes wall-clock end-to-end. Two draft PRs land in the source-control profile, each with the Run Manifest in its description and acceptance criteria mapped to specific commits + tests.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Worked example &middot; medium multi-Feature Spec</h4></div>
+          <div class="skills">~5 Features &middot; ~30 Tasks &middot; one repo &middot; multiple domains</div>
+          <p>You Resolved a Spec for a billing-pipeline overhaul: new invoice schema, migration, API surface, frontend display, observability. Five Constituent Parts; <code>backend-engineer</code>, <code>database-engineer</code>, <code>frontend-engineer</code>, <code>devops-lead</code>, and <code>security-reviewer</code> all active. Full Auto generates five Features, decomposes them serially in Phase 4 (~25 minutes), then runs Phase 6 with five teams in parallel. The 60% session-aggregate budget checkpoint fires around the third Feature's execution &mdash; the dev-lead surfaces, runs <code>/context-prep</code>, you <code>/clear</code> and resume with <code>/context-fetch</code>. Five draft PRs land. Total wall-clock ~90 minutes across two sessions.</p>
+        </div>
+
+        <div class="workflow-card">
+          <div class="wc-head"><h4>Worked example &middot; polyrepo umbrella Spec</h4></div>
+          <div class="skills">~4 Features &middot; ~20 Tasks &middot; 3 sub-repos &middot; cluster manifest</div>
+          <p>You Resolved a Spec on a polyrepo umbrella with three sub-repos (<code>shared-types</code>, <code>api-backend</code>, <code>web-frontend</code>). One Feature is cross-sub-repo (a new type defined in <code>shared-types</code>, consumed by both downstream sub-repos); three Features are single-sub-repo. Full Auto's Phase 1 builds the cluster manifest with the F6 dependency graph (<code>shared-types</code> first, then the two downstream sub-repos in parallel). Phase 4 decomposes each Feature against the right sub-repo's specialists. Phase 6 runs four teams in parallel; the cross-sub-repo Feature opens three coordinated PRs with cluster-manifest cross-references; the single-sub-repo Features open one each. Total: seven draft PRs. The dev-lead enforces merge-order at PR-merge time per the F6 graph &mdash; you merge <code>shared-types</code> first, then the others.</p>
+        </div>
+
+        <div class="callout">
+          <span class="label">When the dev-lead surfaces</span>
+          <p>You will see the conversation pause and a structured question land in one of three categories: <strong>safety-perimeter halt</strong> (security finding, new-domain activation, profile mutation), <strong>Spec-ambiguity halt</strong> (three options to resolve the gap), or <strong>budget checkpoint at 60%</strong> (recommendation to <code>/context-prep</code> + <code>/clear</code> + resume). Anything else is a checkpoint summary &mdash; output-only, no action needed.</p>
+        </div>
+
+        <div class="callout violet">
+          <span class="label">Force Multiplier</span>
+          <p>Full Auto is where STRAP earns the 5x-10x velocity claim. Not because it skips work &mdash; the same Features get generated, the same Tasks get implemented, the same tests get written, the same PRs get opened. The multiplier is in the orchestration: parallel-across-Features execution, collapsed approval-gate ceremony, and a dev-lead acting on Spec-as-contract authority. The CPO is still the deliberate gatekeeper &mdash; just at the entry and at PR-merge time, not at every phase boundary in between.</p>
+        </div>
+      </article>
+
+      <nav class="section-nav" aria-label="Section navigation">
+        <a href="#core-principles" class="section-nav-pill prev">
+          <span class="sn-kicker">Previous &middot; Section 02</span>
+          <span class="sn-label"><span class="sn-arrow">&larr;</span> Core Principles</span>
+        </a>
+        <a href="#dora-governance" class="section-nav-pill next">
+          <span class="sn-kicker">Next &middot; Section 04</span>
+          <span class="sn-label">DORA Governance <span class="sn-arrow">&rarr;</span></span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- ========================================================
+         SECTION 04: DORA GOVERNANCE
+         ======================================================== -->
+    <section id="dora-governance" class="view block">
+      <div class="block-num">Section 04</div>
+      <h2 class="block-title">DORA Governance &amp; Reports</h2>
+      <p class="block-lede">The DORA report is the deepest single instrument STRAP exposes for evaluating how the team is performing. Editorial-quality output every release cycle, grounded in the data the pipeline already records.</p>
+
+      <!-- 04.1 Getting the most from reports -->
+      <article id="dora-overview" class="sub-block">
+        <div class="sub-num">04.1</div>
+        <h3 class="sub-title">Getting the most from reports</h3>
+        <p>The <code>/dora-report</code> skill renders a self-contained HTML document covering 10+ per-sprint sections, a multi-sprint comparison view, and an in-flight "right now" view. It draws on every work item, every pull request, every pipeline run, and every commit STRAP's adapters can reach.</p>
+
+        <p>The report is only as sharp as the data it consumes. The disciplines in <a href="#operational-disciplines">Operational Disciplines</a> are what keep the report sharp instead of noisy &mdash; environment-tagging, OriginalEstimate, CompletedWork, weekly <code>/dora-reconcile</code>, per-sprint <code>/close-ceremony</code>.</p>
+
+        <div class="kpi-grid">
+          <div class="kpi accent">
+            <div class="lbl">Per-sprint sections</div>
+            <div class="val">10+ <span class="unit">views</span></div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">Comparison views</div>
+            <div class="val">N <span class="unit">sprints</span></div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">In-flight view</div>
+            <div class="val">Live</div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">Per-dev profiles</div>
+            <div class="val">UNION</div>
+          </div>
+          <div class="kpi">
+            <div class="lbl">Verify-then-write gates</div>
+            <div class="val">6/6</div>
+          </div>
+        </div>
+
+        <p>The 5-asset engine architecture (<code>engine-head.html</code> + <code>engine-render.js</code> + <code>engine-tail.html</code> + <code>build-payload.js</code> + <code>assemble-report.js</code>) makes the visual rendering repeatable across adopters. The engine is verbatim CPO-approved design &mdash; <strong>adopters never edit the engine assets to retune visuals</strong>. If a section needs a value not computed, the fix is to populate the PAYLOAD field, not rewrite the engine.</p>
+      </article>
+
+      <!-- 04.2 DORA-4 Instruments -->
+      <article id="dora-4" class="sub-block">
+        <div class="sub-num">04.2</div>
+        <h3 class="sub-title">DORA-4 Instruments</h3>
+        <p>The four canonical DORA metrics. Each draws on a specific set of fields STRAP records on work items, pull requests, and pipeline runs.</p>
+
+        <div class="verdict-grid cols-2">
+          <div class="verdict context">
+            <span class="v-label">01 &middot; DEPLOYMENT FREQUENCY</span>
+            <p class="v-headline">How often you ship to production.</p>
+            <p class="v-body">Pipeline runs whose definition matches the sub-repo's <code>pipeline_match_patterns</code> AND target a <code>deployment_targets[].environment: prod</code>.</p>
+            <p class="v-body"><strong>What feeds it:</strong> Pipeline runs &middot; pipeline_match_patterns &middot; <code>deployment_targets:</code> declarations.</p>
+            <p class="v-body"><strong>Where it gets noisy:</strong> PR-trigger pipelines inflate counts; non-merge runs need filtering. Pattern-match per pipeline name AT <code>/connect-devops-project</code> Step 6 substep 3.</p>
+          </div>
+          <div class="verdict good">
+            <span class="v-label">02 &middot; LEAD TIME FOR CHANGES</span>
+            <p class="v-headline">Wall-clock from PR open to PR merge.</p>
+            <p class="v-body">Pull requests in the window with <code>targetRefName == default_branch</code>. Intermediate-target PRs surface separately, not counted toward DORA-4.</p>
+            <p class="v-body"><strong>What feeds it:</strong> <code>pull_request.creationDate</code> &rarr; <code>closedDate</code>; <code>default_branch</code> field.</p>
+            <p class="v-body"><strong>Where it gets noisy:</strong> Long-lived feature branches inflate. Hotfix-merges deflate. Both are surfaced via P50/P90 split.</p>
+          </div>
+          <div class="verdict watch">
+            <span class="v-label">03 &middot; CHANGE FAILURE RATE</span>
+            <p class="v-headline">Percentage of prod deploys that yielded a Bug.</p>
+            <p class="v-body">Bugs filed in the failure window (default 72h) after a prod deployment, with <code>environment: prod</code>.</p>
+            <p class="v-body"><strong>What feeds it:</strong> <code>environment</code> field on Bugs &middot; <code>env:prod</code> tag &middot; CFR window config.</p>
+            <p class="v-body"><strong>Where it gets noisy:</strong> Untagged Bugs (closed by v2.5 #39919) &middot; window too generous inflates &middot; long-tail regressions.</p>
+          </div>
+          <div class="verdict critical">
+            <span class="v-label">04 &middot; MEAN TIME TO RESTORE</span>
+            <p class="v-headline">Median time from prod Bug filed to Resolved.</p>
+            <p class="v-body">Bug work items with <code>environment: prod</code> AND a Resolved (or Closed, when no Resolved state exists) transition in window.</p>
+            <p class="v-body"><strong>What feeds it:</strong> <code>CreatedDate</code> &rarr; <code>ResolvedDate</code> &middot; host-specific field aliases.</p>
+            <p class="v-body"><strong>Where it gets noisy:</strong> Long-tail restorations land in later report &middot; "not a bug" / "duplicate" filtered by default.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 04.3 STRAP Instruments -->
+      <article id="strap-instruments" class="sub-block">
+        <div class="sub-num">04.3</div>
+        <h3 class="sub-title">STRAP Instruments</h3>
+        <p>Beyond the canonical DORA-4, STRAP computes complementary instruments that surface what's unique about an AI-assisted SDLC.</p>
+
+        <div class="verdict-grid">
+          <div class="verdict">
+            <span class="v-label accent">01 &middot; AI EFFICIENCY RATIO</span>
+            <p class="v-headline">Estimated effort vs. wall-clock delivered.</p>
+            <p class="v-body">Sum of <code>OriginalEstimate</code> hours divided by <code>CompletedWork</code>. <strong>&gt;1.0</strong> beat the estimate; <strong>&lt;1.0</strong> took longer.</p>
+            <p class="v-body"><strong>Required:</strong> <code>OriginalEstimate</code> set at Task creation; <code>CompletedWork</code> stamped at Resolved transition.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">02 &middot; PR ITERATION COUNT</span>
+            <p class="v-headline">Review-intensity proxy from RefUpdate events.</p>
+            <p class="v-body">Buckets PRs into Small / Medium / Large / XL by update events. Useful as a "review velocity" lens when the team is hypothesizing about flow.</p>
+            <p class="v-body"><strong>Optional:</strong> Falls back gracefully when the host doesn't expose thread data.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">03 &middot; AGENT VS HUMAN</span>
+            <p class="v-headline">AI-authored share of sprint output.</p>
+            <p class="v-body">Tasks tagged <code>AI</code> (set automatically at creation) vs. untagged. Surfaces the AI-assisted share at-a-glance.</p>
+            <p class="v-body"><strong>Configurable:</strong> <code>mapping.strap_instrumentation_signals</code> tunes the signal mix.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">04 &middot; AGING ALERTS</span>
+            <p class="v-headline">Stale work items, split by origin.</p>
+            <p class="v-body">Tasks not updated in &gt;N days. v2.5 splits <strong>STRAP-instrumented</strong> from <strong>inherited</strong> so adopters see whether STRAP's process is actually accelerating the stuck items, or just inheriting the same backlog.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">05 &middot; CYCLE TIME PER DEV</span>
+            <p class="v-headline">Sprint-over-sprint trend bars per dev.</p>
+            <p class="v-body">Per-developer trend lines + roll-up totals. Reveals the texture of where time goes rather than just an aggregate.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">06 &middot; PR WEIGHT GRADIENT</span>
+            <p class="v-headline">Lines-changed buckets (opt-in).</p>
+            <p class="v-body">Run <code>/dora-collect --with-git-diff-weight</code> to add a Small / Medium / Large / XL distribution. Cost: ~5-10 minutes per 100-PR window. v2.5 #39720 added the Raptor-shape schema.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 04.4 Operational Disciplines -->
+      <article id="operational-disciplines" class="sub-block">
+        <div class="sub-num">04.4</div>
+        <h3 class="sub-title">Operational Disciplines</h3>
+        <p>Six adopter disciplines keep the data layer clean. The DORA report sharpens with each one practiced; it dulls with each one neglected.</p>
+
+        <table class="editorial">
+          <thead>
+            <tr><th>Discipline</th><th>What it controls</th><th>Cadence</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Environment-tagging</strong> <small>Bugs</small></td>
+              <td>CFR + MTTR attribution. v2.5 #39919 makes <code>/file-bugs</code> always prompt via <code>AskUserQuestion</code>.</td>
+              <td><span class="pill accent">Every Bug</span></td>
+            </tr>
+            <tr>
+              <td><strong>OriginalEstimate</strong> <small>Tasks</small></td>
+              <td>AI Efficiency Ratio numerator. <code>/decompose-feature</code> prompts at decomposition; manually-added Tasks need it set.</td>
+              <td><span class="pill accent">Every Task at creation</span></td>
+            </tr>
+            <tr>
+              <td><strong>CompletedWork</strong> <small>Tasks + Bugs</small></td>
+              <td>AI Efficiency Ratio denominator. STRAP stamps at Resolved transition; manual resolutions need backfill.</td>
+              <td><span class="pill accent">At Resolved transition</span></td>
+            </tr>
+            <tr>
+              <td><strong>Layers + Sub-repos + deployment_targets</strong></td>
+              <td>Per-layer Deployment Frequency, Lead Time, CFR scoping. Polyrepo-only.</td>
+              <td><span class="pill blue">Configured at onboarding</span></td>
+            </tr>
+            <tr>
+              <td><strong>/dora-reconcile --auto-fix</strong></td>
+              <td>Auto-cascades + 8 hygiene passes. Catches drift early.</td>
+              <td><span class="pill good">Weekly</span></td>
+            </tr>
+            <tr>
+              <td><strong>/close-ceremony</strong></td>
+              <td>Per-sprint deliberate value-acceptance: Close / Reject / Defer / Skip per Resolved item.</td>
+              <td><span class="pill good">Every sprint boundary</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <span class="label">Rule of thumb</span>
+          <p>If a metric looks surprising, the first question is <strong>"what does <code>/dora-reconcile</code> say about the data quality flags?"</strong> &mdash; not "is the metric wrong?". The report surfaces data-quality flags inline so you can audit before interpreting.</p>
+        </div>
+      </article>
+
+      <!-- 04.5 Configuration -->
+      <article id="dora-config" class="sub-block">
+        <div class="sub-num">04.5</div>
+        <h3 class="sub-title">Configuration</h3>
+        <p>The DORA report honors three configurable surfaces in <code>devops-connection.yaml</code>'s <code>mapping:</code> block. None are required &mdash; sensible defaults apply when absent &mdash; but tuning them to your team's norms makes the report's narrative match your reality.</p>
+
+        <table class="editorial">
+          <thead>
+            <tr><th>Config key</th><th>What it controls</th><th>Default behavior</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">dora_confidence_thresholds</td>
+              <td>Per-metric thresholds for the colored confidence pill on each DORA-4 instrument.</td>
+              <td>Sensible defaults shipped in v2.5 #39701; tune to team cadence.</td>
+            </tr>
+            <tr>
+              <td class="mono">strap_instrumentation_signals</td>
+              <td>Aging Alerts split between STRAP-instrumented and inherited items.</td>
+              <td>Default <code>tags_any: ["AI"]</code>; extend with custom workflow signals.</td>
+            </tr>
+            <tr>
+              <td class="mono">cross_version_field_aliases</td>
+              <td>Honors field renames detected across host process-template upgrades.</td>
+              <td>Populated automatically by <code>/connect-devops-project</code> re-run rename flow (v2.5 #39702).</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>The CLI flag <code>--with-git-diff-weight</code> on <code>/dora-collect</code> is the only opt-in tuning beyond the YAML. It adds the PR Weight gradient block at the cost of ~5-10 minutes per 100-PR window.</p>
+      </article>
+
+      <nav class="section-nav" aria-label="Section navigation">
+        <a href="#workflows" class="section-nav-pill prev">
+          <span class="sn-kicker">Previous &middot; Section 03</span>
+          <span class="sn-label"><span class="sn-arrow">&larr;</span> Workflows</span>
+        </a>
+        <a href="#upgrades-customization" class="section-nav-pill next">
+          <span class="sn-kicker">Next &middot; Section 05</span>
+          <span class="sn-label">Upgrades &amp; Customization <span class="sn-arrow">&rarr;</span></span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- ========================================================
+         SECTION 05: UPGRADES & CUSTOMIZATION
+         ======================================================== -->
+    <section id="upgrades-customization" class="view block">
+      <div class="block-num">Section 05</div>
+      <h2 class="block-title">Upgrades &amp; Customization</h2>
+      <p class="block-lede">STRAP releases bring polish and new capabilities. Your customizations stay. The upgrade machinery is the load-bearing system that makes this true.</p>
+
+      <!-- 05.1 Upgrading STRAP -->
+      <article id="upgrading" class="sub-block">
+        <div class="sub-num">05.1</div>
+        <h3 class="sub-title">Upgrading STRAP</h3>
+        <p>The upgrade story is one paragraph long: <strong><code>/strap-upgrade</code> fetches the new release and the previously-installed release from the distribution URL, performs a three-way diff against your install, classifies every file, applies non-conflicting upstream changes, and surfaces conflicts for CPO resolution.</strong> Adopter customizations on protected paths are preserved.</p>
+
+        <div class="pair-grid">
+          <div class="pair cpo">
+            <div class="pair-role">Category A &middot; Adopter-owned</div>
+            <h4>Never touched</h4>
+            <p>These paths represent state owned entirely by the install or the installer. Excluded from the diff entirely; even <code>package-only</code> adds are NOT applied.</p>
+            <ul>
+              <li><code>.strap-version.json</code></li>
+              <li><code>settings.json</code> + <code>settings.local.json</code></li>
+              <li><code>project-profile.md</code></li>
+              <li>Continuations, state, work-items</li>
+              <li>Connection profiles</li>
+            </ul>
+          </div>
+          <div class="pair dev-lead">
+            <div class="pair-role">Category B &middot; Seeded-then-curated</div>
+            <h4>Reconcile (v2.5)</h4>
+            <p>Package ships seeds; adopter dev-lead curates over time. v2.5 #39694 + #39696 add byte-equality reconcile with subtype split.</p>
+            <ul>
+              <li><code>strap/rules/agents/*.md</code> <span class="pill amber">rules-doctrine</span></li>
+              <li><code>strap/memory/agents/*.md</code> <span class="pill amber">memory-tradecraft</span></li>
+              <li><code>strap/memory/MEMORY.md</code></li>
+              <li><code>strap/memory/dev-lead/</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <h5>The upgrade gates the CPO sees</h5>
+        <ol>
+          <li><strong>Mode selection.</strong> Distribution mode (default; fetches from <code>distributionUrl</code> recorded at install) or source mode (<code>--from-source</code>, for STRAP-on-STRAP development).</li>
+          <li><strong>Plan presentation.</strong> File-classification counts, adds list, overwrites list, conflicts list, Category B reconcile candidates (v2.5).</li>
+          <li><strong>Category B reconcile gate</strong> <span class="pill accent">v2.5</span>. When Category B files match the prev seed byte-for-byte AND upstream improved them, surface a per-subtype <code>AskUserQuestion</code>: Keep install / Apply all upstream improvements / Review per-file.</li>
+          <li><strong>Main approval gate.</strong> Apply / Apply with conflict strategy take-package / Apply with keep-install / Pause / Cancel.</li>
+          <li><strong>Phase 7 schema migrations.</strong> Re-reads <code>SKILL.md</code> from disk (v2.5 #39695) so new migrations execute. Diagnostic surface shows fired / already-applied / cpo-skipped / n/a.</li>
+        </ol>
+
+        <div class="callout good">
+          <span class="label">Major-version refusal</span>
+          <p>STRAP refuses to auto-apply a major-version bump. Major releases carry breaking schema changes that the auto-merge cannot safely land. <strong>Read the release notes, then re-invoke with <code>--target-version</code> explicitly to opt in.</strong></p>
+        </div>
+
+        <h5>The approval gate options at a glance</h5>
+        <table class="editorial">
+          <thead><tr><th>Option</th><th>What it does</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Apply (skip conflicts)</strong></td><td>Apply clean changes; conflicts stay unchanged</td><td>Default when you want to land upstream improvements without making conflict decisions now</td></tr>
+            <tr><td><strong>Apply &middot; take-package</strong></td><td>Overwrite every conflict with the package version</td><td>You haven't deliberately customized the conflicting files; surface still requires a second confirmation</td></tr>
+            <tr><td><strong>Apply &middot; keep-install</strong></td><td>Leave every conflict file alone</td><td>You actively customized the conflicting files; package updates to those files are NOT applied</td></tr>
+            <tr><td><strong>Pause</strong></td><td>Stop without changes; write a pending state file</td><td>Resolve conflicts manually, re-invoke</td></tr>
+            <tr><td><strong>Cancel</strong></td><td>Abandon the upgrade; no state file</td><td>Decided you don't want to upgrade right now</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <!-- 05.2 Customizing STRAP -->
+      <article id="customizing" class="sub-block">
+        <div class="sub-num">05.2</div>
+        <h3 class="sub-title">Customizing STRAP</h3>
+        <p>STRAP is opinionated by design and the customization surface is much narrower than typical platform-style frameworks &mdash; the canonical roster is fixed, the skill catalog is fixed, and per-project tuning happens through a small set of curated files the dev-lead writes on the CPO's direction.</p>
+
+        <h5>The four tunable surfaces</h5>
+        <table class="editorial">
+          <thead>
+            <tr><th>Surface</th><th>What lives here</th><th>Editor</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Project profile</strong></td><td><code>project-profile.md</code> &mdash; stack, active domains, conventions, build/test commands, DevOps integration, optional Layers section for DORA partitioning.</td><td>dev-lead (CPO directs)</td></tr>
+            <tr><td><strong>Per-agent rules</strong></td><td><code>rules/agents/&lt;agent&gt;.md</code> &mdash; per-agent guardrails added reactively when something needs preventing.</td><td>dev-lead (CPO directs)</td></tr>
+            <tr><td><strong>Per-agent memory</strong></td><td><code>memory/agents/&lt;agent&gt;.md</code> &mdash; accumulated tradecraft for this project.</td><td>dev-lead (CPO directs)</td></tr>
+            <tr><td><strong>Connection profiles</strong></td><td><code>state/devops-connection.yaml</code>, <code>state/code-connection.yaml</code> &mdash; per-project wire-up.</td><td><code>/connect-*</code> skills</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <!-- 05.2.1 Tuning Project Shape -->
+      <article id="tuning-project-shape" class="sub-block">
+        <div class="sub-num">05.2.1</div>
+        <h3 class="sub-title">Tuning Project Shape</h3>
+        <p>The project profile at <code>.claude/strap/contexts/project-profile.md</code> is the canonical record of <strong>what this project is</strong>: stack, conventions, commands, architecture, active domains, sub-repos (polyrepo), deployment targets.</p>
+
+        <h5>Three structural levers most often touched</h5>
+        <div class="verdict-grid">
+          <div class="verdict">
+            <span class="v-label accent">Lever 01</span>
+            <p class="v-headline">Active domains</p>
+            <p class="v-body">Which of the 15 specialists are actively engaged on this project. An agent that isn't in the active set is idle &mdash; not deleted, just not dispatched. Change it as your project evolves.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">Lever 02</span>
+            <p class="v-headline">Sub-repos (polyrepo)</p>
+            <p class="v-body">The per-sub-repo block carries Role, Active domains, Build command, Test command, Deployment target. <code>/dora-collect</code> reads these for per-layer metrics.</p>
+          </div>
+          <div class="verdict">
+            <span class="v-label accent">Lever 03</span>
+            <p class="v-headline">Deployment targets</p>
+            <p class="v-body">Declarative deployment topology in <code>devops-connection.yaml</code>. Drives the per-target Deployment Frequency math and the per-target pipeline funnel.</p>
+          </div>
+        </div>
+
+        <p>Run <code>/strap-refresh</code> after major changes to ensure the persistence stack updates against the new shape.</p>
+      </article>
+
+      <!-- 05.2.2 Tuning Specialist Behavior -->
+      <article id="tuning-specialists" class="sub-block">
+        <div class="sub-num">05.2.2</div>
+        <h3 class="sub-title">Tuning Specialist Behavior</h3>
+        <p>When a specialist almost made a mistake or has accumulated tradecraft worth keeping, the dev-lead curates per-agent rules or per-agent memory.</p>
+
+        <div class="pair-grid">
+          <div class="pair">
+            <div class="pair-role">Hard constraint</div>
+            <h4>Per-agent rules</h4>
+            <p>Guardrails. <em>"Don't push directly to main." "Always run the test suite from the repo root."</em> Added reactively when something needs preventing.</p>
+            <p><strong>Path:</strong> <code>.claude/strap/rules/agents/&lt;name&gt;.md</code></p>
+          </div>
+          <div class="pair">
+            <div class="pair-role">Soft tradecraft</div>
+            <h4>Per-agent memory</h4>
+            <p>Soft learnings. <em>"The test runner takes 8 minutes after fresh deps; warm it once first." "This codebase prefers the older mapping pattern for X."</em> Grows naturally as work happens.</p>
+            <p><strong>Path:</strong> <code>.claude/strap/memory/agents/&lt;name&gt;.md</code></p>
+          </div>
+        </div>
+
+        <p>The CPO can direct curation explicitly via <code>/memory-show &lt;agent&gt;</code> to see what's already there and <code>/memory-refine &lt;agent&gt;</code> to update. Both flow through the dev-lead under the single-curator rule.</p>
+      </article>
+
+      <!-- 05.2.3 Tuning Token Budgets -->
+      <article id="tuning-budgets" class="sub-block">
+        <div class="sub-num">05.2.3</div>
+        <h3 class="sub-title">Tuning Token Budgets</h3>
+        <p>STRAP workflows ship with default per-workflow per-agent budgets, plus session-aggregate ceilings. The defaults are tuned for medium-complexity adopter projects; large-codebase adopters routinely raise them, small-project adopters lower.</p>
+
+        <p><code>/revise-token-budget</code> is the canonical knob. It lists current per-workflow per-agent budgets and the session-aggregate ceiling, lets the CPO revise any of them (or layer a per-agent override on a workflow default), and persists to <code>.claude/strap/state/usage.yaml</code> plus an entry in <code>MEMORY.md</code> recording the revision rationale.</p>
+
+        <div class="callout">
+          <span class="label">When to raise</span>
+          <p>If a specialist is repeatedly hitting its budget on routine work (you'll see the warning in the dev-lead's status reports), raise that specialist's budget for the relevant workflow. If multiple specialists are hitting at the same time, raise the session-aggregate ceiling.</p>
+        </div>
+
+        <p>Polyrepo sessions show the additive projection &mdash; <em>"3 sub-repos detected; projection: 1M + 2 &times; 300K = 1.6M"</em> &mdash; so cost is never hidden. Revisions apply to new workflow instances only; in-flight work continues against the budget it started under.</p>
+      </article>
+
+      <!-- 05.2.4 Adding Custom Agents -->
+      <article id="adding-agents" class="sub-block">
+        <div class="sub-num">05.2.4</div>
+        <h3 class="sub-title">Adding Custom Agents</h3>
+        <p>Your project has a specialist STRAP doesn't ship by default &mdash; a payments-domain engineer, a regulatory-compliance reviewer, a stack-tier engineer for an esoteric runtime. The 3-step ceremony adds it. <code>/strap-upgrade</code> naturally protects your additions; you don't lose them when STRAP releases.</p>
+
+        <div class="flow">
+          <div class="flow-step">
+            <span class="flow-step-num">Step 01</span>
+            <code class="flow-step-cmd">Drop role contract</code>
+            <p class="flow-step-desc">Author <code>.claude/agents/agent-{ops,devs}/&lt;name&gt;.md</code> following the existing role-contract pattern. Frontmatter declares the agent type, description, tools.</p>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-num">Step 02</span>
+            <code class="flow-step-cmd">Seed rules + memory</code>
+            <p class="flow-step-desc">Drop <code>.claude/strap/rules/agents/&lt;name&gt;.md</code> + <code>.claude/strap/memory/agents/&lt;name&gt;.md</code> with seed guardrails + tradecraft.</p>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-num">Step 03</span>
+            <code class="flow-step-cmd">Wire into profile</code>
+            <p class="flow-step-desc">Add the new specialist to <code>project-profile.md</code>'s relevant <code>Specialists</code> field on the active Domain. Dev-lead dispatches it from the next invocation onward.</p>
+          </div>
+        </div>
+
+        <p>From that moment, every pipeline skill that reads active-domain specialists routes work through the custom agent like any canonical one. Cross-cutting agents (compliance reviewer, project-specific governance) fit naturally as additional Specialists on existing canonical domains.</p>
+
+        <div class="callout accent">
+          <span class="label">/strap-upgrade is safe</span>
+          <p>Custom additions are always preserved: adopter-authored agents and skills land at paths the package never ships to (classified <code>install-only</code>); per-agent rules and memory live in already-protected directories; project-profile.md edits are Category A adopter-owned. The CPO cannot accidentally break the upgrade path by extending STRAP.</p>
+        </div>
+
+        <div class="callout warn">
+          <span class="label">What is NOT supported</span>
+          <p><strong>In-place edits to package-shipped artifacts.</strong> Editing a canonical agent's role contract file, a STRAP-shipped SKILL.md, or the team rules files directly surfaces as a <code>conflict</code> on every upgrade. The supported path for behavior changes is per-agent rules curation (stacks on top of the canonical role contract at runtime). For skill replacements, add a new skill with a different name.</p>
+        </div>
+      </article>
+
+      <nav class="section-nav" aria-label="Section navigation">
+        <a href="#dora-governance" class="section-nav-pill prev">
+          <span class="sn-kicker">Previous &middot; Section 04</span>
+          <span class="sn-label"><span class="sn-arrow">&larr;</span> DORA Governance</span>
+        </a>
+        <a href="#getting-started" class="section-nav-pill next">
+          <span class="sn-kicker">Back to start &middot; Section 01</span>
+          <span class="sn-label">Getting Started <span class="sn-arrow">&uarr;</span></span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- Footer -->
+    <footer class="guide-footer">
+      <p><strong>STRAP Startup Guide.</strong> v2.6 &middot; A Leo Motion Group portfolio project &middot; Maintained by the STRAP Contributors.</p>
+      <p>This is a manually curated companion to <code>Welcome-to-STRAP.html</code> (auto-generated from the seven narrative source docs). Editorial quality is intentional. For deeper coverage of specific topics: <code>walkthrough.md</code>, <code>dora-tuning.md</code>, <code>architecture.md</code>, <code>customization-guide.md</code>, <code>upgrade-guide.md</code>.</p>
+      <div class="footer-meta">
+        <span>v2.6.0</span>
+        <span>Status: Beta</span>
+        <span>Theme: light + dark</span>
+        <span>Maintained by: The CPO + dev-lead super-pair</span>
+      </div>
+    </footer>
+
+  </div><!-- /view-wrap -->
+
+</div><!-- /main -->
+
+<script>
+// ============================================================
+// Copy-to-clipboard (used by install command blocks)
+// Works on http(s) via navigator.clipboard, and on file:// via fallback.
+// ============================================================
+function copyCode(btn) {
+  const block = btn.closest('.code-block');
+  if (!block) return;
+  const pre = block.querySelector('pre');
+  if (!pre) return;
+  const text = pre.textContent.trim();
+
+  const showCopied = () => {
+    const label = btn.querySelector('.copy-label') || btn;
+    if (!btn.dataset.original) btn.dataset.original = label.textContent;
+    label.textContent = 'copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      label.textContent = btn.dataset.original;
+      btn.classList.remove('copied');
+    }, 1600);
+  };
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(() => fallbackCopy(text, showCopied));
+  } else {
+    fallbackCopy(text, showCopied);
+  }
+}
+function fallbackCopy(text, onDone) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.top = '0';
+  ta.style.left = '0';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+    if (onDone) onDone();
+  } catch (e) {
+    console.error('Copy failed', e);
+  }
+  document.body.removeChild(ta);
+}
+
+// ============================================================
+// View switching (tabbed sections via sidebar)
+// ============================================================
+(function() {
+  const VIEWS = Array.from(document.querySelectorAll('section.view'));
+  const NAV_DETAILS = Array.from(document.querySelectorAll('.nav details'));
+
+  function viewIdForAnchor(anchorId) {
+    if (!anchorId) return null;
+    const target = document.getElementById(anchorId);
+    if (!target) return null;
+    if (target.classList && target.classList.contains('view')) return target.id;
+    const view = target.closest('.view');
+    return view ? view.id : null;
+  }
+
+  function activateView(viewId) {
+    VIEWS.forEach(v => v.classList.toggle('active', v.id === viewId));
+    // Highlight matching sidebar <details>; open it; don't close others
+    NAV_DETAILS.forEach(d => {
+      const matches = d.dataset.view === viewId;
+      d.classList.toggle('active-view', matches);
+      if (matches) d.open = true;
+    });
+  }
+
+  function navigateToAnchor(anchorId) {
+    const viewId = viewIdForAnchor(anchorId) || anchorId;
+    if (!viewId) return;
+    const viewWasAlreadyActive = document.getElementById(viewId)?.classList.contains('active');
+    activateView(viewId);
+    // Determine the scroll target
+    setTimeout(() => {
+      if (anchorId === viewId) {
+        // Main-section click -> scroll to top of the view
+        window.scrollTo({ top: 0, behavior: viewWasAlreadyActive ? 'smooth' : 'auto' });
+      } else {
+        // Sub-anchor click -> scroll the sub-anchor into view
+        const target = document.getElementById(anchorId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    }, viewWasAlreadyActive ? 0 : 30);
+  }
+
+  // Intercept sidebar sub-link clicks (anchors inside the <ul> lists)
+  // AND section-footer pills (next / previous navigation at the bottom of each main section)
+  document.querySelectorAll('.nav a[href^="#"], .section-nav-pill[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (!href || !href.startsWith('#')) return;
+      e.preventDefault();
+      const anchorId = href.slice(1);
+      navigateToAnchor(anchorId);
+      history.replaceState(null, '', href);
+    });
+  });
+
+  // Intercept sidebar summary clicks (main section labels)
+  // Behavior:
+  //   - Click summary of a section that is NOT the active view -> switch to it AND expand it.
+  //   - Click summary of the CURRENTLY active section -> toggle expand/collapse normally.
+  // We always preventDefault and manage `details.open` ourselves so the native
+  // toggle doesn't race against our `open = true` and flip it back closed.
+  document.querySelectorAll('.nav details > summary').forEach(s => {
+    s.addEventListener('click', function(e) {
+      e.preventDefault();
+      const details = this.parentElement;
+      const viewId = details && details.dataset.view;
+      if (!viewId) return;
+
+      const currentView = document.querySelector('section.view.active');
+      const isCurrentView = currentView && currentView.id === viewId;
+
+      if (isCurrentView) {
+        // Already on this view -> allow toggle so user can collapse if desired
+        details.open = !details.open;
+      } else {
+        // Switching to a new section -> always expand it so sub-links are visible
+        details.open = true;
+        navigateToAnchor(viewId);
+        history.replaceState(null, '', '#' + viewId);
+      }
+    });
+  });
+
+  // Intercept hash changes (browser back/forward, manual hash edit)
+  window.addEventListener('hashchange', function() {
+    const hash = window.location.hash;
+    if (hash) navigateToAnchor(hash.slice(1));
+  });
+
+  // Initial load: honor hash if present, else activate first view
+  const initialHash = window.location.hash;
+  if (initialHash) {
+    navigateToAnchor(initialHash.slice(1));
+  } else {
+    activateView('getting-started');
+  }
+})();
+
+// ============================================================
+// Scrollspy: highlight the sub-section currently in the viewport
+// in the sidebar. Tracks the active <section.view>; re-attaches the
+// IntersectionObserver to its sub-blocks every time the active view
+// changes (sidebar click, hashchange, programmatic activation).
+// ============================================================
+(function() {
+  let currentObserver = null;
+  let currentViewId = null;
+
+  function clearActiveMarks() {
+    document.querySelectorAll('.nav li a.scroll-active')
+      .forEach(a => a.classList.remove('scroll-active'));
+  }
+
+  function navLinkForId(id) {
+    return document.querySelector('.nav a[href="#' + id + '"]');
+  }
+
+  function attachScrollspy(viewId) {
+    if (currentObserver) {
+      currentObserver.disconnect();
+      currentObserver = null;
+    }
+    clearActiveMarks();
+    currentViewId = viewId;
+
+    const view = document.getElementById(viewId);
+    if (!view) return;
+
+    const subBlocks = Array.from(view.querySelectorAll('.sub-block[id]'));
+    if (subBlocks.length === 0) return;
+
+    // Default-mark the first sub-block until the observer fires.
+    const firstLink = navLinkForId(subBlocks[0].id);
+    if (firstLink) firstLink.classList.add('scroll-active');
+
+    // Tracking band: a horizontal slice ~100-160px from the top of the
+    // viewport. A sub-block is "active" when its top edge crosses this band.
+    currentObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        const link = navLinkForId(id);
+        if (!link) return;
+        clearActiveMarks();
+        link.classList.add('scroll-active');
+      });
+    }, {
+      rootMargin: '-100px 0px -78% 0px',
+      threshold: [0, 0.1, 0.5, 1]
+    });
+
+    subBlocks.forEach(b => currentObserver.observe(b));
+  }
+
+  function getActiveViewId() {
+    const v = document.querySelector('section.view.active');
+    return v ? v.id : null;
+  }
+
+  // Re-attach whenever the active view changes (handles sidebar click,
+  // section-footer pill click, hashchange, and the initial activation).
+  const viewObserver = new MutationObserver(() => {
+    const id = getActiveViewId();
+    if (id && id !== currentViewId) attachScrollspy(id);
+  });
+  document.querySelectorAll('section.view').forEach(v => {
+    viewObserver.observe(v, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  // Initial attach.
+  const initialId = getActiveViewId();
+  if (initialId) attachScrollspy(initialId);
+})();
+</script>
+
+</body>
+</html>

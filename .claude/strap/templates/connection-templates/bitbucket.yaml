@@ -1,0 +1,111 @@
+# Starter operation_templates for Bitbucket Cloud (Repos + Pipelines).
+# Copy the relevant blocks into .claude/strap/state/code-connection.yaml
+# (repo operations) or devops-connection.yaml (when Bitbucket is the work-tracker,
+# which is uncommon; usually Jira pairs with Bitbucket Repos).
+#
+# Auth model: App password via Atlassian account. Created at
+# https://bitbucket.org/account/settings/app-passwords/; auth header is
+# `Authorization: Basic base64({{user}}:{{app_password}})`.
+# REST examples use `curl -u "{{user}}:{{app_password}}"` for clarity.
+#
+# Placeholders: {{workspace}} (replaces "org"; Bitbucket workspaces are the org
+# unit), {{repo_slug}}, {{user}}, {{app_password}}, {{branch_name}},
+# {{source_branch}}, {{target_branch}}, {{pr_id}}, {{title}}, {{description}},
+# {{body}}, {{repo_path}}.
+
+schema_version: "2.5"
+host: bitbucket
+
+operation_templates:
+
+  ref_get:
+    type: rest
+    method: GET
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/refs/branches/{{branch_name}}
+    headers:
+      Authorization: "Basic {{token_auth_header}}"
+
+  branch_create:
+    type: rest
+    method: POST
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/refs/branches
+    headers:
+      Authorization: "Basic {{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      {
+        "name": "{{branch_name}}",
+        "target": { "hash": "{{source_sha}}" }
+      }
+
+  branch_delete_remote:
+    type: rest
+    method: DELETE
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/refs/branches/{{branch_name}}
+    headers:
+      Authorization: "Basic {{token_auth_header}}"
+
+  branch_push:
+    type: cli
+    command: 'git -c http.extraHeader="Authorization: Basic {{token_auth_header}}" -C {{repo_path}} push -u origin {{branch_name}}'
+    # HTTP basic auth header injection bypasses the credential helper. Alternative: embed
+    # auth in the remote URL via git remote set-url origin https://{{user}}:{{app_password}}@bitbucket.org/...
+    # but the header-injection pattern keeps credentials out of git config.
+
+  pull_request_create:
+    type: rest
+    method: POST
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/pullrequests
+    headers:
+      Authorization: "Basic {{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      {
+        "title": "{{title}}",
+        "description": "{{description}}",
+        "source": { "branch": { "name": "{{source_branch}}" } },
+        "destination": { "branch": { "name": "{{target_branch}}" } }
+      }
+
+  pull_request_list:
+    type: rest
+    method: GET
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/pullrequests?state={{status}}&q=destination.branch.name+%3D+%22{{target_branch}}%22&pagelen={{top}}
+    headers:
+      Authorization: "Basic {{token_auth_header}}"
+    # Bitbucket uses pagelen (max 50) + page for pagination. /dora-collect iterates pages.
+
+  pull_request_get_comments:
+    type: rest
+    method: GET
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/pullrequests/{{pr_id}}/comments
+    headers:
+      Authorization: "Basic {{token_auth_header}}"
+
+  pull_request_post_comment:
+    type: rest
+    method: POST
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/pullrequests/{{pr_id}}/comments
+    headers:
+      Authorization: "Basic {{token_auth_header}}"
+      Content-Type: application/json
+    body_template: |
+      { "content": { "raw": "{{body}}" } }
+
+  pull_request_get_check_status:
+    # Bitbucket Pipelines reports status via build statuses on commits.
+    type: rest
+    method: GET
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/commit/{{commit_sha}}/statuses
+    headers:
+      Authorization: "Basic {{token_auth_header}}"
+
+  pipeline_list:
+    # v2.5 #39703: enumerate pipelines for pipeline_match_patterns capture.
+    # Bitbucket Pipelines are defined in bitbucket-pipelines.yml; recent runs are accessible
+    # via REST. Adopters also inspect bitbucket-pipelines.yml directly during onboarding.
+    type: rest
+    method: GET
+    path: https://api.bitbucket.org/2.0/repositories/{{workspace}}/{{repo_slug}}/pipelines?sort=-created_on&pagelen={{top}}
+    headers:
+      Authorization: "Basic {{token_auth_header}}"

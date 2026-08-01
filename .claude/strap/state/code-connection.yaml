@@ -1,0 +1,100 @@
+schema_version: "2.4"
+host: github
+host_url: https://github.com/JeffGoji/Jeffgoji.com-React-Site
+owner: JeffGoji
+repo: Jeffgoji.com-React-Site
+default_branch: main
+
+# Auth: gh CLI session (account JeffGoji). Token lives in the OS keyring, NOT here.
+# NOTE: `gh` is installed at "C:\Program Files\GitHub CLI\gh.exe" but was not on the
+# Bash tool PATH at wire-up time. Restart Claude Code once so `gh` resolves bare in
+# pipeline operation_templates; until then, invoke gh by full path.
+auth:
+  method: gh_cli
+  account: JeffGoji
+  git_protocol: https
+
+mapping:
+  branch_prefix:
+    feature: feature/
+    task:    task/
+    fix:     fix/
+    chore:   chore/
+
+branch_protection:
+  default_branch:
+    requires_reviewers: null
+    requires_status_checks: []
+    forbids_force_push: false
+    # main is NOT host-protected as of wire-up. STRAP feature/task -> reviewed-PR
+    # discipline is the guard. CPO explicitly wants nothing committed to main directly.
+
+capabilities:
+  ref_get:                        supported     # live-probed via gh api git/refs/heads/main
+  branch_list:                    supported     # live-probed (16 remote branches enumerated)
+  branch_create:                  supported     # live-probed (write-probe: created ref)
+  branch_delete_local:            supported     # git branch -d (once local clone exists)
+  branch_delete_remote:           supported     # live-probed (write-probe: deleted ref, verified 404)
+  branch_push:                    supported     # git push via gh-configured helper; NOT yet live-probed (no local clone at wire-up)
+  pull_request_create:            supported     # gh pr create
+  pull_request_get:               supported
+  pull_request_update:           supported
+  pull_request_close:             supported
+  pull_request_list:              supported     # gh pr list (feeds /dora-collect)
+  pull_request_get_comments:      supported     # gh api pulls/{id}/comments (feeds /refine-pr)
+  pull_request_post_comment:      supported     # gh pr comment (always resolve_thread=false)
+  pull_request_get_check_status:  supported     # gh api commits/{sha}/check-runs
+  pull_request_show:              supported     # gh api pulls/{id}
+  pull_request_linked_work_items: unsupported   # GitHub has no native PR<->work-item link; falls back to parsing "Closes #<id>" in PR body
+  commit_history:                 supported
+  file_read_at_ref:               supported
+
+operation_templates:
+
+  ref_get:
+    type: cli
+    command: gh api repos/{{owner}}/{{repo}}/git/refs/heads/{{branch_name}}
+
+  branch_create:
+    type: cli
+    command: |
+      gh api -X POST repos/{{owner}}/{{repo}}/git/refs \
+        -f ref="refs/heads/{{branch_name}}" \
+        -f sha="{{source_sha}}"
+
+  branch_delete_remote:
+    type: cli
+    command: gh api -X DELETE repos/{{owner}}/{{repo}}/git/refs/heads/{{branch_name}}
+
+  branch_push:
+    type: cli
+    command: 'git -C {{repo_path}} push -u origin {{branch_name}}'
+    # Relies on `gh auth setup-git` having configured the credential helper.
+
+  pull_request_create:
+    type: cli
+    command: |
+      gh pr create --repo {{owner}}/{{repo}} \
+        --base {{target_branch}} \
+        --head {{source_branch}} \
+        --title "{{title}}" \
+        --body "{{body}}"
+
+  pull_request_list:
+    type: cli
+    command: gh pr list --repo {{owner}}/{{repo}} --state {{status}} --base {{target_branch}} --limit {{top}} --json number,title,state,createdAt,closedAt,baseRefName,headRefName,author,mergedAt
+
+  pull_request_get_comments:
+    type: cli
+    command: gh api repos/{{owner}}/{{repo}}/pulls/{{pr_id}}/comments
+
+  pull_request_post_comment:
+    type: cli
+    command: gh pr comment {{pr_id}} --repo {{owner}}/{{repo}} --body "{{body}}"
+
+  pull_request_get_check_status:
+    type: cli
+    command: gh api repos/{{owner}}/{{repo}}/commits/{{commit_sha}}/check-runs --jq '.check_runs[] | {name, status, conclusion, completed_at}'
+
+validated_at: 2026-08-01T16:01:00Z
+validated_by: JeffGoji
