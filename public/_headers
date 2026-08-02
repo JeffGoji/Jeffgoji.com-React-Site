@@ -4,6 +4,7 @@
 /gallery/:gallery/display/*
   Cache-Control: public, max-age=31536000, immutable
 
+# original/ keeps raw source filenames (not content-hashed) -- do NOT mark immutable, it'll serve stale for a year
 /gallery/:gallery/original/*
   Cache-Control: public, max-age=3600, must-revalidate
 
