@@ -1,7 +1,7 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-08-01T20:10:00Z
-last_author: JeffGoji
+last_updated: 2026-08-02T03:05:00Z
+last_author: dev-lead
 status: active
 linked_work_items: ["00003", "00004", "00005", "00006"]
 ---
@@ -10,65 +10,62 @@ linked_work_items: ["00003", "00004", "00005", "00006"]
 
 ## What this is
 
-The V2 initiative for jeffgoji.com: a full "new everything" redesign with three goals — (1) a modern dark motorsport-editorial look, (2) image-loading/performance overhaul, (3) a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. As of this checkpoint, the ENTIRE planning phase is complete — Requirement → Spec → approved mockups → 4 Features → all Stories/Tasks decomposed and persisted. The next phase is execution (`/plan-sprint` → `/execute-sprint`). Full durable detail lives in dev-lead memory `v2-initiative.md`.
+The V2 initiative for jeffgoji.com: a full "new everything" redesign with three goals — (1) a modern dark motorsport-editorial look, (2) image-loading/performance overhaul, (3) a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. Planning is fully done (Requirement → Spec → mockups → 4 Features → all Stories/Tasks decomposed). Execution has started: Feature C's Phase-0 baseline slice is built, tested, PR-reviewed, and merged. Full durable detail lives in dev-lead memory `v2-initiative.md`.
 
 ## Where we left off
 
-**ALL 4 Features are fully decomposed, persisted, and `active`** — the entire V2 backlog is built. `/decompose-feature` run on 00003, 00004, 00005, 00006. Totals: **16 Stories (00007-00011, 00026-00029, 00042-00045, 00061-00063) + 51 Tasks (00012-00025, 00030-00041, 00046-00060, 00064-00073)**, ~200 senior-dev-hours across the four Features. `.next-id`=74. Nothing executed yet — the next step is `/plan-sprint` + `/execute-sprint`.
+**Feature 00005 (Feature C) Phase-0 baseline is done and merged.** `/plan-sprint 00005` allocated Stories 00042+00043 into Sprint 2026.08.A (7 Tasks, 26h); `/execute-sprint 00005` ran all 3 waves, dev-lead reviewed and merged every Task branch, ran an independent build+test pass, walked AC traceability (AC-003/004/012/013/017), and opened PR #16 (`feature/00005-image-perf-analytics-baseline` → `feature/strap-onboarding`, stacked mode since `main` still lacks the STRAP install). CPO reviewed PR #16 interactively (walked the browser-floor fix and the `_headers` rewrite), then approved and merged it — merge commit `de2d4a0` on `feature/strap-onboarding`, source branch deleted, local checkout fast-forwarded and cleaned up. Feature 00005 stays `active` (not resolved) — Stories 00044/00045 (Phase-3 image-pipeline overhaul, AC-006..011) remain unallocated overflow. CPO was last asked whether to run `/plan-sprint 00003` (Feature A, next in execution order) — no answer yet when this checkpoint was written.
 
 ## Files in flight
 
-All V2 artifacts are UNCOMMITTED (created after commit f7bb2ac on branch `feature/strap-onboarding`; ~90 files):
-- `.claude/strap/work/requirement/00001.yaml` — Requirement (resolved).
-- `.claude/strap/work/spec/00002.yaml` — Spec (resolved; carries Mockup Reference + Wiring Guide).
-- `.claude/strap/work/feature/0000{3,4,5,6}.yaml` — Features A/B/C/D (00003 `active`+decomposed; 00004-00006 `new`).
-- `.claude/strap/work/story/*.yaml` (16 stories) + `task/*.yaml` (51 tasks) — the full A/B/C/D decomposition (all `new`).
-- `.claude/strap/mockups/spec-00002/` — approved mockup set (12 files + assets/img photos).
-- `.claude/strap/memory/dev-lead/v2-initiative.md` — the durable V2 map (decisions + pipeline progress).
-- `.claude/strap/memory/agents/{designer,spec-lead}.md` — curated tradecraft.
-- `.claude/strap/state/{devops,code}-connection.yaml`, `usage.yaml` — connection profiles.
-- `.claude/strap/work/.next-id` = 74 (next work item id).
+None — working tree is clean, everything from Feature C's execution is committed and merged. Two real-world (non-code) actions remain open:
+- **Plausible account provisioning** — CPO said "I'll provision an account later." Blocks the V1 engagement-baseline capture window (`v1-engagement-baseline.md`).
+- **`feature/strap-onboarding` → `main` merge** — not yet done; `main` still has no STRAP install and none of the V2 work. Timing is CPO's call, no urgency signaled.
 
 ## Open decisions
 
-- **Start building?** Whole backlog is decomposed. Next: `/plan-sprint <feature-id>` then `/execute-sprint <feature-id>`. Execution order per assembly: Feature C's baseline Stories (00042/00043) FIRST → Feature A (00003) → Feature B (00004) + Feature C perf (00044/00045) → Feature D (00006) last.
-- **RESTART Claude Code before `/execute-sprint`** so `gh` is on the Bash PATH (pipeline templates call `gh` bare).
-- **SQ-001 analytics tool** (Plausible/Umami/Fathom) still TBD — pick before Feature C Story 00043 executes.
-- **Security headers** (CSP/nosniff/HSTS on public/_headers) — out of Feature C scope, not an AC; open hardening item for security-reviewer.
-- **Commit the V2 artifacts?** ~90+ uncommitted files (work items + mockups + memory) on `feature/strap-onboarding`. Worth a commit checkpoint (never push to main without approval).
+- **Next Feature to execute?** Per the locked order (Feature C baseline → Feature A → Feature B + Feature C perf → Feature D), Feature A (00003, design foundation + app shell) is next. Sprint 2026.08.A (ends 2026-08-08) still has ~16h of unused capacity — `/plan-sprint 00003` could pull some of Feature A into the current sprint rather than waiting for a new one. CPO hasn't decided yet.
+- **When to merge `feature/strap-onboarding` → `main`?** No blocker, just a CPO timing call.
+- **Plausible account** — CPO will provision later; no ETA given.
 
 ## Open work items
 
 - `#00001` — resolved — Requirement: V2 (3 goals).
 - `#00002` — resolved — Spec: dark motorsport-editorial V2 (9 Parts, 18 ACs, mockups wired).
-- `#00003` — **active** — Feature A (design foundation + shell). Stories 00007-00011, Tasks 00012-00025.
-- `#00004` — **active** — Feature B (per-surface redesign). Stories 00026-00029, Tasks 00030-00041. Predecessor 00003.
-- `#00005` — **active** — Feature C (image-perf + analytics + baseline). Stories 00042-00045 (C1a/C1b Phase 0, C2a/C2b Phase 3), Tasks 00046-00060.
-- `#00006` — **active** — Feature D (What's New page). Stories 00061-00063, Tasks 00064-00073. Predecessors 00003/4/5 (LAST).
-- All child Stories/Tasks are `new`, ready for sprint planning + execution.
+- `#00003` — active, **not yet sprint-allocated** — Feature A (design foundation + shell). Stories 00007-00011, Tasks 00012-00025. Next up per execution order.
+- `#00004` — active, not yet sprint-allocated — Feature B (per-surface redesign). Stories 00026-00029, Tasks 00030-00041. Predecessor 00003.
+- `#00005` — active, **PARTIALLY EXECUTED** — Feature C. Stories 00042 ✅resolved + 00043 ✅resolved (7 Tasks, all merged via PR #16). Stories 00044/00045 (8 Tasks) still `new`, unallocated overflow — need Feature B's surfaces to exist first (00045) and more sprint capacity.
+- `#00006` — active, not yet sprint-allocated — Feature D (What's New page). Stories 00061-00063, Tasks 00064-00073. Predecessors 00003/4/5 (LAST).
 
 ## Quick resume
 
-1. The whole backlog is decomposed. Start building: **restart Claude Code FIRST** so `gh` lands on PATH (`C:\Program Files\GitHub CLI\gh.exe`), then `/plan-sprint <feature-id>` → `/execute-sprint <feature-id>`.
-2. Execution order (per assembly): Feature C baseline Stories 00042/00043 FIRST (baseline must precede A/B) → Feature A (00003) → Feature B (00004) + Feature C perf 00044/00045 → Feature D (00006) LAST. Pick the analytics tool (SQ-001) before Story 00043 runs.
-3. Optionally commit the V2 planning artifacts (work items + mockups + memory) on `feature/strap-onboarding` at a checkpoint. Never push to `main`.
+1. `/context-fetch jeffgoji-site-update` to reload this context.
+2. Ask the CPO: run `/plan-sprint 00003` (Feature A) now, or wait? If yes, dispatch sprint-planner the same way as Feature C's run — current sprint has ~16h headroom.
+3. Periodically remind the CPO about Plausible account provisioning (blocks `v1-engagement-baseline.md`'s capture window) and the eventual `feature/strap-onboarding` → `main` merge — neither is urgent but both are easy to forget.
 
 ## Critical context
 
-- **Estimates are human senior-dev hours for planning/velocity — NOT pipeline wall-clock.** Agents execute each task in minutes. (This confused the CPO once.)
-- **The V2 planning artifacts are all uncommitted** on `feature/strap-onboarding`. Consider committing the work-item + mockup tree at a checkpoint (no push without CPO approval; never to `main`).
-- **`gh` is NOT on the Bash PATH** until Claude Code restarts (installed mid-session). Use the full path for any gh call until then.
-- **CreateTeam is unavailable this session** — parallel specialist dispatch uses background `Agent` tool calls; their reports arrive as teammate `SendMessage` bodies, then the agent goes idle.
-- **Local strap-agile work-tracking**: one YAML file per work item under `.claude/strap/work/<type>/<id>.yaml`; monotonic zero-padded ids from `.next-id`; four-state machine (new→active→resolved→closed).
+- **Estimates are human senior-dev hours for planning/velocity — NOT pipeline wall-clock.** Agents execute each task in minutes.
+- **`CreateTeam` is unavailable in this harness/session** despite `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` + `CLAUDE_CODE_SPAWN_BACKEND=auto` both being set correctly. Workaround (now the established pattern here): dev-lead creates git worktrees manually (`git worktree add --detach <path> <feature-branch>`) and dispatches specialists via background `Agent` calls (give them a `name` so `SendMessage` keeps working) instead of `CreateTeam` teammates.
+- **Windows long-path limit hits on the first `git worktree add`** in this repo (long nested worktree paths + long legacy image filenames). Fixed once via `git config core.longpaths true` — already set on this repo, should persist, but verify if worktree creation fails again.
+- **`npm install --prefix <path>` (run from outside the target dir) silently injects a self-referential `file:` dependency into `package.json`** plus lockfile churn. Always `cd` into the target dir first; never use `--prefix`. This is the one exception to the general "prefer absolute paths over compound `cd &&`" shell habit.
+- **`esbuild`'s `build.target` downlevels syntax only — it never polyfills built-ins.** Caught a real regression from this: deleting a hand-written `Object.hasOwn` polyfill (labelled dead SSR residue, but actually load-bearing for `react-markdown` v10 at render time) would have shipped a browser-support gap invisible on any modern browser. Fixed by pinning an explicit `build.target` in `vite.config.js` instead of trusting Vite's default.
+- **Plausible's default `script.js` auto-tracks SPA navigation via `pushState` patching.** This project uses `script.manual.js` + a hand-rolled `usePageviews()` hook instead — the default build would double-count every route change. Don't revert the script src without also removing the hook.
+- **Background specialist agents sometimes finish and push without sending the required finishing `SendMessage`.** Happened once (Task 00051) — the agent had already committed, pushed, and gone idle with no report. If a dispatched agent goes quiet, check `git worktree list` / `git ls-remote` for its task branch before assuming it's stuck — it may have already finished.
+- **STRAP work-item YAML edits (state transitions, audit comments) must be committed periodically, not left sitting in the working tree.** Caught this mid-session — several Task/Story resolutions had accumulated uncommitted for a while. Local strap-agile has no separate persistence layer; the git commit IS the persistence.
+- **Token-budget tracking (`usage.yaml`) needs updating after each specialist report, not just reconstructed at session end.** Missed this during Feature C's execution — devops-lead ended up at 289K against its 200K per-agent budget, only caught when backfilling `usage.yaml` at close-out. Nothing broke, but check incrementally next time.
+- **PR review/merge convention**: Feature branches target `feature/strap-onboarding`, not `main` (stacked mode, since `main` lacks the STRAP install). CPO reviews interactively (asks to see specific diffs) before approving merge. Merge strategy used: `--merge` (not squash) to preserve the Task-level audit-trail commits; `--delete-branch` to clean up after.
 - **Locked V2 palette** (softer-dark): charcoal `#141418`, reading panel `#202027`, red `#E10600`, warm off-white text; Archivo/Inter/Space Mono; "Goji Line" logo. Full detail in `designer.md` memory + `mockups/spec-00002/assets/tokens.css`.
-- **Two adopted design deltas**: galleries → single `/galleries` hub + switcher (old routes redirect); videos → poster facade (data-driven). In the Wiring Guide on Spec 00002.
 - CPO preference: never commit to `main`; all work via feature/task branches + reviewed PR.
 
 ## Source-of-truth pointers
 
-- `.claude/strap/memory/dev-lead/v2-initiative.md` — the durable V2 map: locked decisions + pipeline progress + resume path.
+- `.claude/strap/memory/dev-lead/v2-initiative.md` — the durable V2 map: locked decisions, pipeline progress, PR links, open CPO actions.
+- `.claude/strap/state/usage.yaml` — per-agent/session token budget tracking; check before dispatching more specialists.
+- `.claude/strap/work/feature/00005.yaml` — Feature C's audit trail; shows the partial-execution pattern for future Features that span multiple sprints.
+- `.claude/strap/project-docs/v1-perf-baseline.md` + `v1-engagement-baseline.md` — the V1 before-state Phase-3 work measures against; cross-linked to each other.
+- PR #16: `https://github.com/JeffGoji/Jeffgoji.com-React-Site/pull/16` — merged, `de2d4a0`. First reference for how a Feature-C-shaped PR review/merge went.
 - `.claude/strap/work/spec/00002.yaml` — the Spec: Constituent Parts, 18 ACs, Mockup Reference + Wiring Guide.
 - `.claude/strap/mockups/spec-00002/` — approved visual contract (open `index.html`); `assets/tokens.css` = design-token source of truth.
-- `.claude/strap/memory/agents/designer.md` — locked palette/type/logo + hero roster + editorial-grade technique.
-- `.claude/strap/memory/agents/{frontend-engineer,spec-lead,devops-lead}.md` — per-domain tradecraft.
+- `.claude/strap/memory/agents/{designer,devops-lead,frontend-engineer,spec-lead}.md` — per-domain tradecraft, actively curated during Feature C's execution.
 - `.claude/strap/state/{code,devops}-connection.yaml` — GitHub (JeffGoji/Jeffgoji.com-React-Site) + local strap-agile profiles.
