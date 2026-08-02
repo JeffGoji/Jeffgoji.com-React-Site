@@ -1,0 +1,49 @@
+id: "00017"
+type: task
+title: "Assemble the P1 partials into styles.scss with correct import order (fix the $theme-colors bug)"
+state: new
+parent: "00009"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 5
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:10:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Assemble the P1 partials into styles.scss with correct import order (fix the $theme-colors bug)
+
+  ## Description
+  Rewrite `src/scss/styles.scss` to `@import` the P1 partials — `_tokens`, `_theme`, `_fonts`, `_grade` — BEFORE `@import "bootstrap/scss/bootstrap"`. This ordering is the actual fix for the `styles.scss:2` ineffective-`$theme-colors`-override bug (the map is authored correctly in `_theme` (Task 00013); ordering it before Bootstrap makes it effective). Remove the retired inline `$primary-0..4` blue map + `#ff0000` and the stale `.color-primary-*`/`.bg-primary-*` classes.
+
+  ## Linked Story
+  **Story:** 00009
+
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+
+  ## Implementation guidance
+  Order: `_tokens` → `_theme` → `_fonts` → `_grade` → `@import bootstrap` → any app overrides. Verify `.btn-primary`/`.bg-primary` compile to `#E10600`. Keep Bootstrap 5.3 base (SQ-002).
+
+  ## Dependencies
+  Depends on Stories 00007 + 00008 (the partials must exist).
+
+  ## Definition of Done
+  `styles.scss` compiles via the Vite SCSS pipeline; Bootstrap primary resolves to `#E10600` in the built CSS; no reference to the old blue palette remains; tokens available app-wide as CSS vars.
+
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

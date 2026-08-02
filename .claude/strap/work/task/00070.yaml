@@ -1,0 +1,46 @@
+id: "00070"
+type: task
+title: "Draft the Clarkson-voice changelog entry set (structure + voice + traceability spine)"
+state: new
+parent: "00063"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00065"
+    type: predecessor
+original_estimate: 5
+created_at: 2026-08-01T20:00:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:00:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T20:00:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Draft the Clarkson-voice changelog entry set (structure + voice + traceability spine)
+
+  ## Description
+  Author the `whatsNew[]` array — ~5-6 entries per the coverage map, each with `ver/tag/goal/title/body`. Establish the voice, the entry ordering (redesign → navigation → hero/garage → imagery → galleries → under-the-bonnet), and the goal-tagging.
+
+  ## Linked Story
+  **Story:** 00063
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+  ## Implementation guidance
+  Fill the `whatsNew` shape in `src/components/WhatsNew/data/whatsNew.js` exactly. One entry per shipped change; fold the self-referential "What's New page" line into the NAVIGATION entry. Pull concrete shipped facts from the resolved Feature bodies (00003 tokens/logo/shell/`/totdtrip`; 00004 hero/galleries-hub/video facade; 00005 webp/srcset/lazy/OG/es2015/Node/analytics). Do NOT invent numbers — the numeric claims live in the metric tiles (task 00072). Voice bar = the mockup's authored exemplars.
+  ## Dependencies
+  Predecessor: 00065 (data-module scaffold). Blocked-by Features 00003/00004/00005 SHIPPED.
+  ## Definition of Done
+  `whatsNew[]` covers every change in the coverage map; each entry has ver/tag/goal/title/body populated; voice matches the mockup exemplars; no entry references unshipped work; array validates against the shape.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

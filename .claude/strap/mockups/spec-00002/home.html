@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jeffgoji.com — The Goji Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<nav class="nav" data-nav></nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__media media--editorial media--editorial--hero"><img data-hero alt="A car from the garage"></div>
+  <div class="hero__scrim"></div>
+  <div class="hero__nameplate" data-hero-nameplate>
+    <span class="hero__nameplate-label">Today in the garage</span>
+    <span class="hero__nameplate-name"><b data-hero-name></b> · <span data-hero-car></span></span>
+  </div>
+  <div class="hero__content">
+    <div class="container">
+      <div class="eyebrow">Miata · Corvette · Autocross · Great drives</div>
+      <h1 class="hero__title">Find the <span class="accent">line.</span><br>Keep the story.</h1>
+      <p class="hero__lead">A single-driver garage log — four Miatas, one mid-engine Corvette, and every apex, road trip and questionable purchase in between.</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="garage.html">Enter the garage ›</a>
+        <a class="btn btn--ghost" href="gallery.html">Tail of the Dragon gallery</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero__flag"></div>
+</section>
+
+<!-- INTRO -->
+<section class="section">
+  <div class="container" style="display:grid;grid-template-columns:1.3fr 1fr;gap:var(--space-8);align-items:center">
+    <div>
+      <div class="eyebrow">The driver</div>
+      <h2 style="font-size:var(--fs-h2);text-transform:uppercase">Jeff "Goji" Anderson-Lester</h2>
+      <p class="hero__lead" style="color:var(--text-mid)">I've been driving, breaking and fixing Miatas since 2003 — from a 197,000-mile NA6 daily to an SCCA-championship-winning Mazdaspeed. These pages are the running log: what changed, what it cost, and what it felt like on the road.</p>
+      <div class="spec-row" style="margin-top:var(--space-5)">
+        <span class="chip">CARS <b>5</b></span>
+        <span class="chip">CHAMPIONSHIPS <b>2</b></span>
+        <span class="chip">EST. <b>2003</b></span>
+      </div>
+    </div>
+    <div class="media--editorial" style="border-radius:var(--radius-lg);border:var(--hairline);overflow:hidden"><img data-introimg alt="The garage"></div>
+  </div>
+</section>
+
+<div class="checker-strip"></div>
+
+<!-- GARAGE PREVIEW -->
+<section class="section" id="garage">
+  <div class="container">
+    <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-4);flex-wrap:wrap">
+      <div>
+        <div class="eyebrow">The stable</div>
+        <h2>Car Blogs</h2>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="garage.html">All builds ›</a>
+    </div>
+    <div class="garage-grid" data-garage></div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section class="section" id="videos" style="background:var(--ink-900);border-block:var(--hairline)">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">On camera</div>
+      <h2>Videos</h2>
+      <p class="sub">Onboards, build recaps and autocross runs from the YouTube channel.</p>
+    </div>
+    <div class="video-grid" data-videos></div>
+  </div>
+</section>
+
+<footer class="footer" data-footer></footer>
+
+<script src="assets/mock-data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  GOJI.renderShell("home");
+
+  // HERO ROTATION — a different car every visit (Random-Background-Feature).
+  // Ports to a `heroes` array + random pick on mount in the Home component.
+  (function rotateHero () {
+    const img = document.querySelector("[data-hero]");
+    const fallback = "assets/img/hero.jpg";
+    const list = (window.MOCK && MOCK.heroes) || [];
+    const pick = list.length ? list[Math.floor(Math.random() * list.length)] : null;
+
+    // Fall back to the original night hero if the array or an image is missing.
+    img.addEventListener("error", function onErr () {
+      img.removeEventListener("error", onErr);
+      if (img.getAttribute("src") !== fallback) img.src = fallback;
+    });
+
+    if (pick) {
+      img.src = pick.img;
+      img.alt = pick.alt;
+      const nm = document.querySelector("[data-hero-name]");
+      const car = document.querySelector("[data-hero-car]");
+      if (nm) nm.textContent = pick.name;
+      if (car) car.textContent = pick.car;
+    } else {
+      img.src = fallback;
+      const plate = document.querySelector("[data-hero-nameplate]");
+      if (plate) plate.style.display = "none";
+    }
+  })();
+
+  document.querySelector("[data-introimg]").src = "assets/img/intro-garage.jpg";
+
+  // Garage cards (top 3 for the home preview)
+  document.querySelector("[data-garage]").innerHTML = MOCK.cars.slice(0,3).map(c => `
+    <a class="card" href="${c.bloglink}" style="display:block;color:inherit">
+      <div class="card__media media--editorial"><img src="${c.img || GOJI.ph(c.label + ' · ' + c.name, 900, 560)}" alt="${c.name}" loading="lazy"></div>
+      <div class="card__body">
+        <div class="card__kicker">${c.year} ${c.make} · ${c.tag}</div>
+        <h3 class="card__title">${c.name} <small>${c.model}</small></h3>
+        <p class="card__text">${c.description}</p>
+      </div>
+    </a>`).join("");
+
+  // Videos
+  document.querySelector("[data-videos]").innerHTML = MOCK.videos.map(v => `
+    <div class="video">
+      <div class="video__frame"><img src="${GOJI.ph(v.title, 800, 450)}" alt="${v.title}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.5"><span class="video__play"></span></div>
+      <div class="video__body"><div class="card__kicker">${v.meta}</div><h4 style="margin:.35rem 0 0;font-size:var(--fs-h4)">${v.title}</h4></div>
+    </div>`).join("");
+</script>
+</body>
+</html>

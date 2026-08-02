@@ -1,0 +1,48 @@
+id: "00042"
+type: story
+title: "Build hygiene + V1 perf baseline (Phase 0)"
+state: new
+parent: "00005"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links: []
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:15:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Build hygiene + V1 perf baseline (Phase 0)
+
+  ## Description
+  The build-hygiene + measurement backbone (devops build-side of P4 + P6 perf-baseline half). Pin Node so the fragile `sharp@0.34` build is reproducible on Netlify; drop the vestigial `es2015` down-transpile + dead SSR residue; fix the `immutable`-cache-on-non-hashed-originals defect in `public/_headers`; and capture the V1 perf baseline (Lighthouse + image-weight + LCP on home + `nd-totd2025`) BEFORE any V2 UI/perf change lands.
+
+  ## Linked Feature
+  **Feature:** 00005
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P4 (enabler slice) + P6 (perf-baseline half)
+  ## Acceptance Criteria subset
+  AC-012, AC-013, AC-004 (perf half); captures the baseline reference AC-006/007/008 measure against in C2a.
+  ## Implementation notes
+  Real files: `.nvmrc` (new) + `netlify.toml [build.environment]`; `vite.config.js:6-9`; `src/main.jsx:1-5`; `src/App.jsx:37-40`; `public/_headers`; baseline doc under `.claude/strap/project-docs/`. Netlify per-push build IS CI — do NOT add GitHub Actions.
+  ## Dependencies
+  None upstream (Phase 0 — runs immediately). BLOCKS the merge of Features A + B on baseline capture. Note: `src/App.jsx` co-edited with Feature A shell — sequence/coordinate.
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 3 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:45:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00005 (P4/P6 build-side, devops-lead). Tasks 00046-00048."

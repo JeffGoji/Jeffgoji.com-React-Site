@@ -1,0 +1,49 @@
+id: "00023"
+type: task
+title: "Wire in and rebuild the Footer"
+state: new
+parent: "00011"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 5
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:10:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Wire in and rebuild the Footer
+
+  ## Description
+  Render `<Footer/>` inside `App.jsx` (below `<Routes>`) — its first-ever mount. Rebuild the markup to the mockup: checker-strip top accent, 3-column grid (brand blurb + Garage links + More links), and the cookieless bottom line; keep the existing dynamic `currentYear`. DROP `fixed-bottom` — the mockup footer flows at page end (`margin-top`).
+
+  ## Linked Story
+  **Story:** 00011
+
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+
+  ## Implementation guidance
+  Mockup contract: `app.js renderShell()` footer branch + `app.css:356-361,575`. Real file `src/components/Footer/index.jsx` (built, never rendered). 3-col at desktop, single-col at <=768.
+
+  ## Dependencies
+  Depends on Story 00009 (tokens) + Story 00010 (shell exists).
+
+  ## Definition of Done
+  Footer renders on every route under the token palette; 3-col at desktop, single-col at <=768; dynamic year intact; not pinned to the viewport bottom.
+
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

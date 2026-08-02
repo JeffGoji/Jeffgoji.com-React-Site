@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V2 Mockups — jeffgoji.com — Spec 00002</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<nav class="nav" data-nav></nav>
+
+<header class="section-tight" style="border-bottom:var(--hairline);background:radial-gradient(1100px 420px at 20% -20%, var(--goji-red-ink), transparent 60%)">
+  <div class="container">
+    <div class="eyebrow">Spec 00002 · Designer deliverable · Tier-1 contract</div>
+    <h1 style="font-size:var(--fs-h1);text-transform:uppercase">jeffgoji.com V2 — Mockups</h1>
+    <p class="hero__lead" style="color:var(--text-mid);max-width:66ch">Dark motorsport-editorial redesign. These self-contained HTML/CSS mockups are the <b style="color:var(--text-hi)">visual + structural contract</b> the frontend ports into React 18 + Vite + React-Bootstrap + SCSS. Open any view below.</p>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <div class="garage-grid" data-index></div>
+  </div>
+</main>
+
+<footer class="footer" data-footer></footer>
+
+<script src="assets/mock-data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  GOJI.renderShell("");
+  const VIEWS = [
+    ["Design System","design-system.html","Palette (hex), type scale, buttons, cards, states, the new SVG logo, spacing — all as CSS custom properties.","Reference"],
+    ["Home","home.html","Full-bleed motorsport hero → driver intro → garage preview → videos.","Surface"],
+    ["Garage / Car Blogs","garage.html","The 5-car hub with entry points to each build log; retired-car empty state.","Surface"],
+    ["Build Blog","blog.html","Dated posts with mileage/cost/entry + image, markdown-rendered, paginated 3/page.","Surface"],
+    ["Gallery","gallery.html","Thumbnail grid → keyboard-navigable lightbox (mirrors react-image-gallery).","Surface"],
+    ["What's New","whats-new.html","Permanent nav feature page in a Top Gear / Clarkson voice.","Surface"]
+  ];
+  document.querySelector("[data-index]").innerHTML = VIEWS.map(([t,href,d,tag]) => `
+    <a class="card" href="${href}" style="display:block;color:inherit">
+      <div class="card__media"><img src="${GOJI.ph(t, 900, 560, {red: tag==='Reference'})}" alt="${t}" loading="lazy"></div>
+      <div class="card__body">
+        <div class="card__kicker">${tag}</div>
+        <h3 class="card__title" style="font-size:var(--fs-h3)">${t}</h3>
+        <p class="card__text">${d}</p>
+      </div>
+    </a>`).join("");
+</script>
+</body>
+</html>

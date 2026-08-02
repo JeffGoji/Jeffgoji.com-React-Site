@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Garage — jeffgoji.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<nav class="nav" data-nav></nav>
+
+<header class="section-tight" style="border-bottom:var(--hairline);background:radial-gradient(1000px 380px at 80% -20%, var(--goji-red-ink), transparent 60%)">
+  <div class="container">
+    <div class="eyebrow">The stable · 5 cars</div>
+    <h1 style="font-size:var(--fs-h1);text-transform:uppercase">Car Blogs</h1>
+    <p class="hero__lead" style="color:var(--text-mid);max-width:60ch">Every car in the garage keeps its own running log — dated entries with mileage, cost and the story behind the wrench. Pick one and start reading.</p>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <div class="garage-grid" data-garage></div>
+  </div>
+</main>
+
+<footer class="footer" data-footer></footer>
+
+<script src="assets/mock-data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  GOJI.renderShell("garage");
+  document.querySelector("[data-garage]").innerHTML = MOCK.cars.map((c, i) => {
+    const retired = c.bloglink === "#";
+    return `
+    <article class="card" style="position:relative">
+      <div class="card__media media--editorial">
+        <img src="${c.img || GOJI.ph(c.label + ' · ' + c.name, 900, 560)}" alt="${c.name}" loading="lazy" ${i > 2 ? 'loading="lazy"' : ''}>
+        <span class="numtag" style="position:absolute;top:8px;right:12px">#${c.id}</span>
+      </div>
+      <div class="card__body">
+        <div class="card__kicker">${c.year} ${c.make} · ${c.tag}</div>
+        <h3 class="card__title">${c.name} <small>${c.model}</small></h3>
+        <p class="card__text">${c.description}</p>
+        ${retired
+          ? `<span class="btn btn--ghost btn--sm" style="opacity:.5;cursor:not-allowed">Retired · tribute</span>`
+          : `<a class="btn btn--primary btn--sm" href="${c.bloglink}">Read the build log ›</a>`}
+      </div>
+    </article>`;
+  }).join("");
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+id: "00001"
+type: requirement
+title: "Modernize jeffgoji.com (V2): enthusiast-focused redesign, image-loading performance overhaul, and a self-documenting What's New page"
+state: resolved
+parent: null
+iteration: null
+area: null
+assigned_to: null
+tags:
+  - AI
+  - strap:requirement
+links:
+  - target: "00002"
+    type: related
+created_at: 2026-08-01T16:25:00Z
+created_by: req-lead
+updated_at: 2026-08-01T16:50:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-01T16:50:00Z
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | req-lead                    |
+  | Authored At  | 2026-08-01T16:25:00Z        |
+  | Completed By | dev-lead (CPO-approved)     |
+  | Completed At | 2026-08-01T16:50:00Z        |
+
+  # Modernize jeffgoji.com (V2): enthusiast-focused redesign, image-loading performance overhaul, and a self-documenting What's New page
+
+  ## Problem Statement
+
+  jeffgoji.com is a single-author car-enthusiast site (Miata builds, C8, autocross, tuning/suspension articles, photo galleries) whose current presentation and delivery undercut its own content. Three concrete pains:
+
+  1. **Dated, generic presentation.** The site is a stock React-Bootstrap SPA leaning on default Bootstrap dark-navbar chrome and three overlapping/uncoordinated styling systems (Bootstrap utilities + a separately-compiled custom SCSS + a legacy `style.css` + scattered inline styles). The look reads as a template, not as an enthusiast destination. Car enthusiasts — a visually-driven, brand-literate audience — land, don't feel "this is for me," and bounce instead of exploring the deep catalog of builds and galleries that already exists.
+  2. **Heavy, unoptimized image delivery.** The repo carries ~1 GB of source imagery (992 MB / 457 files in `src/assets/images`, plus 71 MB in `public/images`; ~500 raw JPG/PNG total). Delivery patterns are inconsistent: galleries are wired three different ways, a build-time `sharp` webp pipeline exists but only one of two configured galleries consumes it, one gallery still does runtime canvas thumbnailing, and the OG/social preview points at a full-resolution multi-MB JPG. Loads are slow — worst on the gallery pages that are the showcase, and worst on mobile. A build de-optimization (`target:'es2015'`, a vestige of an abandoned prerender attempt) further inflates the shipped bundle.
+  3. **The improvement work will be invisible.** The owner wants the V2 effort — done via the STRAP agent pipeline — to be legible to visitors: what changed, why, and how it made the site better/faster. Today there is no surface that tells that story; the work would ship silently.
+
+  ## Business Justification
+
+  This is a personal brand + ad-supported property; its value is attention and credibility, not transactions.
+
+  - **Cost of inaction (engagement):** a dated first impression and slow gallery loads cause enthusiasts to bounce before reaching the content that builds following and repeat visits. Every bounce is lost dwell time, lost exploration, lost credibility with a discerning audience.
+  - **Cost of inaction (revenue):** Google AdSense is already wired (global script + account meta present), though all slots are currently inert. Ad revenue is a direct function of pageviews x dwell x session depth. Slow, unengaging pages suppress all three, and poor Core Web Vitals can also depress search ranking (the primary discovery channel), compounding the loss.
+  - **Cost of inaction (technical drift):** ~1 GB of unoptimized assets and multiple redundant image/styling systems raise build fragility and storage/CDN cost and make every future change slower.
+  - **Value of solving:** a modern, enthusiast-native design plus fast image delivery should lift dwell time, pages-per-session, and return visits — the exact levers that grow both audience and (when slots are re-enabled) ad yield. The What's New page additionally converts the redesign itself into shareable, trust-building content.
+
+  Business-level measures of success: increased engagement (dwell / pages-per-session / return rate), improved Core Web Vitals on showcase pages, and a credible public artifact documenting the upgrade. (Concrete targets in Success Criteria; measurability gated by Q-002/Q-003.)
+
+  ## Success Criteria
+
+  **Goal 1 — modern, enthusiast-attractive look:**
+  - **SC-001:** A cohesive redesigned visual system is applied across ALL primary surfaces (home, garage/car-blogs hub, each build blog, article pages, every gallery, videos, suspension). No primary route remains on the pre-V2 look. (Observable: route-by-route visual audit.)
+  - **SC-002:** Measured engagement improves versus a captured V1 baseline — average session dwell time and pages-per-session each increase. Analytics APPROVED (cookieless, privacy-respecting; e.g., Plausible) and IN scope; a V1 baseline is captured early in V2. Working target: +15% average dwell time and a measurable rise in pages-per-session; final targets confirmed once the baseline lands.
+  - **SC-003:** The redesign is mobile-first and fully responsive across the target breakpoints (~360 / 768 / 1024 / 1440px), visually intact with no horizontal overflow or broken layout on a representative mobile viewport. (Q-007 resolved.)
+
+  **Goal 2 — image-loading performance:**
+  - **SC-004:** Total transferred image weight on the home page and a representative gallery page is reduced by **>= 50%** versus the V1 baseline for the same pages. (Target confirmed via delegated defaults, Q-010.)
+  - **SC-005:** Largest Contentful Paint on the home page and a representative gallery page is **<= 2.5s** on a mid-tier mobile profile. (Confirmed, Q-010.)
+  - **SC-006:** Lighthouse Performance score on those representative pages is **>= 90 desktop and >= 80 mobile**. (Confirmed, Q-010.)
+  - **SC-007:** Across the site, images are delivered with modern-format + appropriately-sized + deferred-below-the-fold loading (observable in markup/network on every image-bearing page); no page ships full-resolution originals where a smaller rendition suffices.
+
+  **Goal 3 — V2 What's New page:**
+  - **SC-008:** A dedicated "V2 What's New" page exists as a reachable in-site route and is a **permanent** item in the primary navigation. Audience: public car enthusiasts + autocross / great-drives fans. Tone: exciting and entertaining (Top Gear / Clarkson style), not a dry changelog. (Q-009 resolved.)
+  - **SC-009:** The page enumerates the V2 changes with, for each, WHY it was made and HOW it improved goal 1 and/or goal 2 — and every claim is traceable to actually-shipped work (no aspirational/unshipped items).
+
+  ## Stakeholders
+
+  - **Product owner / CPO** — the site owner, Jeff "Goji" Anderson-Lester. Final authority on aesthetic direction, scope, content preservation, resolution.
+  - **Visual/UX design** — owns the V2 look-and-feel direction and mockups (goal 1 is design-led).
+  - **Frontend engineering** — owns the client-UI redesign implementation and responsive behavior.
+  - **Performance / build engineering (devops)** — owns image pipeline consolidation and build-perf work (goal 2).
+  - **Content / technical writing** — authors the What's New page from delivered work (goal 3); safeguards existing content.
+  - **Ads / revenue owner** (same person as CPO) — stake in whether/where AdSense is re-enabled within the new design.
+  - **SEO/discovery interest** (owner-held) — Core Web Vitals + existing SEO/OG/JSON-LD metadata must not regress.
+
+  ## Open Questions
+
+  (Owner = CPO unless noted; all raised 2026-08-01.) **STATUS: all Q-001..Q-011 RESOLVED as of 2026-08-01 — resolutions recorded in Refinement History below.**
+  - **Q-001** Aesthetic direction: what does "modern/exciting/enthusiast-attractive" mean concretely — reference sites, mood, dark vs light, editorial vs gritty-motorsport?
+  - **Q-002** Engagement measurement: the site has NO analytics installed. Is adding a privacy-respecting analytics/RUM tool acceptable and in scope, or must goal-1 success be judged qualitatively? SC-002 depends on this.
+  - **Q-003** Baseline: do we have an existing V1 baseline, or must V2 begin by capturing one (perf now; engagement if Q-002 yes)?
+  - **Q-004** Brand must-keeps: which brand elements are sacred vs open — logo, "Goji green"/signature colors, "The Goji Line" tagline, typography?
+  - **Q-005** Content preservation: are ALL existing blogs/galleries/articles retained as-is, or are any retired/merged (e.g., "NA Miata gallery — coming soon" placeholder, orphaned `/totdtrip` route)?
+  - **Q-006** Depth of visual change: full reskin of every surface, or incremental with certain pages untouched? Any page that must NOT change?
+  - **Q-007** Mobile priority + breakpoints: how heavily is mobile weighted vs desktop, and what target breakpoints/devices define "responsive" for SC-003?
+  - **Q-008** AdSense in V2: re-enable the inert ad slots as part of V2? If yes, where — balancing ad density against a clean modern aesthetic? If out of scope, fence it.
+  - **Q-009** What's New page framing: audience (public enthusiasts vs meta/dev-curious), tone, and permanent nav item vs launch-moment feature?
+  - **Q-010** Concrete performance targets: commit to specific numbers (LCP, Lighthouse, image-weight reduction %) or delegate sensible defaults to perf/design leads? Fills _(needs refinement)_ in SC-004/005/006.
+  - **Q-011** Timeline / launch expectation: target date/event, or best-effort?
+
+  ## Existing System Context
+
+  **Routes / pages** (`src/App.jsx:47-68`; IA in `src/components/NavMenu`): Home (composes Intro + Garage + YouTube), Garage/"Car Blogs" hub, four build blogs (NA/MSM/ND/C8), an Articles area (only "Goodbye C8" live; a Tail-of-the-Dragon article import+route commented out), Videos (YouTube embeds), Suspension (technical), galleries via a nested Navbar dropdown. Duplicate gallery route: both `/totdtrip` (orphaned, unlinked) and `/totdgallery` render the same component.
+
+  **Galleries — three unconsolidated wiring patterns:** (a) static Vite-imported JPG array; (b) that array + `_thumbs/chunk.js` + runtime canvas thumbnailing; (c) `fetch()` of a build-generated `manifest.json`. Only (c) consumes the build-time `sharp` pipeline.
+
+  **Image pipeline** (`scripts/build-gallery.mjs`): Node/`sharp`+`fast-glob` build step emitting webp thumbs (320w q70) + display (1600w q82) + copied originals + a manifest into `public/gallery/`. Configures TWO galleries (`nd-totd2025`, `nd-hillcountry`) but only `nd-totd2025` is rendered from built output — `nd-hillcountry` is built yet ignored by its component. Runs as `gallery:build` before `vite build`.
+
+  **Image assets:** ~1 GB raw imagery — `src/assets/images` = 992 MB / 457 files; `public/images` = 71 MB / 46 files; ~500 raw JPG/PNG repo-wide. Blog `picture` paths are root-relative without a leading slash, served from `public/images/`.
+
+  **Content model (JSON-as-CMS):** blog posts are arrays in `src/assets/Data/{naBlog,MsmBlog,ndBlog,c8Blog}.json`, fields `id/date/mileage/picture/cost/entry`; `entry` is markdown rendered client-side by `react-markdown` + `remark-gfm` with custom `p/img/a` renderers; client-side pagination (sort by `id` desc, 3/page). The four blog components are near-identical.
+
+  **Styling — three overlapping systems:** Bootstrap 5.3 utilities (via React-Bootstrap 2.10) + custom SCSS compiled through a separate `<script>` tag + legacy `src/assets/css/style.css` (`App.jsx:34`) + scattered inline styles. The SCSS `$theme-colors` override is ineffective (Bootstrap imported before the map is defined).
+
+  **Head / SEO / social** (`index.html`): full SEO + Open Graph + Twitter Card + JSON-LD Blog schema present; canonical set; a hidden `<nav>` lists routes for crawlers. og:image and twitter:image point at a full-resolution multi-MB NA-Miata JPG.
+
+  **Ads:** global AdSense script + account meta present; an `AdSenseSlot` component exists but every call site is commented out and its prop/env contract is mismatched (component reads `VITE_AD_*` env; commented call sites pass props). Fully inert.
+
+  **Analytics:** NONE. No GA/gtag/GTM/Plausible/Fathom anywhere in the app. Directly relevant to measuring goal 1.
+
+  **Dead/vestigial (V2-adjacent):** `src/entry-ssr.jsx` (abandoned SSG entry — missing `vite-react-ssg` dep, wrong paths, stale routes) + residue (an `Object.hasOwn` polyfill, a `custom-render-ready` dispatch at `App.jsx:38-40`, `vite.config.js` forcing `target:'es2015'`). Unreferenced `components/Footer/`, misplaced gallery components under the assets tree, `nd-hillcountry` relying on the Vite-5-removed `import.meta.globEager`. Node version unpinned; `sharp@0.34` needs Node >=18.17.
+
+  **Stack/deploy:** React 18.2 + Vite 4.4 (JSX, no TS), React Router v6 single BrowserRouter, client-only SPA, Netlify static hosting (`npm run build` = gallery build -> vite build -> `dist/`; SPA fallback via `public/_redirects`; gallery cache headers in `public/_headers`). No backend, DB, auth, forms, or user input.
+
+  ## Scope
+
+  ### In Scope
+  - **Goal 1:** modern, enthusiast-attractive visual/UX redesign across existing surfaces, responsive across defined breakpoints.
+  - **Goal 2:** image-loading performance — optimized delivery (modern formats, appropriate sizing, deferred loading), consolidating toward the existing build-time pipeline, removing delivery-side de-optimizations, plus associated build-perf cleanup where it serves loading performance.
+  - **Goal 3:** a new in-site "V2 What's New" page authored from actually-delivered V2 work.
+  - Reconciling the overlapping styling systems only insofar as goal 1 requires a coherent visual foundation.
+  - **Analytics (approved):** add a lightweight, cookieless, privacy-respecting analytics/RUM tool (e.g., Plausible) to measure engagement (dwell, pages-per-session), and capture a V1 baseline early so improvement is provable.
+  - **Design language (confirmed):** dark motorsport-editorial — black + red core palette continuing the current theme (current anchors: red `#ff0000`, black, white text), refined toward a premium red; full "new everything" redesign (new logo/layout/components) within that palette.
+  - **Content (confirmed):** ALL existing blogs, galleries, and articles are retained and re-presented in the new design. Clean up dead bits during the redesign — the orphaned `/totdtrip` route and the "coming soon" gallery placeholder. (Q-005 resolved.)
+
+  ### Out of Scope
+  (Fence to prevent creep; revisit only on explicit CPO change.)
+  - Backend, database, CMS migration, or moving off JSON-as-CMS.
+  - Authentication, accounts, comments, e-commerce, or any user-input/forms feature.
+  - Authoring NEW blog/article/gallery content (existing content is preserved and re-presented, not rewritten). What's New page copy is the sole new content.
+  - Reviving the abandoned SSR/SSG layer — cleanup of its residue is in scope; rebuilding prerendering is not, unless CPO decides otherwise.
+  - Migrating off the React 18 + Vite + Netlify stack.
+  - Re-enabling/monetizing AdSense — RESOLVED 2026-08-01: OUT of V2 (ad slots stay off). Constraint: the redesign must NOT break the existing AdSense wiring — keep it functional-but-inert for a possible later flip. (Q-008 resolved.)
+  - Adding analytics — RESOLVED 2026-08-01: APPROVED and moved IN scope (cookieless / privacy-respecting). No longer deferred.
+
+  ## Constraints
+  - Stack stays: React 18 + Vite + Netlify static hosting; no backend. (CPO-stated.)
+  - Git workflow: all work on feature/task branches off `main`; never commit to `main` directly; changes land via reviewed PR. (CPO preference.)
+  - Content preservation: existing content + JSON-as-CMS model + markdown-only render path preserved; do not introduce raw-HTML rendering without sanitization (standing security constraint).
+  - Do not regress existing SEO/OG/Twitter/JSON-LD metadata or the SPA crawl setup.
+  - Keep AdSense wiring functional/non-breaking even while slots stay inert (re-enable only if Q-008 approves).
+  - Build integrity: `sharp` is a native binary and the most fragile build link; Node must be pinned (`sharp@0.34` needs Node >=18.17). CI/CD is Netlify's own per-push build — do NOT add GitHub Actions.
+  - Work-tracking is local strap-agile (YAML work items versioned in-repo); no remote host/credentials.
+  - Single-project, single Netlify deploy target; umbrella-level branch protection on `main` (reviewed PRs) is the only relevant gate.
+
+  ## Refinement History
+  - 2026-08-01 — CREATED via /new-requirement. Authored initial V2 Requirement from CPO raw input (three goals: modern enthusiast redesign, image-loading performance, "V2 What's New" page). Surveyed the codebase to populate Existing System Context. Raised Q-001..Q-011; most critical are Q-001 (aesthetic direction) and Q-002/Q-003 (analytics + baseline). SC-002/004/005/006 carry _(needs refinement)_ pending Q-003/Q-010. — req-lead
+  - 2026-08-01 — REFINED (CPO answers, pass 1). Q-001 RESOLVED: design language = dark motorsport-editorial, black + red core palette continuing the current theme (anchors red `#ff0000` + black + white), refined toward a premium red; "new everything" full redesign. Q-002 RESOLVED: analytics APPROVED (cookieless / privacy-respecting) and moved IN scope. Q-003 RESOLVED (approach): capture a V1 baseline early (perf now; engagement once analytics lands). Q-004 RESOLVED: new logo / layout / components; only the red+black palette family is preserved. Q-006 RESOLVED: full reskin of every surface ("new everything"). Q-010 RESOLVED (delegated defaults): SC-004 >=50% image-weight reduction, SC-005 LCP <=2.5s mobile, SC-006 Lighthouse >=90 desktop / >=80 mobile. Still open: Q-005 (content retirement), Q-007 (mobile breakpoints), Q-008 (AdSense re-enable), Q-009 (What's New audience/permanence), Q-011 (timeline). — dev-lead
+  - 2026-08-01 — REFINED (CPO answers, pass 2) + READY. Q-005 RESOLVED: keep all content; clean up dead bits (orphaned `/totdtrip`, "coming soon" placeholder). Q-007 RESOLVED: mobile-first, breakpoints ~360/768/1024/1440. Q-008 RESOLVED: AdSense stays OUT of V2 (slots off; redesign must not break wiring). Q-009 RESOLVED: What's New page = permanent nav item; audience = public car enthusiasts + autocross/great-drives fans; tone = exciting/entertaining, Top Gear (Clarkson) style. Q-011 RESOLVED: best-effort, no deadline. ALL open questions now resolved; Quality Checklist gates met — Requirement is spec-ready. — dev-lead
+comments:
+  - id: c1
+    author: req-lead
+    timestamp: 2026-08-01T16:25:00Z
+    body: "[STRAP/agent:req-lead] Authored from /new-requirement. Initial state: new. Probe questions surfaced: 11 (Q-001..Q-011)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T16:35:00Z
+    body: "[STRAP/agent:dev-lead] Refinement pass 1 (CPO). Resolved Q-001, Q-002, Q-003, Q-004, Q-006, Q-010. Design language: dark motorsport-editorial, black + red. Analytics approved. Perf targets set (>=50% image weight, LCP <=2.5s, Lighthouse >=90/>=80). Remaining open: Q-005, Q-007, Q-008, Q-009, Q-011."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-01T16:50:00Z
+    body: "[STRAP/agent:dev-lead] Refinement pass 2 complete; all Q-001..Q-011 resolved. State new -> resolved (Quality Checklist gates met, CPO-approved). Proceeding to /create-spec."

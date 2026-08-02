@@ -1,0 +1,44 @@
+id: "00031"
+type: task
+title: "Poster-facade video grid (click-to-load, replacing eager iframes)"
+state: new
+parent: "00026"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 5
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Poster-facade video grid (click-to-load, replacing eager iframes)
+
+  ## Description
+  Replace `YouTube/index.jsx` eager iframes with a data-driven `<VideoGrid>`/`<VideoCard>`: a `videos[]` array (real 3 ids + net-new `meta`), poster image + play button, click swaps facade → `youtube.com/embed/<id>` iframe. Serves the Home videos section + the `/youtube` route (adopted delta).
+
+  ## Linked Story
+  **Story:** 00026
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+  ## Implementation guidance
+  Real ids `UySrXUfHA_k / Q2B8mA3vgP0 / XVjs7LRCBak`. Mockup home.html video grid. No iframe in DOM until click (perf, AC-010 rollup). Do not introduce raw HTML.
+  ## Dependencies
+  Feature A.
+  ## Definition of Done
+  Renders N posters; NO iframe/network request before click; click mounts iframe with correct src/id; no dangerouslySetInnerHTML. Tests authored.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

@@ -1,0 +1,44 @@
+id: "00039"
+type: task
+title: "/galleries hub UI + set-switcher + thumbnail grid"
+state: new
+parent: "00029"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 5
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # /galleries hub UI + set-switcher + thumbnail grid
+
+  ## Description
+  Build `<GalleryHub>`: header + `.select` "Choose set" (sets slug→label config), a `.gallery-grid` of `.thumb`/`.media--editorial` with `.thumb__idx` and `loading="lazy"`. Fetches the selected set's `manifest.json`. Handles loading / empty / missing states (empty manifest items model the missing state).
+
+  ## Linked Story
+  **Story:** 00029
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+  ## Implementation guidance
+  Mockup gallery.html; data via `fetch('/gallery/<slug>/manifest.json')` (the TOTD pattern is the template). Sets list = small NET-NEW config. Place `<GalleryHub>` under `src/components/common/`.
+  ## Dependencies
+  Feature A. Feature C emits the per-slug manifests (renders whatever exists).
+  ## Definition of Done
+  `/galleries` renders the V2 hub responsive; switcher lists sets; selecting a set renders its thumbs; loading/empty states render. Tests authored.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

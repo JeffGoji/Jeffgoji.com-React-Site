@@ -1,0 +1,51 @@
+id: "00015"
+type: task
+title: "Self-host Archivo / Inter / Space Mono; author _fonts.scss; drop the Google @import"
+state: new
+parent: "00008"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00012"
+    type: predecessor
+original_estimate: 4
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:10:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Self-host Archivo / Inter / Space Mono; author _fonts.scss; drop the Google @import
+
+  ## Description
+  Vendor the three OFL webfonts as local woff2 under `src/assets/fonts/` at the weights the mockups use (Archivo 400/600/700/800/900 + italic 800/900; Inter 400/500/600; Space Mono 400/700), create `src/scss/_fonts.scss` with an `@font-face` per face (`font-display: swap`, correct weight/style, `format('woff2')`), and remove the render-blocking Google Fonts `@import` at `styles.scss:5`. No `<link>` exists in index.html, so this fully de-nets the fonts.
+
+  ## Linked Story
+  **Story:** 00008
+
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+
+  ## Implementation guidance
+  All three are SIL OFL (redistributable). Subset to latin(+latin-ext) to keep bytes low (goal-2). Prefer variable-font woff2 for Archivo/Inter if fewer bytes than static cuts. Reference via Vite-friendly asset URLs. The `@import "fonts"` placement in the assembled styles.scss is ST-3's wiring.
+
+  ## Dependencies
+  Predecessor: 00012 (family names must match `--font-display/body/mono`).
+
+  ## Definition of Done
+  `_fonts.scss` compiles; a probe shows Archivo/Inter/Space Mono rendering from local files with ZERO requests to fonts.googleapis.com/fonts.gstatic.com; the old `@import url("…Bangers…")` line is deleted; all listed weights/italics resolve.
+
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

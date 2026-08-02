@@ -1,0 +1,51 @@
+id: "00013"
+type: task
+title: "Author Sass color vars + Bootstrap $theme-colors override in _theme.scss"
+state: new
+parent: "00007"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00012"
+    type: predecessor
+original_estimate: 4
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:10:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Author Sass color vars + Bootstrap $theme-colors override in _theme.scss
+
+  ## Description
+  Create `src/scss/_theme.scss` declaring the V2 palette as Sass vars (`$goji-red: #E10600`, ink + text ramp) and a `$theme-colors` map mapping Bootstrap's slots to the V2 palette (`primary`→`$goji-red`, `dark`/body-bg→charcoal, `danger`→`$goji-red`), replacing and deleting the retired `$primary-0..4` blues + `#ff0000` at `styles.scss:11-26`. The partial must be authorable-before-Bootstrap (defines the map + var overrides Bootstrap reads, with no dependency on Bootstrap being imported first). Document the ordering contract at the top.
+
+  ## Linked Story
+  **Story:** 00007
+
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+
+  ## Implementation guidance
+  Bootstrap 5.3 merges `$theme-colors` via `map-merge` at import time, so the map must exist beforehand — this is the `styles.scss:2` root cause. Do NOT edit styles.scss's import order here (that's ST-3/00017); deliver the correctly-authored partial + the written ordering contract.
+
+  ## Dependencies
+  Predecessor: 00012 (references the palette established as tokens).
+
+  ## Definition of Done
+  `_theme.scss` compiles standalone; a probe importing `_theme` then Bootstrap emits `.btn-primary`/`.bg-primary` with `#E10600` (proves the override is effective when ordered correctly); the retired blue `$primary-0..4` vars appear nowhere.
+
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

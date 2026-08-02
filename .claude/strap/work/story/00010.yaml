@@ -1,0 +1,55 @@
+id: "00010"
+type: story
+title: "Rebuild NavMenu + Header to the V2 shell"
+state: new
+parent: "00003"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links:
+  - target: "00009"
+    type: predecessor
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:10:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Rebuild NavMenu + Header to the V2 shell
+
+  ## Description
+  Port the mockup `renderShell()` navigation verbatim into React-Bootstrap: a sticky blur navbar with the new SVG logo, red-underline active state, the permanent red "What's New" nav pill, and a redesigned Header — dropping the Bootstrap `bg="dark"` default chrome and the "NA Miata (coming soon)" placeholder, and fixing the duplicate DOM ids.
+
+  ## Linked Feature
+  **Feature:** 00003
+
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P2 — Shell / Navigation / Footer redesign
+
+  ## Acceptance Criteria subset
+  **AC-002** (new logo, premium black+red palette, coming-soon removed); contributes to **AC-005** (navbar collapses to mobile menu) and **AC-014** (permanent What's New nav pill; route existence owned by Feature D).
+
+  ## Implementation notes
+  Mockup contract: `mockups/spec-00002/assets/app.js` `renderShell()` + `NAV_ITEMS`, `app.css:65-119,563-575`, `logo.svg`. Real files: `src/components/NavMenu/index.jsx` (drop `bg="dark"` :10, `logo.gif` import :5, `#home` Brand :12, coming-soon :26, duplicate DOM ids :22,25,28,36,45,54), `src/components/Header/index.jsx`. Keep React-Bootstrap `Navbar.Collapse`/`Toggle` for the mobile menu (do NOT hand-roll the mockup's vanilla toggle).
+
+  ## Dependencies
+  **Depends on ST-3 (00009)** for the reconciled tokens and **ST-2 (00008)** for `logo.svg`.
+
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 4 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:10:00Z
+    body: "[STRAP/agent:dev-lead] Story created via /decompose-feature 00003 (P2, frontend-engineer). 4 Tasks: 00019-00022."

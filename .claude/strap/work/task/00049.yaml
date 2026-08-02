@@ -1,0 +1,44 @@
+id: "00049"
+type: task
+title: "Add cookieless analytics script to index.html head"
+state: new
+parent: "00043"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 3
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:15:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Add cookieless analytics script to index.html head
+
+  ## Description
+  Insert a single generic cookieless analytics script tag (src + data-domain placeholder for the SQ-001-picked tool) into `index.html` head so it loads site-wide. Do NOT touch/reorder any existing tag: canonical, description/keywords/author/robots, OG (`og:*`), Twitter (`twitter:*`), JSON-LD, `google-adsense-account` meta (:9), or the global adsbygoogle script (:76-80).
+
+  ## Linked Story
+  **Story:** 00043
+  ## Original Estimate
+  **Hours (senior-developer):** 3
+  ## Implementation guidance
+  Cookieless attribute set only; no cookie/localStorage write. Leave AdSense global script intact-but-inert (AC-017). Coordinate the single head edit with Story 00042 (which also edits index.html).
+  ## Dependencies
+  SQ-001 tool pick (Plausible/Umami/Fathom).
+  ## Definition of Done
+  Analytics `<script>` present in head; all pre-existing meta/JSON-LD/AdSense tags byte-unchanged; no cookie/localStorage write introduced. AC-003.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

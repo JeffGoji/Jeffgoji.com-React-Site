@@ -1,0 +1,44 @@
+id: "00064"
+type: task
+title: "Register /whats-new route and scaffold the WhatsNew page shell"
+state: new
+parent: "00061"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 3
+created_at: 2026-08-01T20:00:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:00:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T20:00:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Register /whats-new route and scaffold the WhatsNew page shell
+
+  ## Description
+  Add the `/whats-new` route to `App.jsx` and create `src/components/WhatsNew/index.jsx` porting the whats-new.html top-level structure verbatim (the `<header class="wn-dash">` region + `<main class="section">` changelog region + `.tele-caption` + closing goal-legend), composing the InstrumentCluster + Changelog children (Story 00062) with data as props.
+
+  ## Linked Story
+  **Story:** 00061
+  ## Original Estimate
+  **Hours (senior-developer):** 3
+  ## Implementation guidance
+  Insert the route in `App.jsx:47-68` + import alongside the existing page imports. Do NOT port mockup nav/footer placeholders (Feature A owns the shell). Delegate the clusters to children.
+  ## Dependencies
+  Feature A shell rendered around routes.
+  ## Definition of Done
+  `/whats-new` renders both cluster regions; `npm run build` succeeds; no console errors; Feature A's nav pill resolves here.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

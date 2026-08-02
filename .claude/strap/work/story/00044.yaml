@@ -1,0 +1,50 @@
+id: "00044"
+type: story
+title: "Image-pipeline overhaul: consolidate galleries onto sharp->webp + manifests (Phase 3)"
+state: new
+parent: "00005"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links:
+  - target: "00042"
+    type: predecessor
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:45:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Image-pipeline overhaul: consolidate galleries onto sharp->webp + manifests (Phase 3)
+
+  ## Description
+  Consolidate the three gallery-wiring patterns onto the single `scripts/build-gallery.mjs` sharp→webp pipeline: generalize it to emit a per-slug `manifest.json` for EVERY gallery (today only `nd-totd2025` is consumed); retire pattern-a static Vite-import arrays (`images.js`) and pattern-b runtime canvas thumbnailing (`_thumbs/thumbs.js`); enhance the manifest with per-image `thumbnailAlt`+`label` (Wiring-Guide mismatch); re-encode heavy source assets (NC 2-9MB, 5 rotating-hero srcset sets, confirm the real in-repo TOTD frames flow through). These manifests are the data contract Feature B Story 00029 consumes.
+
+  ## Linked Feature
+  **Feature:** 00005
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P4 — Image-loading performance overhaul (overhaul slice)
+  ## Acceptance Criteria subset
+  AC-009 (consolidate 3 patterns), AC-006/AC-007/AC-008 (measured vs C1a baseline), AC-010 (build side — emit webp renditions).
+  ## Implementation notes
+  Real files: `scripts/build-gallery.mjs` (GALLERIES :33-44, processOne :53-90), `src/components/Gallery/_thumbs/{thumbs.js,chunk.js}` (keep chunk.js), the per-gallery `images.js`/`index.jsx` under `Gallery/{NC/*,NB/HillCountry,C8/autocross,ND/HillCountry}`, source dirs `src/assets/images/{nd/TOTD2025,nd/HillCountry,nc/15east}`. CORRECTION: real TOTD frames EXIST in-repo (nd/TOTD2025) — run the pipeline against them, don't source new. Fixes the half-consumed `nd-hillcountry` waste.
+  ## Dependencies
+  **Predecessor: Story 00042** (baseline first). SEAMS to Feature B Story 00029 (galleries hub) + Feature B blog-webp repoint — manifests FEED them; don't orphan retired components (coordinate landing).
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 4 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:45:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00005 (P4 build-side, devops-lead). Tasks 00053-00056."

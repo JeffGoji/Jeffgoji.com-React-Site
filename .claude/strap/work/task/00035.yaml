@@ -1,0 +1,46 @@
+id: "00035"
+type: task
+title: "Wire the 4 blog routes onto BlogList"
+state: new
+parent: "00027"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00034"
+    type: predecessor
+original_estimate: 4
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Wire the 4 blog routes onto BlogList
+
+  ## Description
+  Replace the `blog/{Miyoshi,Kiryu,Kasumi,Panda}/index.jsx` bodies with `<BlogList>` + per-car banner/title/chips config; repoint the blog JSON `picture` fields to the webp renditions (from Feature C).
+
+  ## Linked Story
+  **Story:** 00027
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+  ## Implementation guidance
+  Each of the 4 blog components becomes a thin `<BlogList data={...Blog.json} .../>`. Blog `picture` webp repoint depends on Feature C (AC-010) — until then, existing paths render.
+  ## Dependencies
+  Predecessor: 00034 (BlogList). Blog webp ← Feature C (soft).
+  ## Definition of Done
+  All 4 blog routes render the V2 build-log through `<BlogList>`; content intact (AC-016); per-source data-integrity (unique numeric id, required fields). Tests authored.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

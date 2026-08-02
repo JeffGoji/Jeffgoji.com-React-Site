@@ -25,7 +25,9 @@ What it does NOT capture: anything derivable from the current code, git history,
 
 ## Project shape / in-flight work
 
-- [Source-control wire-up in progress](dev-lead/connect-code-repo-inflight.md) -- GitHub repo JeffGoji/Jeffgoji.com-React-Site, gh-CLI auth pending install+restart; local dir is a snapshot not a clone (needs reconcile); CPO: never commit to main.
+- [V2 initiative -- site redesign](dev-lead/v2-initiative.md) -- ACTIVE project. 3 goals: (1) modern enthusiast-attractive look, (2) image/perf optimization, (3) "V2 What's New" summary page. Full pipeline w/ designer-led mockups. Kicked off 2026-08-01.
+
+- [Source control connected](dev-lead/connect-code-repo-inflight.md) -- GitHub JeffGoji/Jeffgoji.com-React-Site via gh CLI; local reconciled to a clone on branch feature/strap-onboarding (STRAP install committed, NOT pushed); `gh` needs full path until Claude Code restart. CPO: never commit to main.
 
 ## Operating learnings
 

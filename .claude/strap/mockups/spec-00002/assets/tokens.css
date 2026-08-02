@@ -1,0 +1,144 @@
+/* ============================================================================
+   jeffgoji.com V2 — Design Tokens (SOURCE OF TRUTH)
+   Dark motorsport-editorial. Softer charcoal + premium racing red.
+   ---------------------------------------------------------------------------
+   "SOFTER DARK" (reading-comfort revision, 2026-08-01):
+   Body backgrounds lifted OFF pure black onto a true charcoal canvas
+   (#141418) and body text softened to a warm off-white (#D8D4CD, ~12:1 on
+   canvas) instead of near-pure-white on near-pure-black (~21:1). Headings
+   stay brighter (#F1EEE9). Long-form prose sits on an elevated charcoal
+   reading panel (--color-reading = #202027). Black+red identity preserved;
+   brand red #E10600 unchanged. These values SUPERSEDE the earlier near-black
+   ramp (#050506 canvas / #F6F6F4 text). See the ink + text ramps below.
+   ---------------------------------------------------------------------------
+   PORT NOTE (mockup-as-contract):
+   These CSS custom properties are the canonical design tokens. In production
+   they map 1:1 into src/scss/styles.scss as Sass variables + a Bootstrap
+   $theme-colors override. IMPORTANT: the current SCSS imports Bootstrap BEFORE
+   defining the color map (styles.scss:2) which makes the override ineffective.
+   When porting: declare these variables and the $theme-colors map BEFORE
+   @import "bootstrap/scss/bootstrap"; so the theme actually takes effect.
+   ============================================================================ */
+
+:root {
+  /* --- CORE PALETTE ------------------------------------------------------- */
+  /* Premium racing red (F1/Ferrari-adjacent), refined away from harsh #ff0000 */
+  --goji-red:        #E10600;   /* primary brand red — CTAs, accents, active nav */
+  --goji-red-bright: #FF1A0E;   /* hover/glow highlight */
+  --goji-red-deep:   #B00500;   /* pressed / gradient dark stop */
+  --goji-red-ink:    #3A0705;   /* deep oxblood — section washes on black */
+
+  /* Ink scale — SOFTER DARK charcoal ramp (lifted off pure black).
+     1000 = deepest chrome (nav/hero/footer wash); 900 = the body canvas. */
+  --ink-1000: #0F0F12;   /* deep chrome — nav / hero / footer wash */
+  --ink-900:  #141418;   /* TRUE CANVAS / body background (charcoal) */
+  --ink-800:  #1A1A1F;   /* raised surface */
+  --ink-700:  #202027;   /* card / reading-panel surface (elevated charcoal) */
+  --ink-600:  #26262E;   /* card elevated / input */
+  --ink-500:  #33333B;   /* hairline borders / dividers */
+  --ink-400:  #45454E;   /* strong border / disabled */
+
+  /* Text on charcoal — warm off-whites, softened for reading comfort.
+     Body ~12:1 (was ~21:1 near-white on near-black). Headings stay brighter. */
+  --text-hi:  #F1EEE9;   /* headings — warm near-white (~16:1 on canvas) */
+  --text-mid: #D8D4CD;   /* body copy — warm off-white (~12:1 on canvas) */
+  --text-lo:  #9C978D;   /* meta, captions, muted (~6:1 on canvas) */
+
+  /* Carbon / metal accents (secondary, sparingly) */
+  --silver:   #C8CACE;   /* chrome/silver highlight */
+  --carbon:   #17171B;   /* carbon-fiber base for texture panels */
+
+  /* Semantic mapping */
+  --color-bg:            var(--ink-900);   /* charcoal canvas (was --ink-1000) */
+  --color-surface:       var(--ink-700);
+  --color-surface-2:     var(--ink-600);
+  --color-reading:       var(--ink-700);   /* long-form prose panel (elevated charcoal) */
+  --color-border:        var(--ink-500);
+  --color-text:          var(--text-mid);
+  --color-heading:       var(--text-hi);
+  --color-muted:         var(--text-lo);
+  --color-accent:        var(--goji-red);
+  --color-accent-hover:  var(--goji-red-bright);
+  --color-on-accent:     #FFFFFF;
+
+  /* Status (galleries/blogs states) */
+  --color-success: #22C55E;
+  --color-warning: #F5A524;
+  --color-danger:  var(--goji-red);
+
+  /* --- TYPOGRAPHY --------------------------------------------------------- */
+  /* Display/headings: Archivo (industrial grotesque, heavy weights)          */
+  /* Body: Inter (clean editorial sans)                                        */
+  /* Data/telemetry chips: Space Mono (timing-sheet / spec-sheet feel)        */
+  --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --font-body:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    "Space Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Type scale (fluid, clamp-based) */
+  --fs-hero:   clamp(2.75rem, 8vw, 6.5rem);   /* mega hero headline */
+  --fs-h1:     clamp(2rem, 5vw, 3.5rem);
+  --fs-h2:     clamp(1.6rem, 3.5vw, 2.5rem);
+  --fs-h3:     clamp(1.25rem, 2.4vw, 1.6rem);
+  --fs-h4:     1.125rem;
+  --fs-lead:   clamp(1.05rem, 1.6vw, 1.3rem);
+  --fs-body:   1rem;
+  --fs-read:   1.0625rem;   /* ~17px — long-form prose (blog / article bodies) */
+  --fs-sm:     0.875rem;
+  --fs-xs:     0.75rem;
+
+  --lh-tight:  1.04;
+  --lh-snug:   1.2;
+  --lh-normal: 1.6;
+  --lh-read:   1.7;         /* relaxed leading for reading surfaces */
+
+  --tracking-mega:  -0.02em;   /* tight for big display */
+  --tracking-label:  0.18em;   /* wide for eyebrow/labels */
+
+  /* --- SPACING (8px base) ------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  /* --- RADII -------------------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius:    8px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* --- BORDERS / LINES ---------------------------------------------------- */
+  --hairline: 1px solid var(--color-border);
+  --accent-bar: 3px solid var(--goji-red);
+
+  /* --- SHADOWS / GLOW ----------------------------------------------------- */
+  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.55);
+  --shadow-pop:  0 20px 60px rgba(0, 0, 0, 0.7);
+  --glow-red:    0 0 0 1px rgba(225, 6, 0, 0.4), 0 8px 30px rgba(225, 6, 0, 0.25);
+
+  /* --- LAYOUT ------------------------------------------------------------- */
+  --container-max: 1240px;
+  --container-wide: 1440px;
+  --nav-h: 68px;
+
+  /* --- MOTION ------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 140ms;
+  --dur:      240ms;
+  --dur-slow: 420ms;
+
+  /* --- BREAKPOINTS (documented; used in media queries) -------------------
+     --bp-sm: 360px   phone
+     --bp-md: 768px   tablet / nav collapse boundary
+     --bp-lg: 1024px  small desktop
+     --bp-xl: 1440px  large desktop
+     ---------------------------------------------------------------------- */
+
+  /* --- CHECKERED FLAG PATTERN (reusable race motif) ---------------------- */
+  --checker: repeating-conic-gradient(var(--ink-900) 0% 25%, var(--ink-600) 0% 50%) 50% / 16px 16px;
+}

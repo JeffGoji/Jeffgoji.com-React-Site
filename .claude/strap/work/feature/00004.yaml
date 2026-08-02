@@ -1,0 +1,99 @@
+id: "00004"
+type: feature
+title: "Re-skin every primary surface to the V2 design system (home, garage, blogs, articles, suspension, videos, consolidated galleries hub)"
+state: active
+parent: null
+iteration: null
+area: null
+assigned_to: null
+tags:
+  - AI
+  - strap:feature
+links:
+  - target: "00002"
+    type: related
+  - target: "00003"
+    type: predecessor
+  - target: "00026"
+    type: related
+  - target: "00027"
+    type: related
+  - target: "00028"
+    type: related
+  - target: "00029"
+    type: related
+created_at: 2026-08-01T18:45:00Z
+created_by: spec-lead
+updated_at: 2026-08-01T19:27:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | spec-lead                   |
+  | Authored At  | 2026-08-01T18:45:00Z        |
+  | Completed By | _(set at resolution)_       |
+  | Completed At | _(set at resolution)_       |
+
+  ---
+
+  # Re-skin every primary surface to the V2 design system (home, garage, blogs, articles, suspension, videos, consolidated galleries hub)
+
+  ## Description
+
+  Feature B — the visible redesign of every page body. Home gets the **rotating multi-car hero** (Random-Background-Feature: 5 per-car shots, `useState(()=>heroes[random])` session-stable) + intro + garage preview + the **poster-facade video grid** (click-to-load, replacing 3 eager iframes). Garage becomes the 5-car number-tag hub with a retired-car tribute state. The 4 near-identical blogs re-skin to the car-identity-banner + paginated build-log (3/page, telemetry chips) — optionally collapsed to a data-driven `<BlogList>`. NaMiata, the GoodbyeC8 article, and Suspension (+7 sub-components) adopt the `.post`/`.card`/section-head language. All galleries **consolidate into a single `/galleries` hub with a set-switcher** (adopted delta) — old per-gallery routes redirect in. The `.media--editorial` grade applies to hero/card/thumb/post media.
+
+  ## Linked Spec
+
+  **Spec:** 00002 (`related`)
+
+  ## Constituent Parts assigned
+
+  | Part | Domain | Owner agent type | Summary |
+  |---|---|---|---|
+  | P3 — Per-surface redesign of every route | client-ui | frontend-engineer (+ designer for Tier-1 fidelity) | re-skin Home(=Intro+Garage+YouTube), 4 blogs, NaMiata, GoodbyeC8, Suspension +7 sub-comps, all galleries; the two adopted deltas' UI/routing (galleries→hub+switcher w/ old-route redirects; videos→poster-facade); optional `<BlogList>` collapse |
+
+  ## Acceptance Criteria subset
+
+  - **AC-001:** Every primary route in `App.jsx:47-68` (plus new `/whats-new`) renders under the V2 design system — no surface retains the pre-V2 Bootstrap-default-navbar / `style.css` look. Verified by route-by-route visual audit.
+  - **AC-005:** At viewport widths 360/768/1024/1440, every primary route renders with no horizontal overflow and no broken layout; the navbar collapses to a mobile menu at the mobile breakpoint.
+  - **AC-016:** All existing blogs, the Goodbye-C8 article, all galleries, videos, and suspension content remain reachable and intact; the render path stays `react-markdown`+`remark-gfm` with NO `dangerouslySetInnerHTML`/raw-HTML introduced. _(P8 security cross-cut — validated inside B.)_
+
+  ## Mockup References
+
+  - `.claude/strap/mockups/spec-00002/home.html` — hero→intro→garage-preview→video-grid; `rotateHero` IIFE → React `heroes[]` random-pick-on-mount.
+  - `.claude/strap/mockups/spec-00002/garage.html` — 5-car number-tag hub + retired-car tribute state.
+  - `.claude/strap/mockups/spec-00002/blog.html` — car-identity banner + paginated build log (3/page) + telemetry chips + markdown entries.
+  - `.claude/strap/mockups/spec-00002/gallery.html` — thumbnail grid → lightbox (the hub's set view; mirrors react-image-gallery).
+  - `.claude/strap/mockups/spec-00002/assets/app.css` — component styles incl. `.media--editorial`/`--hero`/`--soft` grade layer.
+  - `.claude/strap/mockups/spec-00002/assets/app.js` — `renderMarkdown()` (→ real react-markdown+remark-gfm), pagination, `mountGallery()` (→ re-skinned react-image-gallery).
+  - `.claude/strap/mockups/spec-00002/assets/mock-data.js` — `MOCK.cars`/`MOCK.blog.*`/`MOCK.videos`/`MOCK.gallery` → real `Cars.json`/`*Blog.json`/YouTube ids/manifest (per Wiring Guide: keep REAL Router `bloglink` paths, retired NC=`/`; net-new `img`/`label`/`tag`; repoint `picture` to webp).
+  - _No dedicated mockup for Suspension/NaMiata/GoodbyeC8 — extend `.post`/`.card`/section-head language (Tier-1 reuse, 0 blocking gaps)._
+
+  ## Out of scope
+
+  Tokens/logo/shell (A). The sharp→webp pipeline consolidation + srcset/sizes generation + OG image + build hygiene (C) — B **renders** the optimized images/manifest C produces; it does not build the pipeline. Analytics (C). What's New content (D). _Seam:_ B builds the galleries-hub UI + set-switcher + old-route redirects; C rewires the underlying gallery data onto the pipeline (AC-009). _Seam:_ B builds the poster-facade video UI/data model; its no-eager-iframe behavior rolls up to AC-010 (C).
+
+  ## Dependencies
+
+  Depends on Feature A (P1 tokens + P5 SCSS foundation + P2 shell). Runs parallel/interleaved with Feature C's perf slice. Must land after C's baseline capture. Blocks Feature D. P8/P9 parallelize (blog data-integrity + pagination tests; markdown-safety assertion).
+
+  ## Quality Checklist
+
+  - [x] Description concrete enough for a senior developer to scope.
+  - [x] Linked Spec 00002 is resolved.
+  - [x] Constituent Parts reference real Spec rows (P3).
+  - [x] Acceptance Criteria use the Spec's stable IDs verbatim.
+  - [x] Out-of-scope populated.
+  - [x] Dependencies explicit (predecessor: Feature 00003).
+  - [x] Mockup References enumerate real files.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T18:45:00Z
+    body: "[STRAP/agent:spec-lead] Feature authored via /generate-features from Spec 00002. State: new. Owns AC-001, AC-005, AC-016 (P3). Predecessor: Feature 00003 (design foundation). Owners: frontend-engineer + designer (active)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T19:27:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /decompose-feature). Decomposed into 4 Stories (00026-00029, by surface cluster: Home / Garage+blogs / Articles+Suspension+NaMiata / Galleries-hub), 12 Tasks (00030-00041), ~54 senior-dev-hours. Shared components under src/components/common/ (CarCard, BlogList, VideoGrid, GalleryHub). Seams to Feature C (webp renditions + gallery-data rewire) flagged on Stories."

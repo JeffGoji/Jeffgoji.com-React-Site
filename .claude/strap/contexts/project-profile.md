@@ -37,7 +37,8 @@ _Single-project install -- no polyrepo sub-repos. Section intentionally empty; t
 ### client-ui
 
 - **Status**: active
-- **Specialists**: frontend-engineer, security-reviewer, test-strategist
+- **Specialists**: frontend-engineer, security-reviewer, test-strategist, designer, tech-writer
+- **Activated additions**: designer + tech-writer activated 2026-08-01 for the V2 initiative (Spec 00002) — designer owns the V2 visual system + mockups; tech-writer owns the "V2 What's New" page content.
 - **Stack**: React 18.2 + Vite 4.4, JSX, React Router v6, React-Bootstrap + Bootstrap 5.3, react-markdown + remark-gfm, react-image-gallery.
 - **Conventions**:
   - Real entry is `src/main.jsx`; `App.jsx` route table (`App.jsx:47-68`) is the source of truth for routes. Ignore/quarantine `src/entry-ssr.jsx` (dead, broken).
@@ -58,7 +59,7 @@ _Single-project install -- no polyrepo sub-repos. Section intentionally empty; t
 - **Source-of-truth**: `netlify.toml`, `public/_redirects`, `public/_headers`, `scripts/build-gallery.mjs`, `vite.config.js`.
 - **Activated**: 2026-08-01 by jeff.lester01
 
-_Dormant (no signal at onboarding; activate later via `/strap-refresh` if the project grows into them): backend-engineer, database-engineer, integration-specialist, designer, ux-test-engineer._
+_Dormant (no signal at onboarding; activate later via `/strap-refresh` if the project grows into them): backend-engineer, database-engineer, integration-specialist, ux-test-engineer._
 
 ## Build and test
 
@@ -69,6 +70,7 @@ _Dormant (no signal at onboarding; activate later via `/strap-refresh` if the pr
 
 ## Conventions
 
+- **Sprint cadence**: 1-week sprints (e.g. `Sprint 2026.08.A`, 2026-08-01 -> 2026-08-08). Pair topology: solo CPO (JeffGoji) + agent execution team. Capacity fallback (iteration_get_capacity unsupported on strap-agile): **6 productive hours/day**, set 2026-08-01.
 - **Language**: JavaScript/JSX only. No TypeScript despite `@types/*` being present.
 - **Content authoring**: blog entries are hand-edited markdown strings inside JSON; `picture` paths are root-relative _without_ a leading slash (e.g. `"images/na/20250130.jpg"`), served from `public/images/`.
 - **Components**: `components/<Name>/index.jsx` folder pattern predominates.
@@ -84,7 +86,11 @@ _Dormant (no signal at onboarding; activate later via `/strap-refresh` if the pr
 
 ## DevOps integration
 
-_To be wired up by `/connect-devops-project`. Work-tracking host, organization, project go here._
+- **Host**: strap-agile (Local, work-item-tracking-as-code). Work items are YAML files under `.claude/strap/work/<type>/<id>.yaml`, versioned in git alongside the code. No remote host, no credentials.
+- **Types**: requirement, spec, feature, story, task, bug, enhancement. Four-state machine (new → active → resolved → closed).
+- **Ids**: monotonic zero-padded (00001…), counter at `.claude/strap/work/.next-id`.
+- Details in `.claude/strap/state/devops-connection.yaml`; schema at `.claude/strap/work/schema.yaml`.
+- Wired 2026-08-01. No capacity model (sprint-planner reads MEMORY.md preferences); PR creation owned by the GitHub code-connection profile.
 
 ## Layers
 

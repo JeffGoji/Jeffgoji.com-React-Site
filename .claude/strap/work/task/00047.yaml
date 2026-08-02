@@ -1,0 +1,44 @@
+id: "00047"
+type: task
+title: "Drop target:'es2015' + remove dead SSR residue"
+state: new
+parent: "00042"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 4
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:15:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Drop target:'es2015' + remove dead SSR residue
+
+  ## Description
+  Remove the `build.target:'es2015'` block in `vite.config.js:6-9` (restore the esbuild default — the SSG it served is dead, so it only ships a larger bundle). Remove the `Object.hasOwn` polyfill (`main.jsx:1-5`) and the `custom-render-ready` dispatch (`App.jsx:38-40`). That event's comment is "preRender snapshot for adSense" — after removal, verify the global AdSense script (`index.html:77-80`) still loads with no console error; AdSense stays present-but-inert.
+
+  ## Linked Story
+  **Story:** 00042
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+  ## Implementation guidance
+  Edits `src/App.jsx` — a surface Feature A shell work also touches; coordinate/sequence to avoid a merge collision. Grep-clean of `custom-render-ready`/`Object.hasOwn`.
+  ## Dependencies
+  None (flag App.jsx co-edit with Feature A shell owner).
+  ## Definition of Done
+  Clean `vite build`; home + a blog + `nd-totd2025` render unbroken; no `custom-render-ready`/`Object.hasOwn` references remain; AdSense global script present + non-erroring (AC-017 touchpoint). AC-012.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

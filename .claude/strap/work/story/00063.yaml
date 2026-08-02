@@ -1,0 +1,50 @@
+id: "00063"
+type: story
+title: "Author the What's New content: Clarkson-voice entries + telemetry tiles (traceable to shipped work)"
+state: new
+parent: "00006"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links:
+  - target: "00061"
+    type: predecessor
+created_at: 2026-08-01T20:00:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:00:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T20:00:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Author the What's New content: Clarkson-voice entries + telemetry tiles (traceable to shipped work)
+
+  ## Description
+  Author the `whatsNew[]` entries (exciting, entertaining Top Gear / Jeremy Clarkson voice) and the `metrics[]` telemetry tiles, writing the VALUES into the data module Story 00061 scaffolds. Each entry: `{ver,tag,goal,title,body,why,how}` — a WHY naming the goal it served (GOAL 1 look / GOAL 2 performance) and a HOW naming the specific shipped change. Metric tiles carry the perf numbers with TARGET-vs-SHIPPED honesty framing. **Every claim must trace to actually-shipped A/B/C work — zero aspirational items (AC-015).**
+
+  ## Linked Feature
+  **Feature:** 00006
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P7 — "V2 What's New" page (route + content)
+  ## Acceptance Criteria subset
+  AC-015 (primary — enumerates V2 changes, WHY+HOW per entry, traceable-to-shipped, Clarkson tone), supports AC-014.
+  ## Implementation notes
+  Writes VALUES into `src/components/WhatsNew/data/{whatsNew.js,metrics.js}` (frontend owns the shape; tech-writer owns the values — one shared source file, not two). Coverage map (~5-6 entries, one per shipped change): the redesign (A: palette/logo/token-system), navigation (A: nav/footer/cleanup + the What's New page itself folded here), rotating hero + garage (B), imagery/perf (C: webp/srcset/lazy/OG), galleries hub (B+C), under-the-bonnet (C+B: es2015 drop/Node pin/analytics/video facade). Voice bar = the mockup's 4 authored exemplars in mock-data.js. Metric tiles per mockup: image payload -50%, LCP 2.5s, Lighthouse 90+, Shipped 100%; perf tiles TARGET until Feature C measures, then SHIPPED.
+  ## Dependencies
+  **Predecessor: Story 00061** (data-module scaffold to write into). Authored LAST — blocked-by Features 00003/00004/00005 SHIPPED (AC-015 traceability). The TARGET→SHIPPED flip (task 00073) additionally gates on Feature C's perf slice (Stories 00044/00045) publishing measured numbers.
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 4 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T20:00:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00006 (P7 content, tech-writer). Tasks 00070-00073. Merged tech-writer's 2 content stories into one 4-task story."

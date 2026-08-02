@@ -1,0 +1,46 @@
+id: "00073"
+type: task
+title: "Flip TARGET->SHIPPED once Feature C's measured numbers land"
+state: new
+parent: "00063"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00072"
+    type: predecessor
+original_estimate: 3
+created_at: 2026-08-01T20:00:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:00:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T20:00:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Flip TARGET->SHIPPED once Feature C's measured numbers land
+
+  ## Description
+  Reconcile the perf tiles to Feature C's real measured image-weight reduction, LCP, and Lighthouse numbers — replace the TARGET placeholder values with the shipped measurements and flip `target:false` on any tile whose number was actually met and measured.
+
+  ## Linked Story
+  **Story:** 00063
+  ## Original Estimate
+  **Hours (senior-developer):** 3
+  ## Implementation guidance
+  Source the measured numbers from Feature C's perf slice (Stories 00044/00045 + the V1-vs-V2 baseline under `.claude/strap/project-docs/`). For each perf tile: swap `value` to the measured figure, keep the delta honest against the V1 baseline, flip `target:true`→`false` ONLY if the number was met. If a target was NOT met, leave it TARGET and reword the note honestly — AC-015 forbids claiming a SHIPPED number that wasn't hit. This may land slightly after the rest of D — do NOT block the page's launch on it (tiles are honest as TARGET until then).
+  ## Dependencies
+  Predecessor: 00072. Blocked-by Feature 00005 perf slice (Stories 00044/00045) publishing measured numbers.
+  ## Definition of Done
+  Perf tiles carry measured values; `target` flags reflect actual met/not-met; no tile claims SHIPPED for an unmeasured/unmet number; delta reads honestly vs the recorded V1 baseline.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

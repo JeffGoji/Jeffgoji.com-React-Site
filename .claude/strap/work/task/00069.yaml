@@ -1,0 +1,46 @@
+id: "00069"
+type: task
+title: "Wire TARGET-vs-SHIPPED metric badges to Feature C perf outputs"
+state: new
+parent: "00062"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00067"
+    type: predecessor
+original_estimate: 3
+created_at: 2026-08-01T20:00:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:00:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T20:00:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Wire TARGET-vs-SHIPPED metric badges to Feature C perf outputs
+
+  ## Description
+  Connect the `metrics.js` values (image-payload %, LCP, Lighthouse, shipped) to Feature C build-time Lighthouse/perf-budget outputs where available, flipping `target`→false (SHIPPED) once real numbers exist; TARGET placeholders remain until then. The render contract from Task 00067 is unchanged (this is data wiring, no new UI).
+
+  ## Linked Story
+  **Story:** 00062
+  ## Original Estimate
+  **Hours (senior-developer):** 3
+  ## Implementation guidance
+  Locate Feature C's emitted perf/Lighthouse artifact (Stories 00044/00045 + the V1 baseline under `.claude/strap/project-docs/`). If C's output isn't yet available, keep `target:true` with TARGET placeholders and document the seam. This is D's only hard cross-feature data dependency — coordinate the artifact path/shape with Feature C via dev-lead. (Overlaps tech-writer task 00073 — the value authoring is tech-writer's, the render/flag wiring is here.)
+  ## Dependencies
+  Predecessor: 00067. Feature C (Lighthouse/perf-budget output) — hard dep; falls back to TARGET.
+  ## Definition of Done
+  Tiles show SHIPPED for any Feature-C-backed figure, TARGET otherwise; the source of each figure documented in `metrics.js`; page renders in both states.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

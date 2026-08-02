@@ -35,7 +35,7 @@ capabilities:
   branch_create:                  supported     # live-probed (write-probe: created ref)
   branch_delete_local:            supported     # git branch -d (once local clone exists)
   branch_delete_remote:           supported     # live-probed (write-probe: deleted ref, verified 404)
-  branch_push:                    supported     # git push via gh-configured helper; NOT yet live-probed (no local clone at wire-up)
+  branch_push:                    supported     # live-probed: pushed feature/strap-onboarding via gh-configured credential helper (gh auth setup-git)
   pull_request_create:            supported     # gh pr create
   pull_request_get:               supported
   pull_request_update:           supported

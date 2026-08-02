@@ -1,0 +1,260 @@
+id: "00002"
+type: spec
+title: "Redesign jeffgoji.com to a dark motorsport-editorial V2: enthusiast-native visual system, consolidated image-loading performance pipeline, and a self-documenting What's New page"
+state: resolved
+parent: null
+iteration: null
+area: null
+assigned_to: null
+tags:
+  - AI
+  - strap:spec
+links:
+  - target: "00001"
+    type: related
+  - target: "00003"
+    type: related
+  - target: "00004"
+    type: related
+  - target: "00005"
+    type: related
+  - target: "00006"
+    type: related
+created_at: 2026-08-01T17:05:00Z
+created_by: spec-lead
+updated_at: 2026-08-01T18:30:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-01T17:20:00Z
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | spec-lead                   |
+  | Authored At  | 2026-08-01T17:05:00Z        |
+  | Completed By | dev-lead (CPO-approved)     |
+  | Completed At | 2026-08-01T17:20:00Z        |
+
+  ---
+
+  # Redesign jeffgoji.com to a dark motorsport-editorial V2: enthusiast-native visual system, consolidated image-loading performance pipeline, and a self-documenting "What's New" page
+
+  ## Overview
+
+  This Spec implements V2 of jeffgoji.com — a full "new everything" redesign of a client-only React 18.2 + Vite 4.4 SPA (React Router v6 flat route table at `src/App.jsx:47-68`; Netlify static hosting; no backend). Three goals: (1) apply a cohesive dark motorsport-editorial visual system (black + red core palette, refined toward a premium red; new logo/layout/components) across every primary surface — home, the four Miata/C8 blogs, articles, suspension, videos, and all galleries; (2) overhaul image delivery — consolidate the site's three unconsolidated gallery-wiring patterns onto the single build-time `sharp->webp` pipeline (`scripts/build-gallery.mjs`), add responsive `srcset`/`sizes` + below-fold `loading="lazy"`, fix the multi-MB OG image, drop the vestigial `target:'es2015'` de-opt, and pin Node — to hit >=50% image-weight reduction, LCP <=2.5s mobile, and Lighthouse >=90/>=80; and (3) ship a permanent "V2 What's New" nav page authored from actually-delivered work in an entertaining Top Gear/Clarkson voice. Analytics (cookieless, e.g. Plausible) is added and a V1 baseline captured early so the engagement + perf gains are provable. All existing content is preserved and re-presented; AdSense stays inert but its wiring is not broken; dead bits (orphaned `/totdtrip`, "coming soon" placeholder) are cleaned up.
+
+  **Source Requirement:** 00001 (`related` link) — RESOLVED 2026-08-01.
+
+  ## Constituent Parts
+
+  | Part | Domain | Owner agent type | Summary | ACs covered |
+  |---|---|---|---|---|
+  | **P1 — Design System & Visual Language** | client-ui | designer *(NOT-YET-ACTIVE)* | Dark motorsport-editorial black+red system: premium-red palette (replacing `#ff0000` + off-brand blues), new logo (replacing `logo.gif`), type scale, component language, responsive tokens. Produces the mockups (via `/create-mockups`) that gate P2/P3. | AC-001, AC-002, AC-005 |
+  | **P2 — Shell / Navigation / Footer redesign** | client-ui | frontend-engineer | Rebuild `NavMenu`, `Header`, render a real `Footer`; add the permanent **What's New** top-level nav item; drop `bg="dark"` chrome; remove "NA Miata (coming soon)" placeholder. | AC-002, AC-005, AC-014 |
+  | **P3 — Per-surface redesign of every route** | client-ui | frontend-engineer | Re-skin all routes: `Home`(=`Intro`+`Garage`+`YouTube`), 4 blogs, `NaMiata`, `GoodbyeC8`, `YouTube`, `Suspension`(+7 sub-comps), all galleries. Optional: collapse the 4 near-identical blogs to a data-driven `<BlogList>`. | AC-001, AC-005, AC-016 |
+  | **P4 — Image-loading performance overhaul** | infrastructure + client-ui | devops-lead + frontend-engineer | Consolidate 3 gallery patterns onto `scripts/build-gallery.mjs`; responsive `srcset`/`sizes`; below-fold lazy-load; fix OG image; drop `es2015` target; remove SSR residue; pin Node. | AC-006..AC-013 |
+  | **P5 — Styling-system reconciliation** | client-ui | frontend-engineer | Collapse the 3 overlapping systems (Bootstrap utils + `scss/styles.scss` via script tag + legacy `assets/css/style.css` + inline) into the new design system; fix the ineffective `$theme-colors` override (import order). | AC-001 (foundation) |
+  | **P6 — Analytics + V1 baseline capture** | client-ui | frontend-engineer *(+ devops-lead for perf baseline)* | Add cookieless analytics (e.g. Plausible); capture V1 engagement + perf baseline BEFORE V2 UI ships so improvement is provable. | AC-003, AC-004 |
+  | **P7 — "V2 What's New" page (route + content)** | client-ui | tech-writer *(NOT-YET-ACTIVE)* + frontend-engineer | New route (`/whats-new`) + component; content enumerating V2 changes with WHY/HOW, Clarkson tone, every claim traceable to shipped work. Authored LAST. | AC-014, AC-015 |
+  | **P8 — Security / regression review** | client-ui | security-reviewer | No XSS/raw-HTML render regression (preserve `react-markdown`+`remark-gfm`, no `dangerouslySetInnerHTML`); SEO/OG/Twitter/JSON-LD preserved; AdSense wiring intact-but-inert. | AC-011, AC-016, AC-017 |
+  | **P9 — Test strategy & coverage** | client-ui | test-strategist | Vitest+RTL+jsdom suite (route-parity guard, blog data-integrity/pagination, `build-gallery.mjs`/`chunk.js` helpers); Lighthouse/perf + responsive audits. | validates all ACs |
+
+  ### Per-part technical depth (seeded from codebase research; deepened in /refine-spec)
+
+  - **P1**: replaces `src/assets/images/logo.gif` (GIF -> SVG); palette source-of-truth today `src/scss/styles.scss:12-17` (`#ff0000` + blues `#475374/#162f71/#072370` — off-brand for black+red); fonts `Bangers/Cinzel/Praise` (`styles.scss:5`).
+  - **P2**: `src/components/NavMenu/index.jsx` ("coming soon" line 26; `logo.gif` import line 5; `bg="dark"` line 10), `src/components/Header/index.jsx`, unused `src/components/Footer/index.jsx` (built, never rendered — wire it in).
+  - **P3**: `src/components/pages/{Home,Intro,NaMiata}.jsx`, `src/components/Garage/{index,Cards}.jsx`+`Cars.json`, `src/components/YouTube/index.jsx`, `src/components/Suspension/index.jsx`+7 sub-comps, `src/components/Articles/2025/GoodbyeC8.jsx`, `src/components/blog/{Miyoshi,Kiryu,Kasumi,Panda}/index.jsx`, `src/assets/Data/{naBlog,MsmBlog,ndBlog,c8Blog}.json`.
+  - **P4**: `scripts/build-gallery.mjs` (`GALLERIES=[nd-totd2025, nd-hillcountry]`, only `nd-totd2025` consumed; `THUMB_W 320 q70`/`DISPLAY_W 1600 q82`); gallery components — pattern (a) static `NC/EastCoast15`, `NC/Yellowstone15`, `NB/HillCountry`(=`/msm-gallery`), `C8/autocross`; pattern (b) `ND/HillCountry` (`_thumbs/thumbs.js` runtime canvas + `_thumbs/chunk.js`); pattern (c) `ND/TailOfTheDragon` (`fetch('/gallery/nd-totd2025/manifest.json')`). `index.html:34,49,72` OG/twitter/JSON-LD image; `vite.config.js:8` `target:'es2015'`; SSR residue `src/main.jsx` `Object.hasOwn` + `src/App.jsx:38-40` `custom-render-ready`; `netlify.toml` (no `NODE_VERSION`) add `.nvmrc`; `public/_headers`/`_redirects`.
+  - **P5**: `src/scss/styles.scss`, `src/scss/js/main.js`, `src/assets/css/style.css` (imported `App.jsx:34`).
+  - **P6**: `index.html` `<head>` (add analytics script; NO analytics exists today), baseline doc under `.claude/strap/project-docs/`.
+  - **P7**: `src/App.jsx` (add `/whats-new` route), `src/components/NavMenu` (add permanent item), new component folder.
+  - **P8**: `index.html` (OG/JSON-LD/AdSense meta lines 9,25-73,76-80), `src/components/AdSense/AdSenseSlot.jsx` (reads `VITE_AD_CLIENT/VITE_AD_SLOT`; commented call sites pass props — mismatch; keep inert), blog markdown renderers.
+
+  ## Mockup Interview Summary
+
+  Intent: dark motorsport-editorial V2 — black + premium racing red, new SVG logo, mobile-first (360/768/1024/1440), AdSense out. Audience: car enthusiasts + autocross / great-drives fans. Fidelity: **Tier 1 (verbatim port / contract)** — the frontend ports the mockups exactly. Built via `/create-mockups` and **CPO-approved 2026-08-01**. Fonts confirmed: Archivo / Inter / Space Mono, self-hosted in production (SQ-006 resolved — replaces Bangers/Cinzel/Praise). CSS approach confirmed: Bootstrap 5.3 base + SCSS design-token layer (SQ-002 resolved).
+
+  ## Mockup Reference (authoritative for implementation)
+
+  The mockups are the visual contract. Implementation reads the mockup source directly for fidelity; this section is the pointer + non-obvious decisions.
+
+  **Mockup files** (all under `.claude/strap/mockups/spec-00002/`):
+
+  | File | Contributes |
+  |---|---|
+  | `index.html` | Hub linking every view |
+  | `design-system.html` | Palette (with hex) / type scale / components / states / logo — the reference |
+  | `home.html` | Hero → intro → garage preview → video grid |
+  | `garage.html` | 5-car hub; number-tag cards; retired-car tribute state |
+  | `blog.html` | Car-identity banner + paginated build log (3/page), telemetry chips, markdown entries |
+  | `gallery.html` | Thumbnail grid → keyboard/swipe lightbox (mirrors react-image-gallery) |
+  | `whats-new.html` | Permanent-nav feature page; Clarkson-voice entries tagged Why→goal / How→shipped |
+  | `assets/tokens.css` | **Design tokens — SOURCE OF TRUTH** (CSS custom props; map 1:1 to Sass vars + `$theme-colors`) |
+  | `assets/app.css` | Component styles |
+  | `assets/app.js` | Shell / nav / pagination / lightbox / mini-markdown behavior |
+  | `assets/mock-data.js` | Mock data matching the real contracts |
+  | `assets/logo.svg` | The new "The Goji Line" logo |
+
+  **Run command:** open `.claude/strap/mockups/spec-00002/index.html` in a browser (no build/server).
+
+  **Key design decisions:**
+  - **Palette (softer-dark, FINAL):** charcoal canvas `#141418`, deep chrome `#0F0F12`, ink ramp `#1A1A1F/#202027/#26262E/#33333B/#45454E`; **reading panel `#202027`** (elevated, for long-form prose ~17px / 1.7 leading / 68ch); text warm off-whites `#F1EEE9` (headings ~16:1) / `#D8D4CD` (body ~12:1) / `#9C978D` (muted ~6:1). Brand red `#E10600` (hover `#FF1A0E`, pressed `#B00500`, oxblood `#3A0705`) — the only saturated hue. Softened from pure black/white after the first mockup approval for reading comfort.
+  - **Type:** Archivo (display/headings, uppercase tight-tracked), Inter (body/blog), Space Mono (telemetry chips: date/mileage/cost).
+  - **Logo:** "The Goji Line" — racing line through a corner apex bent into a "G" with a white apex dot + "JEFF**GOJI**" wordmark (GOJI in red). Recolours via token.
+  - **Patterns:** sticky blur navbar, red-underline active state, permanent red "What's New" pill; full-bleed hero with dual scrim + checkered-flag accents; number tags on cars; card hover (lift + image zoom).
+  - **Editorial image treatment (reusable — P3/P5):** `.media--editorial` = CSS `filter(brightness .95 / contrast 1.06 / saturate .90)` on the `<img>` + a `mix-blend-mode:multiply` `::after` overlay (faint charcoal↓/oxblood↑ tone + soft vignette with a clear center so the car stays untouched); `--hero` (heavier) and `--soft` (lightbox) modifiers; all keyed off `:root` grade vars. Apply to `.hero__media`, `.card__media`, `.thumb`, `.post__media`; copy the `:root` grade vars into tokens/SCSS. Restrained on purpose — cars stay recognizable, not a duotone. Fixes the bright-snapshot-vs-dark-design mood mismatch.
+  - **Rotating hero (P2/P3 — the repo's Random-Background-Feature):** the home hero randomly picks one of 5 per-car shots on each load (NA night-skyline, MSM wet-autocross-spray, NC mountain overlook, ND country-road beauty, C8 crepe-myrtle evening) with a "TODAY IN THE GARAGE" Space-Mono nameplate. Ports as a `heroes[]` array + `useState(() => heroes[random])` on mount (session-stable, no reshuffle on re-render). Convert the 5 heroes to responsive webp for goal-2.
+  - **PORT CAVEAT (#1 gotcha for P5):** declare the Sass `$theme-colors` map BEFORE `@import bootstrap` — otherwise the override stays ineffective (the current `styles.scss:2` bug). `assets/tokens.css` header documents this.
+
+  **Build-time photo follow-ups (design-approved; not blockers — handle during P3/P4):**
+  - Re-encode the NC hero + gallery source (`nc/15east/*`, 2–9MB) to webp for a crisp NC hero.
+  - Convert the 5 rotating heroes to responsive webp `srcset` (goal-2 performance).
+  - Gallery frames carry a faint "© David Leung Photography" credit (visible in the lightbox) — CPO to decide: accept as credit, crop, or lighten treatment.
+  - Gallery uses C8 autocross frames as stand-ins under "Tail of the Dragon" labels — wire real TOTD webp renditions when built (raw frames at `nd/TOTD2025/action/*`, 5–8MB, need optimization).
+
+  ## Mock-data shape summary (stub — /analyze-mockups deepens into the Wiring Guide)
+
+  - `MOCK.cars` → `src/components/Garage/Cars.json` (+ `bloglink`; display-only `label`/`tag`).
+  - `MOCK.blog.*` → `src/assets/Data/*Blog.json` exactly: `{id, date, mileage, picture, cost, entry(markdown)}`.
+  - `MOCK.gallery` → `public/gallery/<slug>/manifest.json`: `{original, thumbnail, originalAlt, thumbnailAlt}`; slug `nd-totd2025` (representative gallery, SQ-004).
+  - `MOCK.videos` → YouTube `{id, title}`. `MOCK.whatsNew` → `{ver, title, body, why, how}`.
+
+  ## Mockup Wiring Guide (authoritative for the port — written by /analyze-mockups)
+
+  Bridges the mockup data/stubs to the REAL client-only contracts (no backend). Does NOT duplicate colors/layout/CSS — the mockup files are the verbatim visual contract. Mockup dir: `.claude/strap/mockups/spec-00002/`.
+
+  **Completeness:** mostly covered, **0 blocking gaps.** Suspension / NaMiata / GoodbyeC8 have no dedicated mockup — implementers extend the `.post` / `.card` / `.media--editorial` / section-head component language (Tier-1 reuse, not invent).
+
+  **Adopted design deltas (CPO-ruled 2026-08-01 — extend P3):**
+  - **Galleries consolidate to a single hub** (`/galleries`) with a "choose set" switcher (matches the mockup). The current per-gallery routes (`/msm-gallery`, `/nc-eastcoast15`, `/nc-yellowstone15`, `/nd-hillcountry`, `/c8-autox`, `/totdgallery`) redirect into the hub. Supersedes "re-skin each gallery route" in P3; folds together with P4's wiring consolidation.
+  - **Videos use a click-to-load poster facade** (data-driven) instead of eagerly mounting 3 YouTube `<iframe>`s (`YouTube/index.jsx`). Performance win (AC-010); `videos` becomes an array.
+
+  **Data-shape → real-contract mapping (17 match / 3 rename / rest additive):**
+  - **cars** (`MOCK.cars` → `src/components/Garage/Cars.json`): `id/make/model/year/name/description` match. `bloglink` — keep the REAL Router paths (`../na-blog` etc.; retired NC = `/`), not the mock's `blog.html`/`#`. NET-NEW (add to Cars.json or derive in component): **`img`** (car photo, webp), `label` (e.g. "1991 NA6"), `tag` (kicker).
+  - **blog** (`MOCK.blog[key]` → `src/assets/Data/{naBlog,MsmBlog,ndBlog,c8Blog}.json`): `id`(unique numeric — load-bearing for sort + React key)/`date/mileage/cost/entry` match. `picture` shape matches but PATH differs — real is root-relative w/o leading slash from `public/images/`; for AC-010 repoint to optimized webp renditions. `label` is net-new display-only (optional). Markdown `entry` renders via react-markdown+remark-gfm (see stub list).
+  - **gallery** (`MOCK.gallery` → `public/gallery/<slug>/manifest.json` items from `scripts/build-gallery.mjs`): `original`/`thumbnail` match (real = webp display/thumb paths). `gallerySlug`→`manifest.id`, `galleryTitle`→`manifest.label` match. MISMATCH: real `originalAlt` = the generic gallery label per item (not per-image); real script emits `alt`+`description` but NOT `thumbnailAlt` or a per-image `label` (the mockup lightbox caption/thumb-alt want these → build-script enhancement, logged against P4). Empty mock items model the loading/missing state; real manifest omits failed files (→ `skipped[]`). No manifest is built on disk yet — needs `npm run gallery:build` against real TOTD frames.
+  - **videos** (`MOCK.videos` → `YouTube/index.jsx`, currently hardcoded): lift the 3 real ids (`UySrXUfHA_k`, `Q2B8mA3vgP0`, `XVjs7LRCBak`) into a `videos` array; `meta` (duration/category) is net-new authored.
+  - **heroes / metrics / whatsNew** — NET-NEW whole shapes (no existing contract). heroes → `heroes[]` + `useState(() => heroes[random])` on mount (Random-Background-Feature, session-stable); metrics → build-time Lighthouse/perf-budget outputs (TARGET vs SHIPPED badge); whatsNew → tech-writer authors in P7 from shipped P1-P4 work.
+
+  **Stub → production-source replacements (for the port):**
+  - `app.js renderMarkdown()` (regex mini-markdown) → existing **react-markdown + remark-gfm** with the custom p/img/a renderers in `blog/*/index.jsx`. STANDING SECURITY RULE: no rehype-raw, no dangerouslySetInnerHTML.
+  - `app.js ph()` SVG placeholder → real `<img>` webp with responsive `srcset`/`sizes` + below-fold `loading="lazy"` (AC-010).
+  - `app.js mountGallery()` lightbox → **react-image-gallery** re-skinned to the mockup visuals; data via `fetch('/gallery/<slug>/manifest.json')`. Retire pattern-(a) static `images.js` Vite-import arrays, pattern-(b) runtime canvas thumbnailing (`_thumbs/thumbs.js`+`chunk.js`), and the deprecated `import.meta.globEager` (AC-009).
+  - `home.html rotateHero` IIFE → React `heroes[]` + `useState` random-pick-on-mount in `Home`.
+  - `app.js renderShell()` → rebuilt `NavMenu` + `Header` + the dormant `components/Footer/index.jsx` (wire it in). `assets/logo.svg` replaces the `logo.gif` import.
+  - home video grid → data-driven poster-facade replacing `YouTube/index.jsx` eager iframes.
+
+  **Production concerns the mockup elides (implementers MUST wire):**
+  - PRESERVE all real `index.html` SEO/OG/Twitter/JSON-LD meta; only swap the OG/Twitter/JSON-LD image to the optimized ~1200x630 (<200KB) rendition (AC-011). Mockup `<head>` has none.
+  - KEEP AdSense global script + `google-adsense-account` meta + `AdSenseSlot` present-but-inert; enable no slot (AC-017).
+  - Markdown-only render (AC-016); responsive srcset + lazy-load (AC-010); hero rotation session-stable; cookieless analytics is P6 (tool TBD, no cookies, AC-003); self-host the Archivo/Inter/Space Mono fonts (SQ-006).
+  - P5 #1 gotcha: declare Sass `$theme-colors` BEFORE `@import bootstrap`; copy `tokens.css` `:root` vars (incl. the `.media--editorial` grade vars) into the SCSS.
+  - Build-time photo follow-ups (already logged): NC webp re-encode, hero webp srcset, gallery "© David Leung Photography" credit decision, real TOTD frames (mockup uses C8-autocross stand-ins).
+
+  ## Acceptance Criteria
+
+  - **AC-001:** Every primary route in `App.jsx:47-68` (plus new `/whats-new`) renders under the V2 design system — no surface retains the pre-V2 Bootstrap-default-navbar / `style.css` look. Verified by route-by-route visual audit.
+  - **AC-002:** The redesigned shell (`NavMenu`, `Header`, a rendered `Footer`) applies the new logo (no `logo.gif`) and the premium black+red palette; the "NA Miata (coming soon)" placeholder is removed.
+  - **AC-003:** A cookieless, privacy-respecting analytics tool (e.g. Plausible) loads on all routes and records pageviews + engagement; NO cookies set (verified in browser storage/network).
+  - **AC-004:** A V1 engagement + perf baseline is captured and recorded in-repo BEFORE V2 UI ships, enabling a documented before/after; post-launch engagement meets the confirmed target (working: +15% dwell, measurable pages/session rise).
+  - **AC-005:** At viewport widths 360/768/1024/1440, every primary route renders with no horizontal overflow and no broken layout; the navbar collapses to a mobile menu at the mobile breakpoint.
+  - **AC-006:** Transferred image bytes on the home page and the representative gallery (`nd-totd2025` / Tail of the Dragon) are >=50% below the V1 baseline for the same pages (cold-load network waterfall).
+  - **AC-007:** LCP on the home page and representative gallery is <=2.5s on a mid-tier mobile profile.
+  - **AC-008:** Lighthouse Performance >=90 desktop and >=80 mobile on the home page and representative gallery.
+  - **AC-009:** All three gallery-wiring patterns are consolidated onto the `scripts/build-gallery.mjs` `sharp->webp` pipeline; no gallery ships runtime canvas thumbnailing (`_thumbs/thumbs.js`) or full-res Vite-imported originals; every gallery reads built webp output.
+  - **AC-010:** Across all image-bearing surfaces, images are webp with responsive `srcset`/`sizes` and below-fold images use `loading="lazy"`; no page ships a full-res original where a smaller rendition suffices.
+  - **AC-011:** The OG/Twitter/JSON-LD social image in `index.html` (currently a multi-MB JPG) is replaced with an optimized ~1200x630 (<200KB) image; all other SEO/OG/Twitter/JSON-LD metadata is unchanged/non-regressed.
+  - **AC-012:** `vite.config.js` `target:'es2015'` is removed (default esbuild target restored); SSR residue (`Object.hasOwn` polyfill in `main.jsx`, `custom-render-ready` dispatch `App.jsx:38-40`) removed without breaking render.
+  - **AC-013:** Node is pinned (`.nvmrc` and/or `NODE_VERSION`) to >=18.17 (satisfies `sharp@0.34`); a clean Netlify build (`npm run build`) succeeds.
+  - **AC-014:** A "V2 What's New" page exists at a reachable route (`/whats-new`) and is a permanent top-level primary-nav item present on every page.
+  - **AC-015:** The What's New page enumerates the V2 changes; each entry states WHY + HOW it advanced goal 1 and/or goal 2, every claim traceable to shipped work (no aspirational items), in the specified Top Gear/Clarkson tone.
+  - **AC-016:** All existing blogs, the Goodbye-C8 article, all galleries, videos, and suspension content remain reachable and intact; the render path stays `react-markdown`+`remark-gfm` with NO `dangerouslySetInnerHTML`/raw-HTML introduced.
+  - **AC-017:** Existing AdSense wiring (global script + `google-adsense-account` meta in `index.html`, `AdSenseSlot`) remains present and non-erroring while all slots stay inert; no slot is enabled in V2.
+  - **AC-018:** The orphaned `/totdtrip` route (`App.jsx:61`) and the "coming soon" placeholder are removed.
+
+  **SC -> AC map:** SC-001 -> AC-001, AC-002 · SC-002 -> AC-003, AC-004 · SC-003 -> AC-005 · SC-004 -> AC-006 · SC-005 -> AC-007 · SC-006 -> AC-008 · SC-007 -> AC-009, AC-010, AC-011 · SC-008 -> AC-014 · SC-009 -> AC-015. Cross-cutting enablers/constraints: AC-012, AC-013 (perf/build); AC-016, AC-017, AC-018 (content-preservation + AdSense + cleanup). Every SC-001..SC-009 maps to >=1 AC.
+
+  ## Assembly Order
+
+  - **Phase 0 (start immediately, parallel):** **P6 baseline** — analytics + V1 engagement/perf baseline MUST be captured before any V2 UI or perf change lands (otherwise >=50%/LCP/Lighthouse gains are unprovable). Low-risk P4 enablers (Node pin AC-013, drop `es2015`/SSR residue AC-012) can also land now.
+  - **Phase 1:** **P1 Design System** + **mockups** (produced via `/create-mockups` AFTER this Spec) — PREREQUISITE for all client-ui redesign. **P5 styling reconciliation** lands the design tokens/foundation and fixes the `$theme-colors` import-order bug.
+  - **Phase 2:** **P2 Shell/Nav/Footer** — depends on P1+P5. Adds the permanent What's New nav slot.
+  - **Phase 3:** **P3 per-surface redesign** — depends on P1+P5+P2. **P4 image-perf overhaul** runs parallel/interleaved with P3; P4 perf changes must land AFTER the P6 baseline.
+  - **Phase 4:** **P7 What's New page** — LAST; authored from actually-shipped P1-P4 work (AC-015 traceability).
+  - **Cross-cutting:** **P8 security review** + **P9 tests** parallelize with each phase's target layer.
+  - **Mockup prerequisite:** designer mockups (dark motorsport-editorial, black+red) must exist before P2/P3 implementation; the **Mockup Wiring Guide will be injected into the P2/P3/client-ui sections later via `/analyze-mockups`** — not authored now.
+
+  ## Test Strategy
+
+  Stack: **Vitest + React Testing Library + jsdom** (no tests exist today). Centralized execution: `npm test` (= `vitest run`), run only by dev-lead.
+
+  - **P3/blogs:** data-integrity (unique numeric `id` — sort `b.id-a.id` + React `key` assume it), pagination behavior (3/page), and — if collapsed — a data-driven `<BlogList>` renders each JSON source.
+  - **P2/P7 routing:** route-parity guard — `App.jsx` routes vs `NavMenu` links, asserting new `/whats-new` present and `/totdtrip` removed.
+  - **P4 pipeline:** unit-test pure helpers in `build-gallery.mjs` (`parseDateAlt`, `sortKeys`, `cleanName`) after an export-refactor; `_thumbs/chunk.js` `buildChunkMap`.
+  - **P4 perf (manual, dev-lead-run):** Lighthouse desktop+mobile on home + `nd-totd2025` gallery (AC-007/008); cold-load network-weight vs baseline (AC-006).
+  - **P1/P2/P3 responsive (manual/visual):** audit at 360/768/1024/1440 for overflow/layout (AC-005); route-by-route visual audit (AC-001).
+  - **P8 security:** assert no `dangerouslySetInnerHTML`/raw-HTML introduced; markdown path intact; OG/JSON-LD/AdSense meta present.
+
+  ## Dependencies
+
+  - **Analytics tool** — cookieless/privacy-respecting (e.g. Plausible); external script/service. Exact tool = SQ-001.
+  - **`sharp@0.34`** native binary + **Node >=18.17** pin — build prerequisite; `sharp` is the single most fragile build link; Netlify's per-push build IS CI (do NOT add GitHub Actions).
+  - **Designer mockups** — prerequisite output (via `/create-mockups`) for P2/P3; `/analyze-mockups` injects the Wiring Guide.
+  - **`react-image-gallery`** — consuming component for the consolidated galleries (items = `{original, thumbnail, ...}`).
+  - **No backend, no database, no federation, no cross-product deps.** Single Netlify deploy target.
+
+  ## Open Questions
+
+  - **SQ-001** (CPO): Exact analytics tool — Plausible (hosted vs self-host) vs Fathom/Umami? Confirm the cookieless choice + how it's loaded.
+  - **SQ-002** (CPO/frontend-engineer): Is a CSS/component approach prescribed for the new design system — reconcile onto Bootstrap 5.3 + custom SCSS (recommended, least churn), or introduce CSS Modules / a different utility framework?
+  - **SQ-003** (CPO/designer): Logo creation path — designer deliverable or CPO-supplied? Confirm SVG (current is `.gif`).
+  - **SQ-004** (CPO/devops): Confirm `nd-totd2025` (Tail of the Dragon) as the "representative gallery" for SC-004/005/006 measurements.
+  - **SQ-005** (CPO): Engagement baseline needs analytics live on V1 for a data window before V2 UI ships — given "best-effort" timeline, is a short window / perf-only baseline acceptable if engagement data is thin?
+  - **SQ-006** (CPO/designer): Fonts — keep/replace/self-host the current `Bangers/Cinzel/Praise` Google Fonts (self-hosting helps perf)?
+  - **SQ-007** (CPO): Dead-file deletion scope — confirm which "verify-with-owner" dead items may be removed in V2 (`entry-ssr.jsx`, misplaced asset-tree gallery components, `Gallery/NB/index.jsx` switcher, `firebase` + `react-image-file-resizer` deps, root `ads.txt`).
+
+  ### SQ dispositions (CPO, 2026-08-01)
+  - **SQ-001 — DEFERRED to P6 execution.** Spec analytics against a generic cookieless script-tag integration; CPO picks the exact tool (Plausible / Umami-self-host / Fathom) before P6 runs.
+  - **SQ-002 — DEFERRED to /create-mockups.** Working default: keep Bootstrap 5.3 as the base + a real SCSS design-token layer (least churn); the mockups confirm the final CSS/component approach.
+  - **SQ-003 — RESOLVED.** New logo is a `designer` deliverable, authored as SVG during /create-mockups.
+  - **SQ-004 — RESOLVED.** Representative gallery for SC-004/005/006 measurements = `nd-totd2025` (Tail of the Dragon).
+  - **SQ-005 — RESOLVED.** Capture the perf baseline immediately; the engagement baseline is best-effort over a short window (perf-only acceptable if engagement data is thin), given the no-hard-deadline timeline.
+  - **SQ-006 — DEFERRED to /create-mockups.** Fonts are the designer's call; self-host for performance.
+  - **SQ-007 — RESOLVED.** Yes — remove the confirmed-dead items during V2 (`entry-ssr.jsx`, misplaced asset-tree gallery components, `Gallery/NB/index.jsx` switcher, `firebase` + `react-image-file-resizer` deps, root `ads.txt`).
+
+  ## Quality Checklist
+
+  - [x] Overview orients a senior developer in one paragraph and links back to the source Requirement.
+  - [x] Every Constituent Part in the table has a domain owner (P1 designer + P7 tech-writer flagged NOT-YET-ACTIVE for the /decompose-feature gate; all others active).
+  - [x] Per-section technical depth names real files/components/paths.
+  - [x] Every Requirement Success Criterion maps to at least one Acceptance Criterion.
+  - [x] Every Acceptance Criterion has a stable ID and is testable.
+  - [x] Assembly Order documents predecessors/successors (baseline-first ordering explicit).
+  - [x] Test Strategy specifies coverage per part and test types.
+  - [x] Dependencies explicit; no Federation/cross-product entries.
+  - [x] Every Open Question resolved — SQ-001..SQ-007 dispositioned 2026-08-01 (see SQ dispositions above); SQ-002/003/006 design specifics finalize through the mockups.
+  - [x] Senior dev could implement from this Spec alone — pending only the Mockup Wiring Guide, injected via /analyze-mockups after the mockups are approved.
+comments:
+  - id: c1
+    author: spec-lead
+    timestamp: 2026-08-01T17:05:00Z
+    body: "[STRAP/agent:spec-lead] Spec authored from /create-spec on Requirement 00001. Initial state: new. Constituent Parts outlined: 9 (P1-P9). Acceptance Criteria: 18 (AC-001..AC-018). Not-yet-active domains flagged: designer (P1), tech-writer (P7). Open questions: SQ-001..SQ-007."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T17:15:00Z
+    body: "[STRAP/agent:dev-lead] SQ dispositions (CPO): SQ-001 deferred to P6 (generic cookieless integration; tool TBD). SQ-002/006 deferred to /create-mockups. SQ-003 (SVG logo by designer), SQ-004 (nd-totd2025 representative gallery), SQ-005 (perf baseline now, engagement best-effort), SQ-007 (dead-file cleanup approved) RESOLVED. Proceeding to /create-mockups; Spec stays 'new' until mockups are wired via /analyze-mockups and remaining depth lands in /refine-spec."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-01T17:20:00Z
+    body: "[STRAP/agent:dev-lead] State new -> resolved (CPO-approved). All SQs dispositioned; Quality Checklist gates met (Mockup Wiring Guide pending, to be injected via /analyze-mockups). Activated designer + tech-writer into the client-ui domain. Next: /create-mockups builds the V2 mockups."
+  - id: c4
+    author: dev-lead
+    timestamp: 2026-08-01T17:35:00Z
+    body: "[STRAP/agent:dev-lead] Mockup approved (via /create-mockups). Files at .claude/strap/mockups/spec-00002/. Iteration count: 0 (approved first pass). Palette #E10600 black+red; Archivo/Inter/Space Mono; 'The Goji Line' SVG logo. SQ-002 + SQ-006 resolved via mockups. Next: /analyze-mockups 00002 to write the Wiring Guide."
+  - id: c5
+    author: dev-lead
+    timestamp: 2026-08-01T18:10:00Z
+    body: "[STRAP/agent:dev-lead] FINAL mockup set locked after 5 iterations: (1) telemetry-dashboard Updates page, (2) softer-dark palette for reading comfort, (3) real photos wired in, (4) editorial image-grade + moody hero swap, (5) rotating multi-car hero (Random-Background-Feature). Palette now charcoal #141418 + reading panel #202027 + red #E10600. Reusable .media--editorial grade layer. Build-time photo follow-ups logged (NC webp, hero srcset, gallery watermarks, real TOTD frames). Visual contract FINAL. Next: /analyze-mockups 00002."
+  - id: c6
+    author: spec-lead
+    timestamp: 2026-08-01T18:30:00Z
+    body: "[STRAP/agent:spec-lead] Mockup Wiring Guide written (via /analyze-mockups). Completeness: 0 blocking gaps. Data-shape mismatches: 3 renames + 3 missing-on-source + additive/net-new (real Cars.json/*Blog.json core fields match cleanly). Two design deltas CPO-ruled and adopted: galleries -> single hub with set-switcher (old routes redirect); videos -> poster facade (data-driven). Pre-decomposition gate CLOSED. Spec ready for /generate-features."

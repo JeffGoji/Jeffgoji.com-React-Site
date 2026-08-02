@@ -1,0 +1,99 @@
+id: "00003"
+type: feature
+title: "Establish the dark motorsport-editorial design system and rebuild the app shell (nav / header / footer)"
+state: active
+parent: null
+iteration: null
+area: null
+assigned_to: null
+tags:
+  - AI
+  - strap:feature
+links:
+  - target: "00002"
+    type: related
+  - target: "00007"
+    type: related
+  - target: "00008"
+    type: related
+  - target: "00009"
+    type: related
+  - target: "00010"
+    type: related
+  - target: "00011"
+    type: related
+created_at: 2026-08-01T18:45:00Z
+created_by: spec-lead
+updated_at: 2026-08-01T19:12:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | spec-lead                   |
+  | Authored At  | 2026-08-01T18:45:00Z        |
+  | Completed By | _(set at resolution)_       |
+  | Completed At | _(set at resolution)_       |
+
+  ---
+
+  # Establish the dark motorsport-editorial design system and rebuild the app shell (nav / header / footer)
+
+  ## Description
+
+  Feature A — the site-wide chrome and visual foundation every surface renders inside. Ships the black + red premium design-token layer (charcoal `#141418` canvas, reading panel `#202027`, brand red `#E10600`, Archivo/Inter/Space Mono self-hosted), the new "The Goji Line" SVG logo (replacing `logo.gif`), and the rebuilt shell: sticky blur `NavMenu` with red-underline active state + the permanent red "What's New" nav pill, redesigned `Header`, and the currently-dormant `Footer` wired in for the first time. Removes the "NA Miata (coming soon)" placeholder and the orphaned `/totdtrip` route.
+
+  ## Linked Spec
+
+  **Spec:** 00002 (`related`)
+
+  ## Constituent Parts assigned
+
+  | Part | Domain | Owner agent type | Summary |
+  |---|---|---|---|
+  | P1 — Design System & Visual Language | client-ui | designer | tokens, premium-red palette, SVG logo, type scale, responsive tokens (mockups approved) |
+  | P5 — Styling-system reconciliation | client-ui | frontend-engineer | collapse Bootstrap-utils + `scss/styles.scss` + legacy `assets/css/style.css` + inline into the token layer; **fix `styles.scss:2` — declare Sass `$theme-colors` BEFORE `@import bootstrap`**; copy `tokens.css` `:root` vars (incl. `.media--editorial` grade vars) into SCSS |
+  | P2 — Shell / Navigation / Footer redesign | client-ui | frontend-engineer | rebuild `NavMenu` (drop `bg="dark"`, add What's New pill, remove coming-soon), `Header`, wire in `components/Footer/index.jsx`, swap `logo.gif`→`assets/logo.svg` |
+
+  ## Acceptance Criteria subset
+
+  - **AC-002:** The redesigned shell (`NavMenu`, `Header`, a rendered `Footer`) applies the new logo (no `logo.gif`) and the premium black+red palette; the "NA Miata (coming soon)" placeholder is removed.
+  - **AC-018:** The orphaned `/totdtrip` route (`App.jsx:61`) and the "coming soon" placeholder are removed.
+  - _Contributes to (verified in sibling Features):_ AC-001 (foundation for B's route audit), AC-005 (responsive shell + navbar→mobile-menu collapse, verified in B), AC-014 (the permanent What's New nav pill; route existence owned by D).
+
+  ## Mockup References
+
+  - `.claude/strap/mockups/spec-00002/design-system.html` — palette/type/components/states/logo reference.
+  - `.claude/strap/mockups/spec-00002/assets/tokens.css` — DESIGN TOKENS SOURCE OF TRUTH (map 1:1 to Sass vars + `$theme-colors`; header documents the import-order gotcha).
+  - `.claude/strap/mockups/spec-00002/assets/app.css` — component styles (nav/header/footer chrome).
+  - `.claude/strap/mockups/spec-00002/assets/logo.svg` — "The Goji Line" logo (recolours via token).
+  - `.claude/strap/mockups/spec-00002/assets/app.js` — `renderShell()` behavior → rebuilt NavMenu + Header + Footer.
+  - `.claude/strap/mockups/spec-00002/index.html` — hub reference for nav inventory.
+
+  ## Out of scope
+
+  Per-route/page body content (B). Image pipeline / srcset / OG (C). Analytics (C). The `/whats-new` route + page content (D) — A only adds the nav pill pointing at it. Gallery-hub routing/redirects (B).
+
+  ## Dependencies
+
+  Depends on Feature C's **baseline slice** (V1 perf/engagement baseline must be captured BEFORE this V2 UI lands — Assembly Phase 0 → Phase 1). Blocks Feature B (per-surface needs P1+P5+P2). P8 security-reviewer + P9 test-strategist parallelize (route-parity guard asserting `/totdtrip` removed lands at the A/B seam).
+
+  ## Quality Checklist
+
+  - [x] Description concrete enough for a senior developer to scope.
+  - [x] Linked Spec 00002 is resolved.
+  - [x] Constituent Parts reference real Spec rows (P1/P5/P2).
+  - [x] Acceptance Criteria use the Spec's stable IDs verbatim.
+  - [x] Out-of-scope populated.
+  - [x] Dependencies explicit.
+  - [x] Mockup References enumerate real files.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T18:45:00Z
+    body: "[STRAP/agent:spec-lead] Feature authored via /generate-features from Spec 00002. State: new. Owns AC-002, AC-018 (P1/P5/P2). Owners: designer + frontend-engineer (both active)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T19:12:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /decompose-feature). Decomposed into 5 Stories (00007-00011), 14 Tasks (00012-00025), ~55 senior-dev-hours. Dep chain: 00007+00008 -> 00009 -> 00010 -> 00011. Reconciled specialist overlap (designer authors partials; frontend assembles)."

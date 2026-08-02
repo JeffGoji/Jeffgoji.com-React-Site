@@ -1,0 +1,108 @@
+id: "00005"
+type: feature
+title: "Overhaul image delivery onto one build-time pipeline and stand up cookieless analytics with an early V1 baseline"
+state: active
+parent: null
+iteration: null
+area: null
+assigned_to: null
+tags:
+  - AI
+  - strap:feature
+links:
+  - target: "00002"
+    type: related
+  - target: "00042"
+    type: related
+  - target: "00043"
+    type: related
+  - target: "00044"
+    type: related
+  - target: "00045"
+    type: related
+created_at: 2026-08-01T18:45:00Z
+created_by: spec-lead
+updated_at: 2026-08-01T19:47:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | spec-lead                   |
+  | Authored At  | 2026-08-01T18:45:00Z        |
+  | Completed By | _(set at resolution)_       |
+  | Completed At | _(set at resolution)_       |
+
+  ---
+
+  # Overhaul image delivery onto one build-time pipeline and stand up cookieless analytics with an early V1 baseline
+
+  ## Description
+
+  Feature C — the performance + measurement backbone. Consolidates the three unconsolidated gallery-wiring patterns onto the single `scripts/build-gallery.mjs` `sharp→webp` pipeline; adds responsive `srcset`/`sizes` + below-fold `loading="lazy"` across all image-bearing surfaces; replaces the multi-MB OG/Twitter/JSON-LD social image with an optimized ~1200x630 (<200KB) rendition; drops the vestigial `target:'es2015'` + SSR residue; pins Node (`.nvmrc`/`NODE_VERSION` >=18.17) for a reliable `sharp` build. Adds a cookieless privacy-respecting analytics script (tool TBD, SQ-001 deferred to execution) on all routes, and **captures the V1 engagement + perf baseline in-repo BEFORE any V2 UI ships** so the gains are provable. Keeps AdSense present-but-inert.
+
+  **Decomposition note (from spec-lead):** at `/decompose-feature`, split this Feature into two Stories along the assembly seam — **C1 "baseline + build hygiene"** (AC-003/004/012/013 — Assembly Phase 0, must precede A/B) and **C2 "image-perf overhaul"** (AC-006..011 — Phase 3, after B's surfaces exist) — so A/B are not falsely blocked on the whole of C.
+
+  ## Linked Spec
+
+  **Spec:** 00002 (`related`)
+
+  ## Constituent Parts assigned
+
+  | Part | Domain | Owner agent type | Summary |
+  |---|---|---|---|
+  | P4 — Image-loading performance overhaul | infrastructure + client-ui | devops-lead + frontend-engineer | consolidate 3 gallery patterns onto `build-gallery.mjs`; retire static Vite-import arrays + runtime canvas thumbnailing (`_thumbs/*`) + deprecated `import.meta.globEager`; `srcset`/`sizes`; lazy-load; OG image swap; drop es2015+SSR residue; pin Node; build-script per-image `thumbnailAlt`/`label` enhancement; NC-hero webp re-encode + 5 hero webp srcset + real TOTD frames |
+  | P6 — Analytics + V1 baseline capture | client-ui | frontend-engineer (+ devops-lead for perf baseline) | cookieless analytics in `index.html <head>`; capture V1 engagement + perf baseline under `.claude/strap/project-docs/` BEFORE V2 UI ships |
+
+  ## Acceptance Criteria subset
+
+  - **AC-003:** A cookieless, privacy-respecting analytics tool loads on all routes and records pageviews + engagement; NO cookies set.
+  - **AC-004:** A V1 engagement + perf baseline is captured and recorded in-repo BEFORE V2 UI ships; post-launch engagement meets the confirmed target (working: +15% dwell, measurable pages/session rise).
+  - **AC-006:** Transferred image bytes on the home page and the representative gallery (`nd-totd2025`) are >=50% below the V1 baseline for the same pages.
+  - **AC-007:** LCP on the home page and representative gallery is <=2.5s on a mid-tier mobile profile.
+  - **AC-008:** Lighthouse Performance >=90 desktop and >=80 mobile on the home page and representative gallery.
+  - **AC-009:** All three gallery-wiring patterns are consolidated onto the `build-gallery.mjs` `sharp→webp` pipeline; no runtime canvas thumbnailing or full-res Vite-imported originals; every gallery reads built webp output.
+  - **AC-010:** Across all image-bearing surfaces, images are webp with responsive `srcset`/`sizes`; below-fold images use `loading="lazy"`; no full-res original ships where a smaller rendition suffices.
+  - **AC-011:** The OG/Twitter/JSON-LD social image in `index.html` is replaced with an optimized ~1200x630 (<200KB) image; all other SEO/OG/Twitter/JSON-LD metadata unchanged/non-regressed.
+  - **AC-012:** `vite.config.js` `target:'es2015'` removed; SSR residue (`Object.hasOwn` polyfill in `main.jsx`, `custom-render-ready` dispatch `App.jsx:38-40`) removed without breaking render.
+  - **AC-013:** Node pinned (`.nvmrc` and/or `NODE_VERSION`) to >=18.17; a clean Netlify build succeeds.
+  - **AC-017:** Existing AdSense wiring remains present and non-erroring while all slots stay inert; no slot enabled. _(P8 security cross-cut — validated inside C, as `index.html <head>` is C's editing surface.)_
+
+  ## Mockup References
+
+  - `.claude/strap/mockups/spec-00002/gallery.html` — lightbox data model (items via `fetch('/gallery/<slug>/manifest.json')`).
+  - `.claude/strap/mockups/spec-00002/assets/app.js` — `ph()` placeholder → real webp `<img>` with `srcset`/`sizes`+lazy; `mountGallery()` data contract.
+  - `.claude/strap/mockups/spec-00002/assets/mock-data.js` — `MOCK.gallery` → `public/gallery/<slug>/manifest.json` shape (slug `nd-totd2025`; empty items model loading/missing → real `skipped[]`).
+  - _Production concerns the mockup ELIDES (per Wiring Guide): PRESERVE all real `index.html` SEO/OG/Twitter/JSON-LD meta (mockup `<head>` has none), only swap the social image; KEEP AdSense present-but-inert; analytics tool/loader is production-only (no mockup)._
+
+  ## Out of scope
+
+  Visual re-skin of any surface (A/B). The galleries-hub UI + set-switcher + route redirects (B) — C only rewires the data onto the pipeline. The poster-facade video UI (B). What's New (D).
+
+  ## Dependencies
+
+  **Two-phase internal ordering:** the **baseline + build-hygiene slice** (AC-004/003 + P4 enablers AC-012/013) is Assembly Phase 0 — must complete FIRST, before A/B UI lands. The **perf-optimization slice** (AC-006..011) is Phase 3 — after the baseline and parallel/after B's surfaces. Blocks A and B's *merge* on the baseline. P8 (SEO/OG/AdSense-inert review) + P9 (`build-gallery.mjs` helper unit tests after export-refactor; `chunk.js buildChunkMap`) parallelize.
+
+  ## Quality Checklist
+
+  - [x] Description concrete enough for a senior developer to scope.
+  - [x] Linked Spec 00002 is resolved.
+  - [x] Constituent Parts reference real Spec rows (P4/P6).
+  - [x] Acceptance Criteria use the Spec's stable IDs verbatim.
+  - [x] Out-of-scope populated.
+  - [x] Dependencies explicit (two-phase; blocks A/B merge on baseline).
+  - [x] Mockup References enumerate real files.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T18:45:00Z
+    body: "[STRAP/agent:spec-lead] Feature authored via /generate-features from Spec 00002. State: new. Owns 11 ACs (AC-003/004/006-013/017; P4/P6). DECOMPOSE NOTE: split into 2 Stories (C1 baseline+hygiene Phase 0, C2 perf-overhaul Phase 3). Owners: devops-lead + frontend-engineer (active)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T19:47:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /decompose-feature). devops+frontend reconciled; the C1/C2 phase split x 2 domains -> 4 Stories (00042-00045: C1a build-hygiene+baseline, C1b analytics+eng-baseline, C2a pipeline-overhaul, C2b client-delivery+OG), 15 Tasks (00046-00060), ~58 senior-dev-hrs. Phase order C1a+C1b -> C2a -> C2b; C2a manifests feed Feature B Story 00029. Security-headers (P8) noted as an out-of-scope open item."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-01T20:15:00Z
+    body: "[STRAP/agent:dev-lead] Sprint allocation (via /plan-sprint): 2 Stories, 7 Tasks moved to Sprint 2026.08.A. Developer: unassigned (JeffGoji + agent execution team). Remaining backlog Stories/Tasks under this Feature: 2 Stories (00044/00045), 8 Tasks -- overflow, held for next /plan-sprint once Feature B (00004) is underway."

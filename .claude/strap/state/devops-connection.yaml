@@ -1,0 +1,97 @@
+schema_version: "2.4"
+host: strap-agile
+host_url: file://.claude/strap/work/
+
+# Local work-item-tracking-as-code. Work items live as YAML files under
+# .claude/strap/work/<type>/<id>.yaml, versioned in git alongside the code.
+# No remote host, no credentials. Schema reference: .claude/strap/work/schema.yaml
+# Id allocation: monotonic zero-padded, counter at .claude/strap/work/.next-id
+
+auth:
+  method: none
+
+mapping:
+  work_item_types:
+    requirement: { host_type: requirement }
+    spec:        { host_type: spec }
+    feature:     { host_type: feature }
+    story:       { host_type: story }
+    task:        { host_type: task }
+    bug:         { host_type: bug }
+    enhancement: { host_type: enhancement }
+  field_formats:
+    description: markdown
+  states:
+    new:      new
+    active:   active
+    resolved: resolved
+    closed:   closed
+  link_types:
+    parent_child: parent_child
+    related:      related
+    predecessor:  predecessor
+    successor:    successor
+  # Local mode has no enforced hierarchy; top-level types file without a parent slot.
+  default_parents:
+    requirement: ~
+    spec:        ~
+    feature:     ~
+
+capabilities:
+  work_item_create:        supported
+  work_item_read:          supported
+  work_item_read_batch:    supported    # glob + parse
+  work_item_update:        supported
+  work_item_delete:        supported    # move to .deleted/ backup
+  work_item_query:         supported    # glob + parse + filter
+  work_item_link_add:      supported    # links[] in the YAML file
+  work_item_comment_add:   supported    # comments[] append-only
+  work_item_revisions:     supported    # reconstructed from git log of the file
+  iteration_list:          supported    # .claude/strap/work/.iterations.yaml
+  iteration_get_capacity:  unsupported  # no capacity model; sprint-planner reads MEMORY.md preferences
+  pull_request_create:     unsupported  # owned by /connect-code-repo (GitHub)
+
+# Local-mode operations are direct dev-lead filesystem actions, not template-driven.
+operation_templates:
+  work_item_create:
+    type: filesystem
+    action: write_file
+    path_template: ".claude/strap/work/{{type}}/{{id}}.yaml"
+  work_item_read:
+    type: filesystem
+    action: read_file
+    path_template: ".claude/strap/work/{{type}}/{{id}}.yaml"
+  work_item_update:
+    type: filesystem
+    action: read_merge_write
+    path_template: ".claude/strap/work/{{type}}/{{id}}.yaml"
+  work_item_delete:
+    type: filesystem
+    action: move_to_backup
+    path_template: ".claude/strap/work/{{type}}/{{id}}.yaml"
+    backup_dir: ".claude/strap/work/.deleted/"
+  work_item_query:
+    type: filesystem
+    action: glob_parse_filter
+    glob: ".claude/strap/work/*/*.yaml"
+  work_item_link_add:
+    type: filesystem
+    action: update_links_both
+  work_item_comment_add:
+    type: filesystem
+    action: append_comment
+  work_item_revisions:
+    type: filesystem
+    action: git_log
+    command: 'git -C {{repo_path}} log -p -- .claude/strap/work/{{type}}/{{id}}.yaml'
+  iteration_list:
+    type: filesystem
+    action: read_file
+    path: ".claude/strap/work/.iterations.yaml"
+
+id_allocation:
+  counter_file: ".claude/strap/work/.next-id"
+  format: zero-padded-5   # e.g., 00001; monotonic per-host, not per-type
+
+validated_at: 2026-08-01T16:20:00Z
+validated_by: JeffGoji
