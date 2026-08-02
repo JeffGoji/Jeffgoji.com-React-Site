@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 // Components and Pages
@@ -35,11 +34,6 @@ import PageviewTracker from './components/CustomComponents/PageviewTracker'
 import './assets/css/style.css'
 
 function App() {
-  // useEffect for preRender snapshot for adSense:
-  useEffect(() => {
-    window.dispatchEvent(new Event('custom-render-ready'));
-  }, []);
-
   return (
     <BrowserRouter>
       <ScrollToTop />
