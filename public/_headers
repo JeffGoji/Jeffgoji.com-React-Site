@@ -1,5 +1,11 @@
-/gallery/*
+/gallery/:gallery/thumbs/*
   Cache-Control: public, max-age=31536000, immutable
 
-/gallery/*/manifest.json
+/gallery/:gallery/display/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/gallery/:gallery/original/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/gallery/:gallery/manifest.json
   Cache-Control: public, max-age=300
