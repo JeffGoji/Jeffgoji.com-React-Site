@@ -30,6 +30,7 @@ import C8AutoxGallery from './components/Gallery/C8/autocross'
 import TailOfTheDragonGallery from './components/Gallery/ND/TailOfTheDragon';
 
 import ScrollToTop from './components/CustomComponents/ScrollToTop'
+import PageviewTracker from './components/CustomComponents/PageviewTracker'
 
 import './assets/css/style.css'
 
@@ -42,6 +43,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <PageviewTracker />
       <div className="container-fluid m-0 p-0">
         <Header />
         <Routes>
