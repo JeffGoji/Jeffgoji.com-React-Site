@@ -1,7 +1,7 @@
 id: "00046"
 type: task
 title: "Pin Node + fix immutable-cache-on-non-hashed-originals"
-state: new
+state: resolved
 parent: "00042"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -9,19 +9,20 @@ assigned_to: null
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
+completed_work: 5
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:15:00Z
+updated_at: 2026-08-01T21:10:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-01T21:10:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:45:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | devops-lead |
+  | Completed At | 2026-08-01T21:10:00Z |
 
   ---
 
@@ -42,3 +43,12 @@ description: |
   `npm run build` succeeds under pinned Node locally (sharp resolves); `_headers` no longer marks non-hashed `original/` immutable; derivatives still cached long. AC-013.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T20:25:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 1. Dispatched to devops-lead in worktree devops-lead-00046 on feature/00005-image-perf-analytics-baseline."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T21:10:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00046-pin-node-fix-cache into feature/00005-image-perf-analytics-baseline. Completed By: devops-lead. DEVIATION FROM SPEC (dev-lead approved): pinned Node 22, not the literal '20' -- Node 20 was already EOL (2026-04-30) and 22 matches the dev host, actually achieving the Task's own local/Netlify-agreement goal. _headers rewritten to 4 mutually-exclusive :placeholder rules (fixes a pre-existing mid-path-splat defect that may have left manifest.json wrongly immutable in prod). CORRECTION LOGGED: thumbs/display derivatives are not content-hashed either (build-gallery.mjs emits raw filename+.webp) -- immutable kept on them per DoD as literally written; follow-up content-hashing Task deferred, unscheduled, natural home is Story 00044. npm run build verified under the pinned Node 22 locally (205/205 images, 0 skips)."

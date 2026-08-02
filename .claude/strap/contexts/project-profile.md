@@ -65,8 +65,8 @@ _Dormant (no signal at onboarding; activate later via `/strap-refresh` if the pr
 
 - **Build**: `npm run build` (= `npm run gallery:build && vite build`). `gallery:build` = `node scripts/build-gallery.mjs`. Dev server: `npm run dev` (or `npm run dev:gallery` to rebuild galleries first).
 - **Deploy**: Netlify reads `netlify.toml` (command `npm run build`, publish `dist`). SPA fallback via `public/_redirects` (`/* /index.html 200`). Gallery cache headers in `public/_headers`.
-- **Tests**: **NONE currently** -- no test runner, no test files, no `test` script. Recommended stack (per test-strategist): **Vitest + React Testing Library + jsdom** (native fit for Vite; ~15-20 targeted tests). Highest-value targets: pure helpers in `scripts/build-gallery.mjs` (needs export-refactor first) and `Gallery/_thumbs/chunk.js`; blog JSON data-integrity; route-parity guard; blog pagination behavior. Once tests exist, the centralized-execution gate is `npm test` (= `vitest run`), run only by the dev-lead.
-- **Lint**: ESLint configured (`.eslintrc.cjs`) but runs only as a Vite plugin -- no standalone lint script.
+- **Tests**: Vitest 1.6.1 + React Testing Library + jsdom, bootstrapped 2026-08-01 (Feature C Task 00052). `npm test` = `vitest run`. 4 files / 30 tests as of bootstrap (analytics wrapper, SPA pageview hook, AdSense-inert guard, index.html SEO/meta guard). No project-wide Vitest config -- per-file `@vitest-environment jsdom` docblocks. Conventions: co-located `<Module>.test.js(x)` next to the module (no `__tests__/` folders); repo-wide static assertions live in top-level `test/`. Centralized-execution gate, run only by dev-lead. Pinned to Vitest 1.x -- the repo is locked to Vite 4.4 (Vitest 2/3 pull a newer Vite peer).
+- **Lint**: `vite-plugin-eslint` is a devDependency but is NOT registered in `vite.config.js` (verified 2026-08-01, Task 00052) -- **no lint enforcement runs anywhere in this project.** `.eslintrc.cjs` exists but nothing invokes it.
 
 ## Conventions
 
@@ -74,7 +74,7 @@ _Dormant (no signal at onboarding; activate later via `/strap-refresh` if the pr
 - **Language**: JavaScript/JSX only. No TypeScript despite `@types/*` being present.
 - **Content authoring**: blog entries are hand-edited markdown strings inside JSON; `picture` paths are root-relative _without_ a leading slash (e.g. `"images/na/20250130.jpg"`), served from `public/images/`.
 - **Components**: `components/<Name>/index.jsx` folder pattern predominates.
-- **Git**: not yet a git repository -- `/connect-code-repo` will establish this.
+- **Git**: git repository since 2026-08-01 via `/connect-code-repo`; origin `https://github.com/JeffGoji/Jeffgoji.com-React-Site.git`, `gh` CLI auth (account JeffGoji).
 
 ## Architecture notes
 

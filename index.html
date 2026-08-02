@@ -79,6 +79,20 @@
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
         ></script>
 
+        <!--
+            COOKIELESS ANALYTICS (PLAUSIBLE): no cookies, no localStorage.
+            The `manual` build is deliberate: the default build patches history.pushState
+            and fires its own pageview on every SPA navigation, which would double-count
+            against src/hooks/usePageviews.js. Manual makes src/lib/analytics.js the only
+            reporter. This script is deferred in <head>, so it executes before the
+            /src/main.jsx module and window.plausible is callable by first mount.
+        -->
+        <script
+            defer
+            data-domain="jeffgoji.com"
+            src="https://plausible.io/js/script.manual.js"
+        ></script>
+
         <title>JeffGoji.com - Jeff Goji's Car Blogs</title>
     </head>
 

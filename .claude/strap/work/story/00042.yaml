@@ -1,7 +1,7 @@
 id: "00042"
 type: story
 title: "Build hygiene + V1 perf baseline (Phase 0)"
-state: new
+state: resolved
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -10,17 +10,17 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:15:00Z
+updated_at: 2026-08-01T22:20:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-01T22:20:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:45:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-01T22:20:00Z |
 
   ---
 
@@ -46,3 +46,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:45:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00005 (P4/P6 build-side, devops-lead). Tasks 00046-00048."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T20:25:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 1 dispatch begun (Tasks 00046, 00048)."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-01T22:20:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). All 3 Tasks (00046, 00047, 00048) merged into feature/00005-image-perf-analytics-baseline. AC-012, AC-013, AC-004 (perf half) verified: Node pinned to 22 (deviation from spec'd 20, approved), _headers cache-scoping fixed, es2015/SSR residue removed with an explicit honest browser-target fix, V1 perf baseline captured via real Lighthouse. Baseline doc: .claude/strap/project-docs/v1-perf-baseline.md."
