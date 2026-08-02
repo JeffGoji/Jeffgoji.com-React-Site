@@ -1,7 +1,7 @@
 id: "00052"
 type: task
 title: "Author guard tests: cookieless + AdSense-inert + SEO preserved"
-state: new
+state: active
 parent: "00043"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -44,3 +44,8 @@ description: |
   Tests cover no-cookie, AdSense-inert, meta-present cases; authored (not run here).
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T22:25:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3. Predecessor Task 00050 merged. Dispatched to frontend-engineer in worktree frontend-engineer-00052 -- this Task also bootstraps the Vitest+RTL+jsdom toolchain per Task 00050's deferred note (2 test files already authored and waiting: src/lib/analytics.test.js, src/hooks/usePageviews.test.jsx)."

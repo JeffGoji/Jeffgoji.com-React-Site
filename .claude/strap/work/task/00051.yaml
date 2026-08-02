@@ -1,7 +1,7 @@
 id: "00051"
 type: task
 title: "Capture V1 engagement baseline (in-repo)"
-state: new
+state: active
 parent: "00043"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -44,3 +44,8 @@ description: |
   Doc names each engagement metric + target + capture method + date window; cross-links the perf baseline. AC-004 (engagement half).
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T22:25:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3. Predecessor Task 00050 merged (pageview tracking live). Dispatched to frontend-engineer in worktree frontend-engineer-00051."

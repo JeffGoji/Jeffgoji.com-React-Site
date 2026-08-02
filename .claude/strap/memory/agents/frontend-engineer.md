@@ -14,6 +14,8 @@ Curated by the dev-lead. You read; you do not write. When you finish a task and 
 - **Styling is a three-way split**: Bootstrap utilities + custom SCSS (`src/scss/styles.scss` via a separate script tag) + legacy `src/assets/css/style.css`. The SCSS `$theme-colors` override (`styles.scss:2`) is ineffective (Bootstrap imported before the map is defined); custom colors survive only because also hand-declared. Reconcile these before any theming work.
 - **AdSense is entirely inert** -- every slot call site is commented out, and `AdSense/AdSenseSlot.jsx:7` takes no props / reads undefined `VITE_AD_*` env while the commented call sites pass `client=/slot=` props. Fix the prop contract before re-enabling.
 - **Picture paths in blog JSON are root-relative without a leading slash** (`"images/na/..."`), served from `public/images/`. Works only because every route is a single path segment -- keep routes single-segment or fix the paths.
+- **Analytics vendor is Plausible, manual-tracking mode** (`index.html` loads `script.manual.js`, not the default `script.js`). Plausible's default build auto-patches `history.pushState` and fires its own pageview on every SPA navigation -- combined with a manual `usePageviews()` hook that double-counts every route change. Settled shape (as of Task 00050): `src/lib/analytics.js` (vendor seam, `trackPageview()`) is the ONLY reporter; `src/hooks/usePageviews.js` + `src/components/CustomComponents/PageviewTracker.js` (null-render, mounted once inside `<BrowserRouter>` since `App` itself sits outside router context) drive it on `useLocation().pathname` change.
+- **`src/lib/` and `src/hooks/` are new shared-module directories** (introduced by Task 00050; didn't exist before). Home for cross-component non-UI code (vendor seams, custom hooks) -- use them rather than inventing a third location.
 
 ## Anti-patterns to avoid
 
@@ -26,5 +28,5 @@ Curated by the dev-lead. You read; you do not write. When you finish a task and 
 
 ## Tool / environment quirks
 
-- Windows dev host. Not currently a git repo.
+- Windows dev host. Git repo since 2026-08-01 (`/connect-code-repo`); origin `https://github.com/JeffGoji/Jeffgoji.com-React-Site.git`, `gh` CLI auth. Watch for Windows path-length limits in deeply nested worktrees (long legacy image filenames) -- `git config core.longpaths true` fixes it.
 - `scripts/build-gallery.mjs` helpers (`parseDateAlt`, `sortKeys`, `cleanName`) are not exported -- they must be exported (and `main()` guarded behind an entry check) before they're unit-testable. That refactor is frontend-owned.

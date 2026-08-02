@@ -1,7 +1,7 @@
 id: "00050"
 type: task
 title: "Wire SPA route-change pageview + engagement tracking"
-state: new
+state: resolved
 parent: "00043"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00049"
     type: predecessor
 original_estimate: 4
+completed_work: 4
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:15:00Z
+updated_at: 2026-08-01T21:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-01T21:50:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:45:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-01T21:50:00Z |
 
   ---
 
@@ -44,3 +45,12 @@ description: |
   Navigating between two routes fires exactly one pageview each; unit test asserts trackPageview called once per useLocation change (mock global) + no-op when undefined; zero cookies set. Test authored (dev-lead runs).
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T21:35:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2. Predecessor Task 00049 merged (analytics script live in index.html). Dispatched to frontend-engineer in worktree frontend-engineer-00050."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T21:50:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00050-wire-spa-pageview-tracking into feature/00005-image-perf-analytics-baseline. Completed By: frontend-engineer. DEVIATION FROM 00049's OUTPUT (dev-lead approved): index.html's Plausible script.js -> script.manual.js -- the default build auto-tracks SPA navigation via pushState patching, which would have double-counted against this Task's manual usePageviews() hook. New: src/lib/analytics.js (vendor seam), src/hooks/usePageviews.js, src/components/CustomComponents/PageviewTracker.js (null-render mount point, App sits outside BrowserRouter). 8 unit tests authored (not run -- no test runner installed yet; Task 00052 owns bootstrapping it). AC-003 (SPA portion) satisfied pending Task 00052's runner + a live-deploy check that Plausible's manual-mode entry pageview fires (localhost is ignored by Plausible by design)."

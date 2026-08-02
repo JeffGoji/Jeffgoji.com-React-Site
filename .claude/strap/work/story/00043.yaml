@@ -1,7 +1,7 @@
 id: "00043"
 type: story
 title: "Cookieless analytics + engagement baseline (Phase 0)"
-state: new
+state: active
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -46,3 +46,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:45:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00005 (P6 client-side, frontend-engineer). Tasks 00049-00052."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T20:25:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 1 dispatch begun (Task 00049). SQ-001 resolved: Plausible (hosted)."

@@ -1,10 +1,9 @@
 session:
-  workflow: strap-in
-  workflow_instance: 2026-08-01-onboarding
-  started_at: 2026-08-01T00:00:00Z
-  completed_at: 2026-08-01T20:33:00Z
-  specialists_used: 272K
-  notes: "strap-in complete; CPO chose /connect-code-repo as next step"
+  workflow: execute-sprint
+  workflow_instance: execute-00005
+  started_at: 2026-08-01T20:25:00Z
+  completed_at: null
+  specialists_used: 0
 
 budgets:
   strap-in:
@@ -34,12 +33,12 @@ budgets:
 
 agents:
   frontend-engineer:
-    used_in_current: 82K
+    used_in_current: 0
   security-reviewer:
     used_in_current: 50K
   test-strategist:
     used_in_current: 48K
   devops-lead:
-    used_in_current: 48K
+    used_in_current: 0
   tech-writer:
     used_in_current: 44K

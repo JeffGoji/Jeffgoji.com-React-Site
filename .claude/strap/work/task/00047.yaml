@@ -1,7 +1,7 @@
 id: "00047"
 type: task
 title: "Drop target:'es2015' + remove dead SSR residue"
-state: new
+state: resolved
 parent: "00042"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -9,19 +9,20 @@ assigned_to: null
 tags: [AI, strap:task]
 links: []
 original_estimate: 4
+completed_work: 4
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:15:00Z
+updated_at: 2026-08-01T22:15:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-01T22:15:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:45:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | devops-lead |
+  | Completed At | 2026-08-01T22:15:00Z |
 
   ---
 
@@ -42,3 +43,12 @@ description: |
   Clean `vite build`; home + a blog + `nd-totd2025` render unbroken; no `custom-render-ready`/`Object.hasOwn` references remain; AdSense global script present + non-erroring (AC-017 touchpoint). AC-012.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T21:35:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2. Task 00048's baseline capture landed first (Wave 1), satisfying this Task's ordering dependency. Dispatched to devops-lead in worktree devops-lead-00047."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T22:15:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00047-drop-es2015-ssr-residue into feature/00005-image-perf-analytics-baseline (clean 3-way auto-merge against Task 00050's App.jsx changes). Removed es2015 target, Object.hasOwn polyfill, custom-render-ready dispatch. REGRESSION CAUGHT AND FIXED (dev-lead approved amend): react-markdown v10 calls Object.hasOwn at render time on all 4 blog pages; esbuild target downlevels syntax only, never polyfills built-ins, so leaving Vite's default target after removing the polyfill would have advertised a floor the bundle couldn't meet (hard TypeError on Safari 14/iOS 15.0-15.3/Chrome 87-92/Firefox 78-91). Fixed by pinning an explicit honest target (chrome93/safari15.4/firefox92/edge93) matching what Object.hasOwn actually needs -- also yields the smallest bundle of the three revisions tested (651,985B raw vs 659,063B original, -1.07%). Verified via real npm run build + headless Edge render checks on all 3 DoD routes (home/blog/gallery), zero console errors, AdSense global confirmed executing (window.adsbygoogle === object) on all routes. AC-012 + AC-017 touchpoint satisfied."

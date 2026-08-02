@@ -74,7 +74,7 @@ _Dormant (no signal at onboarding; activate later via `/strap-refresh` if the pr
 - **Language**: JavaScript/JSX only. No TypeScript despite `@types/*` being present.
 - **Content authoring**: blog entries are hand-edited markdown strings inside JSON; `picture` paths are root-relative _without_ a leading slash (e.g. `"images/na/20250130.jpg"`), served from `public/images/`.
 - **Components**: `components/<Name>/index.jsx` folder pattern predominates.
-- **Git**: not yet a git repository -- `/connect-code-repo` will establish this.
+- **Git**: git repository since 2026-08-01 via `/connect-code-repo`; origin `https://github.com/JeffGoji/Jeffgoji.com-React-Site.git`, `gh` CLI auth (account JeffGoji).
 
 ## Architecture notes
 
