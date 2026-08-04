@@ -1,65 +1,42 @@
-// Import all of Bootstrap's CSS
+// ============================================================================
+// jeffgoji.com — application stylesheet entry
+// Loaded as a Vite module import from src/scss/js/main.js.
+// ----------------------------------------------------------------------------
+// IMPORT ORDER IS LOAD-BEARING — do not reorder (Spec 00002 Part P5, Task 00017)
+// ----------------------------------------------------------------------------
+// Bootstrap reads $theme-colors and every other themable variable DURING its own
+// import: _root.scss emits the --bs-* custom properties from the map,
+// _buttons.scss generates .btn-*, and utilities/_api.scss generates .bg-*/.text-*.
+// A map defined after that import is never read, so an override placed below
+// Bootstrap is a silent no-op. That was this file's live bug before Task 00017 —
+// it imported Bootstrap on line 2 and declared $theme-colors on line 16, so the
+// palette override never reached a single generated rule.
+//
+// The V2 partials therefore all land ABOVE Bootstrap:
+//   _tokens  — CSS custom properties (palette source of truth)
+//   _theme   — Sass variables that re-point Bootstrap's theme slots
+//   _fonts   — self-hosted @font-face declarations
+//   _grade   — the reusable editorial image-grade layer
+// App-level overrides go BELOW Bootstrap so they win on equal specificity.
+//
+// _fonts.scss resolves its ../assets/fonts/ urls relative to src/scss/, which is
+// where this file lives — an entry outside src/scss/ would break those paths.
+// ============================================================================
+
+@import "tokens";
+@import "theme";
+@import "fonts";
+@import "grade";
+
 @import "bootstrap/scss/bootstrap";
+
+// --- APP OVERRIDES ----------------------------------------------------------
 
 .legal-font {
   font-family: "Cinzel", serif;
 }
 
-// Define your primary colors
-$primary-0: #ff0000; /* Main Primary color */
-$primary-1: #797979;
-$primary-2: #475374;
-$primary-3: #162f71;
-$primary-4: #072370;
-$primary-text: #ffffff;
-
-$theme-colors: (
-  "primary-0": $primary-0,
-  "primary-1": $primary-1,
-  "primary-2": $primary-2,
-  "primary-3": $primary-3,
-  "primary-4": $primary-4,
-  "primary-text": $primary-text,
-);
-
-// Create custom utility classes for your colors
-.color-primary-0 {
-  color: $primary-0;
-} /* Main Primary color */
-.color-primary-1 {
-  color: $primary-1;
-}
-.color-primary-2 {
-  color: $primary-2;
-}
-.color-primary-3 {
-  color: $primary-3;
-}
-.color-primary-4 {
-  color: $primary-4;
-}
-
-.color-primary-text {
-  color: $primary-text;
-}
-
-.bg-primary-0 {
-  background-color: $primary-0;
-} /* Main Primary color */
-.bg-primary-1 {
-  background-color: $primary-1;
-}
-.bg-primary-2 {
-  background-color: $primary-2;
-}
-.bg-primary-3 {
-  background-color: $primary-3;
-}
-.bg-primary-4 {
-  background-color: $primary-4;
-}
-
-//Margins and padding:
+// Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;
 }
