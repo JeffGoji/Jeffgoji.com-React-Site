@@ -1,7 +1,7 @@
 id: "00017"
 type: task
 title: "Assemble the P1 partials into styles.scss with correct import order (fix the $theme-colors bug)"
-state: active
+state: resolved
 parent: "00009"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -9,19 +9,20 @@ assigned_to: null
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
+completed_work: 5
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T05:20:00Z
+updated_at: 2026-08-04T06:40:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T06:40:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-04T06:40:00Z |
 
   ---
 
@@ -56,3 +57,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-04T06:20:00Z
     body: "[STRAP/agent:dev-lead] First dispatch crashed on a transient network error (API ENOTFOUND) before creating a branch or any commit -- nothing to salvage. Redispatched to a fresh frontend-engineer instance reusing the same (untouched) worktree. State stays active."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-04T06:40:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00017-styles-assembly (6964d56) into feature/00003-shell-wiring-and-nav (1787ea8). Completed By: frontend-engineer. THE PALETTE IS LIVE: verified directly in the compiled production CSS (npx vite build) -- --bs-primary: #E10600 at :root, 54 occurrences of the brand hex, retired blue palette (.color-primary-*/.bg-primary-*, #ff0000) fully removed. 27-test probe green; 287/287 repo-wide after merge. One flag for Story 00010: removing .bg-primary-1 changes rendered output on 4 blog pages (Panda/Kiryu/Miyoshi/Kasumi row backgrounds lose their #797979 grey band, fall through to charcoal canvas + text-white) -- acceptable on V2 but should be picked up explicitly, not discovered. Known pre-existing risk reconfirmed, not a regression: Bootstrap's [data-bs-theme=dark] block still carries an independent #0d6efd-based palette, live in the build; matters only if something sets that attribute (P5/Story 00009 cleanup candidate, not blocking)."
