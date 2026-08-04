@@ -7,13 +7,18 @@
  * Covers Task 00024 / AC-018: /totdtrip was a second, unlinked registration of
  * the same gallery component /totdgallery serves. Removing it must not take the
  * shared import — or the surviving route — with it.
+ *
+ * Covers Task 00025: the route-parity guard at the Feature A/B seam. Task 00024
+ * asserts the route table; this asserts the composed shell — what the assembled
+ * App → Header → NavMenu tree actually offers a visitor — so a route removed
+ * from one side and left behind in the other fails here.
  */
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
 /**
  * The real gallery fetches a build-time manifest and mounts
@@ -72,5 +77,111 @@ describe('the Tail of the Dragon gallery has exactly one route', () => {
         expect(APP_SOURCE).toContain(
             "import TailOfTheDragonGallery from './components/Gallery/ND/TailOfTheDragon'"
         );
+    });
+});
+
+/** The per-set submenus the Galleries panel fans out into. */
+const GALLERY_SUBMENU_TOGGLES = [
+    'nb-gallery-dropdown-toggle',
+    'nc-gallery-dropdown-toggle',
+    'nd-gallery-dropdown-toggle',
+    'c8-gallery-dropdown-toggle',
+];
+
+/**
+ * Walks the nav's full offer surface — top level, the Galleries panel and every
+ * per-set submenu — accumulating what a visitor can reach.
+ *
+ * Sampled after each toggle rather than once at the end: react-bootstrap
+ * withholds a Dropdown.Menu's children until the menu has been shown, and the
+ * root-close handler that fires on the next toggle's click can take the last
+ * menu back out of the tree.
+ */
+const surveyNav = (container) => {
+    const hrefs = new Set();
+    const text = [];
+
+    const sample = () => {
+        const nav = container.querySelector('nav.site-nav');
+
+        for (const link of nav.querySelectorAll('a[href]')) {
+            hrefs.add(link.getAttribute('href'));
+        }
+
+        text.push(nav.textContent);
+    };
+
+    sample();
+
+    fireEvent.click(container.querySelector('#galleries-nav-dropdown'));
+    sample();
+
+    for (const id of GALLERY_SUBMENU_TOGGLES) {
+        fireEvent.click(container.querySelector(`#${id}`));
+        sample();
+    }
+
+    return { hrefs: [...hrefs], text: text.join(' ') };
+};
+
+describe('the nav offers exactly what the app registers', () => {
+    it('links the surviving gallery route and nothing at the removed one', () => {
+        const { container } = renderAt('/');
+
+        const { hrefs } = surveyNav(container);
+
+        expect(hrefs).toContain('/totdgallery');
+        expect(hrefs).not.toContain('/totdtrip');
+    });
+
+    /**
+     * Wider than the nav on purpose: the footer gained its own link column in
+     * Task 00023, so a stale target can now be reintroduced from two places.
+     */
+    it('leaves no link to the removed route anywhere in the shell', () => {
+        const { container } = renderAt('/');
+
+        expect(container.querySelector('a[href="/totdtrip"]')).toBeNull();
+    });
+
+    /**
+     * Header and Footer sit outside <Routes>, so an unmatched path still paints
+     * the chrome. Asserts the removal took the route and not the shell with it.
+     */
+    it('still paints the shell at the removed path', () => {
+        const { container } = renderAt('/totdtrip');
+
+        expect(container.querySelector('nav.site-nav')).not.toBeNull();
+        expect(container.querySelector('footer.site-footer')).not.toBeNull();
+    });
+
+    /**
+     * Identified by href rather than by its label: the pill's copy is the
+     * NavMenu unit test's business, and this file should not break on a wording
+     * change. Asserted as a direct child of .navbar-nav because the contract is
+     * that it is reachable without opening anything.
+     */
+    it.each(['/', '/garage', '/youtube', '/totdgallery'])(
+        "offers What's New on %s without a dropdown in the way",
+        (path) => {
+            const { container } = renderAt(path);
+            const pill = container.querySelector(
+                'nav.site-nav .navbar-nav > a[href="/whats-new"]'
+            );
+
+            expect(pill).not.toBeNull();
+            expect(pill.classList.contains('site-nav__link--flag')).toBe(true);
+        }
+    );
+
+    /**
+     * Standing regression guard for Task 00020's removal of the "NA Miata
+     * (coming soon)" entry. The nav advertises routes that exist; a placeholder
+     * for one that does not is a 404 waiting to be clicked.
+     */
+    it('advertises no destination that has not been built', () => {
+        const { container } = renderAt('/');
+
+        expect(surveyNav(container).text).not.toMatch(/coming soon/i);
     });
 });
