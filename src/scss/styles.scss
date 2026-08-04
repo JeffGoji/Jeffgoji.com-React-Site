@@ -433,22 +433,130 @@ a {
   justify-content: center;
 }
 
-// The photo layer this wash sat over (na/12370846_…_o.jpg) was deleted from the
-// tree at some point, so the browser has been dropping it as a 404 and painting
-// the gradient alone — which is what this reproduces. Vite resolves url() at
-// build time, so carrying the dead reference across would fail the build rather
-// than fail silently. Story 00010 picks the V2 hero image for this surface.
-.na-background {
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-}
-
 // Garage card affordance. The hand-rolled red box-shadow became the palette's
 // own glow token; Story 00010 replaces this with the mockup's card treatment.
 .img-hover:hover {
   box-shadow: var(--glow-red);
   cursor: pointer;
+}
+
+// --- V2 COMPONENT LANGUAGE --------------------------------------------------
+// Ported from the mockups' component layer (assets/app.css) by Task 00038, the
+// first surface re-skin that needed it. Only the blocks the NA6 spec page uses
+// are here; the sibling re-skins add the rest of each block (.card__media,
+// .post__specs, .pager, …) as their own surfaces call for them.
+//
+// `.card` shares its name with a live Bootstrap component — the same collision
+// that pushed the nav port onto `.site-nav`. It is deliberately NOT renamed:
+// the mockups treat `.card` as the design system's card and every sibling
+// surface ports against that name. Sitting below the Bootstrap import, the
+// declarations here win the properties they share with Bootstrap's rule; what
+// survives underneath (the flex column, min-width: 0) is what the block wants.
+//
+// The mockups set h1–h4 in the display face app-wide (assets/app.css:24-30).
+// That base rule is Story 00010's to port, so the headings below carry it at
+// block scope rather than pre-empting it globally.
+
+.section {
+  padding-block: var(--space-9);
+}
+
+.section-head {
+  margin-bottom: var(--space-7);
+
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: var(--color-heading);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-mega);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+  }
+
+  h2 {
+    font-size: var(--fs-h2);
+  }
+}
+
+// Long-form reading panel — one step off the canvas, roomy leading, and a
+// measure that keeps a paragraph from running the full container width.
+.post {
+  background: var(--color-reading);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-6);
+}
+
+.post__body {
+  padding: var(--space-6);
+}
+
+.post__entry {
+  color: var(--color-text);
+  white-space: pre-line;
+  font-size: var(--fs-read);
+  line-height: var(--lh-read);
+  max-width: 68ch;
+}
+
+.card {
+  background: var(--color-surface);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--ink-400);
+}
+
+.card__body {
+  padding: var(--space-5);
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--color-heading);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-mega);
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+  margin: var(--space-2) 0;
+}
+
+// Telemetry chips — the spec-sheet voice (Space Mono) the whole site reads data
+// in. `.spec-row` wraps them, which is what keeps a long mod name from forcing
+// horizontal overflow on a 360px viewport.
+.spec-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-mid);
+  background: var(--ink-800);
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+}
+
+.chip b {
+  color: var(--text-hi);
+  font-weight: 700;
 }
