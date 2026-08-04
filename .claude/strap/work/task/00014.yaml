@@ -1,7 +1,7 @@
 id: "00014"
 type: task
 title: "Port the .media--editorial grade layer into _grade.scss"
-state: new
+state: active
 parent: "00007"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -13,7 +13,7 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-03T16:00:00Z
+updated_at: 2026-08-03T19:35:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -49,3 +49,8 @@ description: |
 
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-03T19:35:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2. Dispatched to designer in worktree designer-00014 on branch task/00014-grade-scss."
