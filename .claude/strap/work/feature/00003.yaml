@@ -97,3 +97,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:12:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /decompose-feature). Decomposed into 5 Stories (00007-00011), 14 Tasks (00012-00025), ~55 senior-dev-hours. Dep chain: 00007+00008 -> 00009 -> 00010 -> 00011. Reconciled specialist overlap (designer authors partials; frontend assembles)."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-03T16:00:00Z
+    body: "[STRAP/agent:dev-lead] Sprint allocation (via /plan-sprint): Story 00007 (3 Tasks, 10h, whole) + Task 00015 (4h, split from Story 00008) moved to Sprint 2026.08.A -- 14h of 16h remaining sprint capacity. Developer: unassigned (JeffGoji + agent execution team). Remaining backlog under this Feature: Task 00016 (3h, rest of Story 00008), Stories 00009/00010/00011 (37h, blocked in sequence) -- overflow, held for next /plan-sprint. Note: allocating 00007 does not unblock 00009, which needs both 00007 and 00008 complete; 00008 stays split across sprints (00015 in, 00016 out) rather than deferred whole, per CPO approval of the sprint-planner proposal."
