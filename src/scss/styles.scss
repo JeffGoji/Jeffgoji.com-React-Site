@@ -342,9 +342,246 @@ a {
   background-repeat: no-repeat;
 }
 
-// Garage card affordance. The hand-rolled red box-shadow became the palette's
-// own glow token; Story 00010 replaces this with the mockup's card treatment.
-.img-hover:hover {
-  box-shadow: var(--glow-red);
+// --- V2 EDITORIAL PRIMITIVES + THE GARAGE HUB (Task 00033) -------------------
+// Ported from the mockups' assets/app.css: the layout helpers (:36-57), the
+// button block (:122-136), the card block (:150-168) and the garage grid
+// (:296), plus the styles garage.html carries on style attributes.
+//
+// The button base lands on the MODIFIERS rather than on a bare `.btn`. `.btn`
+// is a live Bootstrap component class that every react-bootstrap <Button> in
+// the blogs and the gallery switcher still carries, and a bare-`.btn` port
+// would restyle all of them from under those surfaces mid-migration. The markup
+// still reads `btn btn--primary btn--sm` exactly as the mockup writes it, so
+// the port becomes verbatim again the moment those Buttons are retired. `.card`
+// needs no such care -- the only pre-V2 `.card` in the tree was the garage card
+// this Task replaces.
+
+.section {
+  padding-block: var(--space-9);
+}
+
+.section-tight {
+  padding-block: var(--space-7);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--goji-red);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+
+  &::before {
+    content: "";
+    width: 28px;
+    height: 2px;
+    background: var(--goji-red);
+    display: inline-block;
+  }
+}
+
+.btn--primary,
+.btn--ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--fs-sm);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
   cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background var(--dur-fast),
+    border-color var(--dur-fast),
+    color var(--dur-fast);
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.btn--primary {
+  background: var(--goji-red);
+  color: #fff;
+
+  &:hover {
+    background: var(--goji-red-bright);
+    color: #fff;
+    box-shadow: var(--glow-red);
+  }
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-hi);
+  border-color: var(--ink-400);
+
+  &:hover {
+    border-color: var(--goji-red);
+    color: #fff;
+  }
+}
+
+.btn--sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--fs-xs);
+}
+
+// The mockup inlines this on the retired car's chip (garage.html:49). It is a
+// <span>, not a disabled control, so `.btn:disabled` cannot carry it.
+.btn.is-retired {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card {
+  background: var(--color-surface);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    transform var(--dur) var(--ease-out),
+    border-color var(--dur);
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: var(--ink-400);
+  }
+}
+
+.card__media {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  position: relative;
+  background: var(--ink-800);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+}
+
+.card:hover .card__media img {
+  transform: scale(1.05);
+}
+
+.card__body {
+  padding: var(--space-5);
+}
+
+.card__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--goji-red);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.card__title {
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+  margin: var(--space-2) 0;
+
+  small {
+    display: block;
+    font-size: var(--fs-sm);
+    color: var(--text-lo);
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-top: 4px;
+  }
+}
+
+.card__text {
+  color: var(--text-mid);
+  font-size: var(--fs-sm);
+}
+
+.numtag {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-style: italic;
+  font-size: var(--fs-h2);
+  color: var(--ink-500);
+  line-height: 1;
+}
+
+// garage.html:42 inlines the corner placement; it is class-borne here. The tag
+// sits above the editorial grade because that grade paints from ::after on the
+// media container, which is this element's parent rather than its sibling.
+.card__numtag {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 2;
+}
+
+// The preview variant makes the whole card the link (home.html:122). An <a> is
+// inline by default, which would collapse the card's box.
+.car-card--preview {
+  display: block;
+  color: inherit;
+}
+
+.garage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+// The hub's own chrome. The measure is repeated per block the way .site-nav and
+// .site-footer carry theirs, rather than through a ported `.container`:
+// Bootstrap owns that class name and its breakpoint ladder is still live on
+// every un-migrated surface.
+.garage__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+// garage.html:16 inlines the wash and the rule under the masthead.
+.garage__head {
+  border-bottom: var(--hairline);
+  background: radial-gradient(1000px 380px at 80% -20%, var(--goji-red-ink), transparent 60%);
+}
+
+.garage__title {
+  font-size: var(--fs-h1);
+  text-transform: uppercase;
+}
+
+.garage__lead {
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+  max-width: 60ch;
+  margin-top: var(--space-4);
+}
+
+// The mockups' own section breakpoint (assets/app.css:582).
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-7);
+  }
+}
+
+// The mockups tighten the container gutter here (assets/app.css:586); the hub
+// measure follows.
+@media (max-width: 360px) {
+  .garage__inner {
+    padding-inline: var(--space-4);
+  }
 }

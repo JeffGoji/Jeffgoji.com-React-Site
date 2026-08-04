@@ -5,6 +5,9 @@
             "make": "Mazda",
             "model": "NA6 Miata",
             "year": 1991,
+            "label": "1991 NA6",
+            "tag": "Daily / Resto",
+            "img": "na/night4.jpg",
             "description": "I bought this NA6 in 2003 as my first car and it has been with me ever since. Primarily used as a daily driver it has been heavily modified including bushings, suspension, exhaust, intake, and a few other goodies that make it a fun and reliable daily driver that still gets complimented daily from fellow auto enthusiast.",
             "name": "Miyoshi",
             "bloglink": "../na-blog"
@@ -14,6 +17,9 @@
             "make": "Mazdaspeed",
             "model": "NB Mazdaspeed",
             "year": 2004,
+            "label": "2004 MSM",
+            "tag": "Autocross weapon",
+            "img": "nb/41923629_10215428433037365_6642417182418403328_o.jpg",
             "description": "This 2004 Mazdaspeed Miata was my second car. It served as a daily driver until 2012 when I began modifying it for Solo Autocross racing. With a nice bump and power, wide wheels and tires and stiff racing suspension, it has won two SCCA championships locally with me driving and is always competing for fastest time of day at BMW and PCA events.",
             "name": "Kiryu",
             "bloglink": "../msm-blog"
@@ -23,6 +29,9 @@
             "make": "Mazda",
             "model": "NC Club",
             "year": 2013,
+            "label": "2013 NC",
+            "tag": "Retired / tribute",
+            "img": "ncEdit.jpg",
             "description": "One of my more compulsive buys, this was my third Miata and one of my absolute favorite cars of all time. The only modifications it ever needed was a new catback exhaust and a set of Progress swaybars. The power retractable hardtop, larger 2.0 engine, and refined interior made it the best Miata for traveling I have ever driven. I toured the United States coast to coast in it back in 2015.\n Unfortunately, it was totaled in a flood back in 2018, but I keep it here for completion's sake.",
             "name": "Ryoko",
             "bloglink": "/"
@@ -32,6 +41,9 @@
             "make": "Mazda",
             "model": "ND GTS RF",
             "year": 2023,
+            "label": "2023 ND RF",
+            "tag": "Current fun",
+            "img": "nd/nd-002.jpg",
             "description": "My fourth Miata. This 2023 ND GTS RF is my newest Miata in the garage and is a little bit of a departure from my norm. I wanted to give the Retractable Fastback design a shot instead of my usual soft-top regime, and I have been pleasantly surprised as it is proving to be not just an amazingly fun car to drive, but an economical one at that.",
             "name": "Kasumi",
             "bloglink": "../nd-blog"
@@ -41,6 +53,9 @@
             "make": "Chevrolet",
             "model": "C8 Corvette Z51",
             "year": 2023,
+            "label": "2023 C8 Z51",
+            "tag": "Mid-engine",
+            "img": "c8/c8-002.jpg",
             "description": "This 2023 C8 Corvette is a blast to drive and is a huge leap forward in performance and technology. I decided on the name 'Panda' with its white and black color scheme. The current plan is to keep it stock and use it for Autocross and road trips.",
             "name": "Panda",
             "bloglink": "../c8-blog"
