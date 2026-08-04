@@ -1,27 +1,28 @@
 id: "00023"
 type: task
 title: "Wire in and rebuild the Footer"
-state: new
+state: resolved
 parent: "00011"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
+completed_work: 5
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:10:00Z
+updated_at: 2026-08-04T08:35:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T08:35:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-04T08:35:00Z |
 
   ---
 
@@ -47,3 +48,12 @@ description: |
 
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T13:20:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00023 on branch task/00023-wire-footer. Dispatched in parallel with Task 00024 (both independent)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T08:35:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00023-wire-footer (674ccb5) into feature/00003-footer-and-cleanup (cf08376), auto-merged cleanly against Task 00024's parallel App.jsx edit (route table vs footer render, non-overlapping). Completed By: frontend-engineer. AC-002/AC-005 satisfied: Footer renders on every route under the token palette, checker-strip + 3-col grid (1.4fr/1fr/1fr) at desktop collapsing to 1fr at 768px (mockup's own breakpoint, no react-bootstrap mechanism forcing otherwise), cookieless bottom line, no longer fixed-bottom. Dynamic year kept dynamic via direct computation instead of the original useState/useEffect pair -- also fixes a real one-frame empty-year flash bug, accepted as an improvement. 21-test probe green; 382/382 repo-wide after both Story 00011 Tasks merged; production build re-verified clean. One accessibility follow-up flagged, non-blocking: the inline logo SVG's gradient id collides between NavMenu and Footer (same id twice in one document) -- renders correctly today since both instances are identical, but the clean fix (a shared Logo component with instance-suffixed ids) is a candidate follow-up Task."
