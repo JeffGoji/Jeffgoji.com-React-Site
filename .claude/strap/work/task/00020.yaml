@@ -1,9 +1,9 @@
 id: "00020"
 type: task
 title: "Rebuild the NavMenu structure to the mockup"
-state: new
+state: resolved
 parent: "00010"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:task]
@@ -11,19 +11,20 @@ links:
   - target: "00019"
     type: predecessor
 original_estimate: 6
+completed_work: 6
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:10:00Z
+updated_at: 2026-08-04T07:40:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T07:40:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-04T07:40:00Z |
 
   ---
 
@@ -49,3 +50,12 @@ description: |
 
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T07:20:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00020 on branch task/00020-navmenu-rebuild."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T07:40:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00020-navmenu-rebuild (23ff83a) into feature/00003-shell-wiring-and-nav (485053a). Completed By: frontend-engineer. DoD fully verified: no data-bs-theme/bg-dark, no coming-soon text, all dropdown/toggle ids unique, Home's false-positive active state fixed via NavLink end. 63-test extension green (46 styles + 17 component); 334/334 repo-wide after merge; production build re-verified clean with #E10600 intact. Accepted mobile-breakpoint call: aligned to the actual expand=lg (992px) mechanism rather than the mockup's literal 768px, since react-bootstrap's collapse behavior was mandated unchanged -- both DoD-required widths (1440/1024 expanded, <=768 collapsed) hold. Galleries hub judgment: kept per-set dropdowns since Feature B's /galleries route doesn't exist yet -- flagged for cleanup when Feature B lands. Not visually verified in a browser (no browser tooling available to the specialist) -- declaration-level assertions only; recommend a human/ux-test-engineer pass before the Feature PR, especially the gallery submenu variant=\"text\" styling."

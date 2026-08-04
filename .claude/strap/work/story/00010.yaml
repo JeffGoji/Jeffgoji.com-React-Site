@@ -1,9 +1,9 @@
 id: "00010"
 type: story
 title: "Rebuild NavMenu + Header to the V2 shell"
-state: new
+state: resolved
 parent: "00003"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:story]
@@ -12,17 +12,17 @@ links:
     type: predecessor
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:10:00Z
+updated_at: 2026-08-04T08:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T08:00:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-04T08:00:00Z |
 
   ---
 
@@ -53,3 +53,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:10:00Z
     body: "[STRAP/agent:dev-lead] Story created via /decompose-feature 00003 (P2, frontend-engineer). 4 Tasks: 00019-00022."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T07:10:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Predecessor 00009 resolved -- unblocked. First Task (00019) started. This is the Story that makes the redesign actually visible."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-04T08:00:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). All 4 Tasks merged (00019 logo swap, 00020 NavMenu rebuild, 00021 What's New pill, 00022 Header). AC-002 fully satisfied (new logo, black+red palette, coming-soon removed); AC-005 satisfied (navbar collapses to mobile menu at expand=lg's 992px breakpoint); AC-014 satisfied (permanent pill, route itself owned by Feature D). 357/357 repo tests green, production build verified. THE V2 SHELL IS VISIBLY LIVE on feature/00003-shell-wiring-and-nav -- this Story is what the CPO's urgent fast-track directive was actually asking for."

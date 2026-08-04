@@ -31,8 +31,6 @@ import TailOfTheDragonGallery from './components/Gallery/ND/TailOfTheDragon';
 import ScrollToTop from './components/CustomComponents/ScrollToTop'
 import PageviewTracker from './components/CustomComponents/PageviewTracker'
 
-import './assets/css/style.css'
-
 function App() {
   return (
     <BrowserRouter>
