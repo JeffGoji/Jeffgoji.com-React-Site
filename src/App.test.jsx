@@ -12,6 +12,10 @@
  * asserts the route table; this asserts the composed shell — what the assembled
  * App → Header → NavMenu tree actually offers a visitor — so a route removed
  * from one side and left behind in the other fails here.
+ *
+ * Covers Task 00023: the footer's composition into the shell, which is a
+ * separate concern from the footer's own contract and lives here for the same
+ * reason — the defect was in App.jsx, not in the component.
  */
 
 import { readFileSync } from 'node:fs';
@@ -183,5 +187,38 @@ describe('the nav offers exactly what the app registers', () => {
         const { container } = renderAt('/');
 
         expect(surveyNav(container).text).not.toMatch(/coming soon/i);
+    });
+});
+
+/**
+ * The Footer component was fully built but never imported, so the defect Task
+ * 00023 fixed lived in App.jsx's composition rather than in the component. Only
+ * an App-level render catches a regression of it; the component's own contract
+ * is covered in components/Footer/index.test.jsx.
+ */
+describe('the shell mounts the footer on every route (Task 00023)', () => {
+    it.each(['/', '/garage', '/youtube', '/suspension'])(
+        'renders the contentinfo landmark on %s',
+        (route) => {
+            renderAt(route);
+
+            expect(screen.getByRole('contentinfo')).toBeDefined();
+        }
+    );
+
+    it('mounts exactly one footer', () => {
+        renderAt('/');
+
+        expect(screen.getAllByRole('contentinfo')).toHaveLength(1);
+    });
+
+    it('places the footer below the routed content, alongside the banner', () => {
+        renderAt('/');
+
+        const footer = screen.getByRole('contentinfo');
+        const banner = screen.getByRole('banner');
+
+        expect(footer.parentElement.contains(banner)).toBe(true);
+        expect(footer.parentElement.lastElementChild).toBe(footer);
     });
 });
