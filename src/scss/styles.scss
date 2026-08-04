@@ -54,6 +54,17 @@
   }
 }
 
+// The banner wrapper around the nav (components/Header). It carries no chrome of
+// its own — the mockups hang `.nav` straight off <body> and declare no header
+// block at all — so it is taken out of the layout tree entirely. A real box here
+// becomes the containing block for `.site-nav`'s `position: sticky` below, and
+// one exactly as tall as the bar gives the sticky offset range zero length,
+// which silently reduces the bar to a static one. `display: contents` keeps the
+// <header> landmark without reintroducing that constraint. Task 00022.
+.site-header {
+  display: contents;
+}
+
 // Primary navigation, ported from the mockups' .nav block (assets/app.css:67-116
 // and the max-width:768 block at :562-574). Task 00020.
 //
