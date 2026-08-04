@@ -39,6 +39,21 @@
   font-family: "Cinzel", serif;
 }
 
+// Brand lockup, ported from the mockups' .logo rule (assets/app.css:118-119).
+// The inlined logo carries its authored width/height attributes, so without an
+// explicit height it paints at its intrinsic 236x44 instead of the nav's 34px.
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  svg {
+    display: block;
+    height: 34px;
+    width: auto;
+  }
+}
+
 // Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;

@@ -1,15 +1,28 @@
-import { NavLink } from 'react-router-dom'
-import { Navbar, Container, Nav, Image, NavDropdown, Dropdown } from 'react-bootstrap'
+import { Link, NavLink } from 'react-router-dom'
+import { Navbar, Container, Nav, NavDropdown, Dropdown } from 'react-bootstrap'
 
-//Import logo:
-import logo from '../../assets/images/logo.gif'
+/**
+ * The logo is injected as markup rather than referenced with <Image src>: its
+ * wordmark is live <text>, so it only resolves the self-hosted Archivo /
+ * Space Mono faces when it lives in this document. An <img> renders the SVG in
+ * an isolated document where those @font-face rules do not exist. The asset is
+ * a checked-in design artifact with no script, no on* handlers and no external
+ * references (verified in Task 00016), which is what makes injecting it safe.
+ */
+import logoMarkup from '../../assets/logo.svg?raw'
 
 function NavMenu() {
     return (
         <>
             <Navbar bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg">
                 <Container fluid>
-                    <Navbar.Brand href="#home" className='ps-5 ms-2'><Image src={logo} /></Navbar.Brand>
+                    <Navbar.Brand
+                        as={Link}
+                        to="/"
+                        aria-label="jeffgoji.com home"
+                        className='logo ps-5 ms-2'
+                        dangerouslySetInnerHTML={{ __html: logoMarkup }}
+                    />
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
