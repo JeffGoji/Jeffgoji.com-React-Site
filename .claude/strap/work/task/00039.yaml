@@ -1,19 +1,19 @@
 id: "00039"
 type: task
 title: "/galleries hub UI + set-switcher + thumbnail grid"
-state: new
+state: resolved
 parent: "00029"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T14:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T14:50:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   `/galleries` renders the V2 hub responsive; switcher lists sets; selecting a set renders its thumbs; loading/empty states render. Tests authored.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T14:50:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (bcbe4b9) with a real styles.scss conflict (this branch re-ported .eyebrow/.spec-row, already merged from Tasks 00030/00038) -- resolved by dev-lead keeping the earlier copies and this branch's unique additions (.label, .select, .gallery-hub__*, .gallery-grid, .thumb, .thumb__idx). 307/307 scoped tests + full build green post-resolution. Final `<GalleryHub>` interface: `sets` (optional, defaults to shipped GALLERY_SETS config), `initialSlug` (optional, seeds selection only, hub owns state after mount), `onSelectImage(index)` (optional lightbox seam for Task 00040 -- recommended pattern: 00040 renders a sibling lightbox INSIDE GalleryHub, holding its own openIndex state, since it needs the full items array). `GALLERY_SETS` (`src/components/common/gallerySets.js`) is `{slug, car, label, legacyPath}[]` -- Task 00041 should build its redirect map from `legacyPath` rather than re-listing routes. 4 of 6 slugs (`c8-autox`/`nb-hillcountry`/`nc-eastcoast15`/`nc-yellowstone15`) have no manifest yet -- Feature C (AC-009) MUST emit under these exact slugs or the hub renders empty states; flagging as a cross-Feature naming contract. ~78K tokens. FLAGGED (real defect, not this task's scope): `public/_redirects` answers unknown paths with `index.html` (200, HTML body) rather than a real 404, so a missing manifest.json doesn't fail cleanly -- `response.ok` alone isn't a sufficient guard, the .json() parse must be inside the try/catch too. The existing (soon-to-retire) TailOfTheDragon/index.jsx:25-27 has this bug latent AND never clears `loading` in its catch, pinning that gallery on 'Loading gallery...' forever on a failed fetch -- worth a bug item if Task 00041 doesn't retire that component outright."
