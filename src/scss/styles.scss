@@ -297,6 +297,110 @@
   }
 }
 
+// Videos section, ported from the mockups' .video block (assets/app.css:348-353)
+// and the section's own inline background/border (home.html:72). Task 00031.
+//
+// The inline declarations are class-borne here for the same reason the footer's
+// are: an inline style cannot be overridden by the cascade, and the mockups use
+// them only because they have no build step to put a class through.
+//
+// `.card__kicker` (assets/app.css:159) is a shared card primitive rather than a
+// video one. It lands here because the video body is the first surface to need
+// it; the garage cards need the same rule and should reuse this one.
+.section--videos {
+  background: var(--ink-900);
+  border-block: var(--hairline);
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-5);
+}
+
+.video {
+  background: var(--color-surface);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+// The frame is a <button> until the player mounts — see VideoCard — so this also
+// has to undo the chrome the user agent gives a button.
+.video__frame {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 0;
+  background: var(--ink-800);
+}
+
+.video__poster,
+.video__player {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+// Dimmed so the play button keeps its contrast against a bright frame grab.
+.video__poster {
+  object-fit: cover;
+  opacity: 0.5;
+}
+
+// Positioned so it stacks above the poster. The mockups leave this static, which
+// puts the absolutely positioned poster in front of it — survivable there only
+// because the poster is half transparent and the button reads through it.
+.video__play {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 64px;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--goji-red);
+  color: var(--color-on-accent);
+
+  &::after {
+    content: "";
+    margin-left: 4px;
+    border-top: 11px solid transparent;
+    border-bottom: 11px solid transparent;
+    border-left: 18px solid var(--color-on-accent);
+  }
+}
+
+// Net-new: the mockup's facade is inert, so it declares no interactive state.
+.video__frame:hover .video__play,
+.video__frame:focus-visible .video__play {
+  background: var(--goji-red-bright);
+}
+
+.video__body {
+  padding: var(--space-4) var(--space-5);
+}
+
+.card__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--goji-red);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.video__title {
+  margin: 0.35rem 0 0;
+  font-size: var(--fs-h4);
+}
+
 // Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;
