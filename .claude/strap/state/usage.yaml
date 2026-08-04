@@ -3,7 +3,7 @@ session:
   workflow_instance: execute-00003-story00011
   started_at: 2026-08-04T13:20:00Z
   completed_at: null
-  specialists_used: 55K
+  specialists_used: 103K
   notes: "CPO-directed fast-track continuation, Story 00011 (Footer + /totdtrip removal + route-parity guard, 3 Tasks, 12h). Same override pattern as the prior instance. frontend-engineer reset to 0 for this new workflow instance per budget-discipline."
   prior_runs:
     - workflow_instance: execute-00003-fasttrack
@@ -50,7 +50,7 @@ budgets:
 
 agents:
   frontend-engineer:
-    used_in_current: 55K
+    used_in_current: 103K
     last_dispatch: 2026-08-04T13:20:00Z
   security-reviewer:
     used_in_current: 0
