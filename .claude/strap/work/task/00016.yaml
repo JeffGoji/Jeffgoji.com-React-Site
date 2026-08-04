@@ -1,7 +1,7 @@
 id: "00016"
 type: task
 title: "Finalize 'The Goji Line' SVG logo as a production asset"
-state: new
+state: active
 parent: "00008"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -49,3 +49,8 @@ description: |
 
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T04:05:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to designer in worktree designer-00016 on branch task/00016-logo-svg."

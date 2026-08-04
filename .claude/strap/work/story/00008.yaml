@@ -3,7 +3,7 @@ type: story
 title: "Integrate V2 brand assets: self-hosted webfonts + 'The Goji Line' SVG logo"
 state: active
 parent: "00003"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:story]
