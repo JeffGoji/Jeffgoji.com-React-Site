@@ -52,7 +52,6 @@ function App() {
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
           <Route path="gallery" element={<Gallery />} />
-          <Route path="totdtrip" element={ <TailOfTheDragonGallery/>} />
           <Route path="msm-gallery" element={<MSMGallery />} />
           <Route path="nc-eastcoast15" element={<EastCoast15 />} />
           <Route path="nc-yellowstone15" element={<Yellowstone15 />} />
