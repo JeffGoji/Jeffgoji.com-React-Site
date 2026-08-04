@@ -2,9 +2,9 @@ session:
   workflow: execute-sprint
   workflow_instance: execute-00003-fasttrack
   started_at: 2026-08-04T04:00:00Z
-  completed_at: null
-  specialists_used: 456K
-  notes: "CPO-directed capacity-override fast-track (via /execute-sprint, feature/00003-shell-wiring-and-nav). Task 00016 + Story 00009 + Story 00010 = 7 Tasks, 28h against 2h nominal remaining sprint capacity -- see Feature 00003.yaml comment c5. designer dispatch reset to 0 for this new workflow instance per budget-discipline; carries no penalty forward from execute-00003's overrun. Tracking gap: Tasks 00021 and 00022 (parallel dispatch) both went idle without a tokens_used line in their finishing report -- their contribution to frontend-engineer's total (~120K combined) is an estimate matched to similarly-scoped prior dispatches (Task 00019's real 62K as the reference point), not a self-reported figure."
+  completed_at: 2026-08-04T08:05:00Z
+  specialists_used: 492K
+  notes: "CPO-directed capacity-override fast-track (via /execute-sprint, feature/00003-shell-wiring-and-nav), COMPLETE. Task 00016 + Story 00009 + Story 00010 = 7 Tasks, 28h against 2h nominal remaining sprint capacity -- see Feature 00003.yaml comment c5. designer dispatch reset to 0 for this new workflow instance per budget-discipline; carries no penalty forward from execute-00003's overrun. Tasks 00021/00022's finishing reports arrived after dev-lead had already reviewed and merged both branches directly -- delayed, not missing; real tokens_used (62K, 78K) now reflected below, replacing the earlier ~120K combined estimate."
   prior_runs:
     - workflow_instance: execute-00003
       started_at: 2026-08-03T19:12:00Z
@@ -45,7 +45,7 @@ budgets:
 
 agents:
   frontend-engineer:
-    used_in_current: 394K
+    used_in_current: 430K
     last_dispatch: 2026-08-04T07:45:00Z
     exceeded_budget_at: 2026-08-04T07:40:00Z
   security-reviewer:
