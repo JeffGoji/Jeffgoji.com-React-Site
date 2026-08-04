@@ -1,6 +1,9 @@
 // ============================================================================
 // jeffgoji.com — application stylesheet entry
-// Loaded as a Vite module import from src/scss/js/main.js.
+// The ONE stylesheet. Imported from src/main.jsx (Task 00018); there is no
+// second <script> tag, no prebuilt bootstrap.min.css, and no legacy
+// src/assets/css/style.css — those three competing entry paths were collapsed
+// onto this file so the token layer below is the only thing painting the site.
 // ----------------------------------------------------------------------------
 // IMPORT ORDER IS LOAD-BEARING — do not reorder (Spec 00002 Part P5, Task 00017)
 // ----------------------------------------------------------------------------
@@ -39,4 +42,51 @@
 // Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;
+}
+
+// --- MIGRATED FROM src/assets/css/style.css (Task 00018) ---------------------
+// Only the rules a live surface still needs survived the migration. The rest of
+// that file was pre-V2 chrome the token layer now owns: the black body canvas
+// and white body text (now $body-bg / $body-color), the gray nav and gray
+// footer washes, the gray dropdown menu, and an 18px root font-size that
+// inflated every rem against a token scale calibrated at the browser default.
+// Unused helpers (.bg-gray, .opacity-85, .text-shadow, .img-shadow,
+// .img-shadow-red, .img-rounded, .no-underline) went with them.
+
+// The mockups' base layer sets this app-wide; Bootstrap 5.3 underlines links by
+// default, which no mockup surface does. Story 00010 ports the full base layer.
+a {
+  text-decoration: none;
+}
+
+// Hero washes. The urls resolve relative to src/scss/, where this file lives.
+.splash-background {
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0)),
+    url("../assets/images/nd/nd-010.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 85vh;
+  display: flex;
+  justify-content: center;
+}
+
+// The photo layer this wash sat over (na/12370846_…_o.jpg) was deleted from the
+// tree at some point, so the browser has been dropping it as a 404 and painting
+// the gradient alone — which is what this reproduces. Vite resolves url() at
+// build time, so carrying the dead reference across would fail the build rather
+// than fail silently. Story 00010 picks the V2 hero image for this surface.
+.na-background {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+// Garage card affordance. The hand-rolled red box-shadow became the palette's
+// own glow token; Story 00010 replaces this with the mockup's card treatment.
+.img-hover:hover {
+  box-shadow: var(--glow-red);
+  cursor: pointer;
 }
