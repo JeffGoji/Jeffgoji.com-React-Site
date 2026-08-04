@@ -1,7 +1,7 @@
 id: "00025"
 type: task
 title: "Author the route-parity guard test"
-state: active
+state: resolved
 parent: "00011"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00024"
     type: predecessor
 original_estimate: 4
+completed_work: 4
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:10:00Z
+updated_at: 2026-08-04T08:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T08:45:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-04T08:45:00Z |
 
   ---
 
@@ -54,3 +55,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-04T08:40:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00025 on branch task/00025-route-parity-guard. Predecessor 00024 resolved."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T08:45:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00025-route-parity-guard (7ab8eaa, b143d12) into feature/00003-footer-and-cleanup (eb07c8e). Completed By: frontend-engineer. Note: original Task guidance to scaffold Vitest+RTL+jsdom was stale (harness already established since Feature C, 2026-08-01) -- corrected in the dispatch brief; no infra scaffolded, only test cases added. DoD satisfied: totdtrip absent from the composed nav (asserted structurally via a surveyNav helper that walks all dropdown submenus, not just source text), What's New pill present on every route by href+class (not fragile label text), no coming-soon text anywhere in the surveyed nav. Picked up a mid-flight addition from Task 00023 (footer-composition coverage, the App-level test that would have caught the original never-mounted bug) and verified it with --sequence.shuffle across 4 runs before folding in. 18/18 in this file; 396/396 repo-wide after merge; production build re-verified clean. This was the last Task in Feature 00003's currently-scoped work."

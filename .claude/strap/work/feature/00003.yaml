@@ -1,7 +1,7 @@
 id: "00003"
 type: feature
 title: "Establish the dark motorsport-editorial design system and rebuild the app shell (nav / header / footer)"
-state: active
+state: resolved
 parent: null
 iteration: null
 area: null
@@ -24,17 +24,17 @@ links:
     type: related
 created_at: 2026-08-01T18:45:00Z
 created_by: spec-lead
-updated_at: 2026-08-01T19:12:00Z
+updated_at: 2026-08-04T08:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T08:50:00Z
 closed_at: null
 description: |
   | Field        | Value                       |
   |--------------|-----------------------------|
   | Authored By  | spec-lead                   |
   | Authored At  | 2026-08-01T18:45:00Z        |
-  | Completed By | _(set at resolution)_       |
-  | Completed At | _(set at resolution)_       |
+  | Completed By | dev-lead (CPO-approved)     |
+  | Completed At | 2026-08-04T08:50:00Z        |
 
   ---
 
@@ -113,3 +113,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-04T08:05:00Z
     body: "[STRAP/agent:dev-lead] CAPACITY-OVERRIDE EXECUTION COMPLETE. All 7 Tasks resolved (00016, 00017, 00018, 00019, 00020, 00021, 00022); Stories 00008, 00009, 00010 all fully resolved. THE V2 DESIGN IS NOW VISIBLY LIVE in the compiled build on feature/00003-shell-wiring-and-nav -- verified directly (not assumed) at every merge: --bs-primary: #E10600 in the compiled CSS, single CSS/JS entry path, logo/fonts/nav/header all rendering under the token system, position:sticky nav confirmed not silently broken. 357/357 tests green, production vite build clean throughout. One real regression caught and fixed mid-execution (Task 00022): a naive Header wrapper would have silently broken the nav's position:sticky by becoming its containing block with a zero-length offset range -- fixed via display:contents. One transient infra failure (Task 00017's first dispatch, API ENOTFOUND) recovered via clean redispatch with zero work lost. frontend-engineer ended this round at 430K against its 200K per-agent budget across 6 dispatches (00017 retry 72K, 00018 78K, 00019 62K, 00020 78K, 00021 62K, 00022 78K); designer added 62K (00016). Session total 492K. Story 00011 (Footer + /totdtrip removal + route-parity guard, 12h) remains the only unallocated overflow left in this Feature. Feature state stays ACTIVE, not resolved, pending Story 00011 in a future pass."
+  - id: c7
+    author: dev-lead
+    timestamp: 2026-08-04T08:50:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint, CPO-directed fast-track, CPO-approved). FEATURE 00003 COMPLETE -- all 5 Stories (00007-00011), all 14 Tasks (00012-00025) resolved. Story 00011 (Footer render, /totdtrip removal, route-parity guard) merged into feature/00003-footer-and-cleanup, PR pending. AC-002 and AC-018 (this Feature's owned ACs) both FULLY satisfied: redesigned shell (NavMenu/Header/Footer) applies the new logo + premium black+red palette, coming-soon placeholder removed, orphaned /totdtrip route removed -- both now guarded by regression tests, not just fixed once. Contributes-to ACs (AC-001, AC-005, AC-014) remain owned by sibling Features B/D for full closure verification, per the Spec's original scoping. 396 repo tests passing, production vite build verified clean throughout every merge in both execution rounds. Executed across two CPO-directed capacity-override rounds (execute-00003-fasttrack: Story 00008/9/10, 492K tokens; execute-00003-story00011: Story 00011, ~130K tokens) that together bypassed /plan-sprint's normal single-sprint gate given the CPO's urgency to get the V2 redesign visibly live -- both rounds fully audited in this comment trail. Two real defects caught and fixed mid-execution, not deferred: a position:sticky regression from the Header wrapper (Task 00022), and a genuine rendering bug in the approved mockup's logo gradient (Task 00016, fixed in production, not yet backported to the locked mockup). This Feature required zero /plan-sprint capacity gating for its final Story since the CPO explicitly directed continuing the override pattern already established."
