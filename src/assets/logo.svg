@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236 44" width="236" height="44"
+     role="img" aria-label="JEFFGOJI — The Goji Line">
+  <!--
+    "The Goji Line" — jeffgoji.com V2 logo (Task 00016, Spec 00002 Part P1).
+    Promoted verbatim from .claude/strap/mockups/spec-00002/assets/logo.svg.
+
+    THE MARK is a racing line sweeping through a corner apex, bent into a "G",
+    with a white dot marking the apex. Pure vector, so it is font-independent
+    and stays crisp at the 24-44px nav-bar range.
+
+    CONSUME INLINE, not via <img src>: the wordmark is live <text>, so it needs
+    the document's self-hosted Archivo / Space Mono @font-face rules (Task
+    00015) to resolve. An <img> or CSS background renders the SVG in an
+    isolated document where those faces do not exist and the fallback stack
+    takes over. Vite serves the inline markup via `import logo from
+    '.../logo.svg?raw'`.
+
+    COLOURS ARE DELIBERATELY OFF-TOKEN. The wordmark's #F6F6F4 and the
+    tagline's #7C7C79 predate the "Softer Dark" palette and were re-approved
+    with it: the logo is a fixed brand artifact that must survive theme
+    changes, so it does not track the text-hi / text-lo tokens. Do not "fix"
+    these to token values. The reds DO match goji-red-bright / goji-red-deep,
+    with goji-red (#E10600) on the GOJI half of the wordmark.
+  -->
+  <defs>
+    <!--
+      Id is namespaced because inlining the logo twice (header + footer) puts
+      two copies of this gradient in one document.
+
+      gradientUnits MUST stay userSpaceOnUse. The mockup used the default
+      objectBoundingBox, which silently dropped the G bar: that path is a
+      horizontal line, its bounding box has zero height, and a bbox-relative
+      gradient is not painted on zero-area geometry. User space also gives the
+      arc and the bar one continuous ramp instead of two independent ones.
+      Coordinates span the mark's bounds and must move with it.
+    -->
+    <linearGradient id="jg-logo-goji-red" gradientUnits="userSpaceOnUse"
+                    x1="11" y1="6" x2="42" y2="38">
+      <stop offset="0" stop-color="#FF1A0E"/>
+      <stop offset="1" stop-color="#B00500"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Racing-line "G": an open apex arc + the exit line into the G bar -->
+  <g fill="none" stroke="url(#jg-logo-goji-red)" stroke-width="5.5" stroke-linecap="round">
+    <path d="M39 11 A16 16 0 1 0 39 33"/>
+    <path d="M39 22 H27"/>
+  </g>
+
+  <!-- Apex dot -->
+  <circle cx="22" cy="7.5" r="3.2" fill="#F6F6F4"/>
+
+  <!-- Wordmark -->
+  <text x="52" y="24" font-family="Archivo, 'Arial Narrow', sans-serif" font-size="21" font-weight="800"
+        letter-spacing="0.5" fill="#F6F6F4">JEFF<tspan fill="#E10600">GOJI</tspan></text>
+
+  <!-- Tagline -->
+  <text x="53" y="38" font-family="'Space Mono', monospace" font-size="7.5" letter-spacing="3"
+        fill="#7C7C79">THE GOJI LINE</text>
+</svg>
