@@ -1,7 +1,7 @@
 id: "00007"
 type: story
 title: "Establish the V2 SCSS design-token foundation (tokens + Bootstrap theme map + editorial grade)"
-state: active
+state: resolved
 parent: "00003"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -10,17 +10,17 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-03T19:15:00Z
+updated_at: 2026-08-03T19:55:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-03T19:55:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-03T19:55:00Z |
 
   ---
 
@@ -60,3 +60,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-03T19:15:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). First Task (00012) started."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-03T19:55:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). All 3 Tasks merged (00012 _tokens.scss, 00013 _theme.scss, 00014 _grade.scss) into feature/00003-design-foundation-shell (7e06c69). AC-002 token/palette half verified (shell render remains ST-4/Story 00010, unallocated this sprint); AC-001 foundation delivered. 245/245 repo tests green. Neither _tokens.scss, _theme.scss, nor _grade.scss is wired into a compiled entry point yet -- that composition + the styles.scss import-order fix is Story 00009 (Task 00017), next in the Feature's dependency chain."
