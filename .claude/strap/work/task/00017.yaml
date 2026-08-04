@@ -52,3 +52,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-04T05:20:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00017 on branch task/00017-styles-assembly."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T06:20:00Z
+    body: "[STRAP/agent:dev-lead] First dispatch crashed on a transient network error (API ENOTFOUND) before creating a branch or any commit -- nothing to salvage. Redispatched to a fresh frontend-engineer instance reusing the same (untouched) worktree. State stays active."
