@@ -248,31 +248,8 @@
   }
 }
 
-// Telemetry chips, ported from the mockups' .spec-row / .chip pair
-// (assets/app.css:139-147). Space Mono is the data voice site-wide.
-.spec-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.chip {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  padding: 4px 10px;
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  color: var(--text-mid);
-  background: var(--ink-800);
-  border: var(--hairline);
-  border-radius: var(--radius-sm);
-
-  b {
-    color: var(--text-hi);
-    font-weight: 700;
-  }
-}
+// Telemetry chips (.spec-row / .chip) are ported further down alongside
+// .post/.card, where the other reading-panel primitives live.
 
 // The mockups' button block (assets/app.css:122-136). `.btn` itself is a live
 // Bootstrap component class, so — unlike the nav, which was renamed wholesale —
