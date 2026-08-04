@@ -1,7 +1,7 @@
 id: "00015"
 type: task
 title: "Self-host Archivo / Inter / Space Mono; author _fonts.scss; drop the Google @import"
-state: active
+state: resolved
 parent: "00008"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00012"
     type: predecessor
 original_estimate: 4
+completed_work: 4
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-03T19:35:00Z
+updated_at: 2026-08-03T19:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-03T19:45:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | designer |
+  | Completed At | 2026-08-03T19:45:00Z |
 
   ---
 
@@ -54,3 +55,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-03T19:35:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2. Dispatched to designer in worktree designer-00015 on branch task/00015-self-hosted-fonts."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-03T19:45:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00015-self-hosted-fonts (6cf443b) into feature/00003-design-foundation-shell (002b017). Completed By: designer. Real OFL woff2 binaries vendored (variable-font strategy, ~152KB critical-path cost vs 950KB static cuts); styles.scss touched only to delete the Google Fonts @import (3-line diff, verified). DoD confirmed against a real Vite production build (zero googleapis/gstatic requests in built output). 50-test suite green; 189/189 repo-wide after merge. Story 00008 stays active, not resolved -- sibling Task 00016 (logo) remains unallocated overflow. Follow-ups noted for Story 00009: dead .legal-font/Cinzel rule at styles.scss (zero consumers, left alone per scope); font partial must be imported from within src/scss/ (relative url() paths); Spec 00002 Part P1 wiring notes could record the variable-font decision."

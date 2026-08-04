@@ -3,7 +3,7 @@ session:
   workflow_instance: execute-00003
   started_at: 2026-08-03T19:12:00Z
   completed_at: null
-  specialists_used: 110K
+  specialists_used: 188K
   notes: "Partial Feature 00003 execution (Story 00007 + Task 00015, 4 Tasks). Prior run (execute-00005, 2026-08-01, Feature 00005 Stories 00042+00043) archived below for reference."
   prior_runs:
     - workflow_instance: execute-00005
@@ -53,5 +53,5 @@ agents:
   tech-writer:
     used_in_current: 0
   designer:
-    used_in_current: 110K
+    used_in_current: 188K
     last_dispatch: 2026-08-03T19:35:00Z
