@@ -836,6 +836,61 @@
   color: var(--text-hi);
 }
 
+// Build-log reading surface, ported from the mockups' "Blog list" block
+// (assets/app.css:302-317) plus the blog.html banner. Task 00034.
+//
+// Only the blog-owned names live here. `.section`, `.container`, `.eyebrow`,
+// `.section-head`, `.chip`, `.spec-row`, `.hero*` and the `.btn--ghost/--sm`
+// modifiers are cross-surface primitives that components/common/BlogList.jsx
+// also consumes; they belong to the shared base layer, not to this block, so
+// porting them here would fork them. `.post`/`.post__body`/`.post__entry`
+// were already ported by Task 00038 (see below) -- this branch's duplicate
+// copies were dropped at merge time, and its img/a additions to .post__entry
+// were folded into that earlier copy instead.
+.blog {
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.post__media img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.post__specs {
+  margin-bottom: var(--space-4);
+}
+
+.pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-4);
+  margin-block: var(--space-7);
+}
+
+.pager__count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-lo);
+}
+
+// The car-identity banner is the shared `.hero` at a shorter stop. blog.html
+// carries both of these on style attributes (:17 and :22); they are class-borne
+// here for the same reason the footer's were.
+.blog-hero {
+  min-height: 44vh;
+}
+
+.blog-hero__title {
+  font-size: var(--fs-h1);
+}
+
+.blog-hero__specs {
+  margin-top: var(--space-3);
+}
+
 // Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;
@@ -933,12 +988,30 @@ a {
   padding: var(--space-6);
 }
 
+// The measure and the relaxed leading are what make a long build write-up
+// readable; `pre-line` is what keeps the single newlines the JSON entries are
+// authored with, which markdown would otherwise collapse. The nested img/a
+// rules are Task 00034's: `display: block` is the one addition to the
+// mockup's rule -- an inline image ignores `margin: auto`, and the markdown
+// renderer emits a bare <img> inside its paragraph rather than a centring
+// wrapper (see components/common/BlogList.jsx).
 .post__entry {
   color: var(--color-text);
   white-space: pre-line;
   font-size: var(--fs-read);
   line-height: var(--lh-read);
   max-width: 68ch;
+
+  img {
+    display: block;
+    border-radius: var(--radius);
+    margin: var(--space-5) auto;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
 }
 
 .card {
