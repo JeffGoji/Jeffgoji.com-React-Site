@@ -1,7 +1,7 @@
 id: "00014"
 type: task
 title: "Port the .media--editorial grade layer into _grade.scss"
-state: active
+state: resolved
 parent: "00007"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00012"
     type: predecessor
 original_estimate: 3
+completed_work: 3
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-03T19:35:00Z
+updated_at: 2026-08-03T19:40:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-03T19:40:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | designer |
+  | Completed At | 2026-08-03T19:40:00Z |
 
   ---
 
@@ -54,3 +55,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-03T19:35:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2. Dispatched to designer in worktree designer-00014 on branch task/00014-grade-scss."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-03T19:40:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00014-grade-scss (b5b8558) into feature/00003-design-foundation-shell (e3cd2b3). Completed By: designer. 2 new files (_grade.scss, _grade.test.js), no scope creep. Verbatim port verified by 23-test parity+probe suite incl. semantic hero/soft-modifier directionality checks; ::after (not ::before) and isolation:isolate both confirmed. Deliberately does not @use tokens (--dur/--ease-out resolve as CSS custom properties at cascade time) -- styles.scss must load _tokens.scss for the reduced-motion transition to resolve; noted for Story 00009's wiring. Neither _tokens.scss nor _grade.scss is reachable from a compiled entry point yet -- Story 00009 (styles.scss assembly + import-order fix) is the seam that activates this Story's output. 109/109 repo tests green after merge."
