@@ -215,6 +215,88 @@
   }
 }
 
+// The mockups' checker tape (assets/app.css:65) — the flag-motif accent strip.
+// Left unprefixed because the mockups treat it as a standalone utility usable on
+// any surface, and no Bootstrap class collides with the name. The pattern itself
+// is the --checker token; only the strip's box lives here.
+.checker-strip {
+  width: 100%;
+  height: 10px;
+  background: var(--checker);
+}
+
+// Site footer, ported from the mockups' .footer block (assets/app.css:356-361
+// and the max-width:768 block at :575). Task 00023.
+//
+// Named `site-footer` for symmetry with `.site-header` / `.site-nav` rather than
+// the mockups' bare `.footer`.
+//
+// `margin-top` is what separates the footer from the page above it. The pre-V2
+// footer used Bootstrap's `fixed-bottom` instead, which took it out of flow and
+// overlaid the tail of every page taller than one viewport.
+.site-footer {
+  margin-top: var(--space-9);
+  background: var(--ink-1000);
+  border-top: var(--accent-bar);
+}
+
+.site-footer__inner {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: var(--space-6);
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-5) var(--space-6);
+}
+
+.site-footer h4 {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-lo);
+}
+
+.site-footer a {
+  display: block;
+  color: var(--text-mid);
+  font-size: var(--fs-sm);
+  padding: 3px 0;
+
+  &:hover {
+    color: var(--text-hi);
+  }
+}
+
+// The mockup carries these on style attributes in renderShell (assets/app.js:83
+// and :84-86); they are class-borne here rather than inlined.
+.site-footer .logo {
+  margin-bottom: var(--space-4);
+}
+
+.site-footer__blurb {
+  max-width: 42ch;
+  font-size: var(--fs-sm);
+  color: var(--text-lo);
+}
+
+.site-footer__bottom {
+  border-top: var(--hairline);
+  padding: var(--space-4) var(--space-5);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-lo);
+}
+
+// The mockup's own breakpoint, kept verbatim: unlike the nav — whose collapse is
+// driven by react-bootstrap's lg breakpoint and had to follow that mechanism —
+// nothing here forces a different number.
+@media (max-width: 768px) {
+  .site-footer__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
 // Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;
