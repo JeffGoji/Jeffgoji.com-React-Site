@@ -3,7 +3,7 @@ session:
   workflow_instance: execute-00003-fasttrack
   started_at: 2026-08-04T04:00:00Z
   completed_at: null
-  specialists_used: 258K
+  specialists_used: 336K
   notes: "CPO-directed capacity-override fast-track (via /execute-sprint, feature/00003-shell-wiring-and-nav). Task 00016 + Story 00009 + Story 00010 = 7 Tasks, 28h against 2h nominal remaining sprint capacity -- see Feature 00003.yaml comment c5. designer dispatch reset to 0 for this new workflow instance per budget-discipline; carries no penalty forward from execute-00003's overrun."
   prior_runs:
     - workflow_instance: execute-00003
@@ -45,8 +45,9 @@ budgets:
 
 agents:
   frontend-engineer:
-    used_in_current: 196K
-    last_dispatch: 2026-08-04T07:10:00Z
+    used_in_current: 274K
+    last_dispatch: 2026-08-04T07:20:00Z
+    exceeded_budget_at: 2026-08-04T07:40:00Z
   security-reviewer:
     used_in_current: 0
   test-strategist:
