@@ -1,7 +1,7 @@
 id: "00013"
 type: task
 title: "Author Sass color vars + Bootstrap $theme-colors override in _theme.scss"
-state: active
+state: resolved
 parent: "00007"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00012"
     type: predecessor
 original_estimate: 4
+completed_work: 4
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-03T19:35:00Z
+updated_at: 2026-08-03T19:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-03T19:50:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | designer |
+  | Completed At | 2026-08-03T19:50:00Z |
 
   ---
 
@@ -54,3 +55,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-03T19:35:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2. Dispatched to designer in worktree designer-00013 on branch task/00013-theme-scss."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-03T19:50:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00013-theme-scss (7d43f0a) into feature/00003-design-foundation-shell (7e06c69). Completed By: designer. Variables-only partial, zero CSS emitted, no Bootstrap function/var referenced -- authorable-before-Bootstrap confirmed. $theme-colors covers all 8 slots (info->silver, dark->ink-1000 distinct from body-bg->ink-900); retired blue palette absent. Palette values mirror _tokens.scss (Sass cannot read CSS custom properties at compile time) with drift enforced as a test failure, not just a comment. Ordering-contract header names Task 00017/Story 00009 as the follow-up that fixes styles.scss's live import-order bug. 56-test probe green (theme-then-Bootstrap proof + Bootstrap-then-theme negative control); 245/245 repo-wide after merge. Follow-up noted for Story 00009/P5: Bootstrap 5.3's [data-bs-theme=dark] block carries its own independent palette and would override ours on any component using that attribute -- needs \$enable-dark-mode:false or a _variables-dark.scss re-point."
