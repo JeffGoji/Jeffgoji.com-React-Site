@@ -136,6 +136,26 @@
   background: var(--goji-red);
 }
 
+// The permanent "What's New" flag pill, ported from the mockups'
+// .nav__link--flag rule (assets/app.css:101-105). Task 00021.
+//
+// Carried through the same .site-nav .navbar-nav .nav-link chain as the base
+// link rule so it outranks it on the shared properties, and so Bootstrap's own
+// .navbar-nav .nav-link:hover / .active colour slots — which would otherwise
+// repaint the label off white the moment the pointer lands or the route
+// matches — lose to it too.
+.site-nav .navbar-nav .nav-link.site-nav__link--flag {
+  color: var(--color-on-accent);
+  background: var(--goji-red);
+  border-radius: var(--radius-pill);
+
+  &:hover,
+  &:focus {
+    color: var(--color-on-accent);
+    background: var(--goji-red-bright);
+  }
+}
+
 // The per-set gallery submenus open from Dropdown.Toggle buttons nested inside a
 // dropdown panel, so they are .btn elements rather than .dropdown-item anchors
 // and inherit none of the panel's item chrome.
@@ -174,6 +194,13 @@
 
   .site-nav .navbar-nav .nav-link.active:not(.dropdown-toggle)::after {
     display: none;
+  }
+
+  // The mockup's max-width:768 treatment for the pill (assets/app.css:574),
+  // rehomed onto this navbar's own collapse breakpoint like the rules above.
+  .site-nav .navbar-nav .nav-link.site-nav__link--flag {
+    margin-top: var(--space-2);
+    text-align: center;
   }
 }
 

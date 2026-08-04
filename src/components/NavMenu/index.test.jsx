@@ -9,6 +9,8 @@
  *
  * Covers Task 00020: the nav is rebuilt onto the mockup's chrome, the active
  * route is marked, every dropdown id is unique and the mobile collapse survives.
+ *
+ * Covers Task 00021: the permanent "What's New" flag pill.
  */
 
 import { readdirSync, readFileSync } from 'node:fs';
@@ -194,6 +196,59 @@ describe('NavMenu active route', () => {
 
         expect(home.classList.contains('active')).toBe(false);
         expect(home.getAttribute('aria-current')).toBeNull();
+    });
+});
+
+/**
+ * Guards AC-014. The pill is permanent chrome, so its contract is that it is
+ * present regardless of route, points at /whats-new, and carries the class the
+ * ported .nav__link--flag rule paints.
+ */
+describe("NavMenu What's New pill", () => {
+    afterEach(cleanup);
+
+    const FLAG_CLASS = 'site-nav__link--flag';
+
+    it.each(['/', '/garage', '/youtube', '/suspension', '/totdgallery'])(
+        'renders the pill on %s',
+        (path) => {
+            const { container } = renderNavAt(path);
+            const pill = container.querySelector(`.navbar-nav > a.${FLAG_CLASS}`);
+
+            expect(pill).not.toBeNull();
+            expect(pill.getAttribute('href')).toBe('/whats-new');
+        }
+    );
+
+    /**
+     * The pill keeps .nav-link: the ported rule rides that chain, and the shared
+     * type/padding chrome comes from it.
+     */
+    it('layers the flag class over the shared nav-link chrome', () => {
+        const { container } = renderNavAt('/garage');
+        const pill = container.querySelector(`.navbar-nav > a.${FLAG_CLASS}`);
+
+        expect(pill.classList.contains('nav-link')).toBe(true);
+    });
+
+    it('sits last in the nav, after the Galleries dropdown', () => {
+        const { container } = renderNavAt('/garage');
+        const items = Array.from(container.querySelectorAll('.navbar-nav > *'));
+
+        expect(items.at(-1).classList.contains(FLAG_CLASS)).toBe(true);
+        expect(items.at(-2).querySelector('#galleries-nav-dropdown')).not.toBeNull();
+    });
+
+    it('leaves the rest of the nav at its established width', () => {
+        const { container } = renderNavAt('/garage');
+
+        expect(navLinks(container).map((link) => link.getAttribute('href'))).toEqual([
+            '/',
+            '/garage',
+            '/youtube',
+            '/suspension',
+            '/whats-new',
+        ]);
     });
 });
 
