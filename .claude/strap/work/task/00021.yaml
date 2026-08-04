@@ -1,7 +1,7 @@
 id: "00021"
 type: task
 title: "Add the permanent red 'What's New' nav pill"
-state: active
+state: resolved
 parent: "00010"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00020"
     type: predecessor
 original_estimate: 3
+completed_work: 3
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T07:45:00Z
+updated_at: 2026-08-04T08:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T08:00:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-04T08:00:00Z |
 
   ---
 
@@ -54,3 +55,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-04T07:45:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00021 on branch task/00021-whats-new-pill. Dispatched in parallel with Task 00022 (both depend only on 00020) -- possible styles.scss merge conflict on review, will resolve manually if needed."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T08:00:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00021-whats-new-pill (0754ebf) into feature/00003-shell-wiring-and-nav (d22bed6), then Task 00022 auto-merged cleanly on top with no styles.scss conflict despite both touching the file. AC-014 satisfied: red pill renders on every route, links to /whats-new (404 expected until Feature D), mobile treatment ported from the mockup. 357/357 repo-wide after both Tasks merged; production build re-verified clean."
