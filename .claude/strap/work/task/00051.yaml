@@ -1,0 +1,56 @@
+id: "00051"
+type: task
+title: "Capture V1 engagement baseline (in-repo)"
+state: resolved
+parent: "00043"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00050"
+    type: predecessor
+original_estimate: 3
+completed_work: 3
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T23:00:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-01T23:00:00Z
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-01T23:00:00Z |
+
+  ---
+
+  # Capture V1 engagement baseline (in-repo)
+
+  ## Description
+  Author the V1 engagement-baseline capture doc under `.claude/strap/project-docs/`: define the tracked engagement signals (pageviews, pages/session, dwell proxy), record the pre-V2 snapshot approach + the confirmed target (working +15% dwell, measurable pages/session rise) so post-launch before/after is provable. Per SQ-005, engagement baseline is best-effort over a short window.
+
+  ## Linked Story
+  **Story:** 00043
+  ## Original Estimate
+  **Hours (senior-developer):** 3
+  ## Implementation guidance
+  Combine with Story 00042's perf-baseline doc into one `.claude/strap/project-docs/v1-baseline.md` (dev-lead merges). Enumerate the analytics goals/events the tool must expose; note the short-window caveat.
+  ## Dependencies
+  Predecessor: 00050 (analytics live). Reconcile with Story 00042 baseline task (00048).
+  ## Definition of Done
+  Doc names each engagement metric + target + capture method + date window; cross-links the perf baseline. AC-004 (engagement half).
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T22:25:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3. Predecessor Task 00050 merged (pageview tracking live). Dispatched to frontend-engineer in worktree frontend-engineer-00051."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T23:00:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00051-capture-v1-engagement-baseline into feature/00005-image-perf-analytics-baseline. Completed By: frontend-engineer. Documents methodology + target only, no live numbers -- no Plausible account is provisioned yet (blocker, needs CPO action outside this sprint), so there is nothing to snapshot. DECISION (dev-lead): kept as two separate cross-linked docs (v1-perf-baseline.md + v1-engagement-baseline.md) rather than mechanically merging into one v1-baseline.md per the original Task wording -- both are individually complete, well-organized, and already cross-link each other by relative path; a forced merge would reduce readability for no benefit. Notable finding: blog pagination is local useState and doesn't change the URL, so URL-driven V2 pagination would invalidate the pages/session (E-3) comparison -- flagged for whoever implements V2 pagination. AC-004 (engagement half) satisfied as methodology; numbers pending Plausible provisioning + a full capture window before V2 UI ships."

@@ -1,0 +1,49 @@
+id: "00019"
+type: task
+title: "Swap the logo asset and fix the brand link"
+state: new
+parent: "00010"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 3
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:10:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Swap the logo asset and fix the brand link
+
+  ## Description
+  Replace the `logo.gif` import (`NavMenu/index.jsx:5`) with the new `src/assets/logo.svg` (from Task 00016), inlining the SVG so self-hosted Archivo applies; make `Navbar.Brand` a router `Link` to `/` (not `href="#home"`).
+
+  ## Linked Story
+  **Story:** 00010
+
+  ## Original Estimate
+  **Hours (senior-developer):** 3
+
+  ## Implementation guidance
+  Inline the SVG (not `<img src>`). Remove the `logo.gif` import + file reference. Brand click routes Home via React Router `Link`.
+
+  ## Dependencies
+  Depends on Story 00008 (logo.svg) + Story 00009 (tokens).
+
+  ## Definition of Done
+  No `logo.gif` reference remains; the logo recolours via token; clicking the brand routes Home.
+
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

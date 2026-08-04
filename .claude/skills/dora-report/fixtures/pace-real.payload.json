@@ -1,0 +1,1537 @@
+{
+  "reportTitle": "DORA Report",
+  "brandName": "",
+  "brandAccent": "DORA",
+  "workItemUrlTemplate": "#{id}",
+  "prUrlTemplate": "#{id}",
+  "layers": [],
+  "subRepos": [],
+  "deploymentTargets": [],
+  "sprintMetrics": [
+    {
+      "name": "20260531-080650",
+      "window": {
+        "end": "2026-05-31T07:52:56Z",
+        "start": "2026-05-17T07:52:56Z"
+      },
+      "counts": {
+        "totalWorkItems": 218,
+        "tasks": 13,
+        "tasksClosed": 8,
+        "tasksActive": 2,
+        "stories": 143,
+        "features": 7,
+        "enhancements": 3,
+        "bugs": 40,
+        "bugsByEnv": {
+          "unspecified": 40
+        },
+        "specs": 1,
+        "reqs": 3,
+        "prsInt": 5,
+        "prsIntCompleted": 1,
+        "prsIntAbandoned": 3,
+        "prsIntActive": 1,
+        "prsIntDrafts": 0,
+        "prsInterm": 0
+      },
+      "draftsByAuthor": {},
+      "contents": {
+        "features": [
+          {
+            "id": 39548,
+            "title": "STRAP cross-sub-repo provenance-dict validation cycle (paceguilib -> objyes4web + kipsy)",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": true
+          }
+        ],
+        "stories": [
+          {
+            "id": 38976,
+            "title": "Merge Store app",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 38986,
+            "title": "Authentication Flow",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 38987,
+            "title": "Prepayments",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39041,
+            "title": "Adding Tech Dashboard to current Pending Screen Dashboard",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39048,
+            "title": "Get Murray Auto's Alt Names transferred for their inventory into PRime",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39055,
+            "title": "Protractor conversion utility",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39070,
+            "title": "AR Adjustments change transaction dates and employee who created the adjustment",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39073,
+            "title": "Invoice Details Screen: Over or Under last mileage warning for Yes Prime",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39076,
+            "title": "Calendar View for Appointments",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39090,
+            "title": "Job Authorization Workflow: Stage 2",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39118,
+            "title": "Cannot use \"#\" symbol for user passwords in Yes Prime",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39120,
+            "title": "Appointment Cal",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39121,
+            "title": "Attachments",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39122,
+            "title": "Datelib",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39123,
+            "title": "Tablet Mode Redesign",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39124,
+            "title": "Use permission for Inventory Import",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39125,
+            "title": "New Dashboard Visualization",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39126,
+            "title": "Barcode Scanning",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39127,
+            "title": "Part Selector revamp",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39128,
+            "title": "PO Number in Billing",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39129,
+            "title": "Pending Screen display",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39130,
+            "title": "Speed up login",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39132,
+            "title": "New Internal Chat System",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39134,
+            "title": "AutoVitals Display enhancements",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39136,
+            "title": "ALO: Add master switch to remove INvoice Billing Acct locks",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39140,
+            "title": "Jobs turned into Estimates have the subtotal show estimated subtotal dollar value",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39142,
+            "title": "Billing Grid is slow",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39143,
+            "title": "ShopTalk is is polling too often",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": false
+          },
+          {
+            "id": 39550,
+            "title": "Declare STRAP_PROVENANCE in paceguilib/__init__.py (Wave 1 source-of-truth) [sub-repo: yp-paceguilib]",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": true
+          },
+          {
+            "id": 39551,
+            "title": "Author hermetic propagation test_strap_provenance.py (Wave 1 test surface) [sub-repo: yp-paceguilib]",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": true
+          },
+          {
+            "id": 39552,
+            "title": "Add mod_STRAP_DIAG.py diagnostic module consuming STRAP_PROVENANCE (Wave 2 consumer) [sub-repo: yp-objyes4web]",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": true
+          },
+          {
+            "id": 39553,
+            "title": "Emit STRAP_PROVENANCE at kipsy startup via top-level INFO log (Wave 2 consumer) [sub-repo: yp-kipsy-asgi-server]",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": true
+          },
+          {
+            "id": 39554,
+            "title": "Negative-surface attestation across cluster PRs (Wave 3 review-only) [sub-repos: all 3]",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": true
+          },
+          {
+            "id": 39555,
+            "title": "Terminal PR abandonment + branch deletion + resolution-notes evidence (Wave 3 cleanup) [sub-repos: all 3]",
+            "assignee": "scorrallo@asaauto.com",
+            "isAi": true
+          }
+        ],
+        "enhancements": [],
+        "specs": [
+          {
+            "id": 39541,
+            "title": "STRAP provenance-dict propagation across paceguilib -> objyes4web + kipsy",
+            "assignee": null,
+            "isAi": true
+          }
+        ],
+        "bugsResolved": [
+          {
+            "id": 39105,
+            "title": "Prime Auto Send not functioning",
+            "assignee": null,
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": false
+          },
+          {
+            "id": 39113,
+            "title": "ISE Parts and Labor tabs cause a 503 error",
+            "assignee": null,
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": false
+          },
+          {
+            "id": 39131,
+            "title": "Bugfixes",
+            "assignee": null,
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": false
+          },
+          {
+            "id": 39138,
+            "title": "Old Stored Images before .348 update cannot be viewed in Yes Prime",
+            "assignee": null,
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": false
+          },
+          {
+            "id": 39144,
+            "title": "Billing: Selector not editing selected item",
+            "assignee": null,
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": false
+          }
+        ]
+      },
+      "prsWithWeight": [],
+      "prWeightStats": {
+        "filesP50": 0,
+        "filesP90": 0,
+        "filesMax": 0,
+        "linesP50": 0,
+        "linesP90": 0,
+        "linesMax": 0,
+        "commitsP50": 0,
+        "commitsP90": 0,
+        "witP50": 0,
+        "witMax": 0,
+        "coverage": 0
+      },
+      "prReviewersRanked": [],
+      "agentVsHuman": {
+        "agent": 8,
+        "human": 0,
+        "tagged": 8,
+        "audited": 0,
+        "agentShare": 1,
+        "taggedShare": 1,
+        "agentByOrchestrator": {
+          "scorrallo@asaauto.com": 8
+        },
+        "humanByAssignee": {},
+        "byAgentRole": {}
+      },
+      "ai": {
+        "all": {
+          "count": 8,
+          "p50": 52.904127740098374,
+          "mean": 95.1820926876594,
+          "p90": 243.62516435158372,
+          "sampleConfidence": "high",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "ai": {
+          "count": 8,
+          "p50": 52.904127740098374,
+          "mean": 95.1820926876594,
+          "p90": 243.62516435158372,
+          "sampleConfidence": "high",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "human": {
+          "count": 0,
+          "p50": null,
+          "mean": null,
+          "p90": null,
+          "sampleConfidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "confidence": "high",
+        "sampleConfidence": "high",
+        "threshold": 5,
+        "thresholdKey": "ai_eff_sample"
+      },
+      "funnel": {
+        "itemCycles": {
+          "requirement": {
+            "newToActive": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 1,
+                "p50": 20.201109166666665
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 1,
+                "p50": 0.08687972222222222
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "spec": {
+            "newToActive": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 1,
+                "p50": 1.1403436111111112
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 1,
+                "p50": 0.04873416666666667
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "feature": {
+            "createdToActive": {
+              "ai": {
+                "count": 1,
+                "p50": 0.5069491666666667
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 1,
+                "p50": 0.5069491666666667
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 1,
+                "p50": 3.8850036111111113
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 1,
+                "p50": 3.8850036111111113
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "story": {
+            "createdToActive": {
+              "ai": {
+                "count": 6,
+                "p50": 1.7783333333333333
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 64,
+                "p50": 0.00005972222222222223
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 6,
+                "p50": 0.08431708333333333
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 34,
+                "p50": 0.00005541666666666667
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "task": {
+            "createdToActive": {
+              "ai": {
+                "count": 8,
+                "p50": 2.747344861111111
+              },
+              "human": {
+                "count": 2,
+                "p50": 0.04974069444444444
+              },
+              "all": {
+                "count": 10,
+                "p50": 1.7743152777777778
+              },
+              "nonAi": {
+                "count": 2,
+                "p50": 0.04974069444444444
+              }
+            },
+            "activeToClosed": {
+              "ai": {
+                "count": 8,
+                "p50": 0.05723569444444444
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 8,
+                "p50": 0.05723569444444444
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          }
+        },
+        "crossStage": {
+          "reqToSpec": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "specToFeature": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "featureCreatedToFirstTask": {
+            "all": {
+              "p50": 1.208425,
+              "p90": 1.9161805555555558,
+              "count": 2,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 2.0931194444444445,
+              "p90": 2.0931194444444445,
+              "count": 1,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 0.3237305555555556,
+              "p90": 0.3237305555555556,
+              "count": 1,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "counts": {
+          "reqsResolved": 1,
+          "specsResolved": 1,
+          "featuresResolved": 1,
+          "storiesResolved": 34,
+          "tasksClosed": 8
+        }
+      },
+      "pr": {
+        "cycle": {
+          "all": {
+            "p50": 0.2407638888888889,
+            "p90": 0.2407638888888889,
+            "mean": 0.2407638888888889,
+            "count": 1
+          },
+          "ai": {
+            "p50": null,
+            "p90": null,
+            "mean": null,
+            "count": 0
+          },
+          "human": {
+            "p50": 0.2407638888888889,
+            "p90": 0.2407638888888889,
+            "mean": 0.2407638888888889,
+            "count": 1
+          }
+        },
+        "sizeBuckets": {
+          "Small": 4,
+          "Medium": 1,
+          "Large": 0,
+          "XL": 0
+        },
+        "sizeBucketsByMode": {
+          "ai": {
+            "Small": 0,
+            "Medium": 0,
+            "Large": 0,
+            "XL": 0
+          },
+          "human": {
+            "Small": 4,
+            "Medium": 1,
+            "Large": 0,
+            "XL": 0
+          }
+        },
+        "outliers": [],
+        "total": 5
+      },
+      "deployByLayer": {},
+      "deployByTarget": null,
+      "clusterCycleTime": {
+        "all": {
+          "median": 0.24083333333333334,
+          "mean": 0.24083333333333334,
+          "p90": 0.24083333333333334,
+          "sampleSize": 1,
+          "inFlightCount": 2,
+          "brokenCount": 0,
+          "distribution": [
+            {
+              "featureId": 39576,
+              "cycleSeconds": 867,
+              "prCount": 1,
+              "isAi": null
+            }
+          ]
+        },
+        "ai": {
+          "median": null,
+          "mean": null,
+          "p90": null,
+          "sampleSize": 0,
+          "inFlightCount": 1,
+          "brokenCount": 0,
+          "distribution": []
+        },
+        "human": {
+          "median": null,
+          "mean": null,
+          "p90": null,
+          "sampleSize": 0,
+          "inFlightCount": 1,
+          "brokenCount": 0,
+          "distribution": []
+        }
+      },
+      "cfrByLayer": {},
+      "mttr": {
+        "all": {
+          "p50": null,
+          "count": 0,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        },
+        "ai": {
+          "p50": null,
+          "count": 0,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        },
+        "human": {
+          "p50": null,
+          "count": 0,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        }
+      },
+      "pipelineRunRateMode": "pipeline-run-rate",
+      "throughputByType": {
+        "Requirement": {
+          "all": 1,
+          "ai": 0,
+          "human": 0
+        },
+        "Spec": {
+          "all": 1,
+          "ai": 0,
+          "human": 0
+        },
+        "Feature": {
+          "all": 1,
+          "ai": 1,
+          "human": 0
+        },
+        "Story": {
+          "all": 34,
+          "ai": 6,
+          "human": 0
+        },
+        "Task": {
+          "all": 8,
+          "ai": 8,
+          "human": 0
+        },
+        "Bug": {
+          "all": 5,
+          "ai": 0,
+          "human": 5
+        },
+        "Enhancement": {
+          "all": 0,
+          "ai": 0,
+          "human": 0
+        }
+      },
+      "qualityCycleTimes": {
+        "requirement": {
+          "newToActive": {
+            "all": {
+              "p50": 20.201109166666665,
+              "p90": 20.201109166666665,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 0.08687972222222222,
+              "p90": 0.08687972222222222,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 20.28798888888889,
+              "p90": 20.28798888888889,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "resolvedToNextSpecCreated": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "spec": {
+          "newToActive": {
+            "all": {
+              "p50": 1.1403436111111112,
+              "p90": 1.1403436111111112,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 0.04873416666666667,
+              "p90": 0.04873416666666667,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 1.1890777777777777,
+              "p90": 1.1890777777777777,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "resolvedToFirstFeatureCreated": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "feature": {
+          "newToActive": {
+            "all": {
+              "p50": 0.5069491666666667,
+              "p90": 0.5069491666666667,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.5069491666666667,
+              "p90": 0.5069491666666667,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 3.8850036111111113,
+              "p90": 3.8850036111111113,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 3.8850036111111113,
+              "p90": 3.8850036111111113,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 4.391952777777778,
+              "p90": 4.391952777777778,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 4.391952777777778,
+              "p90": 4.391952777777778,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "createdToFirstTaskActive": {
+            "all": {
+              "p50": 1.208425,
+              "p90": 1.9161805555555558,
+              "count": 2,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 2.0931194444444445,
+              "p90": 2.0931194444444445,
+              "count": 1,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 0.3237305555555556,
+              "p90": 0.3237305555555556,
+              "count": 1,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "story": {
+          "newToActive": {
+            "all": {
+              "p50": 0.00005972222222222223,
+              "p90": 0.0002796944444444448,
+              "count": 64,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 1.7783333333333333,
+              "p90": 3.7662894444444444,
+              "count": 6,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 0.00005541666666666667,
+              "p90": 8.806788694444444,
+              "count": 34,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.08431708333333333,
+              "p90": 0.12785972222222222,
+              "count": 6,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 0.00011805555555555555,
+              "p90": 8.806845027777777,
+              "count": 34,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 1.8360690277777778,
+              "p90": 3.850606527777778,
+              "count": 6,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "task": {
+          "newToActive": {
+            "all": {
+              "p50": 1.7743152777777778,
+              "p90": 3.7996641666666666,
+              "count": 10,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 2.747344861111111,
+              "p90": 3.8018275,
+              "count": 8,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 0.04974069444444444,
+              "p90": 0.05133925,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToClosed": {
+            "all": {
+              "p50": 0.05723569444444444,
+              "p90": 0.08835058333333333,
+              "count": 8,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.05723569444444444,
+              "p90": 0.08835058333333333,
+              "count": 8,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 2.804580555555556,
+              "p90": 3.834405333333333,
+              "count": 8,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 2.804580555555556,
+              "p90": 3.834405333333333,
+              "count": 8,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        }
+      },
+      "aiVsHumanGlance": {
+        "aiEfficiency": {
+          "ai": 52.904127740098374,
+          "human": null,
+          "spreadDeltaVsPrior": null
+        },
+        "prCycleHours": {
+          "ai": null,
+          "human": 0.2407638888888889,
+          "spreadDeltaVsPrior": null
+        },
+        "tasksClosed": {
+          "ai": 8,
+          "human": 0,
+          "spreadDeltaVsPrior": null
+        },
+        "deploys": {
+          "ai": 0,
+          "human": 0,
+          "spreadDeltaVsPrior": null
+        },
+        "authorshipShare": {
+          "pct": 0,
+          "deltaVsPrior": null
+        }
+      },
+      "aiContributionShare": {
+        "overall": 0,
+        "byLayer": {},
+        "byTarget": null
+      },
+      "intermediateShare": 0,
+      "devRows": [
+        {
+          "name": "scorrallo@asaauto.com",
+          "intPrs": 5,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 1.2,
+          "avgCmt": 0,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 2,
+          "buckets": {
+            "Small": 4,
+            "Medium": 1,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Focused",
+          "tasksClosed": 8,
+          "tasksActive": 2,
+          "taskP50": 0.05723569444444444,
+          "aiP50": 52.904127740098374,
+          "higherStories": 34,
+          "higherFeatures": 1,
+          "higherSpecs": 0,
+          "higherTotal": 35,
+          "reviewerComments": 0
+        }
+      ],
+      "dq": {
+        "flags": {
+          "revisions_unavailable": false,
+          "pr_threads_unavailable": false,
+          "reverts_unavailable": false,
+          "cw_oe_degeneracy": false,
+          "possible_missing_audit_share": 0,
+          "pre_strap_human_backlog_share": 0
+        },
+        "fieldCoverage": {
+          "tasksWithActivatedDate": {
+            "total": 13,
+            "pct": 0.7692,
+            "covered": 10
+          },
+          "tasksWithOriginalEstimate": {
+            "total": 13,
+            "pct": 0.7692,
+            "covered": 10
+          },
+          "tasksWithCompletedWork": {
+            "total": 13,
+            "pct": 0.6154,
+            "covered": 8
+          },
+          "tasksWithWallclockComputable": {
+            "total": 13,
+            "pct": 0.6154,
+            "covered": 8
+          },
+          "bugsWithEnvironment": {
+            "total": 40,
+            "pct": 0,
+            "covered": 0
+          },
+          "aiTaggedItems": {
+            "total": 218,
+            "pct": 0.0963,
+            "covered": 21
+          },
+          "prThreadsAvailable": {
+            "total": 5,
+            "pct": 1,
+            "covered": 5
+          },
+          "pipelineRunsClassified": {
+            "total": 364,
+            "pct": 1,
+            "covered": 364
+          }
+        },
+        "overallPct": 0.5545
+      }
+    }
+  ],
+  "sprintLabels": [
+    "20260531-080650"
+  ],
+  "sprintShort": [
+    "202"
+  ],
+  "series": {
+    "tasksClosed": [
+      8
+    ],
+    "prsInt": [
+      5
+    ],
+    "prsCompleted": [
+      1
+    ],
+    "deploysByLayer": {},
+    "deploysByTarget": null,
+    "aiP50": [
+      52.904127740098374
+    ],
+    "aiMean": [
+      95.1820926876594
+    ],
+    "aiP90": [
+      243.62516435158372
+    ],
+    "prCycleP50": [
+      0.2407638888888889
+    ],
+    "prCycleP90": [
+      0.2407638888888889
+    ],
+    "abandonPct": [
+      0.6
+    ],
+    "bugsByEnv": {
+      "unspecified": [
+        40
+      ]
+    },
+    "cwOeAntiPattern": [
+      0
+    ],
+    "clusterCycleP50": [
+      0.24083333333333334
+    ],
+    "untargetedDeployRuns": [
+      0
+    ]
+  },
+  "movement": {
+    "improvements": [],
+    "regressions": []
+  },
+  "trendByDev": [
+    {
+      "name": "scorrallo@asaauto.com",
+      "prs": [
+        5
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        8
+      ],
+      "higher": [
+        35
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        1.2
+      ],
+      "maxIter": [
+        2
+      ],
+      "avgCmt": [
+        0
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    }
+  ],
+  "devTotals": [
+    {
+      "name": "scorrallo@asaauto.com",
+      "prs": 5,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 8,
+      "higher": 35,
+      "comments": 0,
+      "maxIter": 2,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    }
+  ],
+  "verdicts": {
+    "milestone": {
+      "headline": "Stable sprint",
+      "context": "No metric moved more than 5% from the prior sprint.",
+      "detail": "A flat sprint can mean steady-state delivery or it can mean noise drowning signal -- check the Data Quality flags below to confirm field coverage is holding up before reading the flatness as good news.",
+      "action": "Hold cadence. If multiple sprints in a row read stable, consider whether the +/-5% threshold is masking small but real drift -- the configurable threshold lives in build-payload.js."
+    },
+    "watch": {
+      "headline": "No regressions",
+      "context": "No metric regressed more than 5% from the prior sprint.",
+      "detail": "Sustained absence of regressions is rare; verify the snapshot covers the expected window and that PR + work-item collection isn't silently dropping items.",
+      "action": "Spot-check the Data Quality section -- a zero-regression sprint with degraded coverage is a hidden regression."
+    },
+    "context": {
+      "headline": "Data quality nominal",
+      "context": "Every primary-metric field cleared its coverage threshold this sprint.",
+      "detail": "Translates to: AI Efficiency, PR cycle, CFR, MTTR, and Lead Time all read on data the engine considers trustworthy. No suppression pills firing beyond the configured no-signal thresholds.",
+      "action": "No action needed. The numbers up top are honest; trust them."
+    }
+  },
+  "currentMetrics": null,
+  "inactiveMembers": [],
+  "agentAttribution": {
+    "available": false,
+    "totalTasks": 0,
+    "byAgent": {},
+    "sprintNames": [
+      "20260531-080650"
+    ],
+    "message": "No agent attribution available (no agent:* role tags in window)."
+  },
+  "excludedClusters": []
+}

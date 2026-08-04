@@ -1,0 +1,20 @@
+{
+  "title": "Welcome to STRAP — Spec-To-Release Agentic Pipeline",
+  "outputPath": "../../../../../.claude/strap/docs/Welcome-to-STRAP.html",
+  "brand": {
+    "name": "STRAP",
+    "version": "v2.5",
+    "tagline": "Spec-To-Release Agentic Pipeline"
+  },
+  "sources": [
+    { "path": "../../../../../.claude/strap/docs/welcome.md",            "id": "welcome",            "label": "Welcome" },
+    { "path": "../../../../../.claude/strap/docs/strap-in.md",           "id": "strap-in",           "label": "Onboarding (/strap-in)" },
+    { "path": "../../../../../.claude/strap/docs/walkthrough.md",        "id": "walkthrough",        "label": "Simple Walkthrough" },
+    { "path": "../../../../../.claude/strap/docs/architecture.md",       "id": "architecture",       "label": "Architecture" },
+    { "path": "../../../../../.claude/strap/docs/dora-tuning.md",        "id": "dora-tuning",        "label": "DORA Tuning" },
+    { "path": "../../../../../.claude/strap/docs/customization-guide.md", "id": "customization",     "label": "Customization Guide" },
+    { "path": "../../../../../.claude/strap/docs/upgrade-guide.md",      "id": "upgrade",            "label": "Upgrade Guide" }
+  ],
+  "nav": "auto",
+  "footer": "<p>STRAP v2.5 &middot; Spec-To-Release Agentic Pipeline &middot; A Leo Motion Group portfolio project.</p>\n<p>This document is regenerated from the seven sources in <code>.claude/strap/docs/</code> at each release cut via <code>.claude/strap/tools/html-render/render.js</code>. The markdown files are the source of truth; this HTML is the rendered artifact.</p>"
+}

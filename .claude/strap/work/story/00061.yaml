@@ -1,0 +1,48 @@
+id: "00061"
+type: story
+title: "Add /whats-new route + page scaffold + data module"
+state: new
+parent: "00006"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links: []
+created_at: 2026-08-01T20:00:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:00:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T20:00:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Add /whats-new route + page scaffold + data module
+
+  ## Description
+  Register the permanent `/whats-new` route in `App.jsx` and create the `WhatsNew` component folder rendering the two-cluster structure of whats-new.html (instrument-cluster header + numbered-changelog main), driven from a `whatsNew[]` + `metrics[]` data module. Frontend defines the shape + empty-safe render; tech-writer (Story 00063) fills the values into the same files.
+
+  ## Linked Feature
+  **Feature:** 00006
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P7 — "V2 What's New" page (route + content)
+  ## Acceptance Criteria subset
+  AC-014 (route exists at `/whats-new`, reachable; permanent nav-item route-parity), partial AC-015 (structure enumerates entries; copy authored by tech-writer).
+  ## Implementation notes
+  Real files: `src/App.jsx` (add `<Route path="whats-new" element={<WhatsNew/>}/>` + import), new `src/components/WhatsNew/index.jsx`, new `src/components/WhatsNew/data/{whatsNew.js,metrics.js}` (shape + placeholder-safe defaults). Mockup whats-new.html (structure) + app.css. Do NOT port mockup `<nav>`/`<footer>` (Feature A owns the shell; it wraps the route via App.jsx). Content strings live in the data module (JSON-as-CMS convention), not hardcoded JSX.
+  ## Dependencies
+  Feature A shell + permanent nav pill (route-target parity). Authored LAST (after A/B/C). Route-presence test needs the P9 Vitest harness (stood up in Feature A Story 00011).
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 3 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T20:00:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00006 (P7 route/component, frontend). Tasks 00064-00066."

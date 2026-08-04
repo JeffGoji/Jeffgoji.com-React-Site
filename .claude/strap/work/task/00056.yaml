@@ -1,0 +1,46 @@
+id: "00056"
+type: task
+title: "Re-encode heavy source assets: NC source + 5 rotating-hero webp srcset + confirm TOTD frames"
+state: new
+parent: "00044"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00053"
+    type: predecessor
+original_estimate: 5
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:45:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Re-encode heavy source assets: NC source + 5 rotating-hero webp srcset + confirm TOTD frames
+
+  ## Description
+  Build-time photo follow-ups (design-approved). (1) Re-encode the NC gallery/hero source (`nc/15east/*`, 2-9MB) to webp. (2) Generate the 5 rotating-hero (NA/MSM/NC/ND/C8) responsive webp `srcset` sets (multiple widths) — the frontend consumes the emitted paths in `heroes[]`; this task produces ONLY the renditions. (3) Confirm the real in-repo `nd/TOTD2025` frames flow through the generalized pipeline into the `nd-totd2025` manifest (the representative gallery for AC-006/007/008). Decide a width set (e.g. 480/960/1600) consistent with THUMB_W/DISPLAY_W.
+
+  ## Linked Story
+  **Story:** 00044
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+  ## Implementation guidance
+  May extend `build-gallery.mjs` or add a companion `build-heroes.mjs` wired into `build`. Real TOTD frames EXIST in-repo — run the pipeline against them.
+  ## Dependencies
+  Predecessor: 00053 (generalized pipeline). Parallel with 00055. Requires the 00048 baseline to score against.
+  ## Definition of Done
+  NC source served as webp (no 2-9MB jpg where a rendition suffices); 5 hero srcset webp sets emitted at documented widths; `nd-totd2025` manifest built from the real TOTD frames; re-measured home + `nd-totd2025` show >=50% image-byte drop, LCP <=2.5s mobile, Lighthouse >=90/>=80 vs the C1 baseline. AC-006/007/008; AC-010 build side.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

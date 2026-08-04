@@ -1,0 +1,44 @@
+id: "00068"
+type: task
+title: "Build the numbered changelog ledger (entries + WHY/HOW readout)"
+state: new
+parent: "00062"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 4
+created_at: 2026-08-01T20:00:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:00:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T20:00:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Build the numbered changelog ledger (entries + WHY/HOW readout)
+
+  ## Description
+  Port `Changelog.jsx` verbatim from whats-new.html — the `.cl-head` heading + `whatsNew.map(...)` into `.cl-item` rows (zero-padded `.cl-num`, `.cl-meta` with `.cl-tag` + `.cl-goal` chips, `.cl-card__title`, `.cl-card__body`, `.cl-readout` WHY→/HOW→ rows), data-driven from `whatsNew[]`.
+
+  ## Linked Story
+  **Story:** 00062
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+  ## Implementation guidance
+  Zero-pad via `String(i+1).padStart(2,'0')`. Render title/body/why/how as PLAIN TEXT — no markdown/raw HTML, no `dangerouslySetInnerHTML` (AC-016 standing rule). Port `.changelog`/`.cl-*` from app.css into page SCSS. Author the RTL unit test in this task.
+  ## Dependencies
+  Story 00061 data module + Feature A/P5 tokens.
+  ## Definition of Done
+  One numbered row per entry with chips + WHY/HOW matching the mockup; no raw-HTML path; unit test authored (row count = whatsNew length; numbering zero-pads; chips + WHY/HOW per entry); empty-entries renders head + empty ledger.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

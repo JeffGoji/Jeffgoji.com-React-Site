@@ -1,0 +1,55 @@
+id: "00011"
+type: story
+title: "Wire in the Footer, remove the orphaned /totdtrip route, add the route-parity guard"
+state: new
+parent: "00003"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links:
+  - target: "00010"
+    type: predecessor
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:10:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Wire in the Footer, remove the orphaned /totdtrip route, add the route-parity guard
+
+  ## Description
+  Render the currently-dormant `components/Footer/index.jsx` for the first time and rebuild it to the mockup footer; remove the orphaned `/totdtrip` route; and add the route-parity test guarding both facts (plus What's-New-present + no-coming-soon).
+
+  ## Linked Feature
+  **Feature:** 00003
+
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P2 — Shell / Navigation / Footer redesign
+
+  ## Acceptance Criteria subset
+  **AC-002** (a rendered Footer under the new palette), **AC-018** (orphaned `/totdtrip` + coming-soon placeholder removed); contributes to **AC-005** (footer layout at all breakpoints).
+
+  ## Implementation notes
+  Mockup contract: `app.js renderShell()` footer branch + `app.css:356-361,575`. Real files: `src/components/Footer/index.jsx` (built, never rendered — mount it in `App.jsx` below `<Routes>`; DROP `fixed-bottom`, flow at page end), `src/App.jsx` (remove `/totdtrip` route :61 — KEEP `/totdgallery` :67 which is the linked one). Test stack: Vitest + RTL + jsdom (none exist yet); tests authored here, NOT run (dev-lead runs at PR prep).
+
+  ## Dependencies
+  **Depends on ST-4 (00010)** — footer render belongs after the shell exists. Route-parity test's What's-New assertion aligns with ST-4's nav pill.
+
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 3 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:10:00Z
+    body: "[STRAP/agent:dev-lead] Story created via /decompose-feature 00003 (P2, frontend-engineer). 3 Tasks: 00023-00025."

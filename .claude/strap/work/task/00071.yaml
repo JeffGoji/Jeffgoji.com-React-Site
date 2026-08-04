@@ -1,0 +1,46 @@
+id: "00071"
+type: task
+title: "Author the WHY->goal / HOW->shipped readouts and run the AC-015 no-vapourware audit"
+state: new
+parent: "00063"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00070"
+    type: predecessor
+original_estimate: 4
+created_at: 2026-08-01T20:00:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T20:00:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T20:00:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Author the WHY->goal / HOW->shipped readouts and run the AC-015 no-vapourware audit
+
+  ## Description
+  For every entry, author the `why` (which goal it advanced, in-voice) and `how` (the specific shipped change), then audit the whole set against actually-shipped A/B/C work — every claim must map to a resolved Story/Task, zero aspirational items. This is the AC-015 gate.
+
+  ## Linked Story
+  **Story:** 00063
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+  ## Implementation guidance
+  `why` names GOAL 1 (enthusiast-native visual system) and/or GOAL 2 (performance); `how` names the concrete artifact (e.g. "#E10600 palette + new SVG logo", "sharp→webp + srcset + lazy", "pinned Node >=18.17"). Audit: for each `how` claim, confirm a matching resolved item in Features 00003/00004/00005; strike or reword any claim that outran what shipped.
+  ## Dependencies
+  Predecessor: 00070. Blocked-by Features 00003/00004/00005 SHIPPED (audit needs the shipped record).
+  ## Definition of Done
+  Every entry has why+how; a traceability note maps each `how` to a resolved source item; no claim references unshipped/aspirational work; the set passes an AC-015 read-through.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

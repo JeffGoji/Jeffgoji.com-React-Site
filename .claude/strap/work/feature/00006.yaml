@@ -1,0 +1,95 @@
+id: "00006"
+type: feature
+title: "Ship the permanent self-documenting 'What's New' page enumerating V2 changes in Top Gear/Clarkson voice"
+state: active
+parent: null
+iteration: null
+area: null
+assigned_to: null
+tags:
+  - AI
+  - strap:feature
+links:
+  - target: "00002"
+    type: related
+  - target: "00003"
+    type: predecessor
+  - target: "00004"
+    type: predecessor
+  - target: "00005"
+    type: predecessor
+  - target: "00061"
+    type: related
+  - target: "00062"
+    type: related
+  - target: "00063"
+    type: related
+created_at: 2026-08-01T18:45:00Z
+created_by: spec-lead
+updated_at: 2026-08-01T20:02:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | spec-lead                   |
+  | Authored At  | 2026-08-01T18:45:00Z        |
+  | Completed By | _(set at resolution)_       |
+  | Completed At | _(set at resolution)_       |
+
+  ---
+
+  # Ship the permanent self-documenting "What's New" page enumerating V2 changes in Top Gear/Clarkson voice
+
+  ## Description
+
+  Feature D — a new permanent primary-nav page at `/whats-new` presenting the telemetry-dashboard "Updates" content: entertaining Top Gear / Clarkson-voice entries, each tagged Why→goal / How→shipped, every claim traceable to actually-delivered V2 work (no aspirational items), with TARGET-vs-SHIPPED perf badges. Authored **last**, from what Features A/B/C actually shipped.
+
+  ## Linked Spec
+
+  **Spec:** 00002 (`related`)
+
+  ## Constituent Parts assigned
+
+  | Part | Domain | Owner agent type | Summary |
+  |---|---|---|---|
+  | P7 — "V2 What's New" page (route + content) | client-ui | tech-writer + frontend-engineer | add `/whats-new` route to `App.jsx`; new component folder; enumerate V2 changes WHY/HOW in Clarkson tone; `MOCK.whatsNew` `{ver,title,body,why,how}` authored from shipped P1-P4 + build-time metric badges |
+
+  ## Acceptance Criteria subset
+
+  - **AC-014:** A "V2 What's New" page exists at a reachable route (`/whats-new`) and is a permanent top-level primary-nav item present on every page. _(The nav-pill element is built in A; D delivers the route + verifies nav-presence-everywhere.)_
+  - **AC-015:** The What's New page enumerates the V2 changes; each entry states WHY + HOW it advanced goal 1 and/or goal 2, every claim traceable to shipped work (no aspirational items), in the specified Top Gear/Clarkson tone.
+
+  ## Mockup References
+
+  - `.claude/strap/mockups/spec-00002/whats-new.html` — permanent-nav telemetry-dashboard feature page; Clarkson-voice entries tagged Why→goal / How→shipped.
+  - `.claude/strap/mockups/spec-00002/assets/mock-data.js` — `MOCK.whatsNew` shape `{ver,title,body,why,how}` + metrics (TARGET-vs-SHIPPED badges → build-time Lighthouse/perf-budget outputs).
+  - `.claude/strap/mockups/spec-00002/assets/app.css` / `app.js` — page component styles + dashboard behavior.
+
+  ## Out of scope
+
+  Any design-system/shell/surface/perf work (A/B/C). The nav pill itself (A). D must not make aspirational claims — only shipped work.
+
+  ## Dependencies
+
+  **LAST** — depends on Features A, B, and C being shipped (AC-015 traceability + the perf badges read C's shipped metrics). Consumes A's nav pill. P9 route-parity guard (`/whats-new` present) parallelizes.
+
+  ## Quality Checklist
+
+  - [x] Description concrete enough for a senior developer to scope.
+  - [x] Linked Spec 00002 is resolved.
+  - [x] Constituent Parts reference real Spec rows (P7).
+  - [x] Acceptance Criteria use the Spec's stable IDs verbatim.
+  - [x] Out-of-scope populated.
+  - [x] Dependencies explicit (predecessors: 00003, 00004, 00005 — authored last).
+  - [x] Mockup References enumerate real files.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T18:45:00Z
+    body: "[STRAP/agent:spec-lead] Feature authored via /generate-features from Spec 00002. State: new. Owns AC-014, AC-015 (P7). Predecessors: 00003/00004/00005 (authored last, from shipped work). Owners: tech-writer + frontend-engineer (active)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T20:02:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /decompose-feature). frontend+tech-writer reconciled -> 3 Stories (00061 route+scaffold+data-module, 00062 telemetry-cluster+changelog components, 00063 Clarkson content + TARGET/SHIPPED tiles), 10 Tasks (00064-00073), ~36 senior-dev-hrs. Shared data module (frontend owns shape, tech-writer owns values). Authored LAST; AC-015 no-vapourware audit is task 00071; TARGET->SHIPPED flip (00073) gates on Feature C measured numbers."

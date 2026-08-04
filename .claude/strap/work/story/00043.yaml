@@ -1,0 +1,56 @@
+id: "00043"
+type: story
+title: "Cookieless analytics + engagement baseline (Phase 0)"
+state: resolved
+parent: "00005"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links: []
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T23:05:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-01T23:05:00Z
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-01T23:05:00Z |
+
+  ---
+
+  # Cookieless analytics + engagement baseline (Phase 0)
+
+  ## Description
+  Stand up a cookieless, privacy-respecting analytics script in `index.html <head>` firing pageviews + engagement on ALL routes with NO cookies; wire SPA route-change pageviews (React Router v6 is client-only — a bare script tag counts first-load only); capture the V1 engagement baseline in-repo before V2 UI ships. Preserve all existing SEO/OG/Twitter/JSON-LD meta; keep AdSense present-but-inert.
+
+  ## Linked Feature
+  **Feature:** 00005
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P6 (analytics + engagement-baseline half)
+  ## Acceptance Criteria subset
+  AC-003, AC-004 (engagement half), AC-017.
+  ## Implementation notes
+  Real files: `index.html` (head; insert analytics near :80, DO NOT touch existing meta/JSON-LD/AdSense tags), new `src/hooks/usePageviews.js` + `src/lib/analytics.js` (thin wrapper so SQ-001's tool pick is a 1-line swap), `src/App.jsx` (mount hook), `src/components/AdSense/AdSenseSlot.jsx`, baseline doc under `.claude/strap/project-docs/`. SQ-001 tool (Plausible/Umami/Fathom) TBD — spec against a generic cookieless script tag.
+  ## Dependencies
+  None on Feature B. Blocks A/B merge on baseline. Reconcile with Story 00042 on the single index.html head edit + a combined baseline doc.
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 4 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:45:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00005 (P6 client-side, frontend-engineer). Tasks 00049-00052."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T20:25:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 1 dispatch begun (Task 00049). SQ-001 resolved: Plausible (hosted)."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-01T23:05:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). All 4 Tasks (00049-00052) merged into feature/00005-image-perf-analytics-baseline. AC-003, AC-004 (engagement half), AC-017 verified: Plausible manual-mode script live + SPA pageview tracking (double-count bug caught and fixed), engagement baseline methodology documented (numbers pending Plausible account provisioning -- CPO action, outside this sprint), 30-test guard suite authored and green (AdSense-inert, SEO-preserved, cookieless). Docs: .claude/strap/project-docs/v1-engagement-baseline.md (cross-linked with Story 00042's v1-perf-baseline.md)."

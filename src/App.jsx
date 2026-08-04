@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 // Components and Pages
@@ -30,18 +29,15 @@ import C8AutoxGallery from './components/Gallery/C8/autocross'
 import TailOfTheDragonGallery from './components/Gallery/ND/TailOfTheDragon';
 
 import ScrollToTop from './components/CustomComponents/ScrollToTop'
+import PageviewTracker from './components/CustomComponents/PageviewTracker'
 
 import './assets/css/style.css'
 
 function App() {
-  // useEffect for preRender snapshot for adSense:
-  useEffect(() => {
-    window.dispatchEvent(new Event('custom-render-ready'));
-  }, []);
-
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <PageviewTracker />
       <div className="container-fluid m-0 p-0">
         <Header />
         <Routes>

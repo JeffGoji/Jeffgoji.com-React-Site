@@ -1,0 +1,48 @@
+id: "00029"
+type: story
+title: "Consolidated galleries hub + lightbox + old-route redirects (adopted delta)"
+state: new
+parent: "00004"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links: []
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Consolidated galleries hub + lightbox + old-route redirects (adopted delta)
+
+  ## Description
+  Collapse all galleries into ONE `/galleries` hub with a **"Choose set" switcher** (adopted delta, per gallery.html), a thumbnail grid, and a **react-image-gallery lightbox** re-skinned to the mockup. OLD per-gallery routes **redirect** into the hub. This Story builds the hub UI + switcher + redirects + lightbox; it renders whatever gallery DATA Feature C's sharp/manifest pipeline produces (AC-009 seam).
+
+  ## Linked Feature
+  **Feature:** 00004
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P3 — Per-surface redesign
+  ## Acceptance Criteria subset
+  AC-001 (galleries render V2), AC-005 (responsive grid + lightbox), AC-016 (all galleries reachable/intact through the hub).
+  ## Implementation notes
+  Real files: `App.jsx` (add `/galleries`; convert `/msm-gallery`, `/nc-eastcoast15`, `/nc-yellowstone15`, `/nd-hillcountry`, `/c8-autox`, `/totdgallery`, `/gallery` → `<Navigate to="/galleries" replace/>`), `Gallery/index.jsx`+`GallerySwitcher.jsx` → `<GalleryHub>`; retire per-gallery `index.jsx`+`images.js` (pattern-a) + `_thumbs/thumbs.js`/`chunk.js` (pattern-b) — coordinate retirement with Feature C AC-009. Mockup gallery.html; data via `fetch('/gallery/<slug>/manifest.json')` (TOTD pattern is the template). Sets list = small NET-NEW slug→label config. Wiring-Guide mismatch: manifest lacks per-image `thumbnailAlt`/`label` — fall back to gallery label (build-script enhancement logged vs Feature C/P4). (`/totdtrip` is removed in Feature A Story 00011.)
+  ## Dependencies
+  Feature A. **Feature C seam:** C rewires gallery DATA onto sharp→webp + emits per-slug manifests (AC-009); D renders them. `react-image-gallery` (already in package). Old TOTD frames are C8-autocross stand-ins until C builds real TOTD webp.
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 3 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:25:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00004 (P3, frontend). Tasks 00039-00041."

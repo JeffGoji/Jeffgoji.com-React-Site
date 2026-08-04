@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tail of the Dragon 2025 — Gallery — jeffgoji.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<nav class="nav" data-nav></nav>
+
+<header class="section-tight" style="border-bottom:var(--hairline)">
+  <div class="container">
+    <div class="eyebrow">Great drives · 2025</div>
+    <h1 style="font-size:var(--fs-h1);text-transform:uppercase">Tail of the Dragon</h1>
+    <p class="hero__lead" style="color:var(--text-mid);max-width:60ch">318 curves in 11 miles on US-129 — the ND RF's finest weekend. Click any frame to open the lightbox; use ← → or swipe to move through the set.</p>
+    <div class="spec-row" style="margin-top:var(--space-4)">
+      <label class="label" style="align-self:center">Choose set</label>
+      <select class="select" style="max-width:320px">
+        <option>Tail of the Dragon — 2025 (12)</option>
+        <option>Texas Hill Country — ND</option>
+        <option>Autocross — C8 Panda</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main class="section-tight">
+  <div class="container">
+    <div class="gallery-grid" data-gallery></div>
+  </div>
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox" data-lightbox aria-modal="true" role="dialog">
+  <button class="btn btn--ghost btn--sm lightbox__close" data-close>✕ Close</button>
+  <button class="lightbox__nav lightbox__nav--prev" data-prev aria-label="Previous">‹</button>
+  <div class="lightbox__stage"></div>
+  <div class="lightbox__cap"></div>
+  <button class="lightbox__nav lightbox__nav--next" data-next aria-label="Next">›</button>
+</div>
+
+<footer class="footer" data-footer></footer>
+
+<script src="assets/mock-data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  GOJI.renderShell("gallery");
+  GOJI.mountGallery("[data-gallery]", MOCK.gallery);
+</script>
+</body>
+</html>

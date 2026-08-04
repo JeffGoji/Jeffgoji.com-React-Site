@@ -1,0 +1,46 @@
+id: "00040"
+type: task
+title: "Re-skinned react-image-gallery lightbox"
+state: new
+parent: "00029"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00039"
+    type: predecessor
+original_estimate: 5
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Re-skinned react-image-gallery lightbox
+
+  ## Description
+  Mount `react-image-gallery` re-skinned to the mockup lightbox visuals (`.lightbox` chrome, `.media--editorial--soft`, close/prev/next, keyboard ←/→/Esc + swipe, caption "NN / total · label"); data from manifest items `{original, thumbnail, alt}`. Fall back to the gallery label where per-image `label` is absent (Wiring-Guide mismatch).
+
+  ## Linked Story
+  **Story:** 00029
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+  ## Implementation guidance
+  `react-image-gallery` is already a dependency. Mockup gallery.html lightbox. `--soft` grade in the lightbox preserves detail.
+  ## Dependencies
+  Predecessor: 00039 (hub grid). Feature C manifests.
+  ## Definition of Done
+  Lightbox opens on thumb click; prev/next wrap; Esc closes; caption format correct; responsive. Tests authored.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

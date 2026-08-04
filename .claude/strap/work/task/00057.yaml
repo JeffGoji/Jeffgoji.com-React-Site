@@ -1,0 +1,44 @@
+id: "00057"
+type: task
+title: "Build shared ResponsiveImage primitive"
+state: new
+parent: "00045"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 4
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:45:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Build shared ResponsiveImage primitive
+
+  ## Description
+  Create one reusable `<ResponsiveImage>` (`src/components/common/ResponsiveImage.jsx`) emitting a webp `<img>` with `srcset` (rendition widths from Story 00044's manifest/naming), a `sizes` prop, `alt`, and `loading` (`"lazy"` default, `"eager"` opt-out for above-fold LCP). Single composition unit so no surface hand-rolls srcset. Author the unit test in the same task.
+
+  ## Linked Story
+  **Story:** 00045
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+  ## Implementation guidance
+  Props-in/callback-out; consumes devops' documented rendition-width set (align field names during reconcile). Markdown render path unaffected.
+  ## Dependencies
+  Story 00044's manifest/rendition-naming contract.
+  ## Definition of Done
+  Component + test authored; test asserts srcset built from widths, `sizes` passthrough, `loading` defaults lazy / honors eager, alt required; matches the manifest field shape.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

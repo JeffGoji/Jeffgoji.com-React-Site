@@ -1,0 +1,44 @@
+id: "00030"
+type: task
+title: "Rotating multi-car hero + intro section"
+state: new
+parent: "00026"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 5
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Rotating multi-car hero + intro section
+
+  ## Description
+  Build the hero component: `heroes[]` const, session-stable random pick via `useState` initializer, "TODAY IN THE GARAGE" Space-Mono nameplate (name · car), `.media--editorial--hero` + dual `.hero__scrim` + `.hero__flag`, eyebrow/title/lead/CTAs; plus the intro section (driver bio + telemetry chips). Responsive webp `<img srcset/sizes>` with error fallback to the night hero.
+
+  ## Linked Story
+  **Story:** 00026
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+  ## Implementation guidance
+  Mockup home.html hero + nameplate; `app.js rotateHero` → `useState(() => heroes[Math.floor(Math.random()*heroes.length)])` (no reshuffle on re-render). Hero webp renditions come from Feature C — render whatever exists, fall back gracefully.
+  ## Dependencies
+  Feature A (tokens, `.media--editorial`). Hero srcset ← Feature C (soft).
+  ## Definition of Done
+  Hero + intro render at 360/768/1024/1440 with no overflow; picked hero ∈ heroes[]; pick stable across re-render (test mocks Math.random); img-error fallback works. Tests authored (not run).
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

@@ -1,0 +1,28 @@
+﻿{
+    "env":  {
+                "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS":  "1",
+                "CLAUDE_CODE_SPAWN_BACKEND":  "auto"
+            },
+    "permissions":  {
+                        "allow":  [
+                                      "Edit(.claude/**)",
+                                      "Write(.claude/**)",
+                                      "Bash(mkdir:*)",
+                                      "Bash(git log:*)",
+                                      "Bash(git status:*)",
+                                      "Bash(git diff:*)",
+                                      "Bash(git rev-parse:*)",
+                                      "Bash(git branch:*)",
+                                      "Bash(git ls-files:*)",
+                                      "Bash(git show:*)",
+                                      "Bash(ls:*)",
+                                      "Bash(find:*)",
+                                      "Bash(wc:*)",
+                                      "Bash(head:*)",
+                                      "Bash(tail:*)",
+                                      "Bash(cat:*)",
+                                      "Bash(basename:*)",
+                                      "Bash(dirname:*)"
+                                  ]
+                    }
+}

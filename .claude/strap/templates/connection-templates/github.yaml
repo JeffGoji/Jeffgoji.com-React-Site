@@ -1,0 +1,137 @@
+# Starter operation_templates for GitHub Issues + Git refs + GitHub Actions.
+# Copy the relevant blocks into .claude/strap/state/devops-connection.yaml
+# (issue operations) or .claude/strap/state/code-connection.yaml (repo
+# operations). Adopter overrides individual templates as needed.
+#
+# Auth model: GitHub PAT (classic or fine-grained) OR `gh` CLI session.
+# - Fine-grained PAT: scope to required repos; requires explicit permission grants
+#   (Contents: write, Issues: write, Pull requests: write, Actions: read).
+# - Classic PAT: repo scope. Simpler but org-wide.
+# Templates below assume `gh` CLI for most operations (handles auth via `gh auth status`)
+# OR REST with `Authorization: Bearer {{token}}` injection.
+#
+# Placeholders: {{owner}}, {{repo}}, {{id}}, {{title}}, {{body}}, {{state}}, {{labels}},
+# {{milestone}}, {{assignees}}, {{source_branch}}, {{target_branch}}, {{branch_name}},
+# {{pr_id}}, {{token}}, {{repo_path}}.
+
+schema_version: "2.5"
+host: github
+
+# --- Work-item operations (Issues; consumed by /connect-devops-project) ---
+
+operation_templates:
+
+  work_item_create:
+    type: cli
+    command: |
+      gh issue create --repo {{owner}}/{{repo}} \
+        --title "{{title}}" \
+        --body "{{body}}" \
+        --label "{{labels}}" \
+        --assignee "{{assignees}}"
+
+  work_item_read:
+    type: cli
+    command: gh issue view {{id}} --repo {{owner}}/{{repo}} --json id,number,title,body,state,labels,assignees,createdAt,updatedAt,closedAt
+
+  work_item_update:
+    type: cli
+    command: |
+      gh issue edit {{id}} --repo {{owner}}/{{repo}} \
+        --title "{{title}}" \
+        --body "{{body}}" \
+        --add-label "{{labels}}"
+    # State changes use a separate sub-command: gh issue close / gh issue reopen.
+
+  work_item_delete:
+    # GitHub Issues cannot be hard-deleted via API (closed-with-not-planned is the closest).
+    # Adopter overrides if a GitHub-specific deletion path emerges.
+    type: rest
+    method: PATCH
+    path: /repos/{{owner}}/{{repo}}/issues/{{id}}
+    headers:
+      Authorization: Bearer {{token}}
+      Accept: application/vnd.github+json
+    body_template: |
+      { "state": "closed", "state_reason": "not_planned" }
+
+  work_item_query:
+    type: cli
+    command: gh issue list --repo {{owner}}/{{repo}} --search "{{search_string}}" --json id,number,title,state,labels,assignees,createdAt,updatedAt,closedAt --limit 100
+
+  work_item_link_add:
+    # GitHub does not expose explicit hierarchical work-item links. Tasklists in Issue body
+    # (using a checkbox + cross-issue id reference) are the canonical pattern. Adopter overrides with custom logic.
+    type: cli
+    command: 'gh issue comment {{source_id}} --repo {{owner}}/{{repo}} --body "Linked: #{{target_id}} ({{link_type}})"'
+
+  work_item_comment_add:
+    type: cli
+    command: gh issue comment {{id}} --repo {{owner}}/{{repo}} --body "{{body}}"
+
+  state_machine_probe:
+    # GitHub Issues states are fixed (open/closed). The probe is a no-op.
+    type: static
+    states: [open, closed]
+    categories: { open: "new", closed: "done" }
+
+# --- Code-repo operations (consumed by /connect-code-repo) ---
+
+  ref_get:
+    type: cli
+    command: gh api repos/{{owner}}/{{repo}}/git/refs/heads/{{branch_name}}
+
+  branch_create:
+    type: cli
+    command: |
+      gh api -X POST repos/{{owner}}/{{repo}}/git/refs \
+        -f ref="refs/heads/{{branch_name}}" \
+        -f sha="{{source_sha}}"
+
+  branch_delete_remote:
+    type: cli
+    command: gh api -X DELETE repos/{{owner}}/{{repo}}/git/refs/heads/{{branch_name}}
+
+  branch_push:
+    type: cli
+    command: 'git -C {{repo_path}} push -u origin {{branch_name}}'
+    # Relies on `gh auth setup-git` having configured the credential helper. In
+    # non-interactive contexts where `gh auth setup-git` is not viable, override with
+    # `git -c http.extraHeader="Authorization: Bearer {{token}}" push ...` pattern.
+
+  pull_request_create:
+    type: cli
+    command: |
+      gh pr create --repo {{owner}}/{{repo}} \
+        --base {{target_branch}} \
+        --head {{source_branch}} \
+        --title "{{title}}" \
+        --body "{{body}}"
+
+  pull_request_list:
+    type: cli
+    command: gh pr list --repo {{owner}}/{{repo}} --state {{status}} --base {{target_branch}} --limit {{top}} --json number,title,state,createdAt,closedAt,baseRefName,headRefName,author,mergedAt
+
+  pull_request_get_comments:
+    type: cli
+    command: gh api repos/{{owner}}/{{repo}}/pulls/{{pr_id}}/comments
+
+  pull_request_post_comment:
+    type: cli
+    command: gh pr comment {{pr_id}} --repo {{owner}}/{{repo}} --body "{{body}}"
+
+  pull_request_get_check_status:
+    type: cli
+    command: gh api repos/{{owner}}/{{repo}}/commits/{{commit_sha}}/check-runs --jq '.check_runs[] | {name, status, conclusion, completed_at}'
+
+# --- GitHub Actions operations (consumed by /connect-devops-project Step 6 pipeline probe) ---
+
+  pipeline_list:
+    # v2.5 #39703: enumerate workflows for pipeline_match_patterns capture.
+    type: cli
+    command: gh api repos/{{owner}}/{{repo}}/actions/workflows --jq '.workflows[] | {id, name, path, state}'
+
+  pipeline_runs_list:
+    # Recent runs for pattern discovery. /dora-collect consumes per-run data.
+    type: cli
+    command: gh api "repos/{{owner}}/{{repo}}/actions/runs?per_page={{top}}" --jq '.workflow_runs[] | {id, name, head_branch, status, conclusion, created_at, updated_at}'

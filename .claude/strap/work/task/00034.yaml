@@ -1,0 +1,44 @@
+id: "00034"
+type: task
+title: "Car-identity banner + shared BlogList build-log"
+state: new
+parent: "00027"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 6
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Car-identity banner + shared BlogList build-log
+
+  ## Description
+  Build `<BlogList>`: car-identity `.hero` banner (img `.media--editorial`, eyebrow, title, status chips), telemetry `.spec-row` chips (DATE/MILEAGE/COST in Space-Mono), `.post` entries, pagination 3/page sort id desc. Entries render via the REAL react-markdown + remark-gfm with the existing custom p/img/a renderers — **markdown-only, no rehype-raw, no dangerouslySetInnerHTML** (the P8 markdown-safety guard).
+
+  ## Linked Story
+  **Story:** 00027
+  ## Original Estimate
+  **Hours (senior-developer):** 6
+  ## Implementation guidance
+  Mockup blog.html; `app.js mountBlog`. Preserve the custom p/img/a renderers from `blog/Miyoshi/index.jsx`. Place `<BlogList>` under `src/components/common/`.
+  ## Dependencies
+  Feature A.
+  ## Definition of Done
+  `<BlogList>` renders any *Blog.json; 3/page pagination; sort id desc; prev/next disabled at bounds; markdown img/link/p render; explicit assert NO dangerouslySetInnerHTML; unique-id integrity. Tests authored.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

@@ -1,0 +1,57 @@
+id: "00008"
+type: story
+title: "Integrate V2 brand assets: self-hosted webfonts + 'The Goji Line' SVG logo"
+state: active
+parent: "00003"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links: []
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-03T19:35:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Integrate V2 brand assets: self-hosted webfonts + "The Goji Line" SVG logo
+
+  ## Description
+  Land the two non-CSS V2 brand assets: (1) self-host Archivo / Inter / Space Mono (vendor woff2 in-repo, author `@font-face`, remove the render-blocking Google Fonts `@import` — SQ-006 perf); (2) finalize the "The Goji Line" SVG logo as a production asset at `src/assets/logo.svg`, ready for ST-4 to swap in for `logo.gif`.
+
+  ## Linked Feature
+  **Feature:** 00003
+
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P1 — Design System & Visual Language
+
+  ## Acceptance Criteria subset
+  Contributes to **AC-002** (new logo asset half; swap+render verified in ST-4). Supports SQ-006 self-host-fonts (feeds AC-008, measured in Feature C).
+
+  ## Implementation notes
+  NEW `src/assets/fonts/*.woff2`, `src/scss/_fonts.scss`, `src/assets/logo.svg`. Retire the Google `@import` at `src/scss/styles.scss:5`. Source SVG: `mockups/spec-00002/assets/logo.svg`. Logo consumer (swap is ST-4): `src/components/NavMenu/index.jsx:5`. Font families named by `--font-display/body/mono` in `_tokens.scss` (ST-1). Archivo/Inter/Space Mono are all SIL OFL (redistributable/subsettable).
+
+  ## Dependencies
+  Loosely follows ST-1 (font families named in tokens). BLOCKS ST-3 (imports `_fonts`) and ST-4 (consumes `logo.svg`).
+
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 2 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:10:00Z
+    body: "[STRAP/agent:dev-lead] Story created via /decompose-feature 00003 (P1, designer). 2 Tasks: 00015-00016."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-03T19:35:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Task 00015 started (sprint-allocated). Task 00016 stays overflow, unallocated -- this Story will NOT resolve this run; it resolves once 00016 is allocated and completed in a future /plan-sprint + /execute-sprint pass."

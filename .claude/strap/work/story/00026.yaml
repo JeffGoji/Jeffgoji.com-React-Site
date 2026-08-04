@@ -1,0 +1,48 @@
+id: "00026"
+type: story
+title: "Home surface: rotating multi-car hero + intro + poster-facade video grid"
+state: new
+parent: "00004"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links: []
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Home surface: rotating multi-car hero + intro + poster-facade video grid
+
+  ## Description
+  Rebuild the `/` Home body to the home.html contract: a full-bleed **rotating multi-car hero** (Random-Background-Feature — 5 per-car webp shots, session-stable pick on mount, "TODAY IN THE GARAGE" nameplate, dual scrim + flag), the driver **intro** section (bio + telemetry chips), a **garage-preview** strip (top-3 cars), and the **poster-facade video grid** (click-to-load, replacing the 3 eager YouTube iframes — adopted delta). Retires the old eager `Intro`+`Garage`+`YouTube` composition.
+
+  ## Linked Feature
+  **Feature:** 00004
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P3 — Per-surface redesign
+  ## Acceptance Criteria subset
+  AC-001 (Home renders V2), AC-005 (responsive 360/768/1024/1440), AC-016 (videos reachable/intact; no raw-HTML from the facade).
+  ## Implementation notes
+  Real files: `src/components/pages/Home.jsx` (recompose), `pages/Intro.jsx` (fold/retire), `src/components/YouTube/index.jsx` (poster facade; also serves `/youtube`). Mockup home.html; `app.js rotateHero` → React `heroes[]` + `useState(()=>heroes[random])`; `.media--editorial--hero`. heroes[] NET-NEW (5 {key,img,name,car,alt}); fallback to night hero. Video ids `UySrXUfHA_k/Q2B8mA3vgP0/XVjs7LRCBak` → `videos[]` + net-new `meta`. Garage-preview reuses Story 00027's `CarCard`.
+  ## Dependencies
+  Feature A foundation. Task A3 (00032) depends on Story 00027 / CarCard. Hero webp `srcset` ← Feature C (graceful fallback). Poster-facade no-eager-iframe rolls up to AC-010 (Feature C).
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 3 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:25:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00004 (P3, frontend). Tasks 00030-00032."

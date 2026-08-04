@@ -1,0 +1,50 @@
+id: "00045"
+type: story
+title: "Client-side responsive image delivery (ResponsiveImage + srcset/lazy) + OG swap (Phase 3)"
+state: new
+parent: "00005"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links:
+  - target: "00044"
+    type: predecessor
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:45:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Client-side responsive image delivery (ResponsiveImage + srcset/lazy) + OG swap (Phase 3)
+
+  ## Description
+  Apply responsive webp `srcset`/`sizes` + below-fold `loading="lazy"` across every image-bearing surface, consuming the webp renditions Story 00044's pipeline emits; swap the multi-MB OG/Twitter/JSON-LD social image in `index.html` for the optimized ~1200x630 (<200KB) rendition (all other meta unchanged). Introduces a shared `<ResponsiveImage>` primitive so no surface hand-rolls srcset.
+
+  ## Linked Feature
+  **Feature:** 00005
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P4 — Image-loading performance overhaul (client-ui half)
+  ## Acceptance Criteria subset
+  AC-010 (client application), AC-011 (OG image swap).
+  ## Implementation notes
+  Real files: new `src/components/common/ResponsiveImage.jsx`; image surfaces — `blog/*/index.jsx` (header Image; markdown imgs already lazy), `Garage/Cards.jsx` (static-imported car JPGs), `Articles/2025/GoodbyeC8.jsx` (7 static multi-MB JPGs), the consolidated gallery + the Feature-B rotating hero (LCP → `loading="eager"`), `index.html:34,49,72` (OG image only). Fix generic `alt="this post's pic"` opportunistically.
+  ## Dependencies
+  **Predecessor: Story 00044** (needs the webp renditions/manifests). Also needs Feature B's redesigned surfaces to attach srcset to (blogs, Garage, gallery hub, hero). C1a perf baseline captured first.
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 4 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:45:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00005 (P4 client-side, frontend-engineer). Tasks 00057-00060."

@@ -1,0 +1,46 @@
+id: "00058"
+type: task
+title: "Apply ResponsiveImage to blogs + Garage cards"
+state: new
+parent: "00045"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00057"
+    type: predecessor
+original_estimate: 4
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:45:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Apply ResponsiveImage to blogs + Garage cards
+
+  ## Description
+  Swap the header `<Image src={post.picture}>` in all four `blog/*/index.jsx` and the car imgs in `Garage/Cards.jsx` to `<ResponsiveImage>` pointing at webp renditions; repoint blog JSON `picture` (or resolve at render) to built webp; below-fold lazy. Fix the generic `alt="this post's pic"` to descriptive alt while here.
+
+  ## Linked Story
+  **Story:** 00045
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+  ## Implementation guidance
+  Keep the markdown `<img>` renderer's existing `loading="lazy"` (already present). No full-res original where a rendition suffices. Coordinate with Feature B Story 00027 (which owns the blog/garage components) so the ResponsiveImage swap lands cleanly.
+  ## Dependencies
+  Predecessor: 00057. Needs Story 00044 renditions + Feature B Story 00027 surfaces.
+  ## Definition of Done
+  Each surface renders webp srcset; no raw multi-MB JPG import remains on these surfaces; descriptive alt. AC-010.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

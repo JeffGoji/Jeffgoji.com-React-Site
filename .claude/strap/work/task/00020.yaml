@@ -1,0 +1,51 @@
+id: "00020"
+type: task
+title: "Rebuild the NavMenu structure to the mockup"
+state: new
+parent: "00010"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00019"
+    type: predecessor
+original_estimate: 6
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:10:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Rebuild the NavMenu structure to the mockup
+
+  ## Description
+  Drop `bg="dark"`/`data-bs-theme="dark"`; apply the sticky-blur token chrome (`app.css .nav`); implement the red-underline active state via `NavLink` `is-active` (matches `.nav__link.is-active::after`); REMOVE the "NA Miata (coming soon)" `NavDropdown.Item` (:26); give every dropdown/toggle a UNIQUE id (fix the `basic-nav-dropdown`×2 / `dropdown-basic`×4 duplicates); keep `Navbar.Collapse`/`Toggle` so the bar collapses to a mobile menu (AC-005). Nav model mirrors `NAV_ITEMS`.
+
+  ## Linked Story
+  **Story:** 00010
+
+  ## Original Estimate
+  **Hours (senior-developer):** 6
+
+  ## Implementation guidance
+  Mockup contract: `assets/app.js renderShell()`/`NAV_ITEMS`, `app.css:65-119,563-575`. Keep React-Bootstrap `Navbar.Collapse`/`Toggle` (don't port the mockup's vanilla `.is-open` handler). Adopted delta: the galleries entry points at the single `/galleries` hub (Feature B builds the hub; nav just links it).
+
+  ## Dependencies
+  Predecessor: 00019 (logo swapped first).
+
+  ## Definition of Done
+  Navbar matches the mockup at 1440/1024; collapses to a toggle menu at <=768; active route shows the red underline; no duplicate DOM ids; no "coming soon" text.
+
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

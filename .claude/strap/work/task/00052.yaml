@@ -1,0 +1,56 @@
+id: "00052"
+type: task
+title: "Author guard tests: cookieless + AdSense-inert + SEO preserved"
+state: resolved
+parent: "00043"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00050"
+    type: predecessor
+original_estimate: 3
+completed_work: 3
+created_at: 2026-08-01T19:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T22:45:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-01T22:45:00Z
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:45:00Z |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-01T22:45:00Z |
+
+  ---
+
+  # Author guard tests: cookieless + AdSense-inert + SEO preserved
+
+  ## Description
+  Vitest+RTL/jsdom tests asserting the C1 invariants: the analytics wrapper writes no cookies; `AdSenseSlot` renders present-but-inert (renders `<ins.adsbygoogle>`, no slot enabled, no throw when `window.adsbygoogle` absent — AC-017); and a static assertion over `index.html` that OG/Twitter/JSON-LD/`google-adsense-account` meta are all present (AC-003/AC-017; AC-011 non-regression pre-check).
+
+  ## Linked Story
+  **Story:** 00043
+  ## Original Estimate
+  **Hours (senior-developer):** 3
+  ## Implementation guidance
+  New tests: `src/hooks/__tests__/usePageviews.test.jsx`, `src/components/AdSense/__tests__/AdSenseSlot.test.jsx`, `test/index-html-meta.test.js` (reads index.html). Authored; dev-lead executes.
+  ## Dependencies
+  Predecessor: 00050.
+  ## Definition of Done
+  Tests cover no-cookie, AdSense-inert, meta-present cases; authored (not run here).
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T22:25:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3. Predecessor Task 00050 merged. Dispatched to frontend-engineer in worktree frontend-engineer-00052 -- this Task also bootstraps the Vitest+RTL+jsdom toolchain per Task 00050's deferred note (2 test files already authored and waiting: src/lib/analytics.test.js, src/hooks/usePageviews.test.jsx)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-01T22:45:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00052-guard-tests-cookieless-adsense-seo into feature/00005-image-perf-analytics-baseline. Completed By: frontend-engineer. Test runner bootstrapped: vitest@1.6.1 (pinned for Vite 4.4 compat) + jsdom + @testing-library/react; npm test script added. 4 test files / 30 tests, verified green by the specialist (dev-lead to re-verify independently at integration audit). New: src/components/AdSense/AdSenseSlot.test.jsx (6 tests, incl. a repo-wide scan confirming all 5 real AdSenseSlot call sites are commented out -- the actual AC-017 guard), test/index-html-meta.test.js (16 tests, incl. asserting the Plausible script specifically uses script.manual.js, guarding against Task 00050's double-count fix silently regressing). CORRECTION: Task 00050's flagged ESLint/vite-plugin-eslint conflict does not exist -- the plugin is an unregistered dead devDependency; no lint runs anywhere in this project currently (separate from this Task's scope, noted for follow-up). vite build verified clean, test tooling does not leak into the production bundle. AC-003, AC-017, AC-011-non-regression satisfied."

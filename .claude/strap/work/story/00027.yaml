@@ -1,0 +1,48 @@
+id: "00027"
+type: story
+title: "Garage hub + 4 build blogs (data-driven BlogList collapse)"
+state: new
+parent: "00004"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links: []
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Garage hub + 4 build blogs (data-driven BlogList collapse)
+
+  ## Description
+  Rebuild `/garage` into the V2 **5-car number-tag hub** with a **retired-car tribute** state (NC Ryoko, bloglink `/`), and re-skin the 4 near-identical blogs to the **car-identity banner + paginated build-log** (3/page, telemetry chips), collapsing them to one data-driven `<BlogList>`. Owns the shared `<CarCard>`.
+
+  ## Linked Feature
+  **Feature:** 00004
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P3 — Per-surface redesign
+  ## Acceptance Criteria subset
+  AC-001 (garage + 4 blogs render V2), AC-005 (responsive), **AC-016** (all 4 blogs intact/reachable; render path stays react-markdown+remark-gfm, NO dangerouslySetInnerHTML/rehype-raw — primary home of the P8 markdown-safety assertion).
+  ## Implementation notes
+  Real files: `Garage/index.jsx`+`Cards.jsx` (number-tag grid; REMOVE the Fireball id-6 mismatch), `Garage/Cars.json` (add net-new `img`/`label`/`tag`; KEEP real Router `bloglink` paths, NC retired = `/`), `blog/{Miyoshi,Kiryu,Kasumi,Panda}/index.jsx` (collapse to `<BlogList data title banner/>`), `src/assets/Data/*Blog.json`. Mockup garage.html + blog.html; `app.js mountBlog` (3/page, sort `b.id-a.id`). Preserve the existing custom p/img/a react-markdown renderers. Clean up the `ndBlogList` var misname in Miyoshi.
+  ## Dependencies
+  Feature A. Blog `picture` webp repoint ← Feature C (AC-010). JSON `id` stays unique numeric (load-bearing). `CarCard` consumed by Story 00026.
+  ## Quality Checklist
+  - [x] Concrete; Feature+Spec populated; AC ids verbatim; real files; deps explicit; 3 Tasks.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:25:00Z
+    body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00004 (P3, frontend). Tasks 00033-00035."

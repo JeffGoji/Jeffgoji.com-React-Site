@@ -1,0 +1,108 @@
+# Starter reference for strap-agile (Local) work-tracking mode.
+# When the adopter picks "Local (strap-agile)" at /connect-devops-project Step 1,
+# work items live as YAML files under .claude/strap/work/ -- there is no remote
+# host, so the operation_templates pattern (CLI / REST) does not apply.
+#
+# This file documents:
+# 1. The local YAML schema for work-item files
+# 2. The directory layout the adapter uses
+# 3. Where the dev-lead implements the CRUD ops (direct file operations, not
+#    template-driven)
+
+schema_version: "2.5"
+host: strap-agile
+
+# --- Directory layout ---
+#
+# .claude/strap/work/
+#   schema.yaml                    # this file (the schema reference)
+#   requirement/<id>.yaml          # one file per work item, named by id
+#   spec/<id>.yaml
+#   feature/<id>.yaml
+#   story/<id>.yaml
+#   task/<id>.yaml
+#   bug/<id>.yaml
+#   enhancement/<id>.yaml
+#
+# Ids are zero-padded numerics (00001, 00002, ...) -- monotonic per-host, not
+# per-type. The dev-lead allocates the next id from a counter at
+# .claude/strap/work/.next-id when creating a new item.
+
+# --- Work-item schema (every type uses this shape) ---
+
+work_item_schema:
+  id: string                       # e.g., "00042"
+  type: string                     # requirement | spec | feature | story | task | bug | enhancement
+  title: string
+  description: string              # markdown
+  state: string                    # new | active | resolved | closed
+  parent: string                   # id of parent (e.g., a feature's parent is a spec); null for top-level
+  iteration: string                # iteration label; null for unscheduled
+  area: string                     # area path; null for default
+  assigned_to: string              # email or handle; null for unassigned
+  tags: list                       # list of strings; e.g., ["AI", "strap:feature", "env:prod"]
+  links:                           # related items
+    - target: string               # id of related item
+      type: string                 # related | predecessor | successor | parent_child
+  created_at: timestamp
+  created_by: string
+  updated_at: timestamp
+  updated_by: string
+  resolved_at: timestamp           # null until resolved
+  closed_at: timestamp             # null until closed
+  # v2.2 extension fields (optional; per-type):
+  severity: string                 # Bug only
+  priority: integer                # Enhancement / Feature
+  environment: string              # Bug only (env:* tag value)
+  original_estimate: number        # Task / atomic Bug; hours
+  completed_work: number           # Task / Bug; hours at resolution
+  remaining_work: number
+  start_date: timestamp
+  finish_date: timestamp
+  resolved_reason: string          # Bug only
+  pr_url: string                   # optional
+  comments:                        # ordered list, append-only
+    - id: string
+      author: string
+      timestamp: timestamp
+      body: string
+
+# --- States ---
+#
+# state_asymmetries.<host_type> is NOT used for strap-agile; every type uses the
+# canonical four-state machine (new / active / resolved / closed). The /connect-devops-project
+# Step 4 state probe reads this schema's "states" block.
+
+states:
+  - name: new
+    category: new
+  - name: active
+    category: indeterminate
+  - name: resolved
+    category: indeterminate
+  - name: closed
+    category: done
+
+# --- CRUD operations ---
+#
+# Local-mode operations are direct dev-lead file operations, not template-driven.
+# The connect skill does NOT populate operation_templates for strap-agile; the
+# operation_templates block in devops-connection.yaml is empty for this host.
+# Capabilities are all declared supported via the local-files mechanism.
+#
+# Logical -> implementation:
+#   work_item_create    -> Write .claude/strap/work/<type>/<id>.yaml (after allocating id)
+#   work_item_read      -> Read .claude/strap/work/<type>/<id>.yaml
+#   work_item_update    -> Read + merge + Write (preserving created_*; updating updated_*)
+#   work_item_delete    -> Remove .claude/strap/work/<type>/<id>.yaml (with backup to .deleted/)
+#   work_item_query     -> Glob + parse + filter
+#   work_item_link_add  -> Update both source.links and target.links
+#   work_item_comment_add -> Append to comments[]
+#   work_item_revisions  -> Reconstructed from git history of the file (git log -p)
+#   iteration_list      -> Read iteration-list metadata from .claude/strap/work/.iterations.yaml
+#
+# Pipeline patterns (#39703): strap-agile has no CI; pipeline_match_patterns is N/A.
+
+# --- Auth ---
+#
+# No remote auth required. All operations are local-filesystem.

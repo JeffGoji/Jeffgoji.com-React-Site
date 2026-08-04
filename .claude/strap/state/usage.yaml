@@ -1,0 +1,58 @@
+session:
+  workflow: execute-sprint
+  workflow_instance: execute-00003
+  started_at: 2026-08-03T19:12:00Z
+  completed_at: 2026-08-03T20:00:00Z
+  specialists_used: 266K
+  notes: "Partial Feature 00003 execution (Story 00007 + Task 00015, 4 Tasks). PR #17 opened against feature/strap-onboarding. designer exceeded its 200K per-agent budget (266K across 4 dispatches) -- tracked incrementally this run, unlike execute-00005's after-the-fact reconstruction. Prior run (execute-00005, 2026-08-01, Feature 00005 Stories 00042+00043) archived below for reference."
+  prior_runs:
+    - workflow_instance: execute-00005
+      started_at: 2026-08-01T20:25:00Z
+      completed_at: 2026-08-01T23:15:00Z
+      specialists_used: 503K
+      notes: "Partial Feature 00005 execution (Stories 00042+00043, 7 Tasks). PR #16 opened. Tracking gap: usage.yaml was not updated incrementally per-dispatch during this run as the skill specifies -- these figures are reconstructed after the fact from each specialist's self-reported tokens_used lines (one estimated: frontend-engineer-00051 never sent a finishing SendMessage, ~50K is an estimate from its commit's scope). devops-lead ended the run at 289K against its 200K per-agent budget -- exceeded, not caught in real time because of the same tracking gap. Fix for next run: check/update usage.yaml after each specialist's report, not just at session end."
+
+budgets:
+  strap-in:
+    per_agent: 500K
+    session_aggregate: 1M
+  strap-refresh:
+    per_agent: 200K
+    session_aggregate: 1M
+  decompose-feature:
+    per_agent: 200K
+    session_aggregate: 1M
+  execute-sprint:
+    per_agent: 200K
+    session_aggregate: 1M
+  execute-sprint-full-auto:
+    per_agent: 200K
+    session_aggregate: 2M
+  refine-pr:
+    per_agent: 200K
+    session_aggregate: 1M
+  fix-bugs:
+    per_agent: 200K
+    session_aggregate: 1M
+  quick:
+    per_agent: 200K
+    session_aggregate: 500K
+
+agents:
+  frontend-engineer:
+    used_in_current: 0
+    last_dispatch: 2026-08-01T22:25:00Z
+  security-reviewer:
+    used_in_current: 0
+  test-strategist:
+    used_in_current: 0
+  devops-lead:
+    used_in_current: 0
+    last_dispatch: 2026-08-01T21:35:00Z
+    exceeded_budget_at: 2026-08-01T22:15:00Z
+  tech-writer:
+    used_in_current: 0
+  designer:
+    used_in_current: 266K
+    last_dispatch: 2026-08-03T19:35:00Z
+    exceeded_budget_at: 2026-08-03T19:50:00Z

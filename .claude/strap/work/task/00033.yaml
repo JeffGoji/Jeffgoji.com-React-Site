@@ -1,0 +1,44 @@
+id: "00033"
+type: task
+title: "Shared CarCard + Garage 5-car number-tag hub"
+state: new
+parent: "00027"
+iteration: null
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links: []
+original_estimate: 5
+created_at: 2026-08-01T19:25:00Z
+created_by: dev-lead
+updated_at: 2026-08-01T19:25:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:25:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Shared CarCard + Garage 5-car number-tag hub
+
+  ## Description
+  Rebuild `Garage/index.jsx` + `Cards.jsx`; create the shared `<CarCard>` with a `variant` (`preview` | `hub`) — the hub variant adds a `.numtag #id` and a retired-tribute branch (bloglink `/` → non-link tribute chip). `.media--editorial` on `.card__media`; section-head. Add net-new `img`/`label`/`tag` to `Cars.json`; remove the Fireball id-6 image mismatch.
+
+  ## Linked Story
+  **Story:** 00027
+  ## Original Estimate
+  **Hours (senior-developer):** 5
+  ## Implementation guidance
+  Mockup garage.html (`.numtag`, retired → "Retired · tribute"). KEEP real Router `bloglink` paths (NC retired = `/`). Place `CarCard` under `src/components/common/`.
+  ## Dependencies
+  Feature A.
+  ## Definition of Done
+  `/garage` renders the V2 5-car hub responsive; retired car (id 3) renders a tribute (no build-log `<a>`); number tags present; no 6th/Fireball card. Tests authored.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236 44" role="img" aria-label="JEFFGOJI — The Goji Line" width="236" height="44">
+  <!--
+    LOGO CONCEPT: "The Goji Line"
+    The mark is a racing line sweeping through a corner apex, bent into a "G".
+    Pure vector (font-independent) for the mark; wordmark is live text so it
+    ports as either <text> or outlined paths. Red = --goji-red (#E10600).
+  -->
+  <defs>
+    <linearGradient id="gojiRed" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF1A0E"/>
+      <stop offset="1" stop-color="#B00500"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Racing-line "G": an open apex arc + exit tick -->
+  <g fill="none" stroke="url(#gojiRed)" stroke-width="5.5" stroke-linecap="round">
+    <path d="M39 11 A16 16 0 1 0 39 33" />        <!-- corner sweep -->
+    <path d="M39 22 H27" />                         <!-- exit line into the G bar -->
+  </g>
+  <!-- apex dot -->
+  <circle cx="22" cy="7.5" r="3.2" fill="#F6F6F4"/>
+
+  <!-- Wordmark -->
+  <text x="52" y="24" font-family="Archivo, 'Arial Narrow', sans-serif" font-size="21" font-weight="800"
+        letter-spacing="0.5" fill="#F6F6F4">JEFF<tspan fill="#E10600">GOJI</tspan></text>
+  <!-- Tagline -->
+  <text x="53" y="38" font-family="'Space Mono', monospace" font-size="7.5" letter-spacing="3"
+        fill="#7C7C79">THE GOJI LINE</text>
+</svg>

@@ -1,0 +1,61 @@
+id: "00013"
+type: task
+title: "Author Sass color vars + Bootstrap $theme-colors override in _theme.scss"
+state: resolved
+parent: "00007"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:task]
+links:
+  - target: "00012"
+    type: predecessor
+original_estimate: 4
+completed_work: 4
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-03T19:50:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-03T19:50:00Z
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | designer |
+  | Completed At | 2026-08-03T19:50:00Z |
+
+  ---
+
+  # Author Sass color vars + Bootstrap $theme-colors override in _theme.scss
+
+  ## Description
+  Create `src/scss/_theme.scss` declaring the V2 palette as Sass vars (`$goji-red: #E10600`, ink + text ramp) and a `$theme-colors` map mapping Bootstrap's slots to the V2 palette (`primary`→`$goji-red`, `dark`/body-bg→charcoal, `danger`→`$goji-red`), replacing and deleting the retired `$primary-0..4` blues + `#ff0000` at `styles.scss:11-26`. The partial must be authorable-before-Bootstrap (defines the map + var overrides Bootstrap reads, with no dependency on Bootstrap being imported first). Document the ordering contract at the top.
+
+  ## Linked Story
+  **Story:** 00007
+
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+
+  ## Implementation guidance
+  Bootstrap 5.3 merges `$theme-colors` via `map-merge` at import time, so the map must exist beforehand — this is the `styles.scss:2` root cause. Do NOT edit styles.scss's import order here (that's ST-3/00017); deliver the correctly-authored partial + the written ordering contract.
+
+  ## Dependencies
+  Predecessor: 00012 (references the palette established as tokens).
+
+  ## Definition of Done
+  `_theme.scss` compiles standalone; a probe importing `_theme` then Bootstrap emits `.btn-primary`/`.bg-primary` with `#E10600` (proves the override is effective when ordered correctly); the retired blue `$primary-0..4` vars appear nowhere.
+
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-03T19:35:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2. Dispatched to designer in worktree designer-00013 on branch task/00013-theme-scss."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-03T19:50:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00013-theme-scss (7d43f0a) into feature/00003-design-foundation-shell (7e06c69). Completed By: designer. Variables-only partial, zero CSS emitted, no Bootstrap function/var referenced -- authorable-before-Bootstrap confirmed. $theme-colors covers all 8 slots (info->silver, dark->ink-1000 distinct from body-bg->ink-900); retired blue palette absent. Palette values mirror _tokens.scss (Sass cannot read CSS custom properties at compile time) with drift enforced as a test failure, not just a comment. Ordering-contract header names Task 00017/Story 00009 as the follow-up that fixes styles.scss's live import-order bug. 56-test probe green (theme-then-Bootstrap proof + Bootstrap-then-theme negative control); 245/245 repo-wide after merge. Follow-up noted for Story 00009/P5: Bootstrap 5.3's [data-bs-theme=dark] block carries its own independent palette and would override ours on any component using that attribute -- needs \$enable-dark-mode:false or a _variables-dark.scss re-point."

@@ -1,0 +1,2361 @@
+{
+  "reportTitle": "DORA Report",
+  "brandName": "",
+  "brandAccent": "DORA",
+  "workItemUrlTemplate": "#{id}",
+  "prUrlTemplate": "#{id}",
+  "layers": [],
+  "subRepos": [],
+  "deploymentTargets": [],
+  "sprintMetrics": [
+    {
+      "name": "Hippodraco",
+      "window": {
+        "start": "2026-05-17T07:42:51Z",
+        "end": "2026-05-31T07:42:51Z"
+      },
+      "counts": {
+        "totalWorkItems": 594,
+        "tasks": 315,
+        "tasksClosed": 60,
+        "tasksActive": 0,
+        "stories": 155,
+        "features": 22,
+        "enhancements": 15,
+        "bugs": 67,
+        "bugsByEnv": {
+          "unspecified": 67
+        },
+        "specs": 13,
+        "reqs": 3,
+        "prsInt": 46,
+        "prsIntCompleted": 39,
+        "prsIntAbandoned": 2,
+        "prsIntActive": 5,
+        "prsIntDrafts": 0,
+        "prsInterm": 8
+      },
+      "draftsByAuthor": {},
+      "contents": {
+        "features": [
+          {
+            "id": 39390,
+            "title": "Marlin Web + Mobile E2E MVP: Docker Stack + Webappstest Login Smoke",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39474,
+            "title": "Federation Stub: GTX -- Per-Job Tech Assignment Endpoint (pending upstream)",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          }
+        ],
+        "stories": [
+          {
+            "id": 38377,
+            "title": "Refactor BaseEntity.Merge to handle Quote parent-navigation cycles without [IgnoreOnMerge] workaround",
+            "assignee": "Flavio Ferrari",
+            "isAi": false
+          },
+          {
+            "id": 39168,
+            "title": "Improve inspection telemetry metrics: advisor/technician breakdown + workbook chart aggregation",
+            "assignee": "Renan Esteves",
+            "isAi": true
+          },
+          {
+            "id": 39170,
+            "title": "Restore direct Inspection.QuoteId/WorkOrderId FKs and drop umbrella Job chain",
+            "assignee": "Renan Esteves",
+            "isAi": true
+          },
+          {
+            "id": 39178,
+            "title": "QuoteItem.IsApproved tri-state (null = not answered) and drop unused InspectionItem.IsApproved",
+            "assignee": "Flavio Ferrari",
+            "isAi": true
+          },
+          {
+            "id": 39375,
+            "title": "Implement DELETE /api/v1/gtx/inspection endpoint mirroring Create pattern",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39391,
+            "title": "Wire webappstest federation-server-url into marlin-web and marlin-mobile production builds",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39392,
+            "title": "Scaffold marlin-web-e2e Nx Playwright project with webappstest login smoke",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39393,
+            "title": "Scaffold marlin-mobile-e2e Nx Playwright project with Pixel 7 webappstest login smoke",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39394,
+            "title": "Configure Marlin Federation API and Raptor API for Docker Compose E2E stack",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39395,
+            "title": "Postgres + Azurite seed sidecar for one Raptor tenant + branch + BranchTenantStore mapping",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39396,
+            "title": "Containerize Marlin Mobile web bundle and harden existing Dockerfiles",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39397,
+            "title": "Author docker-compose.e2e.yml with .NET seed sidecar and Azurite",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39398,
+            "title": "Verify cert mount strategy end-to-end (host + CI)",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39399,
+            "title": "Create post-merge Azure DevOps E2E pipeline",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39400,
+            "title": "Security review of Marlin E2E MVP cert handling, password handling, and tenant isolation",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39483,
+            "title": "DB: seed JobCategoryAdminEditing TenantFeatureFlag for existing tenants",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39484,
+            "title": "Add JobCategoryAdminEditing enum + TranslatableForbiddenException + middleware mapping",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39486,
+            "title": "Seed JobCategoryAdminEditing flag at tenant provisioning",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39487,
+            "title": "Scaffold job-category-management Angular lib (store + HTTP service + routes)",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          }
+        ],
+        "enhancements": [
+          {
+            "id": 38729,
+            "title": "Refactor GTX federation to materialise GTX work orders as Raptor WorkOrder (not Quote)",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 38772,
+            "title": "Sync GTX Jobs and JobTypes into Raptor on quote/work-order read",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          },
+          {
+            "id": 39374,
+            "title": "Add GTX-callable delete inspection endpoint in Marlin Federation API",
+            "assignee": "Shaun McGowan",
+            "isAi": true
+          }
+        ],
+        "specs": [
+          {
+            "id": 39381,
+            "title": "Spec: Marlin Web + Mobile E2E MVP — Docker Stack + Webappstest Login Smoke",
+            "assignee": null,
+            "isAi": true
+          },
+          {
+            "id": 39475,
+            "title": "Manage Job Categories: Admin UI, Inspection Template Section Linking, and GTX Recommended-Job Categorization on DVI Transfer",
+            "assignee": null,
+            "isAi": true
+          }
+        ],
+        "bugsResolved": [
+          {
+            "id": 38660,
+            "title": "Check-in flow locked at Signature step when tenant has no active Terms & Conditions",
+            "assignee": "Shaun McGowan",
+            "env": null,
+            "severity": "2 - High",
+            "isAi": false
+          },
+          {
+            "id": 38794,
+            "title": "Consolidated DVI Report: per-item total hard-coded to USD instead of tenant-locale currency",
+            "assignee": "Shaun McGowan",
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": true
+          },
+          {
+            "id": 38838,
+            "title": "Consolidated DVI report classifies existing GTX work-order items as Other items",
+            "assignee": "Shaun McGowan",
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 38839,
+            "title": "Consolidated DVI report shows Approve/Decline on existing booking items",
+            "assignee": "Shaun McGowan",
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 38840,
+            "title": "POST /inspection/consolidated-approval returns 400 for Allocated=true WO inspections",
+            "assignee": "Shaun McGowan",
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 38841,
+            "title": "TransferInspectionToWorkOrder never calls federation submit-back; GTX silently misses WO-routed inspection transfers",
+            "assignee": "Shaun McGowan",
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 38897,
+            "title": "WO-routed inspections missing View/Send Report on consolidated DVI list",
+            "assignee": "Shaun McGowan",
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": true
+          },
+          {
+            "id": 38903,
+            "title": "FK violation persisting freehand note options when inspection template lives in different branch (NoteOptionsService cross-branch Add)",
+            "assignee": "Shaun McGowan",
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 38930,
+            "title": "Check-in inspection fails for allocated GTX work-order appointments (QuoteId-only target validation)",
+            "assignee": null,
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 38932,
+            "title": "GTX appointment sync materialises shadow Quote for allocated WO responses, blocking WO-routed check-in",
+            "assignee": null,
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 38934,
+            "title": "Customer code-login consolidated-approval fails for WorkOrder targets: 'Value cannot be null. (Parameter Name)'",
+            "assignee": null,
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 39172,
+            "title": "DVI mobile: attachment data loss when uploadMany fails",
+            "assignee": "Renan Esteves",
+            "env": null,
+            "severity": "2 - High",
+            "isAi": true
+          },
+          {
+            "id": 39174,
+            "title": "Customer flow fixes: mileage, quote number display, Vision AI model id",
+            "assignee": "Renan Esteves",
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": true
+          },
+          {
+            "id": 39176,
+            "title": "Admin Inspection view does not render child section titles",
+            "assignee": "Ted Nguyen",
+            "env": null,
+            "severity": "4 - Low",
+            "isAi": true
+          },
+          {
+            "id": 39180,
+            "title": "TM federation: CreateEstimateAreaLine default arm silently overwrites quote area status to Good",
+            "assignee": "Flavio Ferrari",
+            "env": null,
+            "severity": "3 - Medium",
+            "isAi": true
+          },
+          {
+            "id": 39182,
+            "title": "DVI: required Yes/No item requires re-toggle for transfer to succeed",
+            "assignee": "Renan Esteves",
+            "env": null,
+            "severity": "4 - Low",
+            "isAi": true
+          }
+        ]
+      },
+      "prsWithWeight": [],
+      "prWeightStats": {
+        "filesP50": 0,
+        "filesP90": 0,
+        "filesMax": 0,
+        "linesP50": 0,
+        "linesP90": 0,
+        "linesMax": 0,
+        "commitsP50": 0,
+        "commitsP90": 0,
+        "witP50": 0,
+        "witMax": 0,
+        "coverage": 0
+      },
+      "prReviewersRanked": [],
+      "agentVsHuman": {
+        "agent": 59,
+        "human": 1,
+        "tagged": 59,
+        "audited": 0,
+        "agentShare": 0.9833333333333333,
+        "taggedShare": 0.9833333333333333,
+        "agentByOrchestrator": {
+          "unknown": 59
+        },
+        "humanByAssignee": {
+          "Flavio Ferrari": 1
+        },
+        "byAgentRole": {
+          "angular-frontend-engineer": {
+            "tasks": 10
+          },
+          "dotnet-backend-engineer": {
+            "tasks": 10
+          },
+          "tm-dotnet-backend-engineer": {
+            "tasks": 1
+          },
+          "ux-test-engineer": {
+            "tasks": 8
+          },
+          "database-engineer": {
+            "tasks": 3
+          },
+          "terraform-infrastructure-critic": {
+            "tasks": 15
+          },
+          "test-engineer": {
+            "tasks": 1
+          },
+          "security-reviewer": {
+            "tasks": 4
+          },
+          "dev-lead": {
+            "tasks": 7
+          }
+        }
+      },
+      "ai": {
+        "all": {
+          "count": 59,
+          "p50": 8.729530060298421,
+          "mean": 336.9297315519793,
+          "p90": 118.1656411400318,
+          "sampleConfidence": "high",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "ai": {
+          "count": 58,
+          "p50": 9.190329799951899,
+          "mean": 342.7385379168782,
+          "p90": 159.6247284158782,
+          "sampleConfidence": "high",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "human": {
+          "count": 1,
+          "p50": 0.018962387846485216,
+          "mean": 0.018962387846485216,
+          "p90": 0.018962387846485216,
+          "sampleConfidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "ai_eff_sample"
+        },
+        "confidence": "high",
+        "sampleConfidence": "high",
+        "threshold": 5,
+        "thresholdKey": "ai_eff_sample"
+      },
+      "funnel": {
+        "itemCycles": {
+          "requirement": {
+            "newToActive": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 3,
+                "p50": 0.49282888888888887
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 3,
+                "p50": 0.38897027777777776
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "spec": {
+            "newToActive": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 12,
+                "p50": 0.36634916666666667
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 0,
+                "p50": null
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 10,
+                "p50": 0.4208827777777778
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "feature": {
+            "createdToActive": {
+              "ai": {
+                "count": 4,
+                "p50": 1.887932361111111
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 20,
+                "p50": 1.2583129166666667
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 3,
+                "p50": 22.627127777777776
+              },
+              "human": {
+                "count": 0,
+                "p50": null
+              },
+              "all": {
+                "count": 12,
+                "p50": 142.27794861111113
+              },
+              "nonAi": {
+                "count": 0,
+                "p50": null
+              }
+            }
+          },
+          "story": {
+            "createdToActive": {
+              "ai": {
+                "count": 83,
+                "p50": 21.928313055555556
+              },
+              "human": {
+                "count": 1,
+                "p50": 25.110076666666668
+              },
+              "all": {
+                "count": 134,
+                "p50": 16.873637083333335
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 25.110076666666668
+              }
+            },
+            "activeToResolved": {
+              "ai": {
+                "count": 82,
+                "p50": 0.3704341666666667
+              },
+              "human": {
+                "count": 1,
+                "p50": 316.4105102777778
+              },
+              "all": {
+                "count": 132,
+                "p50": 0.38541847222222225
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 316.4105102777778
+              }
+            }
+          },
+          "task": {
+            "createdToActive": {
+              "ai": {
+                "count": 183,
+                "p50": 2.180760277777778
+              },
+              "human": {
+                "count": 1,
+                "p50": 0.009008333333333333
+              },
+              "all": {
+                "count": 184,
+                "p50": 2.180679722222222
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 0.009008333333333333
+              }
+            },
+            "activeToClosed": {
+              "ai": {
+                "count": 183,
+                "p50": 0.24699166666666666
+              },
+              "human": {
+                "count": 1,
+                "p50": 316.4158463888889
+              },
+              "all": {
+                "count": 184,
+                "p50": 0.24710194444444444
+              },
+              "nonAi": {
+                "count": 1,
+                "p50": 316.4158463888889
+              }
+            }
+          }
+        },
+        "crossStage": {
+          "reqToSpec": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "specToFeature": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "featureCreatedToFirstTask": {
+            "all": {
+              "p50": 2.992734722222222,
+              "p90": 4.2784313888888885,
+              "count": 2,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 2.992734722222222,
+              "p90": 4.2784313888888885,
+              "count": 2,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "counts": {
+          "reqsResolved": 3,
+          "specsResolved": 2,
+          "featuresResolved": 1,
+          "storiesResolved": 19,
+          "tasksClosed": 60
+        }
+      },
+      "pr": {
+        "cycle": {
+          "all": {
+            "p50": 24.736736666666665,
+            "p90": 79.9714513333334,
+            "mean": 45.37842153133904,
+            "count": 39
+          },
+          "ai": {
+            "p50": null,
+            "p90": null,
+            "mean": null,
+            "count": 0
+          },
+          "human": {
+            "p50": 24.736736666666665,
+            "p90": 79.9714513333334,
+            "mean": 45.37842153133904,
+            "count": 39
+          }
+        },
+        "sizeBuckets": {
+          "Small": 29,
+          "Medium": 13,
+          "Large": 2,
+          "XL": 2
+        },
+        "sizeBucketsByMode": {
+          "ai": {
+            "Small": 0,
+            "Medium": 0,
+            "Large": 0,
+            "XL": 0
+          },
+          "human": {
+            "Small": 29,
+            "Medium": 13,
+            "Large": 2,
+            "XL": 2
+          }
+        },
+        "outliers": [
+          {
+            "id": 2613,
+            "title": "feat(work-order-inspections): materialise allocated GTX WOs as Raptor WorkOrder + DVI WO-target parity",
+            "status": "completed",
+            "isDraft": false,
+            "creationDate": "2026-05-18T23:29:11.870581+00:00",
+            "closedDate": "2026-05-28T00:23:17.946813+00:00",
+            "sourceBranch": "refs/heads/fix/38897/wo-consolidated-report",
+            "targetBranch": "refs/heads/integration",
+            "createdBy": "Shaun McGowan",
+            "iterationCount": 36,
+            "commentCount": 115,
+            "voteCount": 5,
+            "isAi": false,
+            "aiShare": 0
+          },
+          {
+            "id": 2744,
+            "title": "feat(marlin-e2e): docker stack + web/mobile login smokes + post-merge pipeline [#39390]",
+            "status": "completed",
+            "isDraft": false,
+            "creationDate": "2026-05-26T06:29:15.269610+00:00",
+            "closedDate": "2026-05-28T23:50:57.123867+00:00",
+            "sourceBranch": "refs/heads/feat/39390/marlin-e2e-mvp",
+            "targetBranch": "refs/heads/integration",
+            "createdBy": "Shaun McGowan",
+            "iterationCount": 17,
+            "commentCount": 420,
+            "voteCount": 2,
+            "isAi": false,
+            "aiShare": 0
+          },
+          {
+            "id": 2701,
+            "title": "feat(inspections): v1 history suggestion stubs for legacy mobile",
+            "status": "completed",
+            "isDraft": false,
+            "creationDate": "2026-05-22T16:20:46.840361+00:00",
+            "closedDate": "2026-05-28T14:33:08.451820+00:00",
+            "sourceBranch": "refs/heads/feat/v1-checkin-legacy-compat",
+            "targetBranch": "refs/heads/integration",
+            "createdBy": "Ted Nguyen",
+            "iterationCount": 5,
+            "commentCount": 8,
+            "voteCount": 3,
+            "isAi": false,
+            "aiShare": 0
+          },
+          {
+            "id": 2592,
+            "title": "feat(#38729): refactor GTX federation to materialise allocated work orders as Raptor WorkOrder",
+            "status": "abandoned",
+            "isDraft": false,
+            "creationDate": "2026-05-18T00:17:37.371108+00:00",
+            "closedDate": "2026-05-19T21:07:13.764317+00:00",
+            "sourceBranch": "refs/heads/feat/38729/gtx-wo-materialize-rebased",
+            "targetBranch": "refs/heads/integration",
+            "createdBy": "Shaun McGowan",
+            "iterationCount": 4,
+            "commentCount": 17,
+            "voteCount": 2,
+            "isAi": false,
+            "aiShare": 0
+          }
+        ],
+        "total": 46
+      },
+      "deployByLayer": {},
+      "deployByTarget": null,
+      "clusterCycleTime": null,
+      "cfrByLayer": {},
+      "mttr": {
+        "all": {
+          "p50": null,
+          "count": 0,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        },
+        "ai": {
+          "p50": null,
+          "count": 0,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        },
+        "human": {
+          "p50": null,
+          "count": 0,
+          "confidence": "no-signal",
+          "threshold": 5,
+          "thresholdKey": "mttr_sample"
+        }
+      },
+      "pipelineRunRateMode": "pipeline-run-rate",
+      "throughputByType": {
+        "Requirement": {
+          "all": 3,
+          "ai": 0,
+          "human": 0
+        },
+        "Spec": {
+          "all": 2,
+          "ai": 0,
+          "human": 0
+        },
+        "Feature": {
+          "all": 2,
+          "ai": 1,
+          "human": 0
+        },
+        "Story": {
+          "all": 20,
+          "ai": 19,
+          "human": 1
+        },
+        "Task": {
+          "all": 60,
+          "ai": 59,
+          "human": 1
+        },
+        "Bug": {
+          "all": 16,
+          "ai": 15,
+          "human": 1
+        },
+        "Enhancement": {
+          "all": 5,
+          "ai": 4,
+          "human": 1
+        }
+      },
+      "qualityCycleTimes": {
+        "requirement": {
+          "newToActive": {
+            "all": {
+              "p50": 0.49282888888888887,
+              "p90": 0.651256888888889,
+              "count": 3,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 0.38897027777777776,
+              "p90": 0.5139340555555555,
+              "count": 3,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 0.6927777777777778,
+              "p90": 0.843994888888889,
+              "count": 3,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "resolvedToNextSpecCreated": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "spec": {
+          "newToActive": {
+            "all": {
+              "p50": 0.48729361111111114,
+              "p90": 14.897049166666669,
+              "count": 3,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 0.6811536111111112,
+              "p90": 0.8635780555555556,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 1.0216611111111111,
+              "p90": 1.3215144444444444,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "resolvedToFirstFeatureCreated": {
+            "all": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "feature": {
+          "newToActive": {
+            "all": {
+              "p50": 0.49477777777777776,
+              "p90": 3.806753888888889,
+              "count": 5,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.8083416666666666,
+              "p90": 1.0591927777777776,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 0.6609740277777778,
+              "p90": 1.18975325,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 1.3219480555555556,
+              "p90": 1.3219480555555556,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 4.020253194444445,
+              "p90": 5.2813728611111115,
+              "count": 2,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 2.4438536111111113,
+              "p90": 2.4438536111111113,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "createdToFirstTaskActive": {
+            "all": {
+              "p50": 2.992734722222222,
+              "p90": 4.2784313888888885,
+              "count": 2,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 2.992734722222222,
+              "p90": 4.2784313888888885,
+              "count": 2,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "high",
+              "threshold": 0,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "story": {
+          "newToActive": {
+            "all": {
+              "p50": 0.7601083333333334,
+              "p90": 4.339548277777777,
+              "count": 19,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.7601083333333334,
+              "p90": 4.339548277777777,
+              "count": 19,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToResolved": {
+            "all": {
+              "p50": 0.1682063888888889,
+              "p90": 2.4329041666666886,
+              "count": 20,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.1600536111111111,
+              "p90": 0.37826877777777734,
+              "count": 19,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 316.4105102777778,
+              "p90": 316.4105102777778,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 1.2006265277777777,
+              "p90": 19.640902972222264,
+              "count": 20,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 1.12754,
+              "p90": 6.966094499999992,
+              "count": 19,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 341.52058694444446,
+              "p90": 341.52058694444446,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        },
+        "task": {
+          "newToActive": {
+            "all": {
+              "p50": 0.5606626388888889,
+              "p90": 4.328292805555556,
+              "count": 58,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.5606626388888889,
+              "p90": 4.328292805555556,
+              "count": 58,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": null,
+              "p90": null,
+              "count": 0,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "activeToClosed": {
+            "all": {
+              "p50": 0.17261944444444444,
+              "p90": 0.5522164444444488,
+              "count": 59,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.1724638888888889,
+              "p90": 0.24705783333333334,
+              "count": 58,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 316.4158463888889,
+              "p90": 316.4158463888889,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          },
+          "totalCycle": {
+            "all": {
+              "p50": 0.7751490277777777,
+              "p90": 30.25850444444447,
+              "count": 60,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "ai": {
+              "p50": 0.7556777777777778,
+              "p90": 9.346802888888957,
+              "count": 59,
+              "confidence": "high",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            },
+            "human": {
+              "p50": 316.4248547222222,
+              "p90": 316.4248547222222,
+              "count": 1,
+              "confidence": "no-signal",
+              "threshold": 5,
+              "thresholdKey": "lead_time_sample"
+            }
+          }
+        }
+      },
+      "aiVsHumanGlance": {
+        "aiEfficiency": {
+          "ai": 9.190329799951899,
+          "human": 0.018962387846485216,
+          "spreadDeltaVsPrior": null
+        },
+        "prCycleHours": {
+          "ai": null,
+          "human": 24.736736666666665,
+          "spreadDeltaVsPrior": null
+        },
+        "tasksClosed": {
+          "ai": 59,
+          "human": 1,
+          "spreadDeltaVsPrior": null
+        },
+        "deploys": {
+          "ai": 0,
+          "human": 0,
+          "spreadDeltaVsPrior": null
+        },
+        "authorshipShare": {
+          "pct": 0,
+          "deltaVsPrior": null
+        }
+      },
+      "aiContributionShare": {
+        "overall": 0,
+        "byLayer": {},
+        "byTarget": null
+      },
+      "intermediateShare": 0.17391304347826086,
+      "devRows": [
+        {
+          "name": "Brian Adelman",
+          "intPrs": 2,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 0.5,
+          "avgCmt": 3,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 1,
+          "buckets": {
+            "Small": 2,
+            "Medium": 0,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Focused",
+          "tasksClosed": 0,
+          "tasksActive": 0,
+          "taskP50": null,
+          "aiP50": null,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        },
+        {
+          "name": "Fachrizal Gita Rahmanda",
+          "intPrs": 1,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 0,
+          "avgCmt": 2,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 0,
+          "buckets": {
+            "Small": 1,
+            "Medium": 0,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Focused",
+          "tasksClosed": 0,
+          "tasksActive": 0,
+          "taskP50": null,
+          "aiP50": null,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        },
+        {
+          "name": "Flavio Ferrari",
+          "intPrs": 4,
+          "intermPrs": 4,
+          "drafts": 0,
+          "avgIter": 0.75,
+          "avgCmt": 4.25,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 1,
+          "buckets": {
+            "Small": 4,
+            "Medium": 0,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Focused",
+          "tasksClosed": 3,
+          "tasksActive": 0,
+          "taskP50": 1.7722333333333333,
+          "aiP50": 1.1285195704102169,
+          "higherStories": 2,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 2,
+          "reviewerComments": 0
+        },
+        {
+          "name": "I Gede Agus Mahasadhu",
+          "intPrs": 12,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 0.9166666666666666,
+          "avgCmt": 5,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 3,
+          "buckets": {
+            "Small": 8,
+            "Medium": 4,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Moderate",
+          "tasksClosed": 0,
+          "tasksActive": 0,
+          "taskP50": null,
+          "aiP50": null,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        },
+        {
+          "name": "Renan Esteves",
+          "intPrs": 12,
+          "intermPrs": 2,
+          "drafts": 0,
+          "avgIter": 1,
+          "avgCmt": 3.25,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 3,
+          "buckets": {
+            "Small": 8,
+            "Medium": 4,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Focused",
+          "tasksClosed": 5,
+          "tasksActive": 0,
+          "taskP50": 0.0027416666666666666,
+          "aiP50": 729.4832826747721,
+          "higherStories": 2,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 2,
+          "reviewerComments": 0
+        },
+        {
+          "name": "Shane Corrallo",
+          "intPrs": 1,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 3,
+          "avgCmt": 7,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 3,
+          "buckets": {
+            "Small": 0,
+            "Medium": 1,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Moderate",
+          "tasksClosed": 0,
+          "tasksActive": 0,
+          "taskP50": null,
+          "aiP50": null,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        },
+        {
+          "name": "Shaun McGowan",
+          "intPrs": 7,
+          "intermPrs": 2,
+          "drafts": 0,
+          "avgIter": 8.714285714285714,
+          "avgCmt": 80.85714285714286,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 36,
+          "buckets": {
+            "Small": 3,
+            "Medium": 1,
+            "Large": 1,
+            "XL": 2
+          },
+          "signature": "Iterative",
+          "tasksClosed": 51,
+          "tasksActive": 0,
+          "taskP50": 0.17280319444444445,
+          "aiP50": 8.697770980810716,
+          "higherStories": 15,
+          "higherFeatures": 1,
+          "higherSpecs": 0,
+          "higherTotal": 16,
+          "reviewerComments": 0
+        },
+        {
+          "name": "Ted Nguyen",
+          "intPrs": 6,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 2.3333333333333335,
+          "avgCmt": 7.833333333333333,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 5,
+          "buckets": {
+            "Small": 2,
+            "Medium": 3,
+            "Large": 1,
+            "XL": 0
+          },
+          "signature": "Moderate",
+          "tasksClosed": 1,
+          "tasksActive": 0,
+          "taskP50": 28.49677888888889,
+          "aiP50": 0.14036674164460147,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        },
+        {
+          "name": "William Clark",
+          "intPrs": 1,
+          "intermPrs": 0,
+          "drafts": 0,
+          "avgIter": 0,
+          "avgCmt": 2,
+          "avgFiles": null,
+          "avgLines": null,
+          "totalLines": 0,
+          "heaviestPr": null,
+          "maxIter": 0,
+          "buckets": {
+            "Small": 1,
+            "Medium": 0,
+            "Large": 0,
+            "XL": 0
+          },
+          "signature": "Focused",
+          "tasksClosed": 0,
+          "tasksActive": 0,
+          "taskP50": null,
+          "aiP50": null,
+          "higherStories": 0,
+          "higherFeatures": 0,
+          "higherSpecs": 0,
+          "higherTotal": 0,
+          "reviewerComments": 0
+        }
+      ],
+      "dq": {
+        "flags": {
+          "revisions_unavailable": false,
+          "pr_threads_unavailable": false,
+          "reverts_unavailable": false,
+          "cw_oe_degeneracy": false,
+          "possible_missing_audit_share": 0,
+          "pre_strap_human_backlog_share": 0
+        },
+        "fieldCoverage": {
+          "tasksWithActivatedDate": {
+            "covered": 59,
+            "total": 60,
+            "pct": 0.98
+          },
+          "tasksWithOriginalEstimate": {
+            "covered": 60,
+            "total": 60,
+            "pct": 1
+          },
+          "tasksWithCompletedWork": {
+            "covered": 52,
+            "total": 60,
+            "pct": 0.87
+          },
+          "tasksWithWallclockComputable": {
+            "covered": 0,
+            "total": 0,
+            "pct": 0
+          },
+          "bugsWithEnvironment": {
+            "covered": 23,
+            "total": 67,
+            "pct": 0.34
+          },
+          "aiTaggedItems": {
+            "covered": 0,
+            "total": 0,
+            "pct": 0
+          },
+          "prThreadsAvailable": {
+            "covered": 0,
+            "total": 0,
+            "pct": 0
+          },
+          "pipelineRunsClassified": {
+            "covered": 0,
+            "total": 0,
+            "pct": 0
+          }
+        },
+        "overallPct": 0
+      }
+    }
+  ],
+  "sprintLabels": [
+    "Hippodraco"
+  ],
+  "sprintShort": [
+    "HIP"
+  ],
+  "series": {
+    "tasksClosed": [
+      60
+    ],
+    "prsInt": [
+      46
+    ],
+    "prsCompleted": [
+      39
+    ],
+    "deploysByLayer": {},
+    "deploysByTarget": null,
+    "aiP50": [
+      8.729530060298421
+    ],
+    "aiMean": [
+      336.9297315519793
+    ],
+    "aiP90": [
+      118.1656411400318
+    ],
+    "prCycleP50": [
+      24.736736666666665
+    ],
+    "prCycleP90": [
+      79.9714513333334
+    ],
+    "abandonPct": [
+      0.043478260869565216
+    ],
+    "bugsByEnv": {
+      "unspecified": [
+        67
+      ]
+    },
+    "cwOeAntiPattern": [
+      0
+    ],
+    "clusterCycleP50": [
+      null
+    ],
+    "untargetedDeployRuns": [
+      0
+    ]
+  },
+  "movement": {
+    "improvements": [],
+    "regressions": []
+  },
+  "trendByDev": [
+    {
+      "name": "Brian Adelman",
+      "prs": [
+        2
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        0
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        0.5
+      ],
+      "maxIter": [
+        1
+      ],
+      "avgCmt": [
+        3
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "Fachrizal Gita Rahmanda",
+      "prs": [
+        1
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        0
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        0
+      ],
+      "maxIter": [
+        0
+      ],
+      "avgCmt": [
+        2
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "Flavio Ferrari",
+      "prs": [
+        4
+      ],
+      "interm": [
+        4
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        3
+      ],
+      "higher": [
+        2
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        0.75
+      ],
+      "maxIter": [
+        1
+      ],
+      "avgCmt": [
+        4.25
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "I Gede Agus Mahasadhu",
+      "prs": [
+        12
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        0
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        0.9166666666666666
+      ],
+      "maxIter": [
+        3
+      ],
+      "avgCmt": [
+        5
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "Renan Esteves",
+      "prs": [
+        12
+      ],
+      "interm": [
+        2
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        5
+      ],
+      "higher": [
+        2
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        1
+      ],
+      "maxIter": [
+        3
+      ],
+      "avgCmt": [
+        3.25
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "Shane Corrallo",
+      "prs": [
+        1
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        0
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        3
+      ],
+      "maxIter": [
+        3
+      ],
+      "avgCmt": [
+        7
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "Shaun McGowan",
+      "prs": [
+        7
+      ],
+      "interm": [
+        2
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        51
+      ],
+      "higher": [
+        16
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        8.714285714285714
+      ],
+      "maxIter": [
+        36
+      ],
+      "avgCmt": [
+        80.85714285714286
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "Ted Nguyen",
+      "prs": [
+        6
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        1
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        2.3333333333333335
+      ],
+      "maxIter": [
+        5
+      ],
+      "avgCmt": [
+        7.833333333333333
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    },
+    {
+      "name": "William Clark",
+      "prs": [
+        1
+      ],
+      "interm": [
+        0
+      ],
+      "drafts": [
+        0
+      ],
+      "tasks": [
+        0
+      ],
+      "higher": [
+        0
+      ],
+      "comments": [
+        0
+      ],
+      "iter": [
+        0
+      ],
+      "maxIter": [
+        0
+      ],
+      "avgCmt": [
+        2
+      ],
+      "avgFiles": [
+        null
+      ],
+      "avgLines": [
+        null
+      ],
+      "totalLines": [
+        0
+      ],
+      "heaviestPr": [
+        null
+      ]
+    }
+  ],
+  "devTotals": [
+    {
+      "name": "Brian Adelman",
+      "prs": 2,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 0,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": 1,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "Fachrizal Gita Rahmanda",
+      "prs": 1,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 0,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": null,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "Flavio Ferrari",
+      "prs": 4,
+      "interm": 4,
+      "drafts": 0,
+      "tasks": 3,
+      "higher": 2,
+      "comments": 0,
+      "maxIter": 1,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "I Gede Agus Mahasadhu",
+      "prs": 12,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 0,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": 3,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "Renan Esteves",
+      "prs": 12,
+      "interm": 2,
+      "drafts": 0,
+      "tasks": 5,
+      "higher": 2,
+      "comments": 0,
+      "maxIter": 3,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "Shane Corrallo",
+      "prs": 1,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 0,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": 3,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "Shaun McGowan",
+      "prs": 7,
+      "interm": 2,
+      "drafts": 0,
+      "tasks": 51,
+      "higher": 16,
+      "comments": 0,
+      "maxIter": 36,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "Ted Nguyen",
+      "prs": 6,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 1,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": 5,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    },
+    {
+      "name": "William Clark",
+      "prs": 1,
+      "interm": 0,
+      "drafts": 0,
+      "tasks": 0,
+      "higher": 0,
+      "comments": 0,
+      "maxIter": null,
+      "avgFilesPerPr": null,
+      "avgLinesPerPr": null,
+      "totalLines": 0,
+      "heaviestPr": null
+    }
+  ],
+  "verdicts": {
+    "milestone": {
+      "headline": "Stable sprint",
+      "context": "No metric moved more than 5% from the prior sprint.",
+      "detail": "A flat sprint can mean steady-state delivery or it can mean noise drowning signal -- check the Data Quality flags below to confirm field coverage is holding up before reading the flatness as good news.",
+      "action": "Hold cadence. If multiple sprints in a row read stable, consider whether the +/-5% threshold is masking small but real drift -- the configurable threshold lives in build-payload.js."
+    },
+    "watch": {
+      "headline": "No regressions",
+      "context": "No metric regressed more than 5% from the prior sprint.",
+      "detail": "Sustained absence of regressions is rare; verify the snapshot covers the expected window and that PR + work-item collection isn't silently dropping items.",
+      "action": "Spot-check the Data Quality section -- a zero-regression sprint with degraded coverage is a hidden regression."
+    },
+    "context": {
+      "headline": "Data quality nominal",
+      "context": "Every primary-metric field cleared its coverage threshold this sprint.",
+      "detail": "Translates to: AI Efficiency, PR cycle, CFR, MTTR, and Lead Time all read on data the engine considers trustworthy. No suppression pills firing beyond the configured no-signal thresholds.",
+      "action": "No action needed. The numbers up top are honest; trust them."
+    }
+  },
+  "currentMetrics": null,
+  "inactiveMembers": [],
+  "agentAttribution": {
+    "available": true,
+    "totalTasks": 59,
+    "byAgent": {
+      "angular-frontend-engineer": {
+        "tasks": 10,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      },
+      "dotnet-backend-engineer": {
+        "tasks": 10,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      },
+      "tm-dotnet-backend-engineer": {
+        "tasks": 1,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      },
+      "ux-test-engineer": {
+        "tasks": 8,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      },
+      "database-engineer": {
+        "tasks": 3,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      },
+      "terraform-infrastructure-critic": {
+        "tasks": 15,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      },
+      "test-engineer": {
+        "tasks": 1,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      },
+      "security-reviewer": {
+        "tasks": 4,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      },
+      "dev-lead": {
+        "tasks": 7,
+        "stories": 0,
+        "aiP50": null,
+        "aiMean": null
+      }
+    },
+    "sprintNames": [
+      "Hippodraco"
+    ],
+    "message": ""
+  },
+  "excludedClusters": []
+}

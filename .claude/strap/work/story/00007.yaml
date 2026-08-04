@@ -1,0 +1,66 @@
+id: "00007"
+type: story
+title: "Establish the V2 SCSS design-token foundation (tokens + Bootstrap theme map + editorial grade)"
+state: resolved
+parent: "00003"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:story]
+links: []
+created_at: 2026-08-01T19:10:00Z
+created_by: dev-lead
+updated_at: 2026-08-03T19:55:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-03T19:55:00Z
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-01T19:10:00Z |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-03T19:55:00Z |
+
+  ---
+
+  # Establish the V2 SCSS design-token foundation (tokens + Bootstrap theme map + editorial grade)
+
+  ## Description
+  Port the approved mockup design tokens into production SCSS as three importable partials — a CSS-custom-property `:root` layer, a Sass-var + Bootstrap `$theme-colors` override layer, and the reusable `.media--editorial` grade layer. These are the single design-token source of truth that ST-3 (P5) assembles into `styles.scss` (import-order-correct) and P2/P3 consume. Retires the off-brand `#ff0000` + blue palette.
+
+  ## Linked Feature
+  **Feature:** 00003
+
+  ## Linked Spec section
+  **Spec:** 00002  **Constituent Part:** P1 — Design System & Visual Language
+
+  ## Acceptance Criteria subset
+  Contributes to **AC-002** (palette/token half; shell render verified in ST-4) and is the foundation for **AC-001**.
+
+  ## Implementation notes
+  NEW `src/scss/_tokens.scss`, `_theme.scss`, `_grade.scss`. Source of truth: `.claude/strap/mockups/spec-00002/assets/tokens.css` (:root) + `app.css:201-242` (grade vars). Existing retired blues at `src/scss/styles.scss:11-26`. Keep tokens as CSS custom props AND mirror palette into Sass vars where Bootstrap's map needs literals. Deliberate exceptions (nav/hero scrims keep `rgba(5,5,6,…)`; logo keeps `#F6F6F4`) are NOT stragglers.
+
+  ## Dependencies
+  None upstream (mockups approved). BLOCKS ST-3 (P5 reconciliation consumes these partials) and P2/P3.
+
+  ## Quality Checklist
+  - [x] Concrete for the assigned developer.
+  - [x] Linked Feature + Spec section populated.
+  - [x] AC uses the Spec's stable IDs.
+  - [x] Implementation notes name real files.
+  - [x] Dependencies explicit.
+  - [x] <=4 Tasks (3).
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-01T19:10:00Z
+    body: "[STRAP/agent:dev-lead] Story created via /decompose-feature 00003 (P1, designer). 3 Tasks: 00012-00014."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-03T19:15:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). First Task (00012) started."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-03T19:55:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). All 3 Tasks merged (00012 _tokens.scss, 00013 _theme.scss, 00014 _grade.scss) into feature/00003-design-foundation-shell (7e06c69). AC-002 token/palette half verified (shell render remains ST-4/Story 00010, unallocated this sprint); AC-001 foundation delivered. 245/245 repo tests green. Neither _tokens.scss, _theme.scss, nor _grade.scss is wired into a compiled entry point yet -- that composition + the styles.scss import-order fix is Story 00009 (Task 00017), next in the Feature's dependency chain."

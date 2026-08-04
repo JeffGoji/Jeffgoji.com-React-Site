@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jeffgoji.com V2 — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<nav class="nav" data-nav></nav>
+
+<header class="container section-tight">
+  <div class="eyebrow">Design system · v2.0</div>
+  <h1 style="font-size:var(--fs-h1);text-transform:uppercase">The contract</h1>
+  <p class="hero__lead" style="color:var(--text-mid)">Dark motorsport-editorial, tuned for reading comfort — a softer charcoal canvas, warm off-white text, premium racing red, industrial type. Every token below is defined in <code style="font-family:var(--font-mono);color:var(--goji-red)">assets/tokens.css</code> as a CSS custom property and ports 1:1 into the production SCSS + Bootstrap <code style="font-family:var(--font-mono);color:var(--goji-red)">$theme-colors</code> map.</p>
+</header>
+
+<main class="container">
+
+  <!-- LOGO -->
+  <section class="ds-block">
+    <h3>Logo — "The Goji Line"</h3>
+    <p class="card__text" style="max-width:64ch">Replaces <code style="font-family:var(--font-mono)">src/assets/images/logo.gif</code> with an inline SVG. The mark is a racing line sweeping through a corner apex, bent into a "G", with a white apex dot. Scales crisp at any size; recolours via <code style="font-family:var(--font-mono)">currentColor</code>/token.</p>
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:center;margin-top:1rem">
+      <div style="background:var(--ink-1000);padding:1.5rem 2rem;border:var(--hairline);border-radius:var(--radius)"><a class="logo" href="#" style="pointer-events:none"><span data-logo></span></a></div>
+      <div style="background:var(--text-hi);padding:1.5rem 2rem;border-radius:var(--radius)"><a class="logo" href="#" style="pointer-events:none;filter:invert(0)"><span data-logo-dark></span></a></div>
+      <img src="assets/logo.svg" alt="Standalone logo file" style="height:44px;background:var(--ink-900);padding:8px 14px;border-radius:var(--radius)">
+    </div>
+    <p class="card__text" style="margin-top:1rem"><code style="font-family:var(--font-mono)">assets/logo.svg</code> is the deliverable file.</p>
+  </section>
+
+  <!-- PALETTE -->
+  <section class="ds-block">
+    <h3>Palette — softer charcoal + premium red</h3>
+    <p class="card__text">Refined from the harsh <code style="font-family:var(--font-mono)">#ff0000</code>; off-brand blues dropped entirely. <b style="color:var(--text-hi)">Softer Dark revision:</b> the canvas is lifted off pure black to a true charcoal (<code style="font-family:var(--font-mono)">#141418</code>) and body text softened to a warm off-white (<code style="font-family:var(--font-mono)">#D8D4CD</code>, ~12:1) so long reading surfaces don't strain. Headings stay brighter; the black+red identity is preserved.</p>
+    <div class="ds-grid" data-swatches></div>
+  </section>
+
+  <!-- TYPE -->
+  <section class="ds-block">
+    <h3>Typography</h3>
+    <p class="card__text"><b style="color:var(--text-hi)">Archivo</b> (display / headings) · <b style="color:var(--text-hi)">Inter</b> (body) · <b style="color:var(--text-hi)">Space Mono</b> (telemetry / data chips). Self-host in production; Google Fonts links here.</p>
+    <div style="margin-top:1rem">
+      <div class="type-sample"><span style="font-family:var(--font-display);font-size:var(--fs-hero);font-weight:900;text-transform:uppercase;line-height:1">Apex</span><span class="meta">Archivo 900 · --fs-hero</span></div>
+      <div class="type-sample"><span style="font-family:var(--font-display);font-size:var(--fs-h1);font-weight:800;text-transform:uppercase">Heading H1</span><span class="meta">Archivo 800 · --fs-h1</span></div>
+      <div class="type-sample"><span style="font-family:var(--font-display);font-size:var(--fs-h2);font-weight:700;text-transform:uppercase">Heading H2</span><span class="meta">Archivo 700 · --fs-h2</span></div>
+      <div class="type-sample"><span style="font-family:var(--font-body);font-size:var(--fs-lead)">Lead paragraph — the fast bit before the detail.</span><span class="meta">Inter · --fs-lead</span></div>
+      <div class="type-sample"><span style="font-family:var(--font-body);font-size:var(--fs-body)">Body copy set in Inter for long-form blog readability.</span><span class="meta">Inter · --fs-body</span></div>
+      <div class="type-sample"><span style="font-family:var(--font-mono);font-size:var(--fs-sm)">DATE 2/07/2026 · MILEAGE 197,307</span><span class="meta">Space Mono · data chips</span></div>
+    </div>
+  </section>
+
+  <!-- BUTTONS + CHIPS -->
+  <section class="ds-block">
+    <h3>Buttons & data chips</h3>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+      <button class="btn btn--primary">Primary</button>
+      <button class="btn btn--ghost">Ghost</button>
+      <button class="btn btn--primary btn--sm">Small</button>
+      <button class="btn btn--primary" disabled>Disabled</button>
+    </div>
+    <div class="spec-row">
+      <span class="chip">DATE <b>2/07/2026</b></span>
+      <span class="chip">MILEAGE <b>197,307 mi</b></span>
+      <span class="chip chip--cost">COST <b>$1250</b></span>
+    </div>
+  </section>
+
+  <!-- FORM CONTROLS -->
+  <section class="ds-block">
+    <h3>Form controls</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;max-width:640px">
+      <div class="field"><label class="label">Choose set</label>
+        <select class="select"><option>Tail of the Dragon 2025</option><option>Texas Hill Country</option></select></div>
+      <div class="field"><label class="label">Search</label>
+        <input class="input" placeholder="Type to filter…"></div>
+    </div>
+  </section>
+
+  <!-- CARD -->
+  <section class="ds-block">
+    <h3>Card</h3>
+    <div style="max-width:340px">
+      <article class="card">
+        <div class="card__media"><span data-cardimg></span></div>
+        <div class="card__body">
+          <div class="card__kicker">2004 MSM · Autocross</div>
+          <h3 class="card__title">Kiryu <small>NB Mazdaspeed Miata</small></h3>
+          <p class="card__text">Two-time local SCCA champion. Built for Solo — wide wheels, stiff suspension, hunting FTD.</p>
+          <a class="btn btn--ghost btn--sm" href="#">Read the build ›</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- STATES -->
+  <section class="ds-block">
+    <h3>States — loading · empty · error</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem">
+      <div class="state"><div class="spinner"></div>Loading gallery…</div>
+      <div class="state"><div class="state__icon">◇</div>No posts yet — check back soon.</div>
+      <div class="state"><div class="state__icon" style="color:var(--goji-red)">⚠</div>Couldn't load the manifest.</div>
+      <div class="skeleton" style="height:120px"></div>
+    </div>
+  </section>
+
+  <!-- SPACING -->
+  <section class="ds-block">
+    <h3>Spacing scale (8px base)</h3>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div data-space></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer" data-footer></footer>
+
+<script src="assets/mock-data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  GOJI.renderShell("");
+  document.querySelectorAll("[data-logo],[data-logo-dark]").forEach(el => { el.outerHTML = document.querySelector(".logo svg").outerHTML; });
+  // Palette swatches
+  const SW = [
+    ["--goji-red","#E10600","Brand red · CTA/accent"],
+    ["--goji-red-bright","#FF1A0E","Hover / glow"],
+    ["--goji-red-deep","#B00500","Pressed / gradient"],
+    ["--goji-red-ink","#3A0705","Oxblood wash"],
+    ["--ink-1000","#0F0F12","Deep chrome · nav/hero/footer"],
+    ["--ink-900","#141418","Canvas · body bg"],
+    ["--ink-800","#1A1A1F","Raised surface"],
+    ["--ink-700","#202027","Card / reading panel"],
+    ["--ink-600","#26262E","Input / elevated"],
+    ["--ink-500","#33333B","Hairline border"],
+    ["--text-hi","#F1EEE9","Heading · warm near-white"],
+    ["--text-mid","#D8D4CD","Body · warm off-white (~12:1)"],
+    ["--text-lo","#9C978D","Muted / meta (~6:1)"],
+    ["--silver","#C8CACE","Chrome accent"]
+  ];
+  document.querySelector("[data-swatches]").innerHTML = SW.map(([v,hex,use]) =>
+    `<div class="swatch"><div class="swatch__chip" style="background:${hex}"></div>
+     <div class="swatch__meta"><b>${hex}</b>${v}<br><span style="color:var(--text-lo)">${use}</span></div></div>`).join("");
+  // Card image
+  document.querySelector("[data-cardimg]").outerHTML = `<img src="${GOJI.ph('2004 MSM · Kiryu',800,500)}" alt="Kiryu" style="width:100%;height:100%;object-fit:cover">`;
+  // Spacing bars
+  const SP = [["--space-2","0.5rem"],["--space-4","1rem"],["--space-5","1.5rem"],["--space-6","2rem"],["--space-7","3rem"],["--space-8","4rem"]];
+  document.querySelector("[data-space]").outerHTML = SP.map(([v,px]) =>
+    `<div style="display:flex;align-items:center;gap:1rem"><div style="height:14px;width:var(${v});background:var(--goji-red);border-radius:2px"></div><span style="font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-lo)">${v} · ${px}</span></div>`).join("");
+</script>
+</body>
+</html>
