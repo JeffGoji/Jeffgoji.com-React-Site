@@ -1,0 +1,158 @@
+/* ============================================================================
+   jeffgoji.com V2 — Self-hosted webfaces (Task 00015, Spec 00002 Part P1)
+   Archivo (display) · Inter (body) · Space Mono (telemetry)
+   ---------------------------------------------------------------------------
+   WHY SELF-HOSTED:
+   The retired Google Fonts @import in styles.scss was render-blocking and
+   third-party. These faces are vendored under src/assets/fonts/ so the browser
+   makes ZERO requests to fonts.googleapis.com / fonts.gstatic.com.
+   ---------------------------------------------------------------------------
+   WHY VARIABLE FOR ARCHIVO + INTER, STATIC FOR SPACE MONO:
+   Archivo and Inter ship upstream variable fonts, and one axis-sliced file per
+   style beats shipping every static cut the mockups use:
+     Archivo  400/600/700/800/900 + italic 800/900 ... 486 KB static -> 142 KB
+     Inter    400/500/600 .......................... 400 KB static -> 133 KB
+   Space Mono has no upstream variable version, so 400 and 700 stay discrete
+   cuts. Declaring a WEIGHT RANGE (e.g. `font-weight: 400 900`) rather than a
+   single value is what lets every mockup weight resolve to one file — do not
+   collapse those ranges to single values.
+   ---------------------------------------------------------------------------
+   WHY latin AND latin-ext:
+   Each subset is gated by unicode-range, so latin-ext is only fetched if a
+   glyph in that range is actually rendered. English-only car content pays the
+   latin cost alone (~152 KB across all three families) while accented names in
+   future copy still render instead of falling back.
+   ---------------------------------------------------------------------------
+   CONSTRAINTS FOR WHOEVER WIRES THIS UP (Story 00009):
+   1. Family names MUST stay exactly "Archivo" / "Inter" / "Space Mono" — they
+      are what --font-display / --font-body / --font-mono in _tokens.scss
+      resolve to. Renaming a family here silently breaks the token layer.
+   2. Sass does NOT rewrite relative url() paths across @use boundaries; they
+      stay relative to THIS file's directory. Any importer must therefore also
+      live in src/scss/ or the ../assets/fonts/ paths will break. Vite's asset
+      pipeline resolves them from there (styles.scss is a Vite module import
+      via src/scss/js/main.js).
+   ---------------------------------------------------------------------------
+   Fonts are SIL OFL 1.1. License texts ship alongside the binaries at
+   src/assets/fonts/OFL-*.txt; keep them with any re-vendoring.
+   ============================================================================ */
+
+/* --- ARCHIVO — display / headings (uppercase, tight-tracked) -------------- */
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 900;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../assets/fonts/archivo-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 900;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../assets/fonts/archivo-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: italic;
+  font-weight: 800 900;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../assets/fonts/archivo-latin-wght-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: italic;
+  font-weight: 800 900;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../assets/fonts/archivo-latin-ext-wght-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* --- INTER — body / long-form prose --------------------------------------- */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* --- SPACE MONO — telemetry chips (date / mileage / cost) ----------------- */
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/space-mono-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/space-mono-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/space-mono-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/space-mono-latin-ext-700-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}

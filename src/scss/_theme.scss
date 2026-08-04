@@ -1,0 +1,137 @@
+// ============================================================================
+// jeffgoji.com V2 — Bootstrap theme bridge
+// Dark motorsport-editorial. Softer charcoal + premium racing red.
+// ----------------------------------------------------------------------------
+// Spec 00002, Constituent Part P1. This partial is the ONLY place Bootstrap's
+// theme slots are re-pointed at the V2 palette. It replaces the retired
+// $primary-0..4 blues + #ff0000 that styles.scss declares today.
+//
+// ----------------------------------------------------------------------------
+// ORDERING CONTRACT — read before importing this file
+// ----------------------------------------------------------------------------
+// 1. This partial MUST be imported BEFORE Bootstrap:
+//
+//        @import "theme";                      // slots the V2 palette in
+//        @import "bootstrap/scss/bootstrap";   // consumes it
+//        @import "tokens";                     // V2 custom props, cascade last
+//
+//    Bootstrap consumes $theme-colors DURING its own import — _root.scss emits
+//    --bs-* custom properties from the map, _buttons.scss generates .btn-*, and
+//    utilities/_api.scss generates .bg-*/.text-* — so a map defined afterwards
+//    is never read. Every Bootstrap variable this file sets is declared !default
+//    inside Bootstrap, meaning Bootstrap only fills a slot this file left empty.
+//    Importing this partial after Bootstrap is a silent no-op, which is exactly
+//    the live bug at styles.scss:2.
+//
+// 2. This partial is authorable-before-Bootstrap by construction: it declares
+//    Sass variables only, emits zero CSS, and uses no Bootstrap function
+//    (shade-color / shift-color / color-contrast) or Bootstrap variable
+//    ($blue, $gray-*). It compiles standalone.
+//
+// 3. Every value here is declared !default so a consumer may re-point a colour
+//    before importing this file. To ADD theme slots rather than replace them,
+//    map.merge onto $theme-colors AFTER importing this partial and still before
+//    Bootstrap.
+//
+// ----------------------------------------------------------------------------
+// PALETTE PARITY
+// ----------------------------------------------------------------------------
+// _tokens.scss is the palette source of truth, but it publishes CSS custom
+// properties, which Sass cannot read at compile time. The hex values below are
+// therefore a mirror of its :root ramp, not a second source. Drift is a test
+// failure: _theme.test.js compiles both files and asserts every mirrored value
+// against the token it mirrors. Change _tokens.scss first, then re-mirror.
+//
+// Fixing the styles.scss import order is deliberately NOT done here — that is
+// Story 00009 / Task 00017. This file only delivers the contract.
+// ============================================================================
+
+// --- CORE PALETTE (mirror of _tokens.scss) ----------------------------------
+$goji-red:        #E10600 !default; // --goji-red
+$goji-red-bright: #FF1A0E !default; // --goji-red-bright
+$goji-red-deep:   #B00500 !default; // --goji-red-deep
+$goji-red-ink:    #3A0705 !default; // --goji-red-ink
+
+// Ink ramp — 1000 is the deepest chrome (nav/hero/footer), 900 is the canvas.
+$ink-1000: #0F0F12 !default;
+$ink-900:  #141418 !default;
+$ink-800:  #1A1A1F !default;
+$ink-700:  #202027 !default;
+$ink-600:  #26262E !default;
+$ink-500:  #33333B !default;
+$ink-400:  #45454E !default;
+
+// Warm off-whites on charcoal.
+$text-hi:  #F1EEE9 !default;
+$text-mid: #D8D4CD !default;
+$text-lo:  #9C978D !default;
+
+$silver: #C8CACE !default;
+$carbon: #17171B !default;
+
+$status-success: #22C55E !default; // --color-success
+$status-warning: #F5A524 !default; // --color-warning
+$on-accent:      #FFFFFF !default; // --color-on-accent
+
+// --- BOOTSTRAP THEME SLOTS --------------------------------------------------
+// Red is the system's only saturated hue, so `danger` collapses onto the brand
+// red rather than introducing a second red. `info` has no V2 token — it takes
+// the chrome/silver accent to keep generated utilities inside the palette
+// instead of falling back to Bootstrap's cyan. `dark` is the nav/hero/footer
+// wash (ink-1000), one step deeper than the body canvas (ink-900), because that
+// is what .bg-dark / .navbar are used for on this site.
+$primary:   $goji-red !default;
+$secondary: $ink-400 !default;
+$success:   $status-success !default;
+$info:      $silver !default;
+$warning:   $status-warning !default;
+$danger:    $goji-red !default;
+$light:     $text-hi !default;
+$dark:      $ink-1000 !default;
+
+$theme-colors: (
+  "primary":   $primary,
+  "secondary": $secondary,
+  "success":   $success,
+  "info":      $info,
+  "warning":   $warning,
+  "danger":    $danger,
+  "light":     $light,
+  "dark":      $dark
+) !default;
+
+// --- BODY SURFACES ----------------------------------------------------------
+// Bootstrap derives its secondary/tertiary body slots from a light-mode default
+// ($gray-100/$gray-200), which would punch near-white panels through the dark
+// canvas. They are re-pointed at the ink ramp rather than left to derive.
+$body-bg:              $ink-900 !default;
+$body-color:           $text-mid !default;
+$body-secondary-color: $text-lo !default;
+$body-secondary-bg:    $ink-800 !default;
+$body-tertiary-color:  $text-lo !default;
+$body-tertiary-bg:     $ink-700 !default;
+$body-emphasis-color:  $text-hi !default;
+
+$headings-color: $text-hi !default;
+$border-color:   $ink-500 !default;
+
+// --- LINKS AND ACTIVE STATE -------------------------------------------------
+// Bootstrap's default hover is shift-color($link-color, …), a Bootstrap
+// function this partial must not depend on, so the hover step is taken from the
+// palette's own bright red.
+$link-color:       $goji-red !default;
+$link-hover-color: $goji-red-bright !default;
+
+$component-active-color: $on-accent !default;
+$component-active-bg:    $goji-red !default;
+
+$code-color: $goji-red-bright !default;
+
+// --- GENERATED CONTRAST -----------------------------------------------------
+// color-contrast() picks foregrounds for .btn-*/.text-bg-* at Bootstrap's
+// import time. Constraining its two candidates keeps every generated foreground
+// inside the V2 palette: pure white matches --color-on-accent (#E10600 clears
+// 4.5:1 against it), and dark foregrounds land on the deep chrome rather than
+// pure black.
+$color-contrast-light: $on-accent !default;
+$color-contrast-dark:  $ink-1000 !default;

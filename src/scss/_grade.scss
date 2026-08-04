@@ -1,0 +1,85 @@
+/* ============================================================================
+   jeffgoji.com V2 — Editorial Image Grade (reusable)
+   ---------------------------------------------------------------------------
+   Ported verbatim from .claude/strap/mockups/spec-00002/assets/app.css
+   (mockup-as-contract, Spec 00002 Constituent Part P1). Values are locked —
+   change them in the mockup first, then re-port.
+   ---------------------------------------------------------------------------
+   ONE grading layer that makes bright candid enthusiast snapshots read as
+   intentional / moody so they cohere with the charcoal palette — while keeping
+   the cars recognizable and MOSTLY true-color (enthusiasts judge the builds).
+
+   Port: add `media--editorial` to ANY element that clips an <img> (the media
+   container — .hero__media, .card__media, .thumb, .post__media, a wrapper div).
+   The container must be position:relative (all of ours already are; wrappers get
+   it inline). No markup beyond the class; the grade + tone + vignette are pure
+   CSS so it drops onto any future photo unchanged.
+
+   HOW IT WORKS — two cooperating parts, both tuned by the vars below:
+     1. a CSS `filter` on the <img>  → brightness-down + gentle contrast + a
+        modest desaturation (the "moody" base; never touches hue, so red stays
+        red / silver stays silver).
+     2. a single `::after` MULTIPLY overlay → a faint charcoal↘/oxblood-warm↗
+        tone-lean plus a soft vignette. Multiply only ever DARKENS (never blows
+        a build's paint out), and its white-center radial leaves the middle of
+        the frame — where the car usually sits — essentially untouched.
+   `::after` (not `::before`) so it always paints ABOVE the <img> regardless of
+   sibling order (e.g. the gallery index chip / garage number tag).
+   ---------------------------------------------------------------------------
+   WIRING NOTE:
+   The reduced-motion transition consumes --dur / --ease-out from _tokens.scss
+   at custom-property resolution time, not through a Sass dependency — this
+   partial deliberately does not @use "tokens" so it emits only the grade layer.
+   styles.scss must load _tokens.scss for the transition timing to resolve.
+   ============================================================================ */
+
+:root {
+  --grade-brightness: 0.95;   /* slight brightness-down                        */
+  --grade-contrast:   1.06;   /* gentle contrast punch                         */
+  --grade-saturate:   0.90;   /* modest desaturation — cars stay true          */
+  --grade-tone-top:   rgba(122, 72, 66, 0.10);  /* faint oxblood warm, upper   */
+  --grade-tone-bot:   rgba(34, 34, 42, 0.34);   /* charcoal weight, lower      */
+  --grade-vignette:   rgba(8, 8, 10, 0.42);     /* vignette edge darkness      */
+  --grade-vig-clear:  48%;                       /* untouched center radius     */
+}
+
+.media--editorial { position: relative; isolation: isolate; }
+
+.media--editorial > img { filter:
+  brightness(var(--grade-brightness))
+  contrast(var(--grade-contrast))
+  saturate(var(--grade-saturate)); }
+
+.media--editorial::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  mix-blend-mode: multiply;
+  background:
+    linear-gradient(180deg, var(--grade-tone-top) 0%, transparent 42%, var(--grade-tone-bot) 100%),
+    radial-gradient(135% 135% at 50% 44%, #fff var(--grade-vig-clear), var(--grade-vignette) 100%);
+}
+
+/* Heavier hero grade — dramatic even from a candid source */
+.media--editorial--hero {
+  --grade-brightness: 0.88;
+  --grade-contrast:   1.09;
+  --grade-saturate:   0.86;
+  --grade-tone-bot:   rgba(18, 18, 24, 0.50);
+  --grade-vignette:   rgba(6, 6, 8, 0.60);
+  --grade-vig-clear:  40%;
+}
+
+/* Soft grade — lightbox / full-view: cohere in tone but preserve color+detail
+   for enthusiasts pixel-peeping a build. */
+.media--editorial--soft {
+  --grade-brightness: 0.98;
+  --grade-contrast:   1.03;
+  --grade-saturate:   0.96;
+  --grade-tone-top:   rgba(122, 72, 66, 0.05);
+  --grade-tone-bot:   rgba(34, 34, 42, 0.14);
+  --grade-vignette:   rgba(8, 8, 10, 0.22);
+  --grade-vig-clear:  60%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .media--editorial > img { transition: filter var(--dur) var(--ease-out); }
+}

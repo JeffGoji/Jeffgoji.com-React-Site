@@ -1,7 +1,7 @@
 id: "00008"
 type: story
 title: "Integrate V2 brand assets: self-hosted webfonts + 'The Goji Line' SVG logo"
-state: new
+state: active
 parent: "00003"
 iteration: null
 area: null
@@ -10,7 +10,7 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:10:00Z
+updated_at: 2026-08-03T19:35:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -51,3 +51,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:10:00Z
     body: "[STRAP/agent:dev-lead] Story created via /decompose-feature 00003 (P1, designer). 2 Tasks: 00015-00016."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-03T19:35:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Task 00015 started (sprint-allocated). Task 00016 stays overflow, unallocated -- this Story will NOT resolve this run; it resolves once 00016 is allocated and completed in a future /plan-sprint + /execute-sprint pass."
