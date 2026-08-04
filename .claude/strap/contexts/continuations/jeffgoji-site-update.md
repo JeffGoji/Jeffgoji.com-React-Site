@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-08-04T01:10:00Z
+last_updated: 2026-08-04T01:25:00Z
 last_author: dev-lead
 status: active
 linked_work_items: ["00003", "00004", "00005", "00006"]
@@ -10,13 +10,15 @@ linked_work_items: ["00003", "00004", "00005", "00006"]
 
 ## What this is
 
-The V2 initiative for jeffgoji.com: a full "new everything" redesign with three goals — (1) a modern dark motorsport-editorial look, (2) image-loading/performance overhaul, (3) a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. Planning is fully done (Requirement → Spec → mockups → 4 Features → all Stories/Tasks decomposed). Execution is underway across two Features in parallel tracks: Feature C's (00005) baseline slice merged first, now Feature A (00003) has landed its own foundational slice. Full durable detail lives in dev-lead memory `v2-initiative.md` (stale as of this checkpoint — needs a refresh pass).
+The V2 initiative for jeffgoji.com: a full "new everything" redesign with three goals — (1) a modern dark motorsport-editorial look, (2) image-loading/performance overhaul, (3) a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. Planning is fully done (Requirement → Spec → mockups → 4 Features → all Stories/Tasks decomposed). Execution is underway across two Features in parallel tracks: Feature C's (00005) baseline slice merged first, now Feature A (00003) has landed its own foundational slice. Full durable detail lives in dev-lead memory `v2-initiative.md` (refreshed 2026-08-04, current).
 
 ## Where we left off
 
 **Feature 00003 (Feature A) Story 00007 is fully resolved; Story 00008 is partially resolved.** `/plan-sprint 00003` allocated Story 00007 (whole, 3 Tasks, 10h) + Task 00015 (split from Story 00008, 4h) into Sprint 2026.08.A's remaining 16h. `/execute-sprint 00003` ran 2 waves (00012 solo, then 00013/00014/00015 in parallel), dev-lead reviewed and merged every Task branch, ran independent build+test passes after each merge (245/245 tests green, `vite build` clean), and opened PR #17 (`feature/00003-design-foundation-shell` → `feature/strap-onboarding`, stacked mode). CPO asked me to review/merge PR #17 directly — done. **Post-merge, discovered PR #17 had been opened from a stale local push**: two commits (Task 00013 + Story 00007 resolution, and the Feature close-out audit comment) were never pushed before `gh pr create` ran, so they weren't in the PR's diff. Fixed via a follow-up branch (`fix/00003-finalize-work-item-state`, cherry-picked the two missing commits) → PR #18, reviewed and merged. Both PRs are now merged into `feature/strap-onboarding`; local checkout is clean on that branch.
 
 **Sprint 2026.08.A capacity is now exhausted.** 42h total, 40h allocated (14h Feature A + 26h Feature C), all of it resolved. Only 2h nominally unused — not enough for anything. Ran `/rebalance-sprint` (mid-sprint mode, since today is before the 2026-08-08 end date): nothing to move, everything allocated is already done. Ran `/plan-sprint 00003` again hoping to pull Task 00016 (3h, finalize the logo SVG, the only dependency-unblocked candidate left under Feature 00003) — doesn't fit in 2h. CPO confirmed: leave it for the next sprint.
+
+**Housekeeping closed out and verified.** `v2-initiative.md` refreshed with Feature 00003's execution progress and the PUSH BEFORE YOU PR lesson; this continuation refreshed alongside it. Both committed (`95c19cd`, `f90eff5`) and pushed to origin. Re-verified PR #17 and #18 on GitHub directly: both `MERGED`, clean merge commits (`0f04698`, `e937568`), source branches deleted. Local `feature/strap-onboarding` confirmed matching origin at `f90eff5`. Nothing outstanding from this session.
 
 ## Files in flight
 
@@ -63,7 +65,7 @@ None — working tree is clean on `feature/strap-onboarding`, everything from th
 
 ## Source-of-truth pointers
 
-- `.claude/strap/memory/dev-lead/v2-initiative.md` — the durable V2 map; **stale, last updated mid-Feature-C** — refresh next session with Feature A's progress + the PUSH BEFORE YOU PR lesson.
+- `.claude/strap/memory/dev-lead/v2-initiative.md` — the durable V2 map; refreshed 2026-08-04, current through Feature 00003's execution + the PUSH BEFORE YOU PR lesson.
 - `.claude/strap/state/usage.yaml` — per-agent/session token budget tracking; designer is over budget (266K/200K) for the execute-00003 workflow instance.
 - `.claude/strap/work/feature/00003.yaml` — Feature A's audit trail; shows the partial-execution + dependency-chain-blocked pattern.
 - `.claude/strap/project-docs/v1-perf-baseline.md` + `v1-engagement-baseline.md` — the V1 before-state Phase-3 work measures against; cross-linked to each other.
