@@ -1,7 +1,7 @@
 id: "00008"
 type: story
 title: "Integrate V2 brand assets: self-hosted webfonts + 'The Goji Line' SVG logo"
-state: active
+state: resolved
 parent: "00003"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -10,17 +10,17 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-03T19:35:00Z
+updated_at: 2026-08-04T04:20:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T04:20:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-04T04:20:00Z |
 
   ---
 
@@ -55,3 +55,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-03T19:35:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Task 00015 started (sprint-allocated). Task 00016 stays overflow, unallocated -- this Story will NOT resolve this run; it resolves once 00016 is allocated and completed in a future /plan-sprint + /execute-sprint pass."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-04T04:20:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint, CPO-directed fast-track). Task 00016 landed -- both Tasks now resolved. AC-002 logo half complete (swap into NavMenu is Task 00019, next). Story 00009 (needs 00007+00008 both done) is now unblocked."
