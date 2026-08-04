@@ -11,72 +11,85 @@ import { Navbar, Container, Nav, NavDropdown, Dropdown } from 'react-bootstrap'
  */
 import logoMarkup from '../../assets/logo.svg?raw'
 
+/**
+ * Primary navigation.
+ *
+ * The chrome is the mockups' `.nav` block, ported onto `.site-nav` in
+ * src/scss/styles.scss. Bootstrap's `bg="dark"` / `data-bs-theme="dark"` is
+ * deliberately absent: that is Bootstrap's own dark ramp, independent of the V2
+ * token layer, and on this element it shadowed it.
+ *
+ * The active-route underline rides the `active` class React Router's NavLink
+ * appends. `isActive` as a render prop is unavailable here: react-bootstrap's
+ * Nav.Link folds `className` through the `classnames` package, which silently
+ * drops function arguments before the router ever sees them.
+ *
+ * Galleries still fan out per set. Spec 00002's adopted delta routes them
+ * through one `/galleries` hub, but Feature B has not built that route yet, so
+ * pointing at it here would 404.
+ */
 function NavMenu() {
     return (
-        <>
-            <Navbar bg="dark" data-bs-theme="dark" collapseOnSelect expand="lg">
-                <Container fluid>
-                    <Navbar.Brand
-                        as={Link}
-                        to="/"
-                        aria-label="jeffgoji.com home"
-                        className='logo ps-5 ms-2'
-                        dangerouslySetInnerHTML={{ __html: logoMarkup }}
-                    />
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                    <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="me-auto">
-                            <Nav.Link as={NavLink} to="/">Home</Nav.Link>
-                            <Nav.Link as={NavLink} to="/garage">Car Blogs</Nav.Link>
-                            <Nav.Link as={NavLink} to="/youtube">Videos</Nav.Link>
-                            <Nav.Link as={NavLink} to="/suspension">Suspension</Nav.Link>
-                            {/* <Nav.Link as={NavLink} to="/blogs">Blogs</Nav.Link> */}
-                            {/* <Nav.Link as={NavLink} to="/gallery">Galleries</Nav.Link> */}
-                            <NavDropdown title="Articles" id="basic-nav-dropdown">
-                                <NavDropdown.Item as={NavLink} to="/goodbye-c8">Goodbye C8</NavDropdown.Item>
-                                </NavDropdown>
-                            <NavDropdown title="Galleries" id="basic-nav-dropdown">
-                                <NavDropdown.Item>NA Miata (coming soon)</NavDropdown.Item>
-                                <Dropdown drop="end">
-                                    <Dropdown.Toggle variant="text" id="dropdown-basic">
-                                        NB Mazdaspeed Miata
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item as={NavLink} to="/msm-gallery">Texas Hill Country Trip 2023</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                <Dropdown drop="end">
-                                    <Dropdown.Toggle variant="text" id="dropdown-basic">
-                                        NC Miata
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item as={NavLink} to="/nc-eastcoast15">East Coast Trip 2015</Dropdown.Item>
-                                        <Dropdown.Item as={NavLink} to="/nc-yellowstone15">Yellowstone West Coast Trip 2015</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                <Dropdown drop="end">
-                                    <Dropdown.Toggle variant="text" id="dropdown-basic">
-                                        ND Miata
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item as={NavLink} to="/nd-hillcountry">Texas Hill Country</Dropdown.Item>
-                                        <Dropdown.Item as={NavLink} to="/totdgallery">Tail of the Dragon 2025</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                <Dropdown drop="end">
-                                    <Dropdown.Toggle variant="text" id="dropdown-basic">
-                                        C8 Corvette
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item as={NavLink} to="/c8-autox">Autocross</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </NavDropdown>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-        </>
+        <Navbar collapseOnSelect expand="lg" className="site-nav">
+            <Container fluid className="site-nav__inner">
+                <Navbar.Brand
+                    as={Link}
+                    to="/"
+                    aria-label="jeffgoji.com home"
+                    className='logo'
+                    dangerouslySetInnerHTML={{ __html: logoMarkup }}
+                />
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">
+                    <Nav className="ms-auto">
+                        {/* `end` keeps "/" from prefix-matching every route and underlining Home everywhere. */}
+                        <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
+                        <Nav.Link as={NavLink} to="/garage">Car Blogs</Nav.Link>
+                        <Nav.Link as={NavLink} to="/youtube">Videos</Nav.Link>
+                        <Nav.Link as={NavLink} to="/suspension">Suspension</Nav.Link>
+                        <NavDropdown title="Articles" id="articles-nav-dropdown">
+                            <NavDropdown.Item as={NavLink} to="/goodbye-c8">Goodbye C8</NavDropdown.Item>
+                        </NavDropdown>
+                        <NavDropdown title="Galleries" id="galleries-nav-dropdown">
+                            <Dropdown drop="end">
+                                <Dropdown.Toggle variant="text" id="nb-gallery-dropdown-toggle">
+                                    NB Mazdaspeed Miata
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item as={NavLink} to="/msm-gallery">Texas Hill Country Trip 2023</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <Dropdown drop="end">
+                                <Dropdown.Toggle variant="text" id="nc-gallery-dropdown-toggle">
+                                    NC Miata
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item as={NavLink} to="/nc-eastcoast15">East Coast Trip 2015</Dropdown.Item>
+                                    <Dropdown.Item as={NavLink} to="/nc-yellowstone15">Yellowstone West Coast Trip 2015</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <Dropdown drop="end">
+                                <Dropdown.Toggle variant="text" id="nd-gallery-dropdown-toggle">
+                                    ND Miata
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item as={NavLink} to="/nd-hillcountry">Texas Hill Country</Dropdown.Item>
+                                    <Dropdown.Item as={NavLink} to="/totdgallery">Tail of the Dragon 2025</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <Dropdown drop="end">
+                                <Dropdown.Toggle variant="text" id="c8-gallery-dropdown-toggle">
+                                    C8 Corvette
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item as={NavLink} to="/c8-autox">Autocross</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </NavDropdown>
+                    </Nav>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
     )
 }
 

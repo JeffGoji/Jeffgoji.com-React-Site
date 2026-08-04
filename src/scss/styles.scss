@@ -54,6 +54,129 @@
   }
 }
 
+// Primary navigation, ported from the mockups' .nav block (assets/app.css:67-116
+// and the max-width:768 block at :562-574). Task 00020.
+//
+// The BEM names are prefixed `site-nav` rather than reusing the mockups' `.nav`:
+// `.nav` is also a live Bootstrap component class, and Bootstrap's rule would
+// collide with the ported chrome on the same element.
+//
+// The Navbar no longer carries bg="dark"/data-bs-theme="dark". That attribute
+// switched Bootstrap onto its OWN dark ramp, which is independent of the token
+// layer and was shadowing it here. Dropping it re-exposes Bootstrap's light-mode
+// component defaults — a near-black toggler glyph on near-black chrome, a white
+// dropdown panel — so the --bs-* slots below re-point those components at the V2
+// tokens instead. The toggler glyph is inlined rather than tokenised because
+// Bootstrap ships it as a data URI, which cannot reference a custom property.
+.site-nav {
+  --bs-navbar-padding-y: 0;
+  --bs-navbar-color: var(--text-mid);
+  --bs-navbar-hover-color: var(--text-hi);
+  --bs-navbar-active-color: var(--text-hi);
+  --bs-navbar-disabled-color: var(--text-lo);
+  --bs-navbar-brand-color: var(--text-hi);
+  --bs-navbar-brand-hover-color: var(--text-hi);
+  --bs-navbar-toggler-border-color: var(--color-border);
+  --bs-dropdown-bg: var(--ink-800);
+  --bs-dropdown-border-color: var(--color-border);
+  --bs-dropdown-link-color: var(--text-mid);
+  --bs-dropdown-link-hover-color: var(--text-hi);
+  --bs-dropdown-link-hover-bg: var(--ink-700);
+  --bs-dropdown-link-active-color: var(--color-on-accent);
+  --bs-dropdown-link-active-bg: var(--goji-red);
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23F1EEE9' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--nav-h);
+  background: rgba(5, 5, 6, 0.82);
+  backdrop-filter: blur(12px);
+  border-bottom: var(--hairline);
+}
+
+// Bootstrap already gives `.navbar > .container-fluid` the flex row and the
+// space-between the mockup's .nav__inner declares; only the measure, the gutter
+// and the full-bleed height need porting.
+.site-nav__inner {
+  height: 100%;
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+  gap: var(--space-5);
+}
+
+// Scoped through .navbar-nav so these outrank Bootstrap's own
+// `.navbar-nav .nav-link` pair, and matched on .nav-link rather than a ported
+// `.nav__link` class so the two NavDropdown toggles — which react-bootstrap
+// renders through its internal NavLink with no className seam — are covered too.
+.site-nav .navbar-nav .nav-link {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  position: relative;
+}
+
+// The mockup's `.nav__link.is-active::after`. `active` is what React Router's
+// NavLink appends on match; see the note in components/NavMenu/index.jsx for why
+// the isActive render prop cannot supply `is-active` through Nav.Link. Dropdown
+// toggles are excluded because Bootstrap already owns their ::after — it is the
+// caret.
+.site-nav .navbar-nav .nav-link.active:not(.dropdown-toggle)::after {
+  content: "";
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: 2px;
+  height: 2px;
+  background: var(--goji-red);
+}
+
+// The per-set gallery submenus open from Dropdown.Toggle buttons nested inside a
+// dropdown panel, so they are .btn elements rather than .dropdown-item anchors
+// and inherit none of the panel's item chrome.
+.site-nav .dropdown-menu .btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+  color: var(--bs-dropdown-link-color);
+  text-align: left;
+
+  &:hover,
+  &:focus,
+  &.show {
+    color: var(--bs-dropdown-link-hover-color);
+    background: var(--bs-dropdown-link-hover-bg);
+  }
+}
+
+// The mockup collapses at 768px; this navbar collapses at Bootstrap's lg
+// breakpoint, so the mobile treatment follows the mechanism actually in play
+// rather than the mockup's number. The bar also has to give up its fixed height
+// here: react-bootstrap expands the menu in flow rather than as the mockup's
+// fixed overlay, and a 68px cap would clip it.
+@media (max-width: 991.98px) {
+  .site-nav {
+    height: auto;
+    min-height: var(--nav-h);
+  }
+
+  .site-nav .navbar-nav .nav-link {
+    padding: var(--space-4);
+    border-bottom: var(--hairline);
+  }
+
+  .site-nav .navbar-nav .nav-link.active:not(.dropdown-toggle)::after {
+    display: none;
+  }
+}
+
 // Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;

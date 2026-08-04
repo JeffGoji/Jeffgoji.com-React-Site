@@ -199,6 +199,131 @@ describe('the legacy stylesheet is absorbed rather than layered (Task 00018)', (
     });
 });
 
+const escapeForRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * `declarationsOf` folds an @media copy of a rule into its base rule -- its
+ * block matcher cannot see the at-rule wrapper. The nav is styled at two
+ * breakpoints, so these assertions read the desktop rule on its own. Sass's
+ * expanded output indents anything nested in an at-rule, so anchoring the
+ * selector at column zero isolates it. Comments are deliberately not stripped
+ * here: the toggler glyph is a data URI containing `//`, which the line-comment
+ * pass would eat along with the rest of its declaration.
+ */
+function topLevelDeclarationsOf(selector) {
+    const match = css.match(
+        new RegExp(`^${escapeForRegExp(selector)} \\{([^{}]*)\\}`, 'm')
+    );
+
+    expect(match, `no top-level ${selector} rule emitted`).not.toBeNull();
+
+    return new Map(
+        match[1]
+            .split(';')
+            .filter((declaration) => declaration.includes(':'))
+            .map((declaration) => {
+                const [name, ...rest] = declaration.split(':');
+
+                return [name.trim(), rest.join(':').trim().replace(/\s+/g, ' ')];
+            })
+            .filter(([name]) => name)
+    );
+}
+
+describe('the primary nav ports the mockup chrome (Task 00020)', () => {
+    /**
+     * Values are the mockups' own, read from
+     * .claude/strap/mockups/spec-00002/assets/app.css:67-100. This suite exists
+     * so the port is checked against those declarations rather than eyeballed.
+     */
+    it('gives the bar the mockups sticky blurred chrome', () => {
+        const nav = topLevelDeclarationsOf('.site-nav');
+
+        expect(nav.get('position')).toBe('sticky');
+        expect(nav.get('top')).toBe('0');
+        expect(nav.get('z-index')).toBe('50');
+        expect(nav.get('height')).toBe('var(--nav-h)');
+        expect(nav.get('background')).toBe('rgba(5, 5, 6, 0.82)');
+        expect(nav.get('backdrop-filter')).toBe('blur(12px)');
+        expect(nav.get('border-bottom')).toBe('var(--hairline)');
+    });
+
+    it('holds the inner row to the wide container measure', () => {
+        const inner = topLevelDeclarationsOf('.site-nav__inner');
+
+        expect(inner.get('max-width')).toBe('var(--container-wide)');
+        expect(inner.get('margin-inline')).toBe('auto');
+        expect(inner.get('padding-inline')).toBe('var(--space-5)');
+        expect(inner.get('height')).toBe('100%');
+    });
+
+    it('sets the links in the display face the mockup uses', () => {
+        const link = topLevelDeclarationsOf('.site-nav .navbar-nav .nav-link');
+
+        expect(link.get('font-family')).toBe('var(--font-display)');
+        expect(link.get('font-weight')).toBe('600');
+        expect(link.get('font-size')).toBe('var(--fs-sm)');
+        expect(link.get('letter-spacing')).toBe('0.04em');
+        expect(link.get('text-transform')).toBe('uppercase');
+        expect(link.get('padding')).toBe('var(--space-2) var(--space-3)');
+        expect(link.get('position')).toBe('relative');
+    });
+
+    it('underlines the active route in brand red', () => {
+        const underline = topLevelDeclarationsOf(
+            '.site-nav .navbar-nav .nav-link.active:not(.dropdown-toggle)::after'
+        );
+
+        expect(underline.get('background')).toBe('var(--goji-red)');
+        expect(underline.get('height')).toBe('2px');
+        expect(underline.get('bottom')).toBe('2px');
+        expect(underline.get('left')).toBe('var(--space-3)');
+        expect(underline.get('right')).toBe('var(--space-3)');
+    });
+
+    /**
+     * Dropping data-bs-theme="dark" from the Navbar re-exposes Bootstrap's
+     * light-mode component defaults. These slots are what keeps the toggler
+     * glyph and the dropdown panel on the token layer instead.
+     */
+    it('re-points the Bootstrap navbar and dropdown slots at the tokens', () => {
+        const nav = topLevelDeclarationsOf('.site-nav');
+
+        expect(nav.get('--bs-navbar-color')).toBe('var(--text-mid)');
+        expect(nav.get('--bs-navbar-active-color')).toBe('var(--text-hi)');
+        expect(nav.get('--bs-navbar-padding-y')).toBe('0');
+        expect(nav.get('--bs-dropdown-bg')).toBe('var(--ink-800)');
+        expect(nav.get('--bs-dropdown-link-active-bg')).toBe('var(--goji-red)');
+    });
+
+    /**
+     * Bootstrap ships the glyph as a data URI, which cannot reference a custom
+     * property, so the override is a literal and drifts silently if the ink
+     * ramp moves. Asserted against --text-hi's declared value for that reason.
+     */
+    it('paints the collapse toggler glyph in the warm off-white', () => {
+        const glyph = topLevelDeclarationsOf('.site-nav').get(
+            '--bs-navbar-toggler-icon-bg'
+        );
+
+        expect(glyph).toContain("stroke='%23F1EEE9'");
+        expect(root.get('--text-hi').toUpperCase()).toBe('#F1EEE9');
+    });
+
+    /** The mockups collapse the bar into a stacked sheet; so does this port. */
+    it('stacks the links and drops the underline below the collapse breakpoint', () => {
+        expect(emitted).toMatch(/@media \(max-width: 991\.98px\)/);
+
+        const collapsed = emitted
+            .split('@media (max-width: 991.98px)')
+            .pop();
+
+        expect(collapsed).toContain('.site-nav .navbar-nav .nav-link');
+        expect(collapsed).toContain('padding: var(--space-4)');
+        expect(collapsed).toContain('display: none');
+    });
+});
+
 describe('no unthemed Bootstrap default survives the collapse', () => {
     it('reaches no default blue from :root or a component slot', () => {
         for (const [name, value] of root) {
