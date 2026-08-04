@@ -696,6 +696,146 @@
   font-size: var(--fs-h4);
 }
 
+// Form controls, ported from the mockups' .label / .select pair
+// (assets/app.css:172-177). Bootstrap ships no `.select` or `.label` class, so
+// these names carry across without colliding.
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+.select {
+  background: var(--ink-600);
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  color: var(--text-hi);
+
+  &:focus {
+    outline: none;
+    border-color: var(--goji-red);
+    box-shadow: var(--glow-red);
+  }
+}
+
+// .eyebrow and .spec-row are already ported above (Tasks 00030/00038) --
+// this branch's copies were dropped as duplicates at merge time.
+
+// Consolidated galleries hub, ported from mockups/spec-00002/gallery.html and
+// the GALLERY block at assets/app.css:319-325. Task 00039.
+//
+// The mockup's page chrome — .container and .section-tight — is inlined here as
+// __inner rather than ported as global helpers: Bootstrap already owns
+// `.container` with its own breakpoint-stepped max-widths, so a mockup-faithful
+// `.container` would either fight it or silently inherit the wrong measure.
+.gallery-hub__head {
+  padding-block: var(--space-7);
+  border-bottom: var(--hairline);
+}
+
+.gallery-hub__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.gallery-hub__body {
+  padding-block: var(--space-7);
+}
+
+.gallery-hub__title {
+  font-size: var(--fs-h1);
+  text-transform: uppercase;
+}
+
+// The mockup carries this as .hero__lead (assets/app.css:267) reused off the
+// hero surface. Copied onto the hub's own element instead of borrowing another
+// block's name, which would tie this surface to the hero's future changes.
+.gallery-hub__lead {
+  max-width: 60ch;
+  margin-top: var(--space-4);
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+}
+
+.gallery-hub__chooser {
+  margin-top: var(--space-4);
+  align-items: center;
+}
+
+.gallery-hub__select {
+  max-width: 320px;
+}
+
+.gallery-hub__status {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-lo);
+}
+
+// auto-fill against a 180px floor is the whole responsive story for this grid —
+// the column count falls out of the measure at every width, which is why the
+// mockup declares no breakpoint for it.
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+// A <button> rather than the mockup's implied div: the thumb is the lightbox's
+// trigger (Task 00040), so it has to be focusable and keyboard-operable. That
+// brings Bootstrap's reboot button chrome with it, hence the explicit padding
+// reset and block display.
+.thumb {
+  position: relative;
+  display: block;
+  padding: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: var(--hairline);
+  border-radius: var(--radius);
+  background: var(--ink-800);
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  &:hover img {
+    transform: scale(1.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+  }
+}
+
+// z-index clears the editorial grade's own ::after (_grade.scss, z-index 1),
+// which otherwise paints over the badge — it comes later in painting order at
+// an equal index.
+.thumb__idx {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  z-index: 2;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(5, 5, 6, 0.6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-hi);
+}
+
 // Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;
