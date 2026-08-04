@@ -1,7 +1,7 @@
 id: "00016"
 type: task
 title: "Finalize 'The Goji Line' SVG logo as a production asset"
-state: new
+state: resolved
 parent: "00008"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00015"
     type: predecessor
 original_estimate: 3
+completed_work: 3
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T04:00:00Z
+updated_at: 2026-08-04T04:20:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T04:20:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | designer |
+  | Completed At | 2026-08-04T04:20:00Z |
 
   ---
 
@@ -49,3 +50,12 @@ description: |
 
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T04:05:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to designer in worktree designer-00016 on branch task/00016-logo-svg."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T04:20:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00016-logo-svg (428c51f) into feature/00003-shell-wiring-and-nav (e1694e5). Completed By: designer. 2 new files (logo.svg, logo.test.js), no scope creep. 15/15 test probe green. Two flagged items from the specialist: (1) fixed a real rendering bug in the mockup's logo -- objectBoundingBox gradient on zero-height geometry silently drops the G's crossbar in every renderer; switched to userSpaceOnUse. The approved mockup at .claude/strap/mockups/spec-00002/assets/logo.svg still has this bug and should be backported for consistency -- flagged to CPO, not done here since mockups are locked. (2) tagline colour #7C7C79 is below AA contrast and may be an unmigrated straggler from the retired palette (token equivalent would be #9C978D) -- CPO ruling pending, one-line fix if wanted. Kept live <text> wordmark (not outlined) since no font-tooling exists in this environment; documented that the <img> fallback path is not font-safe, inline consumption is required -- Task 00019 hand-off note included."

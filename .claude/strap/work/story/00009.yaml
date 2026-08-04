@@ -1,7 +1,7 @@
 id: "00009"
 type: story
 title: "Reconcile the three styling systems onto the V2 token layer"
-state: new
+state: resolved
 parent: "00003"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -14,17 +14,17 @@ links:
     type: predecessor
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T04:00:00Z
+updated_at: 2026-08-04T07:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T07:00:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-04T07:00:00Z |
 
   ---
 
@@ -55,3 +55,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:10:00Z
     body: "[STRAP/agent:dev-lead] Story created via /decompose-feature 00003 (P5, frontend-engineer). 2 Tasks: 00017-00018. Reconciled: partial-AUTHORING moved to ST-1/ST-2 (designer); this Story is assembly/wiring only."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T05:20:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Predecessors 00007+00008 both resolved -- unblocked. First Task (00017) started."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-04T07:00:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Both Tasks merged (00017 styles.scss assembly, 00018 collapse CSS entries). AC-001 satisfied for the styling-system layer (single token-driven CSS entry, no pre-V2 look survives at the CSS level); AC-002 palette fully live. Story 00010 (NavMenu/Header render) is now unblocked and next."

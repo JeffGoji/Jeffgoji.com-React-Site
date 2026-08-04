@@ -1,7 +1,7 @@
 id: "00022"
 type: task
 title: "Redesign the Header to V2"
-state: new
+state: resolved
 parent: "00010"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00020"
     type: predecessor
 original_estimate: 3
+completed_work: 3
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T04:00:00Z
+updated_at: 2026-08-04T08:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T08:00:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-04T08:00:00Z |
 
   ---
 
@@ -49,3 +50,12 @@ description: |
 
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T07:45:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00022 on branch task/00022-header-redesign. Dispatched in parallel with Task 00021 (both depend only on 00020)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T08:00:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00022-header-redesign (a0c30c9) into feature/00003-shell-wiring-and-nav (7c613ce), auto-merged cleanly against Task 00021's parallel styles.scss changes. Completed By: frontend-engineer. Real bug caught and fixed, not just cosmetic cleanup: the retired container-fluid p-0 wrapper, if left as a normal block box, would have become .site-nav's sticky containing block with a zero-length offset range -- silently breaking position:sticky on the whole navbar. Fixed via .site-header { display:contents }, verified with real box-model reasoning, not a guess. 15-test probe green; 357/357 repo-wide after both Tasks merged; production build re-verified clean."

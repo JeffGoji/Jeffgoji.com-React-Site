@@ -1,11 +1,16 @@
 session:
   workflow: execute-sprint
-  workflow_instance: execute-00003
-  started_at: 2026-08-03T19:12:00Z
-  completed_at: 2026-08-03T20:00:00Z
-  specialists_used: 266K
-  notes: "Partial Feature 00003 execution (Story 00007 + Task 00015, 4 Tasks). PR #17 opened against feature/strap-onboarding. designer exceeded its 200K per-agent budget (266K across 4 dispatches) -- tracked incrementally this run, unlike execute-00005's after-the-fact reconstruction. Prior run (execute-00005, 2026-08-01, Feature 00005 Stories 00042+00043) archived below for reference."
+  workflow_instance: execute-00003-fasttrack
+  started_at: 2026-08-04T04:00:00Z
+  completed_at: 2026-08-04T08:05:00Z
+  specialists_used: 492K
+  notes: "CPO-directed capacity-override fast-track (via /execute-sprint, feature/00003-shell-wiring-and-nav), COMPLETE. Task 00016 + Story 00009 + Story 00010 = 7 Tasks, 28h against 2h nominal remaining sprint capacity -- see Feature 00003.yaml comment c5. designer dispatch reset to 0 for this new workflow instance per budget-discipline; carries no penalty forward from execute-00003's overrun. Tasks 00021/00022's finishing reports arrived after dev-lead had already reviewed and merged both branches directly -- delayed, not missing; real tokens_used (62K, 78K) now reflected below, replacing the earlier ~120K combined estimate."
   prior_runs:
+    - workflow_instance: execute-00003
+      started_at: 2026-08-03T19:12:00Z
+      completed_at: 2026-08-03T20:00:00Z
+      specialists_used: 266K
+      notes: "Partial Feature 00003 execution (Story 00007 + Task 00015, 4 Tasks). PR #17 opened against feature/strap-onboarding. designer exceeded its 200K per-agent budget (266K across 4 dispatches) -- tracked incrementally this run, unlike execute-00005's after-the-fact reconstruction."
     - workflow_instance: execute-00005
       started_at: 2026-08-01T20:25:00Z
       completed_at: 2026-08-01T23:15:00Z
@@ -40,8 +45,9 @@ budgets:
 
 agents:
   frontend-engineer:
-    used_in_current: 0
-    last_dispatch: 2026-08-01T22:25:00Z
+    used_in_current: 430K
+    last_dispatch: 2026-08-04T07:45:00Z
+    exceeded_budget_at: 2026-08-04T07:40:00Z
   security-reviewer:
     used_in_current: 0
   test-strategist:
@@ -53,6 +59,5 @@ agents:
   tech-writer:
     used_in_current: 0
   designer:
-    used_in_current: 266K
-    last_dispatch: 2026-08-03T19:35:00Z
-    exceeded_budget_at: 2026-08-03T19:50:00Z
+    used_in_current: 62K
+    last_dispatch: 2026-08-04T04:05:00Z

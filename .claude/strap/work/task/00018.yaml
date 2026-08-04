@@ -1,7 +1,7 @@
 id: "00018"
 type: task
 title: "Collapse the three CSS entry paths onto the single token-driven system"
-state: new
+state: resolved
 parent: "00009"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,19 +11,20 @@ links:
   - target: "00017"
     type: predecessor
 original_estimate: 5
+completed_work: 5
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T04:00:00Z
+updated_at: 2026-08-04T07:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T07:00:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-04T07:00:00Z |
 
   ---
 
@@ -49,3 +50,12 @@ description: |
 
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T06:45:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00018 on branch task/00018-collapse-css-entries."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T07:00:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00018-collapse-css-entries (629381c) into feature/00003-shell-wiring-and-nav (6feb5df). Completed By: frontend-engineer. Verified in the real production build: exactly 1 module script + 1 stylesheet in dist/index.html (was 2+2), CSS payload dropped 413KB->241KB (duplicate plain-Bootstrap bundle genuinely gone), #E10600 survives at 54 occurrences, only the harmless --bs-blue token remains at 0d6efd. style.css + scss/js/main.js deleted outright (grep-verified no other importers). 310/310 repo tests green. One judgment call accepted: dropped the legacy html{font-size:18px} override -- correctly matches the mockup's uncalibrated-root-font-size contract, but shrinks text ~12.5% on every not-yet-rebuilt surface until Story 00010 lands (next in this run). Two follow-ups noted, non-blocking: .na-background's source photo is missing from the tree (pre-existing, gradient-only fallback preserved as-is; Story 00010 should pick a real V2 hero image), and project-profile.md's three-way-styling-split description is now stale and should be refreshed."
