@@ -163,3 +163,57 @@ describe('the retired pre-V2 palette is gone from styles.scss', () => {
         expect(source).not.toContain('.color-primary-text');
     });
 });
+
+describe('the legacy stylesheet is absorbed rather than layered (Task 00018)', () => {
+    it.each([
+        ['.splash-background', 'the home hero wash'],
+        ['.na-background', 'the NA Miata page wash'],
+        ['.img-hover:hover', 'the garage card affordance'],
+    ])('carries %s forward for %s', (selector) => {
+        expect(emitted).toContain(selector);
+    });
+
+    it('drives the card hover glow from the palette instead of a raw red', () => {
+        expect(declarationsOf('.img-hover:hover').get('box-shadow')).toBe('var(--glow-red)');
+    });
+
+    it('strips link underlines app-wide, as every mockup surface does', () => {
+        expect(declarationsOf('a').get('text-decoration')).toBe('none');
+    });
+
+    it.each([
+        ['rgb(184, 184, 184)', 'the gray nav and footer washes'],
+        ['rgb(90, 90, 90)', 'the .bg-gray helper'],
+        ['rgb(69, 69, 69)', 'the gray dropdown menu'],
+    ])('drops %s, which the token layer supersedes', (color) => {
+        expect(emitted).not.toContain(color);
+    });
+
+    it('leaves the body canvas to the ink ramp, not the legacy pure black', () => {
+        expect(declarationsOf('body').get('background-color')).toBe('var(--bs-body-bg)');
+        expect(root.get('--bs-body-bg').toUpperCase()).toBe('#141418');
+    });
+
+    it('drops the 18px root that inflated every rem against the token scale', () => {
+        expect(emitted).not.toMatch(/html\s*\{[^}]*font-size:\s*18px/);
+    });
+});
+
+describe('no unthemed Bootstrap default survives the collapse', () => {
+    it('reaches no default blue from :root or a component slot', () => {
+        for (const [name, value] of root) {
+            if (name === '--bs-blue') {
+                continue;
+            }
+
+            expect(value.toLowerCase(), `${name} still resolves to a Bootstrap default`).not.toContain(
+                '0d6efd'
+            );
+        }
+    });
+
+    it('leaves --bs-blue as an unconsumed palette entry', () => {
+        expect(root.get('--bs-blue')).toBe('#0d6efd');
+        expect(emitted).not.toContain('var(--bs-blue)');
+    });
+});
