@@ -225,6 +225,324 @@
   background: var(--checker);
 }
 
+// The mockups' eyebrow label (assets/app.css:41-58) — the wide-tracked Space
+// Mono kicker that opens every section. Left unprefixed like `.checker-strip`:
+// the mockups treat it as a standalone utility and no Bootstrap class collides.
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--goji-red);
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: var(--goji-red);
+  }
+}
+
+// Telemetry chips, ported from the mockups' .spec-row / .chip pair
+// (assets/app.css:139-147). Space Mono is the data voice site-wide.
+.spec-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-mid);
+  background: var(--ink-800);
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+
+  b {
+    color: var(--text-hi);
+    font-weight: 700;
+  }
+}
+
+// The mockups' button block (assets/app.css:122-136). `.btn` itself is a live
+// Bootstrap component class, so — unlike the nav, which was renamed wholesale —
+// only the MODIFIERS are ported and they carry the mockup's `.btn` base with
+// them. Markup stays `class="btn btn--primary"` exactly as the mockup writes it:
+// Bootstrap's `.btn` supplies the reset and the focus ring, and these rules land
+// below the Bootstrap import so they win the visual properties on top of it.
+@mixin v2-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background var(--dur-fast),
+    border-color var(--dur-fast),
+    color var(--dur-fast);
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.btn--primary {
+  @include v2-button;
+
+  color: var(--color-on-accent);
+  background: var(--goji-red);
+
+  &:hover,
+  &:focus {
+    color: var(--color-on-accent);
+    background: var(--goji-red-bright);
+    box-shadow: var(--glow-red);
+  }
+}
+
+.btn--ghost {
+  @include v2-button;
+
+  color: var(--text-hi);
+  background: transparent;
+  border-color: var(--ink-400);
+
+  &:hover,
+  &:focus {
+    color: var(--color-on-accent);
+    border-color: var(--goji-red);
+  }
+}
+
+// Hero, ported from the mockups' .hero block (assets/app.css:246-292 and the
+// max-width:768 rules at :578-579). Task 00030.
+//
+// Two darkening layers stack over the photo, and both are load-bearing: the
+// `.media--editorial--hero` grade from _grade.scss tones the image itself, and
+// `.hero__scrim` lays the four-gradient wash that keeps the headline legible
+// over whichever of the five cars the rotation picked. Dropping either one
+// makes the brightest source (the wet-autocross MSM frame) illegible.
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: min(84vh, 760px);
+  overflow: hidden;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 125% at 50% 32%, transparent 44%, rgba(5, 5, 6, 0.55) 100%),
+    linear-gradient(180deg, rgba(5, 5, 6, 0.45) 0%, rgba(5, 5, 6, 0.1) 38%, rgba(5, 5, 6, 0.94) 100%),
+    linear-gradient(90deg, rgba(5, 5, 6, 0.8) 0%, rgba(5, 5, 6, 0) 62%),
+    radial-gradient(85% 65% at 6% 100%, rgba(58, 7, 5, 0.38), transparent 60%);
+}
+
+.hero__content {
+  position: relative;
+  width: 100%;
+  padding-block: var(--space-8);
+}
+
+// The mockup nests a `.container` inside `.hero__content`; that name is a live
+// Bootstrap component with different measure and gutter, so the measure is
+// carried block-locally here — the same trade `.site-nav__inner` and
+// `.site-footer__inner` already make.
+.hero__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.hero__title {
+  max-width: 16ch;
+  margin: 0;
+  font-size: var(--fs-hero);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--text-hi);
+
+  .accent {
+    color: var(--goji-red);
+  }
+}
+
+.hero__lead {
+  max-width: 52ch;
+  margin-top: var(--space-4);
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.hero__flag {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 6px;
+  background: var(--goji-red);
+}
+
+// The rotating hero's nameplate — names whichever car is on show. It sits above
+// the scrim and the flag, and is pointer-transparent so it never intercepts a
+// click meant for the CTAs underneath.
+.hero__nameplate {
+  position: absolute;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+  pointer-events: none;
+}
+
+.hero__nameplate-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+
+.hero__nameplate-name {
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--text-hi);
+  background: rgba(5, 5, 6, 0.42);
+  border: 1px solid rgba(241, 238, 233, 0.12);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(2px);
+
+  b {
+    color: var(--goji-red);
+    font-weight: 700;
+  }
+}
+
+// Driver intro, ported from home.html's second <section>. The mockup carries
+// this layout on style attributes rather than classes; it is class-borne here
+// for the same reason the footer's was.
+.driver-intro {
+  padding-block: var(--space-9);
+}
+
+.driver-intro__inner {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--space-8);
+  align-items: center;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.driver-intro__name {
+  font-size: var(--fs-h2);
+  text-transform: uppercase;
+}
+
+.driver-intro__bio {
+  max-width: 52ch;
+  margin-top: var(--space-4);
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+}
+
+.driver-intro__chips {
+  margin-top: var(--space-5);
+}
+
+.driver-intro__portrait {
+  overflow: hidden;
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+// The mockups' own breakpoints (assets/app.css:578-579 and :591-593), kept
+// verbatim. The two-column intro is not in the mockup's media block because the
+// mockup declares that grid inline; collapsing it here is what keeps 360 and 768
+// free of horizontal overflow.
+@media (max-width: 768px) {
+  .hero {
+    min-height: 72vh;
+  }
+
+  .driver-intro {
+    padding-block: var(--space-7);
+  }
+
+  .driver-intro__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__nameplate {
+    right: var(--space-4);
+    bottom: calc(var(--space-4) + 6px);
+  }
+
+  .hero__nameplate-label {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero__inner,
+  .driver-intro__inner {
+    padding-inline: var(--space-4);
+  }
+}
+
 // Site footer, ported from the mockups' .footer block (assets/app.css:356-361
 // and the max-width:768 block at :575). Task 00023.
 //
