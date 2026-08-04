@@ -1,7 +1,7 @@
 id: "00024"
 type: task
 title: "Remove the orphaned /totdtrip route"
-state: active
+state: resolved
 parent: "00011"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -9,19 +9,20 @@ assigned_to: null
 tags: [AI, strap:task]
 links: []
 original_estimate: 3
+completed_work: 3
 created_at: 2026-08-01T19:10:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:10:00Z
+updated_at: 2026-08-04T08:25:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T08:25:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T19:10:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-04T08:25:00Z |
 
   ---
 
@@ -52,3 +53,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-04T13:20:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00024 on branch task/00024-remove-totdtrip. Dispatched in parallel with Task 00023 (both independent)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T08:25:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00024-remove-totdtrip (aa88f91) into feature/00003-footer-and-cleanup (8926821). Completed By: frontend-engineer. AC-018 satisfied: /totdtrip no longer registered, /totdgallery + its TailOfTheDragonGallery import both intact. New src/App.test.jsx (4 tests, verified 4/4 green) is the first route-table-level test in the repo -- future route work (Feature B's /totdgallery rework) should extend it. Discovered import.meta.globEager breaks any App-level render test under Vitest's SSR transform (needs a vi.mock workaround) and window.scrollTo needs vi.stubGlobal for ScrollToTop -- both flagged proactively to Task 00023 (running in parallel, likely to hit the same walls) via SendMessage mid-flight."
