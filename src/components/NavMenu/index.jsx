@@ -27,6 +27,10 @@ import logoMarkup from '../../assets/logo.svg?raw'
  * Galleries still fan out per set. Spec 00002's adopted delta routes them
  * through one `/galleries` hub, but Feature B has not built that route yet, so
  * pointing at it here would 404.
+ *
+ * The trailing "What's New" pill is permanent chrome (AC-014) and ships ahead of
+ * its destination: `/whats-new` is Feature D's route and does not exist yet, so
+ * the link 404s until that lands.
  */
 function NavMenu() {
     return (
@@ -86,6 +90,9 @@ function NavMenu() {
                                 </Dropdown.Menu>
                             </Dropdown>
                         </NavDropdown>
+                        <Nav.Link as={NavLink} to="/whats-new" className="site-nav__link--flag">
+                            What&apos;s New
+                        </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
