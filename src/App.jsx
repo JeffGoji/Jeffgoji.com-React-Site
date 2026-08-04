@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 // Components and Pages
 import Header from './components/Header'
+import Footer from './components/Footer'
 import Garage from './components/Garage'
 import Home from './components/pages/Home'
 import Intro from './components/pages/Intro'
@@ -52,7 +53,6 @@ function App() {
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
           <Route path="gallery" element={<Gallery />} />
-          <Route path="totdtrip" element={ <TailOfTheDragonGallery/>} />
           <Route path="msm-gallery" element={<MSMGallery />} />
           <Route path="nc-eastcoast15" element={<EastCoast15 />} />
           <Route path="nc-yellowstone15" element={<Yellowstone15 />} />
@@ -60,6 +60,7 @@ function App() {
           <Route path="c8-autox" element={<C8AutoxGallery />} />
           <Route path="totdgallery" element={<TailOfTheDragonGallery/>} />
         </Routes>
+        <Footer />
       </div>
     </BrowserRouter>
   )
