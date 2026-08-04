@@ -1,19 +1,19 @@
 id: "00034"
 type: task
 title: "Car-identity banner + shared BlogList build-log"
-state: new
+state: resolved
 parent: "00027"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 6
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T15:05:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T15:05:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   `<BlogList>` renders any *Blog.json; 3/page pagination; sort id desc; prev/next disabled at bounds; markdown img/link/p render; explicit assert NO dangerouslySetInnerHTML; unique-id integrity. Tests authored.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T15:05:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (232b679) with a real styles.scss conflict (this branch re-ported .post/.post__body/.post__entry, already merged from Task 00038) -- resolved by dev-lead dropping the duplicate rules but folding this branch's load-bearing img/a additions to .post__entry (markdown-image centering, since markdown emits a bare <img> in a <p> rather than a centring wrapper) into the earlier canonical copy. Kept this branch's unique additions (.blog, .post__media, .post__specs, .pager, .pager__count, .blog-hero*). 329/329 scoped tests + full build green post-resolution. Final `<BlogList>` interface: `data` (required, *Blog.json array), `title` (required), `eyebrow` (optional, default 'Build log'), `banner` (optional object -- image/imageAlt/title required within it if passed, eyebrow/chips optional; omit entirely for no banner), `postsPerPage` (optional, default 3). Component renders its own <main class=\"section\"> internally -- Task 00035 must NOT wrap it in another <main>, and should drop the per-car Container/Row/Col scaffold entirely, returning <BlogList/> directly. ~78K tokens. FLAGGED (real data defect, not this task's scope): src/assets/Data/c8Blog.json entry id:2 has no cost field -- handled gracefully here (missing fields drop from the chip row) but Task 00035 touches c8Blog.json anyway for the webp repoint and could backfill it if the CPO knows the real cost. FLAGGED (needs a visual check once merged): pager buttons use .btn--ghost/.btn--sm -- .btn--ghost landed via Task 00030 but .btn--sm has not been ported by anyone yet, so the pager may render with near-invisible bare-Bootstrap .btn styling on the dark canvas until that modifier exists."
