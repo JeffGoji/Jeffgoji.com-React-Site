@@ -6,6 +6,9 @@
  *
  * Covers Task 00019: the V2 logo replaces logo.gif and the brand routes Home
  * through the router rather than reloading the document.
+ *
+ * Covers Task 00020: the nav is rebuilt onto the mockup's chrome, the active
+ * route is marked, every dropdown id is unique and the mobile collapse survives.
  */
 
 import { readdirSync, readFileSync } from 'node:fs';
@@ -117,6 +120,141 @@ describe('NavMenu brand link', () => {
         fireEvent.click(container.querySelector('a.navbar-brand'), { button: 0 });
 
         expect(screen.getByTestId('location').textContent).toBe('/');
+    });
+});
+
+/**
+ * Opens the Galleries menu so the per-set submenu toggles mount: react-bootstrap
+ * withholds a Dropdown.Menu's children until the menu has been shown once, and
+ * four of the component's six ids live in there.
+ */
+function openGalleries(container) {
+    fireEvent.click(container.querySelector('#galleries-nav-dropdown'));
+}
+
+/** Every id currently in the tree, in document order, duplicates included. */
+function renderedIds(container) {
+    return Array.from(container.querySelectorAll('[id]')).map((node) => node.id);
+}
+
+/** The nav's own links, excluding the brand and the dropdown panels' items. */
+function navLinks(container) {
+    return Array.from(container.querySelectorAll('.navbar-nav > a.nav-link'));
+}
+
+describe('NavMenu chrome', () => {
+    afterEach(cleanup);
+
+    /**
+     * data-bs-theme="dark" switches Bootstrap onto its own dark ramp, which is
+     * independent of the V2 token layer and shadowed it on this element. Guards
+     * AC-002: the palette cannot reach the bar while that attribute is present.
+     */
+    it('leaves the navbar on the token layer rather than Bootstrap dark mode', () => {
+        const { container } = renderNavAt('/garage');
+        const navbar = container.querySelector('nav.navbar');
+
+        expect(navbar.getAttribute('data-bs-theme')).toBeNull();
+        expect(navbar.classList.contains('bg-dark')).toBe(false);
+    });
+
+    it('carries the ported mockup chrome hooks', () => {
+        const { container } = renderNavAt('/garage');
+
+        expect(container.querySelector('nav.site-nav')).not.toBeNull();
+        expect(container.querySelector('.site-nav > .site-nav__inner')).not.toBeNull();
+    });
+});
+
+describe('NavMenu active route', () => {
+    afterEach(cleanup);
+
+    it.each([
+        ['/', '/'],
+        ['/garage', '/garage'],
+        ['/suspension', '/suspension'],
+    ])('marks only the link for %s as active', (path, expected) => {
+        const { container } = renderNavAt(path);
+
+        const active = navLinks(container).filter((link) =>
+            link.classList.contains('active')
+        );
+
+        expect(active.map((link) => link.getAttribute('href'))).toEqual([expected]);
+        expect(active[0].getAttribute('aria-current')).toBe('page');
+    });
+
+    /**
+     * NavLink prefix-matches by default, so an unbounded "/" would mark Home
+     * active on every route and paint a second underline.
+     */
+    it('does not mark home active on a route below it', () => {
+        const { container } = renderNavAt('/garage');
+        const home = navLinks(container).find((link) => link.getAttribute('href') === '/');
+
+        expect(home.classList.contains('active')).toBe(false);
+        expect(home.getAttribute('aria-current')).toBeNull();
+    });
+});
+
+describe('NavMenu dropdown identity', () => {
+    afterEach(cleanup);
+
+    it('assigns a unique DOM id to every element that carries one', () => {
+        const { container } = renderNavAt('/garage');
+
+        const closed = renderedIds(container);
+
+        expect(closed).toEqual([...new Set(closed)]);
+
+        openGalleries(container);
+
+        const opened = renderedIds(container);
+
+        expect(opened).toEqual([...new Set(opened)]);
+        expect(opened.length).toBeGreaterThan(closed.length);
+    });
+
+    it('names each gallery submenu toggle after the chassis it opens', () => {
+        const { container } = renderNavAt('/garage');
+
+        openGalleries(container);
+
+        for (const id of [
+            'nb-gallery-dropdown-toggle',
+            'nc-gallery-dropdown-toggle',
+            'nd-gallery-dropdown-toggle',
+            'c8-gallery-dropdown-toggle',
+        ]) {
+            expect(container.querySelector(`#${id}`), `${id} is missing`).not.toBeNull();
+        }
+    });
+
+    it('carries no placeholder entry for a gallery that does not exist', () => {
+        const { container } = renderNavAt('/garage');
+
+        openGalleries(container);
+
+        expect(container.textContent).not.toMatch(/coming soon/i);
+    });
+});
+
+describe('NavMenu mobile collapse', () => {
+    afterEach(cleanup);
+
+    /**
+     * Guards AC-005. The mockup toggles a hand-rolled .is-open class; this app
+     * keeps react-bootstrap's collapse, so the contract asserted here is the
+     * toggle button and the labelled region it controls.
+     */
+    it('keeps the toggle wired to the collapsible region', () => {
+        const { container } = renderNavAt('/garage');
+        const toggle = container.querySelector('button.navbar-toggler');
+        const collapse = container.querySelector('.navbar-collapse');
+
+        expect(toggle).not.toBeNull();
+        expect(collapse).not.toBeNull();
+        expect(toggle.getAttribute('aria-controls')).toBe(collapse.id);
     });
 });
 
