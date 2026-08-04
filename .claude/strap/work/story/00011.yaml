@@ -1,9 +1,9 @@
 id: "00011"
 type: story
 title: "Wire in the Footer, remove the orphaned /totdtrip route, add the route-parity guard"
-state: new
+state: active
 parent: "00003"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:story]
@@ -53,3 +53,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:10:00Z
     body: "[STRAP/agent:dev-lead] Story created via /decompose-feature 00003 (P2, frontend-engineer). 3 Tasks: 00023-00025."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T13:20:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track, same override pattern as Stories 00009/00010). Predecessor 00010 resolved -- unblocked. Last remaining Story in Feature 00003."

@@ -1,9 +1,9 @@
 id: "00023"
 type: task
 title: "Wire in and rebuild the Footer"
-state: new
+state: active
 parent: "00011"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:task]
@@ -47,3 +47,8 @@ description: |
 
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T13:20:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint, CPO-directed fast-track). Dispatched to frontend-engineer in worktree frontend-engineer-00023 on branch task/00023-wire-footer. Dispatched in parallel with Task 00024 (both independent)."
