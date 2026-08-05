@@ -1,19 +1,19 @@
 id: "00033"
 type: task
 title: "Shared CarCard + Garage 5-car number-tag hub"
-state: new
+state: resolved
 parent: "00027"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:25:00Z
+updated_at: 2026-08-04T15:25:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T15:25:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   `/garage` renders the V2 5-car hub responsive; retired car (id 3) renders a tribute (no build-log `<a>`); number tags present; no 6th/Fireball card. Tests authored.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T15:25:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (2dfd865) with real conflicts in both styles.scss (this branch and Task 00038 both ported .card/.card__body/.card__title/.section; this branch and Task 00030 both fully styled .btn--primary/.btn--ghost/.eyebrow) and styles.test.js (both this branch and Task 00038 edited the same 'legacy stylesheet absorbed' describe block, each retiring a different selector) -- resolved by dev-lead keeping this branch's richer .card block (adds .card__media + hover image-scale) and Task 00030's .btn--primary/.btn--ghost (adds :focus via its v2-button mixin, which this branch's copy lacked), merging 00038's fuller .card__title typography into this branch's copy (which added the nested `small` for CarCard's model line), and keeping both styles.test.js retirement assertions (.na-background gone per 00038, .img-hover gone per this Task). 323/323 scoped tests + full build green post-resolution. Fixed the real Fireball id-6 image mismatch bug via carImages.js, a portrait registry re-keyed by the data's img path (root-cause fix, not a workaround) -- made 'every car resolves a portrait' a testable property. Final `<CarCard>` interface: props mirror a Garage/Cars.json entry field-for-field (id/make/model/year/label/tag/img/description/name/bloglink) plus `variant` ('hub'|'preview', defaults 'preview'); named exports `isRetired(bloglink)`/`RETIRED_BLOGLINK`. img is resolved INTERNALLY by CarCard -- callers must NOT pre-resolve it. preview variant renders the whole card as a Link except for retired cars, which render as a non-link <article> (relevant to Task 00032's garage-preview strip, which includes the retired NC in its top-3 slice). ~95K tokens. Deliberately scoped the button-modifier port to avoid restyling the still-live react-bootstrap <Button> elements in blog/* and Gallery/GallerySwitcher.jsx mid-migration -- markup stays mockup-verbatim so the port becomes a bare-.btn port once those are retired. No real-browser responsive check possible -- structural/compiled-CSS assertions only, flagged for a manual eyeball."

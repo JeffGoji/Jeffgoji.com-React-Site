@@ -1,11 +1,11 @@
 id: "00040"
 type: task
 title: "Re-skinned react-image-gallery lightbox"
-state: new
+state: resolved
 parent: "00029"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00039"
@@ -13,9 +13,9 @@ links:
 original_estimate: 5
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:25:00Z
+updated_at: 2026-08-04T16:35:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T16:35:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   Lightbox opens on thumb click; prev/next wrap; Esc closes; caption format correct; responsive. Tests authored.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T16:35:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (9bfb295), clean auto-merge, no conflicts (correctly scoped away from Task 00041's App.jsx/routing work per dispatch briefing -- 00040 owned GalleryHub.jsx internals only). New `<GalleryLightbox>` mounted as a sibling of .gallery-grid inside GalleryHub when openIndex!==null. Verified against react-image-gallery's actual source (not assumed): arrow-key nav, swipe, and wrap-around are all native library behavior; Esc-to-close is NOT native (the library's ESC_KEY only exits browser fullscreen) so this Task owns a window keydown listener for it. Caption driven by onBeforeSlide (fires synchronously) not onSlide (deferred by slideDuration+50ms). New shared contract: GalleryHub's framesFrom() normalizes manifest items to {original,thumbnail,alt} once, consumed by both the grid and the lightbox, so a frame can't be described one way under its thumbnail and differently in the caption. 435/435 scoped tests (60 new: 28 GalleryLightbox + 5 new GalleryHub seam tests) + full build green. ~78K tokens. Deviations: .lightbox uses display:flex outright rather than porting the mockup's .is-open toggle class (React only mounts it while open, so a CSS-side open-state could only ever disagree with the mount state); focus moves to the close button on open (not in the mockup, but Esc-to-close was in scope and a modal that doesn't move focus strands keyboard users) -- no full focus trap added, flagged as optional follow-up. No breakpoint-scoped CSS added (lightbox is fluid via min()/vh) so the earlier order-dependent-media-query trap didn't arise here."

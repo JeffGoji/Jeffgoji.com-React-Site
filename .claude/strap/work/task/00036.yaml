@@ -1,19 +1,19 @@
 id: "00036"
 type: task
 title: "Re-skin the GoodbyeC8 article"
-state: new
+state: resolved
 parent: "00028"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 4
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:25:00Z
+updated_at: 2026-08-04T15:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T15:45:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   `/goodbye-c8` renders V2, all text/images intact, responsive clean at 4 breakpoints.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T15:45:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (089b1b8, dev-lead dedup follow-up) -- this branch's .eyebrow/.section-head/.post/.post__media/.post__specs/.post__entry duplicated what Tasks 00030/00034/00038 had already landed by merge time; the agent pre-flagged this exact collision in its own report ('keep one copy of everything down to the .article block and drop the duplicates') so resolution was mechanical -- dropped the duplicates, kept the .article-scoped overrides unique to this Task (.article .post__media img aspect-ratio:auto for the panorama photo; .article .post__entry white-space:normal for JSX prose vs blog markdown). 311/311 scoped tests + full build (incl. the new articles:build derivative-generation step) green post-dedup; verified public/articles/goodbye-c8/ derivatives actually landed on disk. Added a sharp-based responsive image pipeline (scripts/build-article-images.mjs, mirrors the existing public/gallery/ pattern) since a Vite asset import has no width variants and the task's srcset requirement was otherwise unaddressable -- new npm script articles:build wired into build/dev, generated output gitignored. ~95K tokens. FLAGGED for a content check: all 7 photo alt texts were the generic 'Panda' (repeated) -- replaced with descriptions inferred from filenames (autocross/club meet/shop rally/alongside the ND) since 7 identical alt texts give screen-reader users no way to differentiate; agent could not see the actual photos, so these are inferences the CPO should eyeball and correct if wrong. No real-browser responsive check possible -- structural/CSS assertions only."

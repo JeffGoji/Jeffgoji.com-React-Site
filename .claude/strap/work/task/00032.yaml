@@ -1,11 +1,11 @@
 id: "00032"
 type: task
 title: "Compose Home page + garage-preview strip"
-state: new
+state: resolved
 parent: "00026"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00033"
@@ -13,9 +13,9 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:25:00Z
+updated_at: 2026-08-04T16:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T16:45:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   `/` renders the full V2 home (all four sections); garage-preview shows 3 cards; responsive audit clean.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T16:45:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (ca67ed9), clean auto-merge including styles.scss (this branch's 37-line append landed after the lightbox's 78-line append with no overlap). 844/844 FULL SUITE + build green -- this merge completes Feature B's entire implementation (all 4 Stories, all 12 Tasks). `/` now composes Hero -> DriverIntro -> checker-strip -> garage-preview (3 CarCards, preview variant) -> VideoGrid, one <main>, one <h1> (in Hero). Garage-preview deliberately does NOT filter the retired car out of the top-3 slice -- CarCard's own preview-variant logic already renders it as a non-link <article>, so the strip stays a straight read of the data's own order. ~78K tokens. OPEN QUESTION FOR CPO: pages/Intro.jsx and its /intro route were NOT deleted (out of this Task's scope -- brief covered Home's composition, not route removal, and deleting a public route unilaterally wasn't authorized) but are now an orphaned, unlinked URL still serving the pre-V2 full-bleed splash, visually off-system next to the rest of the site. Also: DriverIntro's own docblock comment claims pages/Intro 'is retired... in Task 00032', which is now inaccurate until someone actually removes it. Needs a CPO call: delete Intro.jsx + route, or correct the docblock. FLAGGED (cosmetic inconsistency, not blocking): VideoGrid is the one Home section still using Bootstrap's own .container (different measure than every other section's __inner pattern) since Task 00031 predates the __inner convention that emerged across Tasks 00030/00033/00039/00032 -- someone should decide whether to retrofit it. FLAGGED (test infra, pre-existing before this Task): DriverIntro/index.test.jsx's 768px assertion still takes the FIRST matching media block via destructuring rather than searching for the one containing its own selector -- currently safe only because nothing has added a 768px block above it yet; same class of fragility as the .pop()-based tests fixed during Wave-1 integration, just not yet triggered."

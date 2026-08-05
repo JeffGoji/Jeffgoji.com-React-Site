@@ -1,19 +1,19 @@
 id: "00030"
 type: task
 title: "Rotating multi-car hero + intro section"
-state: new
+state: resolved
 parent: "00026"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:25:00Z
+updated_at: 2026-08-04T14:30:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T14:30:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   Hero + intro render at 360/768/1024/1440 with no overflow; picked hero ∈ heroes[]; pick stable across re-render (test mocks Math.random); img-error fallback works. Tests authored (not run).
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T14:30:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (d1d91d2), plus a dev-lead follow-up dedup commit (3c5a5bf) -- .spec-row/.chip landed twice (once from this Task, once already-merged from Task 00038) and were collapsed to one copy, kept functionally identical, 399/399 scoped tests + full build still green after the dedup. New Hero + DriverIntro components (`components/Hero/`, `components/DriverIntro/`); heroes[] confirmed by md5 to be exact-byte matches of real in-repo photos (not copied mockup assets) -- production-safe by reference. `nightHero` fallback is a heroes[] member so it can never itself be missing. srcset/sizes are an intentionally unpopulated seam for Feature C. Second hero CTA points at /totdgallery (literal route match today) -- will need repointing once Story 00029's /galleries hub lands, flagged on that Story. 44/44 scoped, 440/440 full suite (frontend-engineer ran full suite since it touched the shared stylesheet, per standing exception), build clean. ~95K tokens. No real-browser responsive check possible in an unmounted-component worktree -- compiled-CSS assertions only (no fixed widths, clamp() type, flex collapse at <=768) -- flagged for a manual eyeball once Task 00032 mounts these on `/`."

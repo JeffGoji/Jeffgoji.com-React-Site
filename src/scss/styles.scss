@@ -225,6 +225,301 @@
   background: var(--checker);
 }
 
+// The mockups' eyebrow label (assets/app.css:41-58) — the wide-tracked Space
+// Mono kicker that opens every section. Left unprefixed like `.checker-strip`:
+// the mockups treat it as a standalone utility and no Bootstrap class collides.
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--goji-red);
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: var(--goji-red);
+  }
+}
+
+// Telemetry chips (.spec-row / .chip) are ported further down alongside
+// .post/.card, where the other reading-panel primitives live.
+
+// The mockups' button block (assets/app.css:122-136). `.btn` itself is a live
+// Bootstrap component class, so — unlike the nav, which was renamed wholesale —
+// only the MODIFIERS are ported and they carry the mockup's `.btn` base with
+// them. Markup stays `class="btn btn--primary"` exactly as the mockup writes it:
+// Bootstrap's `.btn` supplies the reset and the focus ring, and these rules land
+// below the Bootstrap import so they win the visual properties on top of it.
+@mixin v2-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background var(--dur-fast),
+    border-color var(--dur-fast),
+    color var(--dur-fast);
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.btn--primary {
+  @include v2-button;
+
+  color: var(--color-on-accent);
+  background: var(--goji-red);
+
+  &:hover,
+  &:focus {
+    color: var(--color-on-accent);
+    background: var(--goji-red-bright);
+    box-shadow: var(--glow-red);
+  }
+}
+
+.btn--ghost {
+  @include v2-button;
+
+  color: var(--text-hi);
+  background: transparent;
+  border-color: var(--ink-400);
+
+  &:hover,
+  &:focus {
+    color: var(--color-on-accent);
+    border-color: var(--goji-red);
+  }
+}
+
+// Hero, ported from the mockups' .hero block (assets/app.css:246-292 and the
+// max-width:768 rules at :578-579). Task 00030.
+//
+// Two darkening layers stack over the photo, and both are load-bearing: the
+// `.media--editorial--hero` grade from _grade.scss tones the image itself, and
+// `.hero__scrim` lays the four-gradient wash that keeps the headline legible
+// over whichever of the five cars the rotation picked. Dropping either one
+// makes the brightest source (the wet-autocross MSM frame) illegible.
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: min(84vh, 760px);
+  overflow: hidden;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 125% at 50% 32%, transparent 44%, rgba(5, 5, 6, 0.55) 100%),
+    linear-gradient(180deg, rgba(5, 5, 6, 0.45) 0%, rgba(5, 5, 6, 0.1) 38%, rgba(5, 5, 6, 0.94) 100%),
+    linear-gradient(90deg, rgba(5, 5, 6, 0.8) 0%, rgba(5, 5, 6, 0) 62%),
+    radial-gradient(85% 65% at 6% 100%, rgba(58, 7, 5, 0.38), transparent 60%);
+}
+
+.hero__content {
+  position: relative;
+  width: 100%;
+  padding-block: var(--space-8);
+}
+
+// The mockup nests a `.container` inside `.hero__content`; that name is a live
+// Bootstrap component with different measure and gutter, so the measure is
+// carried block-locally here — the same trade `.site-nav__inner` and
+// `.site-footer__inner` already make.
+.hero__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.hero__title {
+  max-width: 16ch;
+  margin: 0;
+  font-size: var(--fs-hero);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--text-hi);
+
+  .accent {
+    color: var(--goji-red);
+  }
+}
+
+.hero__lead {
+  max-width: 52ch;
+  margin-top: var(--space-4);
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.hero__flag {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 6px;
+  background: var(--goji-red);
+}
+
+// The rotating hero's nameplate — names whichever car is on show. It sits above
+// the scrim and the flag, and is pointer-transparent so it never intercepts a
+// click meant for the CTAs underneath.
+.hero__nameplate {
+  position: absolute;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+  pointer-events: none;
+}
+
+.hero__nameplate-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+
+.hero__nameplate-name {
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--text-hi);
+  background: rgba(5, 5, 6, 0.42);
+  border: 1px solid rgba(241, 238, 233, 0.12);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(2px);
+
+  b {
+    color: var(--goji-red);
+    font-weight: 700;
+  }
+}
+
+// Driver intro, ported from home.html's second <section>. The mockup carries
+// this layout on style attributes rather than classes; it is class-borne here
+// for the same reason the footer's was.
+.driver-intro {
+  padding-block: var(--space-9);
+}
+
+.driver-intro__inner {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--space-8);
+  align-items: center;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.driver-intro__name {
+  font-size: var(--fs-h2);
+  text-transform: uppercase;
+}
+
+.driver-intro__bio {
+  max-width: 52ch;
+  margin-top: var(--space-4);
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+}
+
+.driver-intro__chips {
+  margin-top: var(--space-5);
+}
+
+.driver-intro__portrait {
+  overflow: hidden;
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+// The mockups' own breakpoints (assets/app.css:578-579 and :591-593), kept
+// verbatim. The two-column intro is not in the mockup's media block because the
+// mockup declares that grid inline; collapsing it here is what keeps 360 and 768
+// free of horizontal overflow.
+@media (max-width: 768px) {
+  .hero {
+    min-height: 72vh;
+  }
+
+  .driver-intro {
+    padding-block: var(--space-7);
+  }
+
+  .driver-intro__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__nameplate {
+    right: var(--space-4);
+    bottom: calc(var(--space-4) + 6px);
+  }
+
+  .hero__nameplate-label {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero__inner,
+  .driver-intro__inner {
+    padding-inline: var(--space-4);
+  }
+}
+
 // Site footer, ported from the mockups' .footer block (assets/app.css:356-361
 // and the max-width:768 block at :575). Task 00023.
 //
@@ -297,9 +592,472 @@
   }
 }
 
+// Videos section, ported from the mockups' .video block (assets/app.css:348-353)
+// and the section's own inline background/border (home.html:72). Task 00031.
+//
+// The inline declarations are class-borne here for the same reason the footer's
+// are: an inline style cannot be overridden by the cascade, and the mockups use
+// them only because they have no build step to put a class through.
+//
+// `.card__kicker` (assets/app.css:159) is a shared card primitive rather than a
+// video one. It lands here because the video body is the first surface to need
+// it; the garage cards need the same rule and should reuse this one.
+.section--videos {
+  background: var(--ink-900);
+  border-block: var(--hairline);
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-5);
+}
+
+.video {
+  background: var(--color-surface);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+// The frame is a <button> until the player mounts — see VideoCard — so this also
+// has to undo the chrome the user agent gives a button.
+.video__frame {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 0;
+  background: var(--ink-800);
+}
+
+.video__poster,
+.video__player {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+// Dimmed so the play button keeps its contrast against a bright frame grab.
+.video__poster {
+  object-fit: cover;
+  opacity: 0.5;
+}
+
+// Positioned so it stacks above the poster. The mockups leave this static, which
+// puts the absolutely positioned poster in front of it — survivable there only
+// because the poster is half transparent and the button reads through it.
+.video__play {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 64px;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--goji-red);
+  color: var(--color-on-accent);
+
+  &::after {
+    content: "";
+    margin-left: 4px;
+    border-top: 11px solid transparent;
+    border-bottom: 11px solid transparent;
+    border-left: 18px solid var(--color-on-accent);
+  }
+}
+
+// Net-new: the mockup's facade is inert, so it declares no interactive state.
+.video__frame:hover .video__play,
+.video__frame:focus-visible .video__play {
+  background: var(--goji-red-bright);
+}
+
+.video__body {
+  padding: var(--space-4) var(--space-5);
+}
+
+.card__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--goji-red);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.video__title {
+  margin: 0.35rem 0 0;
+  font-size: var(--fs-h4);
+}
+
+// Form controls, ported from the mockups' .label / .select pair
+// (assets/app.css:172-177). Bootstrap ships no `.select` or `.label` class, so
+// these names carry across without colliding.
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+.select {
+  background: var(--ink-600);
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  color: var(--text-hi);
+
+  &:focus {
+    outline: none;
+    border-color: var(--goji-red);
+    box-shadow: var(--glow-red);
+  }
+}
+
+// .eyebrow and .spec-row are already ported above (Tasks 00030/00038) --
+// this branch's copies were dropped as duplicates at merge time.
+
+// Consolidated galleries hub, ported from mockups/spec-00002/gallery.html and
+// the GALLERY block at assets/app.css:319-325. Task 00039.
+//
+// The mockup's page chrome — .container and .section-tight — is inlined here as
+// __inner rather than ported as global helpers: Bootstrap already owns
+// `.container` with its own breakpoint-stepped max-widths, so a mockup-faithful
+// `.container` would either fight it or silently inherit the wrong measure.
+.gallery-hub__head {
+  padding-block: var(--space-7);
+  border-bottom: var(--hairline);
+}
+
+.gallery-hub__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.gallery-hub__body {
+  padding-block: var(--space-7);
+}
+
+.gallery-hub__title {
+  font-size: var(--fs-h1);
+  text-transform: uppercase;
+}
+
+// The mockup carries this as .hero__lead (assets/app.css:267) reused off the
+// hero surface. Copied onto the hub's own element instead of borrowing another
+// block's name, which would tie this surface to the hero's future changes.
+.gallery-hub__lead {
+  max-width: 60ch;
+  margin-top: var(--space-4);
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+}
+
+.gallery-hub__chooser {
+  margin-top: var(--space-4);
+  align-items: center;
+}
+
+.gallery-hub__select {
+  max-width: 320px;
+}
+
+.gallery-hub__status {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-lo);
+}
+
+// auto-fill against a 180px floor is the whole responsive story for this grid —
+// the column count falls out of the measure at every width, which is why the
+// mockup declares no breakpoint for it.
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+// A <button> rather than the mockup's implied div: the thumb is the lightbox's
+// trigger (Task 00040), so it has to be focusable and keyboard-operable. That
+// brings Bootstrap's reboot button chrome with it, hence the explicit padding
+// reset and block display.
+.thumb {
+  position: relative;
+  display: block;
+  padding: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: var(--hairline);
+  border-radius: var(--radius);
+  background: var(--ink-800);
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  &:hover img {
+    transform: scale(1.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+  }
+}
+
+// z-index clears the editorial grade's own ::after (_grade.scss, z-index 1),
+// which otherwise paints over the badge — it comes later in painting order at
+// an equal index.
+.thumb__idx {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  z-index: 2;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(5, 5, 6, 0.6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-hi);
+}
+
+// Lightbox, ported from the mockups' gallery.html overlay and the LIGHTBOX
+// block at assets/app.css:328-337. Task 00040.
+//
+// The mockup's `.lightbox { display: none }` / `.lightbox.is-open` pair is not
+// ported: React mounts the overlay only while it is open, so a second, CSS-side
+// open state could only ever disagree with the first.
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(3, 3, 4, 0.94);
+}
+
+// The mockup sizes the stage with max-width alone. react-image-gallery lays its
+// slides out absolutely, so the stage has to carry a definite width or the
+// slider collapses to nothing.
+.lightbox__stage {
+  width: min(1100px, 92vw);
+  max-height: 78vh;
+}
+
+.lightbox__frame {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius);
+  line-height: 0;
+}
+
+// Out-specifies react-image-gallery's own
+// `.image-gallery-slide .image-gallery-image`, which crops to the slide box.
+.lightbox__stage .image-gallery-slide .image-gallery-image {
+  max-height: 78vh;
+  object-fit: contain;
+}
+
+.lightbox__cap {
+  margin-top: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-mid);
+}
+
+.lightbox__close {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+}
+
+.lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border: var(--hairline);
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.4);
+  font-size: 1.4rem;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--goji-red);
+  }
+}
+
+.lightbox__nav--prev {
+  left: var(--space-5);
+}
+
+.lightbox__nav--next {
+  right: var(--space-5);
+}
+
+// Build-log reading surface, ported from the mockups' "Blog list" block
+// (assets/app.css:302-317) plus the blog.html banner. Task 00034.
+//
+// Only the blog-owned names live here. `.section`, `.container`, `.eyebrow`,
+// `.section-head`, `.chip`, `.spec-row`, `.hero*` and the `.btn--ghost/--sm`
+// modifiers are cross-surface primitives that components/common/BlogList.jsx
+// also consumes; they belong to the shared base layer, not to this block, so
+// porting them here would fork them. `.post`/`.post__body`/`.post__entry`
+// were already ported by Task 00038 (see below) -- this branch's duplicate
+// copies were dropped at merge time, and its img/a additions to .post__entry
+// were folded into that earlier copy instead.
+.blog {
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.post__media img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.post__specs {
+  margin-bottom: var(--space-4);
+}
+
+.pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-4);
+  margin-block: var(--space-7);
+}
+
+.pager__count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-lo);
+}
+
+// The car-identity banner is the shared `.hero` at a shorter stop. blog.html
+// carries both of these on style attributes (:17 and :22); they are class-borne
+// here for the same reason the footer's were.
+.blog-hero {
+  min-height: 44vh;
+}
+
+.blog-hero__title {
+  font-size: var(--fs-h1);
+}
+
+.blog-hero__specs {
+  margin-top: var(--space-3);
+}
+
 // Bootstrap's spacing scale stops at 5 (3rem).
 .mt-6 {
   margin-top: 6rem;
+}
+
+// --- EDITORIAL READING SURFACE (.article scope) -----------------------------
+// .eyebrow, .section-head, .post/.post__media/.post__body/.post__specs/
+// .post__entry are already ported above (Tasks 00030/00034/00038) -- this
+// branch's duplicate copies were dropped at merge time, as pre-flagged by the
+// agent. The .article-scoped rules below are unique to this Task and kept.
+//
+// The mockups' `.container` and `.section` layout helpers are deliberately NOT
+// ported: `.container` is a live Bootstrap component class and its rule would
+// collide, exactly as `.nav` did for the navbar. The measure and block rhythm
+// they supply are carried on `.article` below instead.
+
+// Long-form article page shell. Stands in for the mockups'
+// `.section > .container > .blog` chain on a surface that has no hero: the
+// measure comes from `.blog` (assets/app.css:302) and the block rhythm from
+// `.section` (:36), collapsed onto one article-scoped name so neither has to
+// borrow Bootstrap's `.container`.
+.article {
+  max-width: 760px;
+  margin-inline: auto;
+  padding-block: var(--space-9);
+  padding-inline: var(--space-5);
+}
+
+// The blog list crops every post photo to a uniform 16/9 band because the posts
+// are a rhythmic feed. An article's photos are the content — one of these is a
+// 4.3:1 panorama — so a shared crop would amputate them, and the ratio is
+// released back to the file's own here. The intrinsic width/height attributes on
+// each <img> still reserve the box, so nothing reflows on load.
+.article .post__media img {
+  aspect-ratio: auto;
+}
+
+// `pre-line` exists for the blog's markdown, whose newlines are significant.
+// This article's prose is JSX with explicit <br /> and <p>, and JSX's own
+// whitespace collapsing leaves indentation in the text nodes that `pre-line`
+// would repaint as blank lines.
+.article .post__entry {
+  white-space: normal;
+  max-width: none;
+}
+
+.article h1 {
+  font-size: var(--fs-h1);
+  text-transform: uppercase;
+}
+
+.article__lede {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+}
+
+// Bulleted passages sit inside .post__entry and inherit its reading size; only
+// the marker gutter and the space between items need declaring.
+.article .post__entry ul {
+  padding-left: var(--space-5);
+  margin: 0;
+}
+
+.article .post__entry li + li {
+  margin-top: var(--space-4);
+}
+
+.article .post__entry li::marker {
+  color: var(--goji-red);
+}
+
+// The panel's inner padding is most of the 360px viewport once the page gutter
+// is taken out, so it steps down with the viewport rather than holding 2rem.
+//
+// The exclusive boundary matches the navbar's `991.98px` rather than the
+// footer's mockup-verbatim `768px`: this surface has no mockup to be faithful
+// to, and sharing the footer's exact query text would make the existing
+// "collapses at 768px" assertion — which reads the LAST such block in the
+// compiled sheet — start reading this block instead.
+@media (max-width: 767.98px) {
+  .article {
+    padding-block: var(--space-7);
+    padding-inline: var(--space-4);
+  }
+
+  .article .post__body {
+    padding: var(--space-5) var(--space-4);
+  }
 }
 
 // --- MIGRATED FROM src/assets/css/style.css (Task 00018) ---------------------
@@ -329,22 +1087,495 @@ a {
   justify-content: center;
 }
 
-// The photo layer this wash sat over (na/12370846_…_o.jpg) was deleted from the
-// tree at some point, so the browser has been dropping it as a 404 and painting
-// the gradient alone — which is what this reproduces. Vite resolves url() at
-// build time, so carrying the dead reference across would fail the build rather
-// than fail silently. Story 00010 picks the V2 hero image for this surface.
-.na-background {
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+// .img-hover (the legacy garage card affordance) and the NA6 page wash both
+// stood here. The NA6 wash was retired by Task 00038 and .img-hover is
+// retired by this Task, superseded by the mockup's own card treatment below
+// -- neither survives the merge.
+
+// --- V2 EDITORIAL PRIMITIVES + THE GARAGE HUB (Task 00033) -------------------
+// Ported from the mockups' assets/app.css: the layout helpers (:36-57), the
+// button block (:122-136), the card block (:150-168) and the garage grid
+// (:296), plus the styles garage.html carries on style attributes.
+//
+// The button base lands on the MODIFIERS rather than on a bare `.btn`. `.btn`
+// is a live Bootstrap component class that every react-bootstrap <Button> in
+// the blogs and the gallery switcher still carries, and a bare-`.btn` port
+// would restyle all of them from under those surfaces mid-migration. The markup
+// still reads `btn btn--primary btn--sm` exactly as the mockup writes it, so
+// the port becomes verbatim again the moment those Buttons are retired. `.card`
+// needs no such care -- the only pre-V2 `.card` in the tree was the garage card
+// this Task replaces.
+
+.section {
+  padding-block: var(--space-9);
 }
 
-// Garage card affordance. The hand-rolled red box-shadow became the palette's
-// own glow token; Story 00010 replaces this with the mockup's card treatment.
-.img-hover:hover {
-  box-shadow: var(--glow-red);
-  cursor: pointer;
+.section-tight {
+  padding-block: var(--space-7);
+}
+
+// .eyebrow and .btn--primary/.btn--ghost are already ported above (Task
+// 00030's mixin-based version, which also covers :focus) -- this branch's
+// duplicate copies were dropped at merge time.
+
+.btn--sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--fs-xs);
+}
+
+// The mockup inlines this on the retired car's chip (garage.html:49). It is a
+// <span>, not a disabled control, so `.btn:disabled` cannot carry it.
+.btn.is-retired {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card {
+  background: var(--color-surface);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    transform var(--dur) var(--ease-out),
+    border-color var(--dur);
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: var(--ink-400);
+  }
+}
+
+.card__media {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  position: relative;
+  background: var(--ink-800);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+}
+
+.card:hover .card__media img {
+  transform: scale(1.05);
+}
+
+.card__body {
+  padding: var(--space-5);
+}
+
+// .card__kicker already ported above (Task 00031's video block) -- identical,
+// dropped as a duplicate here.
+
+.card__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--color-heading);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-mega);
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+  margin: var(--space-2) 0;
+
+  small {
+    display: block;
+    font-size: var(--fs-sm);
+    color: var(--text-lo);
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-top: 4px;
+  }
+}
+
+.card__text {
+  color: var(--text-mid);
+  font-size: var(--fs-sm);
+}
+
+.numtag {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-style: italic;
+  font-size: var(--fs-h2);
+  color: var(--ink-500);
+  line-height: 1;
+}
+
+// garage.html:42 inlines the corner placement; it is class-borne here. The tag
+// sits above the editorial grade because that grade paints from ::after on the
+// media container, which is this element's parent rather than its sibling.
+.card__numtag {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 2;
+}
+
+// The preview variant makes the whole card the link (home.html:122). An <a> is
+// inline by default, which would collapse the card's box.
+.car-card--preview {
+  display: block;
+  color: inherit;
+}
+
+.garage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+// The hub's own chrome. The measure is repeated per block the way .site-nav and
+// .site-footer carry theirs, rather than through a ported `.container`:
+// Bootstrap owns that class name and its breakpoint ladder is still live on
+// every un-migrated surface.
+.garage__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+// garage.html:16 inlines the wash and the rule under the masthead.
+.garage__head {
+  border-bottom: var(--hairline);
+  background: radial-gradient(1000px 380px at 80% -20%, var(--goji-red-ink), transparent 60%);
+}
+
+.garage__title {
+  font-size: var(--fs-h1);
+  text-transform: uppercase;
+}
+
+.garage__lead {
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+  max-width: 60ch;
+  margin-top: var(--space-4);
+}
+
+// The mockups' own section breakpoint (assets/app.css:582).
+@media (max-width: 768px) {
+  .section {
+    padding-block: var(--space-7);
+  }
+}
+
+// The mockups tighten the container gutter here (assets/app.css:586); the hub
+// measure follows.
+@media (max-width: 360px) {
+  .garage__inner {
+    padding-inline: var(--space-4);
+  }
+}
+
+// --- V2 COMPONENT LANGUAGE --------------------------------------------------
+// Ported from the mockups' component layer (assets/app.css) by Task 00038, the
+// first surface re-skin that needed it. Only the blocks the NA6 spec page uses
+// are here; the sibling re-skins add the rest of each block (.card__media,
+// .post__specs, .pager, …) as their own surfaces call for them.
+//
+// `.card` shares its name with a live Bootstrap component — the same collision
+// that pushed the nav port onto `.site-nav`. It is deliberately NOT renamed:
+// the mockups treat `.card` as the design system's card and every sibling
+// surface ports against that name. Sitting below the Bootstrap import, the
+// declarations here win the properties they share with Bootstrap's rule; what
+// survives underneath (the flex column, min-width: 0) is what the block wants.
+//
+// The mockups set h1–h4 in the display face app-wide (assets/app.css:24-30).
+// That base rule is Story 00010's to port, so the headings below carry it at
+// block scope rather than pre-empting it globally.
+
+// .section already ported above (Task 00033's block, which also carries the
+// 768px responsive override) -- dropped as a duplicate here.
+
+.section-head {
+  margin-bottom: var(--space-7);
+
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: var(--color-heading);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-mega);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+  }
+
+  h2 {
+    font-size: var(--fs-h2);
+  }
+
+  .sub {
+    color: var(--color-muted);
+    max-width: 60ch;
+  }
+}
+
+// Long-form reading panel — one step off the canvas, roomy leading, and a
+// measure that keeps a paragraph from running the full container width.
+.post {
+  background: var(--color-reading);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-6);
+}
+
+.post__body {
+  padding: var(--space-6);
+}
+
+// The measure and the relaxed leading are what make a long build write-up
+// readable; `pre-line` is what keeps the single newlines the JSON entries are
+// authored with, which markdown would otherwise collapse. The nested img/a
+// rules are Task 00034's: `display: block` is the one addition to the
+// mockup's rule -- an inline image ignores `margin: auto`, and the markdown
+// renderer emits a bare <img> inside its paragraph rather than a centring
+// wrapper (see components/common/BlogList.jsx).
+.post__entry {
+  color: var(--color-text);
+  white-space: pre-line;
+  font-size: var(--fs-read);
+  line-height: var(--lh-read);
+  max-width: 68ch;
+
+  img {
+    display: block;
+    border-radius: var(--radius);
+    margin: var(--space-5) auto;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+// .card/.card:hover/.card__body/.card__title already ported above (Task
+// 00033's block, richer -- includes .card__media and the hover image-scale
+// microinteraction; its .card__title now also carries this block's
+// font-family/weight/color/line-height/letter-spacing, merged in at merge
+// time) -- dropped as duplicates here.
+
+// Telemetry chips — the spec-sheet voice (Space Mono) the whole site reads data
+// in. `.spec-row` wraps them, which is what keeps a long mod name from forcing
+// horizontal overflow on a 360px viewport.
+.spec-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-mid);
+  background: var(--ink-800);
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+}
+
+.chip b {
+  color: var(--text-hi);
+  font-weight: 700;
+}
+
+// .eyebrow already ported above (Task 00030's block) and .section-head above
+// (Task 00038's block, now carrying this branch's .sub addition too) --
+// dropped as duplicates here.
+
+// --- SUSPENSION HUB (Task 00037) --------------------------------------------
+// No mockup covers this surface, so it extends the language the mockups already
+// establish: a section head over grouped disclosure panels whose bodies are the
+// same elevated reading panel .post uses for long-form prose.
+
+.suspension {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-5) var(--space-9);
+}
+
+.suspension__group {
+  margin-bottom: var(--space-7);
+}
+
+// The mockups' "section header with editorial rule" motif, carried onto the
+// group label so the four groups read as the page's spine.
+.suspension__group-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-heading);
+  border-bottom: var(--accent-bar);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+// React-Bootstrap's Accordion, re-pointed at the token layer through Bootstrap's
+// own --bs-accordion-* slots rather than by overriding its rules — the same seam
+// .site-nav uses for the navbar. Matched on .accordion.spec-accordion so the
+// override outranks Bootstrap's .accordion defaults on specificity rather than
+// on source order alone.
+//
+// The two chevrons are literals because Bootstrap ships them as data URIs, which
+// cannot reference a custom property; they track --text-lo and --goji-red and
+// drift silently if either moves. Same trade as the navbar toggler glyph above.
+.accordion.spec-accordion {
+  --bs-accordion-color: var(--color-text);
+  --bs-accordion-bg: var(--color-reading);
+  --bs-accordion-border-color: var(--color-border);
+  --bs-accordion-border-radius: var(--radius-lg);
+  --bs-accordion-inner-border-radius: var(--radius-lg);
+  --bs-accordion-btn-color: var(--color-heading);
+  --bs-accordion-btn-bg: var(--ink-800);
+  --bs-accordion-btn-padding-x: var(--space-5);
+  --bs-accordion-btn-padding-y: var(--space-4);
+  --bs-accordion-btn-focus-border-color: var(--goji-red);
+  --bs-accordion-btn-focus-box-shadow: var(--glow-red);
+  --bs-accordion-active-color: var(--color-heading);
+  --bs-accordion-active-bg: var(--ink-800);
+  --bs-accordion-body-padding-x: var(--space-6);
+  --bs-accordion-body-padding-y: var(--space-6);
+  --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%239C978D'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23E10600'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+
+  box-shadow: var(--shadow-card);
+}
+
+.spec-accordion .accordion-button {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h4);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+// The open panel's header carries the brand rule, so the expanded group is
+// findable at a glance in a page that is mostly collapsed bars.
+.spec-accordion .accordion-button:not(.collapsed) {
+  box-shadow: inset 0 -3px 0 var(--goji-red);
+}
+
+.spec-accordion .accordion-body {
+  font-size: var(--fs-read);
+  line-height: var(--lh-read);
+  overflow-wrap: break-word;
+}
+
+.spec-accordion .accordion-body h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+  color: var(--color-heading);
+  margin-top: var(--space-6);
+}
+
+.spec-accordion .accordion-body h5 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  color: var(--color-heading);
+  margin-top: var(--space-5);
+}
+
+// Formula runs (wheel rate, bounce frequency). Bootstrap's default code colour
+// is its own pink, which is the last unthemed slot this surface reaches.
+.spec-accordion code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--goji-red-bright);
+  background: var(--ink-800);
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+}
+
+// The spec tables. --bs-table-color otherwise resolves to Bootstrap's light-mode
+// emphasis colour (near-black on the charcoal panel), and --bs-table-bg to the
+// body canvas, which would paint a flat rectangle over the elevated panel.
+.spec-accordion .table {
+  --bs-table-color: var(--color-text);
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--color-border);
+  --bs-table-striped-color: var(--color-text);
+  --bs-table-hover-color: var(--color-heading);
+  --bs-table-hover-bg: rgba(225, 6, 0, 0.06);
+
+  font-size: var(--fs-sm);
+}
+
+.spec-accordion .table th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+// The swaybar spec table is six columns wide and cannot fit a 360px viewport,
+// so both tables ship inside Bootstrap's .table-responsive wrapper — it scrolls
+// the table in place rather than letting it push the page into overflow.
+.spec-accordion .table-responsive {
+  margin-block: var(--space-5);
+}
+
+@media (max-width: 768px) {
+  .suspension {
+    padding-inline: var(--space-4);
+  }
+
+  .accordion.spec-accordion {
+    --bs-accordion-btn-padding-x: var(--space-4);
+    --bs-accordion-body-padding-x: var(--space-4);
+  }
+}
+
+// Home's garage preview, ported from home.html's GARAGE PREVIEW section
+// (home.html:58-69). Task 00032.
+//
+// The measure is repeated on this block rather than taken from a ported
+// `.container`, the same trade `.garage__inner` and `.driver-intro__inner`
+// make: Bootstrap owns that class name and its breakpoint ladder is still live
+// on every un-migrated surface.
+.garage-preview__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+// home.html:60 inlines the head row so the "All builds" link can sit opposite
+// the heading. It is class-borne here for the same reason the rest of the
+// mockups' style attributes are: an inline style cannot be overridden by the
+// cascade, and the mockups use them only because they have no build step.
+//
+// `flex-wrap` is what keeps the row off a horizontal overflow at 360 — the
+// link drops under the heading rather than pushing the section wide.
+.garage-preview__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+// The mockups tighten the container gutter here (assets/app.css:586); the
+// preview measure follows its siblings.
+@media (max-width: 360px) {
+  .garage-preview__inner {
+    padding-inline: var(--space-4);
+  }
 }

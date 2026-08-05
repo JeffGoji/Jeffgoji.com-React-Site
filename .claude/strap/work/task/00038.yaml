@@ -1,19 +1,19 @@
 id: "00038"
 type: task
 title: "Re-skin the NaMiata spec page"
-state: new
+state: resolved
 parent: "00028"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 3
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:25:00Z
+updated_at: 2026-08-04T14:15:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T14:15:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   `/na-miata` renders V2, content intact, responsive at 4 breakpoints.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T14:15:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (283ed13). Rebuilt NaMiata.jsx onto .post/.card/.chip/.spec-row; .na-background removed from markup + styles.scss; fixed a pre-existing invalid-HTML bug (3x <h4> directly inside one <ul>) as a side effect. 97/97 scoped+App tests, build clean. ~78K tokens. No real-browser responsive check was possible (no Playwright/Puppeteer in the worktree) -- static verification only (no fixed widths, flex-wrap, clamp-based type, ch-capped reading width); flagging for a manual eyeball at 360/768/1024/1440 before this Feature closes. FLAGGED (Feature-A gap, not this task's scope): `_theme.scss` never sets $font-family-base/$headings-font-family, so headings still resolve to Bootstrap's system font stack despite Inter/Archivo being self-hosted and loaded -- the mockups' app-wide h1-h4 rule was never ported in Story 00010. Also body{overflow-x:hidden} safety net from the mockup base layer isn't ported either. FLAGGED (integration-order risk): task list shows 4-5 parallel Wave-1 branches (00033, 00034, 00036, 00037, 00039) all porting overlapping base-layer CSS (.section-head/.eyebrow/.card/.post) into the same tail region of styles.scss -- expect real merge conflicts, resolve by keeping one canonical copy per selector rather than accepting duplicates."

@@ -5,8 +5,7 @@
  * uses.
  *
  * Covers Task 00024 / AC-018: /totdtrip was a second, unlinked registration of
- * the same gallery component /totdgallery serves. Removing it must not take the
- * shared import — or the surviving route — with it.
+ * the gallery /totdgallery served. It must not come back.
  *
  * Covers Task 00025: the route-parity guard at the Feature A/B seam. Task 00024
  * asserts the route table; this asserts the composed shell — what the assembled
@@ -16,6 +15,14 @@
  * Covers Task 00023: the footer's composition into the shell, which is a
  * separate concern from the footer's own contract and lives here for the same
  * reason — the defect was in App.jsx, not in the component.
+ *
+ * Covers Task 00041: every pre-V2 gallery URL now redirects into the one
+ * /galleries hub, and the per-gallery components behind those URLs are retired.
+ *
+ * Covers Task 00035: the blog routes now render a <main> of their own, from
+ * inside <BlogList>. Whether that lands as one landmark or two is a property of
+ * the assembled shell, so it is asserted here as well as in the route's own
+ * test.
  */
 
 import { readFileSync } from 'node:fs';
@@ -24,22 +31,16 @@ import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
-/**
- * The real gallery fetches a build-time manifest and mounts
- * react-image-gallery; neither is what this file is asserting about. The stub
- * keeps the assertion on route resolution.
- */
-vi.mock('./components/Gallery/ND/TailOfTheDragon', () => ({
-    default: () => <div data-testid="totd-gallery" />,
-}));
+import { GALLERY_SETS } from './components/common/gallerySets';
 
 /**
- * Unrelated to this route, but unavoidable: the module is reached through the
- * route table's nd-hillcountry entry and calls import.meta.globEager, which
- * Vitest's SSR transform does not implement. Any test that renders App needs
- * this stub until that call site moves to import.meta.glob({eager:true}).
+ * The real hub fetches a build-time manifest per set; that is
+ * GalleryHub.test.jsx's business. The stub keeps these assertions on route
+ * resolution and off the network.
  */
-vi.mock('./components/Gallery/ND/HillCountry/images', () => ({ default: [] }));
+vi.mock('./components/common/GalleryHub', () => ({
+    default: () => <div data-testid="gallery-hub" />,
+}));
 
 const { default: App } = await import('./App');
 
@@ -60,27 +61,58 @@ const renderAt = (path) => {
 
 afterEach(cleanup);
 
-describe('the Tail of the Dragon gallery has exactly one route', () => {
-    it('still resolves /totdgallery to the gallery', () => {
-        renderAt('/totdgallery');
+/**
+ * Every URL a visitor could once reach a gallery at. Derived from the set
+ * config rather than re-listed so this guard and the route table cannot drift;
+ * `/gallery` is added by hand because the switcher landing page was not a set.
+ */
+const LEGACY_GALLERY_PATHS = [...GALLERY_SETS.map((set) => set.legacyPath), '/gallery'];
 
-        expect(screen.getByTestId('totd-gallery')).toBeDefined();
+describe('the legacy gallery URLs redirect into the hub (Task 00041)', () => {
+    it('resolves /galleries to the hub', () => {
+        renderAt('/galleries');
+
+        expect(screen.getByTestId('gallery-hub')).toBeDefined();
     });
 
-    it('no longer resolves /totdtrip to anything', () => {
+    it.each(LEGACY_GALLERY_PATHS)('lands %s on the hub', (path) => {
+        renderAt(path);
+
+        expect(screen.getByTestId('gallery-hub')).toBeDefined();
+        expect(window.location.pathname).toBe('/galleries');
+    });
+
+    /**
+     * `replace` rather than `push`: a redirect that stacks a history entry
+     * traps Back on the URL that immediately forwards again.
+     */
+    it.each(LEGACY_GALLERY_PATHS)('leaves %s off the history stack', (path) => {
+        const before = window.history.length;
+
+        renderAt(path);
+
+        expect(window.history.length).toBe(before + 1);
+    });
+
+    /**
+     * The redirects are the whole reason the old components can go; a
+     * reintroduced import is the signal that one of them came back.
+     */
+    it('imports no per-gallery component', () => {
+        expect(APP_SOURCE).not.toMatch(/from '\.\/components\/Gallery/);
+    });
+});
+
+describe('the removed totdtrip route stays removed (Task 00024)', () => {
+    it('resolves /totdtrip to nothing', () => {
         renderAt('/totdtrip');
 
-        expect(screen.queryByTestId('totd-gallery')).toBeNull();
+        expect(screen.queryByTestId('gallery-hub')).toBeNull();
+        expect(window.location.pathname).toBe('/totdtrip');
     });
 
     it('registers no totdtrip path', () => {
         expect(APP_SOURCE).not.toContain('totdtrip');
-    });
-
-    it('retains the gallery import the surviving route depends on', () => {
-        expect(APP_SOURCE).toContain(
-            "import TailOfTheDragonGallery from './components/Gallery/ND/TailOfTheDragon'"
-        );
     });
 });
 
@@ -221,4 +253,20 @@ describe('the shell mounts the footer on every route (Task 00023)', () => {
         expect(footer.parentElement.contains(banner)).toBe(true);
         expect(footer.parentElement.lastElementChild).toBe(footer);
     });
+});
+
+/**
+ * <BlogList> brings its own <main>, so a per-car route that also wrapped one
+ * would give the shell two competing landmarks — invisible on screen and only
+ * catchable from an assembled render.
+ */
+describe('each blog route contributes exactly one main landmark (Task 00035)', () => {
+    it.each(['/na-blog', '/msm-blog', '/nd-blog', '/c8-blog'])(
+        'mounts a single main on %s',
+        (route) => {
+            renderAt(route);
+
+            expect(screen.getAllByRole('main')).toHaveLength(1);
+        }
+    );
 });

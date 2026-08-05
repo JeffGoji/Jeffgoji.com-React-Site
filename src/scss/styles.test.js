@@ -167,14 +167,34 @@ describe('the retired pre-V2 palette is gone from styles.scss', () => {
 describe('the legacy stylesheet is absorbed rather than layered (Task 00018)', () => {
     it.each([
         ['.splash-background', 'the home hero wash'],
-        ['.na-background', 'the NA Miata page wash'],
-        ['.img-hover:hover', 'the garage card affordance'],
     ])('carries %s forward for %s', (selector) => {
         expect(emitted).toContain(selector);
     });
 
-    it('drives the card hover glow from the palette instead of a raw red', () => {
-        expect(declarationsOf('.img-hover:hover').get('box-shadow')).toBe('var(--glow-red)');
+    /**
+     * `.na-background` was migrated forward by Task 00018 and retired by Task
+     * 00038: the photo it washed had already been deleted from the tree, so it
+     * only ever painted a flat 60% veil, and the V2 re-skin of that surface has
+     * no fixed-attachment wash at all.
+     */
+    it('no longer carries .na-background, retired with the NA6 re-skin', () => {
+        expect(source).not.toContain('.na-background');
+        expect(emitted).not.toContain('.na-background');
+    });
+
+    it('keeps background-attachment: fixed out of the stylesheet entirely', () => {
+        expect(emitted).not.toContain('background-attachment: fixed');
+    });
+
+    /**
+     * `.img-hover` was the legacy garage card affordance, kept alive only until
+     * the mockup's own card treatment landed. Task 00033 ported that treatment
+     * and deleted the one element that carried the class, so the rule goes with
+     * it rather than lingering as dead CSS.
+     */
+    it('retires the legacy .img-hover affordance the ported card supersedes', () => {
+        expect(emitted).not.toContain('.img-hover');
+        expect(declarationsOf('.card:hover').get('transform')).toBe('translateY(-4px)');
     });
 
     it('strips link underlines app-wide, as every mockup surface does', () => {

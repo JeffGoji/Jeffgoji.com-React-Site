@@ -153,9 +153,16 @@ describe('the three-column shell is ported from the mockup', () => {
     it('collapses to a single column at 768px and below', () => {
         expect(css).toMatch(/@media \(max-width: 768px\)/);
 
-        const collapsed = css.split('@media (max-width: 768px)').pop();
+        // Multiple Feature B surfaces each carry their own 768px block, so the
+        // LAST one in the file is not necessarily this one -- search every
+        // block for the one that mentions .site-footer__inner instead of
+        // assuming position.
+        const collapsed = css
+            .split('@media (max-width: 768px)')
+            .slice(1)
+            .find((segment) => segment.includes('.site-footer__inner'));
 
-        expect(collapsed).toContain('.site-footer__inner');
+        expect(collapsed, 'no 768px block mentions .site-footer__inner').toBeDefined();
         expect(collapsed).toContain('grid-template-columns: 1fr');
     });
 
