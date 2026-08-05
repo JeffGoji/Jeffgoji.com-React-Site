@@ -29,3 +29,9 @@ public/gallery/
 
 # Generated article image derivatives (scripts/build-article-images.mjs)
 public/articles/
+
+# Generated hero renditions (scripts/build-heroes.mjs)
+public/hero/
+
+# Generated social-unfurl card (scripts/build-og-image.mjs)
+public/og/

@@ -1,19 +1,19 @@
 id: "00057"
 type: task
 title: "Build shared ResponsiveImage primitive"
-state: new
+state: resolved
 parent: "00045"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 4
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:45:00Z
+updated_at: 2026-08-05T04:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T04:00:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   Component + test authored; test asserts srcset built from widths, `sizes` passthrough, `loading` defaults lazy / honors eager, alt required; matches the manifest field shape.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T04:00:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00005-image-pipeline-phase3 (5986bec), clean merge (2 new files only). 17/17 scoped + 892/892 full suite (component isn't consumed yet, ran full suite as a sanity check anyway), build clean. ~62K tokens. Final interface: `<ResponsiveImage src srcSet sizes alt loading={'lazy'|'eager'} {...rest}/>` plus a separately-exported pure `buildSrcSet(candidates)`. Deliberately manifest-agnostic -- `srcSet` accepts EITHER a pre-built string (hero's case, since its ladder is truncated per-car to the source's native width and can't be derived from a constant) OR a `{width,url}[]` array (gallery/article's case) -- one polymorphic prop, no mode flag, so the component never hardcodes THUMB_W/DISPLAY_W or any other pipeline constant that could desync from it. Two contract violations throw (not degrade, since this repo has neither TypeScript nor prop-types): missing `alt` (alt=\"\" is the accepted decorative-image marker, a different statement from omitting it), and candidates present with no `sizes` (no safe default exists, sizes describes a layout box the component can't see). REJECTED, deliberately, a 'manifest-item-shaped object' third mode floated in the original brief -- would have hardcoded gallery field names against the brief's own 'not hardcoded to one manifest shape' requirement; a 4-line adapter literal at each of the 3 downstream call sites covers it instead. FLAGGED for whoever dispatches 00058/00059/00060: article derivatives (build-article-images.mjs) emit NO manifest at all, just flat files with over-width rungs silently dropped -- GoodbyeC8.jsx already carries its own intrinsic-width table (`MEDIA`) to cope, port that pattern rather than re-deriving. Also flagged, not this Task's scope: gallery manifests give only 2 usable rungs (320/1600, ~5x gap, nothing between) -- a 960w rung in build-gallery.mjs would be the highest-value follow-up if image-byte budget matters further."

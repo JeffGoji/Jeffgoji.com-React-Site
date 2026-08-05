@@ -1,11 +1,11 @@
 id: "00059"
 type: task
 title: "Apply ResponsiveImage to GoodbyeC8 article + hero"
-state: new
+state: resolved
 parent: "00045"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00057"
@@ -13,9 +13,9 @@ links:
 original_estimate: 4
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:45:00Z
+updated_at: 2026-08-05T04:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T04:45:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   Article + hero ship webp srcset; hero eager, below-fold lazy. AC-010.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T04:45:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00005-image-pipeline-phase3 (a80daba), clean merge, no overlap with 00058/00060. 908/908 full suite, build clean 24.25s; dev-lead independently verified the hero webp path is inlined into the built JS bundle (grep hit) and 14+1 hero assets landed in dist/hero/. ~92K tokens. GoodbyeC8: ported the EXISTING intrinsic-width-aware srcset logic (DERIVATIVE_WIDTHS/MEDIA/the <=width filter) onto ResponsiveImage rather than rewriting it -- only srcSetFor's return type changed (string join -> candidate array). Preserved the lead photo's eager/decoding=sync/fetchpriority=high coupling explicitly through the rest spread (ResponsiveImage does NOT auto-couple these, confirmed in Task 00057's own report) -- added a dedicated decoding test since it's the prop most likely to get silently dropped by a future edit that only checks loading. KEY DESIGN DECISION for the hero: public/hero/ is fully gitignored, so a plain `import` of manifest.json would hard-fail on a fresh clone/test run, and a runtime fetch (GalleryHub's pattern) was rejected as wrong for the LCP element specifically -- would make the image ladder wait on a round trip. Used `import.meta.glob('...manifest.json', {eager:true, import:'default'})` instead: build-time resolution, zero extra requests, degrades to {} (matching the hero's existing no-renditions graceful-degradation path) when the file is absent. Verified both directions (renamed the manifest away, re-ran the suite, still green). Extracted a pure `withRenditions(shots, ladders)` in heroes.js so the wiring is unit-testable without depending on a generated file. Added a key-parity guard between heroes.js and build-heroes.mjs's HEROES export (a mismatch would silently produce renditions no hero entry could reach -- nothing enforced this before). Untouched as instructed: the random-pick mechanism, nightHero, the error-fallback behavior -- all pre-existing rotation/stability tests pass unmodified. FLAGGED for memory: `import.meta.glob({eager:true})` against a gitignored public/ manifest is now the established pattern for build-time-only manifest consumption above the fold; GalleryHub's runtime-fetch pattern is the wrong model for anything LCP-critical."

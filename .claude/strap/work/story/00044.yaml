@@ -1,9 +1,9 @@
 id: "00044"
 type: story
 title: "Image-pipeline overhaul: consolidate galleries onto sharp->webp + manifests (Phase 3)"
-state: new
+state: active
 parent: "00005"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:story]
@@ -12,7 +12,7 @@ links:
     type: predecessor
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:45:00Z
+updated_at: 2026-08-05T05:15:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -48,3 +48,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:45:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00005 (P4 build-side, devops-lead). Tasks 00053-00056."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-05T03:45:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> resolved. All 4 Tasks (00053 generalize pipeline, 00054 per-image manifest schema, 00055 retire dead patterns, 00056 hero+NC re-encode) resolved and merged into feature/00005-image-pipeline-phase3. AC-009 satisfied: all 6 gallery slugs now build through one pipeline (was 3 wiring patterns, now exactly one), verified slug-parity against common/gallerySets.js via a standing test. AC-006/007/008 (byte reduction vs C1 baseline): NC sets measured -91.8%/-95.9%, nd-totd2025 -92.7%, hero phone-width -95.3% -- all well past the >=50% bar; LCP/Lighthouse re-measurement not done (no browser tool available to any dispatched agent this Story, same standing gap as Feature B's responsive audit) -- flagging as an open verification item, not claiming it met. Two real defects caught and fixed, not just built around: (1) Task 00053 found a duplicate-thumbnail hazard (thumb/ subdirs of legacy low-res images that the recursive glob would have shipped alongside every real frame) and fixed it with a scoped ignore list; (2) Task 00055 found ~229MB of TRULY DUPLICATE deploy weight (Vite double-emitting full-size originals the static-import pattern no longer needed) and removed it, independently verified by dev-lead via du -sh on the actual built dist/. ONE UNRESOLVED BLOCKER-GRADE FINDING CARRIED TO STORY 00045: dist/gallery/*/original/ is 881MB (92% of dist/gallery/, ~80% of the full 1.1GB dist/) -- every manifest's `full` field points at an untouched full-resolution original and the lightbox can serve one on click. This needs an explicit AC when Story 00045 is scoped/dispatched, not an assumption that its srcset work implicitly covers it. Also carried forward, not this Story's to fix: a misplaced 5th dead gallery consumer (src/assets/images/nb/HillCountry/index.jsx, already broken, needs an explicit owner call) and src/entry-ssr.jsx's pre-existing dangling Gallery imports (tracked Task-00047 follow-up)."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-05T05:15:00Z
+    body: "[STRAP/agent:dev-lead] State: resolved -> active. Reopened for new post-close scope: CPO confirmed the 881MB dist/gallery/*/original/ finding from c2 above (also carried through Feature 00005's own close, comment c6) needs to be addressed, and wants full resolution KEPT (these serve as download/wallpaper images, not just lightbox display) rather than downscaled. New Task 00074 filed (devops-lead, build-side, matches this Story's existing domain split) to re-encode the `original` rendition in scripts/build-gallery.mjs via mozjpeg at quality ~85 with no resize -- CPO-validated approach, dev-lead spot-tested 3 real source files first (56-61% size reduction, 0 dimension change). Allocated into current Sprint 2026.08.A per the established CPO-directed capacity-override pattern."

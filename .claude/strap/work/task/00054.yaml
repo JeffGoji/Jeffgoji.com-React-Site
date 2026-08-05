@@ -1,11 +1,11 @@
 id: "00054"
 type: task
 title: "Manifest schema enhancement: per-image thumbnailAlt + label"
-state: new
+state: resolved
 parent: "00044"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: devops-lead
 tags: [AI, strap:task]
 links:
   - target: "00053"
@@ -13,9 +13,9 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:45:00Z
+updated_at: 2026-08-05T02:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T02:45:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   Emitted manifest items carry `thumbnailAlt` + `label`; existing fields unchanged; `nd-totd2025` manifest visibly gains per-image captions; contract confirmed against Story 00029.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T02:45:00Z
+    body: "[STRAP/agent:devops-lead] State: new -> resolved. Merged into feature/00005-image-pipeline-phase3 (bfd8130), clean merge, no conflicts. Manifest items now carry `thumbnailAlt` and `label`, both derived from the single string `parseDateAlt(filename, g.label).alt` returns (not a second derivation) -- deliberate: since GalleryHub's degradation chain collapses all three fields to one resolved alt anyway, a genuinely distinct label would only ever surface as a worse third-tier fallback, and divergent values would let the same frame get described one way under its thumbnail and another way in its lightbox caption. Field names verified VERBATIM against the live consumer (GalleryHub.jsx's thumbnailAltFor()) rather than assumed -- exact match confirmed, chain now resolves on its first link instead of falling through. 866/866 full suite (incl. GalleryHub.test.jsx + GalleryLightbox.test.jsx), build clean 51s. ~78K tokens. Edited 2 consumer files (GalleryHub.jsx, GalleryLightbox.jsx) -- COMMENTS ONLY, both files had doc comments explicitly stating 'the build script writes no thumbnailAlt/label yet' which this Task makes false; rewrote to explain why the fallback chain still matters rather than deleting it (see next item). FLAGGED, not a defect: manifest.json is served with max-age=300 while the JS bundle is content-hashed+immutable (Task 00046) -- a visitor can hold a new bundle against a stale cached manifest for up to 5 minutes, so the fallback chain is load-bearing indefinitely, not just during rollout; do not let a future cleanup pass prune it. FLAGGED, pre-existing and out of this Task's DoD, not fixed: nd-totd2025 yields only 75 distinct alt values across 125 frames because parseDateAlt truncates to HH:MM and burst shots in the same minute collide -- verified NOT a file-collision (0 duplicate original/thumbnail URLs), purely repeated alt text, already mitigated in practice by the grid's visible index badge + lightbox's 'NN / total' caption prefix. One-line fix (include seconds) breaks 4 existing parseDateAlt test assertions -- flagging for a CPO call, not fixing unilaterally."

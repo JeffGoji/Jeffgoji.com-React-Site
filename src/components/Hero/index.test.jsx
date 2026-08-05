@@ -23,8 +23,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import { HEROES } from '../../../scripts/build-heroes.mjs';
+
 import Hero from './index';
-import { heroes, nightHero } from './heroes';
+import { heroes, nightHero, withRenditions } from './heroes';
 
 /**
  * Resolved from the Vitest root rather than import.meta.url: under jsdom
@@ -218,48 +220,129 @@ describe('a frame that fails to load falls back to the night hero', () => {
     });
 });
 
-describe('responsive delivery degrades to what the pipeline has emitted', () => {
-    it('omits srcset and sizes while no shot carries renditions', () => {
-        vi.spyOn(Math, 'random').mockReturnValue(0.5);
-        renderHero();
+describe('the shot list picks up the ladders the pipeline built', () => {
+    /**
+     * Two entries verbatim from public/hero/manifest.json. `nc` is the
+     * load-bearing one: its source photo is 800px wide, so its ladder has two
+     * rungs where `na` has three. Fixtures rather than the real manifest because
+     * public/hero/ is generated and gitignored — a fresh clone has none, and a
+     * suite that only passes after a build is not a guard.
+     */
+    const LADDERS = {
+        na: {
+            srcSet: '/hero/na-480.webp 480w, /hero/na-960.webp 960w, /hero/na-1024.webp 1024w',
+        },
+        nc: { srcSet: '/hero/nc-480.webp 480w, /hero/nc-800.webp 800w' },
+    };
 
-        expect(heroes.every((shot) => shot.srcSet === undefined)).toBe(true);
-        expect(heroImage().hasAttribute('srcset')).toBe(false);
-        expect(heroImage().hasAttribute('sizes')).toBe(false);
+    const shot = (key) => ({
+        key,
+        img: `/${key}.jpg`,
+        name: key,
+        car: `${key} chassis`,
+        alt: `The ${key} frame`,
+    });
+
+    it('attaches each ladder to the shot whose key names it', () => {
+        const [na, nc, nd] = withRenditions([shot('na'), shot('nc'), shot('nd')], LADDERS);
+
+        expect(na.srcSet).toBe(LADDERS.na.srcSet);
+        expect(nc.srcSet).toBe(LADDERS.nc.srcSet);
+        expect(nd.srcSet).toBeUndefined();
+    });
+
+    /** The ladder is truncated per source, so no consumer may count rungs. */
+    it('takes each ladder verbatim rather than assuming a rung count', () => {
+        const [na, nc] = withRenditions([shot('na'), shot('nc')], LADDERS);
+
+        expect(na.srcSet.split(',')).toHaveLength(3);
+        expect(nc.srcSet.split(',')).toHaveLength(2);
+    });
+
+    it('leaves the list untouched when the pipeline has not run', () => {
+        const shots = [shot('na'), shot('nc')];
+
+        expect(withRenditions(shots, {})).toEqual(shots);
+        expect(withRenditions(shots, undefined)).toEqual(shots);
+    });
+
+    /** The bundled JPG is the degradation path; a ladder never displaces it. */
+    it('keeps the full-size frame on img', () => {
+        const [na] = withRenditions([shot('na')], LADDERS);
+
+        expect(na.img).toBe('/na.jpg');
     });
 
     /**
-     * The seam Feature C Task 00059 fills. Asserted against a stubbed shot list
-     * because the renditions themselves are that Task's deliverable.
+     * A key on one side and not the other yields renditions no shot can reach,
+     * or a shot that never gets one — silently, in both directions.
      */
-    it('emits both once a shot carries renditions', async () => {
-        const stub = {
-            key: 'stub',
-            img: '/stub.jpg',
-            srcSet: '/stub-480.webp 480w, /stub-960.webp 960w',
-            name: 'Stub',
-            car: 'Stub chassis',
-            alt: 'A stubbed frame',
-        };
+    it('names exactly the cars the rendition pipeline builds', () => {
+        expect(heroes.map((entry) => entry.key).sort()).toEqual(
+            HEROES.map((entry) => entry.key).sort()
+        );
+    });
+});
 
+describe('the frame renders through the shared responsive image', () => {
+    /** Mounts the Hero against a stubbed shot list of exactly one frame. */
+    async function renderStubbed(stub) {
         vi.resetModules();
         vi.doMock('./heroes', () => ({ heroes: [stub], nightHero: stub }));
 
-        try {
-            const { default: StubbedHero } = await import('./index');
+        const { default: StubbedHero } = await import('./index');
 
-            render(
-                <MemoryRouter>
-                    <StubbedHero />
-                </MemoryRouter>
-            );
+        render(
+            <MemoryRouter>
+                <StubbedHero />
+            </MemoryRouter>
+        );
+    }
 
-            expect(heroImage().getAttribute('srcset')).toBe(stub.srcSet);
-            expect(heroImage().getAttribute('sizes')).toBe('100vw');
-        } finally {
-            vi.doUnmock('./heroes');
-            vi.resetModules();
-        }
+    const base = {
+        key: 'stub',
+        img: '/stub.jpg',
+        name: 'Stub',
+        car: 'Stub chassis',
+        alt: 'A stubbed frame',
+    };
+
+    afterEach(() => {
+        vi.doUnmock('./heroes');
+        vi.resetModules();
+    });
+
+    it('emits the ladder and a full-bleed sizes hint when the shot carries one', async () => {
+        const srcSet = '/hero/stub-480.webp 480w, /hero/stub-960.webp 960w';
+
+        await renderStubbed({ ...base, srcSet });
+
+        expect(heroImage().getAttribute('srcset')).toBe(srcSet);
+        expect(heroImage().getAttribute('sizes')).toBe('100vw');
+    });
+
+    /**
+     * `srcset=""` would suppress the src fallback on some engines and leave a
+     * blank block, so the attributes have to be absent rather than empty.
+     */
+    it('omits both when the shot carries none', async () => {
+        await renderStubbed(base);
+
+        expect(heroImage().hasAttribute('srcset')).toBe(false);
+        expect(heroImage().hasAttribute('sizes')).toBe(false);
+        expect(heroImage().getAttribute('src')).toBe(base.img);
+    });
+
+    /** The home surface's LCP element must not inherit the lazy default. */
+    it('loads eagerly either way', async () => {
+        await renderStubbed(base);
+
+        expect(heroImage().getAttribute('loading')).toBe('eager');
+
+        cleanup();
+        await renderStubbed({ ...base, srcSet: '/hero/stub-480.webp 480w' });
+
+        expect(heroImage().getAttribute('loading')).toBe('eager');
     });
 });
 

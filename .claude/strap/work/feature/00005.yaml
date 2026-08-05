@@ -1,7 +1,7 @@
 id: "00005"
 type: feature
 title: "Overhaul image delivery onto one build-time pipeline and stand up cookieless analytics with an early V1 baseline"
-state: active
+state: resolved
 parent: null
 iteration: null
 area: null
@@ -22,9 +22,9 @@ links:
     type: related
 created_at: 2026-08-01T18:45:00Z
 created_by: spec-lead
-updated_at: 2026-08-01T19:47:00Z
+updated_at: 2026-08-05T04:55:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T04:55:00Z
 closed_at: null
 description: |
   | Field        | Value                       |
@@ -110,3 +110,39 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T23:15:00Z
     body: "[STRAP/agent:dev-lead] PARTIAL execution complete (via /execute-sprint, Sprint 2026.08.A). Stories 00042 + 00043 (all 7 sprint-allocated Tasks) resolved and merged into feature/00005-image-perf-analytics-baseline. Centralized build+test pass re-verified independently by dev-lead (30/30 tests, clean build). PR #16 opened against feature/strap-onboarding (stacked -- main does not yet have the STRAP install; see connect-code-repo history). AC-003, AC-004, AC-012, AC-013, AC-017 traced and satisfied (AC-004 engagement half is methodology-only pending Plausible account provisioning -- CPO action). Feature state stays ACTIVE, not resolved -- Stories 00044/00045 (AC-006..011, Phase 3 image-pipeline overhaul) remain unallocated overflow; a future /plan-sprint + /execute-sprint pass closes out the rest of this Feature once Feature B's redesigned surfaces exist. Two real regressions were caught and fixed mid-execution rather than deferred: a browser-support-floor gap from removing a stale polyfill (Task 00047), and an analytics double-counting bug from Plausible's default SPA tracking (Task 00050)."
+  - id: c5
+    author: dev-lead
+    timestamp: 2026-08-05T02:15:00Z
+    body: |
+      [STRAP/agent:dev-lead] CPO-DIRECTED CAPACITY OVERRIDE (bypasses /plan-sprint's single-sprint capacity gate, per explicit CPO direction to continue the pattern established across Features A and B). Feature B (00004) fully resolved and now live on main (PR #25) -- the predecessor condition on this overflow is satisfied. Both remaining Stories (00044 C2a pipeline-overhaul, 00045 C2b client-delivery+OG) + all 8 Tasks (00053-00060, 32h) allocated directly to Sprint 2026.08.A (still current, ends 2026-08-08).
+
+      STALENESS RECONCILIATION at allocation time (these Tasks were authored 2026-08-01, before Feature B's actual implementation diverged from its own original file-path assumptions in a few places):
+      - Task 00053/00055 assume `src/components/Gallery/_thumbs/{chunk.js,thumbs.js}` still exist and should be partially kept (chunk.js) / partially retired (thumbs.js). BOTH files are now gone entirely -- Feature B Task 00041 deleted the whole `_thumbs/` directory when it retired the 2 gallery components that were its only consumers. Task 00053's chunk.js unit-test sub-scope and Task 00055's 'keep chunk.js' directive are both moot; dispatched agents briefed accordingly.
+      - Task 00055's actual retirement targets (verified against current tree) are exactly the 4 `images.js` arrays Feature B deliberately deferred: `Gallery/{C8/autocross,NB/HillCountry,NC/EastCoast15,NC/Yellowstone15}/images.js`, plus the orphaned `Gallery/NB/index.jsx` switcher. This is precisely the retirement backlog Task 00041's own report flagged as left for 'whoever picks up Feature C AC-009' -- confirms the seam is clean, not broken.
+      - Task 00058 references `Garage/Cards.jsx`, which Feature B Task 00033 deleted and replaced with `common/CarCard.jsx` + `common/carImages.js`. Also references blogs' `<Image src={post.picture}>` pattern, which now lives inside the shared `common/BlogList.jsx` (`.post__media img`), not in the 4 per-car components (Feature B Task 00035 collapsed them). Dispatched agent briefed on the real current file layout.
+      - The 4 gallery slugs Task 00053 must ADD to `build-gallery.mjs`'s `GALLERIES` array must exactly match `common/gallerySets.js`'s canonical ids (`c8-autox`, `nb-hillcountry`, `nc-eastcoast15`, `nc-yellowstone15`) -- confirmed verbatim from that file before dispatch, per the exact naming-contract risk Task 00039's own report flagged.
+
+      Execution plan: single feature branch off feature/strap-onboarding, manual git-worktree + background-Agent dispatch. Dependency chain is more serial than Feature B's (build-pipeline nature -- each step edits the same file the last one produced): Wave 1 = Task 00053 solo (devops-lead, foundation). Wave 2 = Tasks 00054 + 00056 in parallel (both depend only on 00053). Wave 3 = Task 00055 (needs 00054). Wave 4 = Task 00057 solo (frontend-engineer, needs the full manifest/rendition-naming contract from Story 00044). Wave 5 = Tasks 00058 + 00059 + 00060 in parallel (all depend on 00057). Domain split: Story 00044 is devops-lead (build-side, scripts/Node), Story 00045 is frontend-engineer (client-side, React) -- first devops-lead dispatch this session.
+  - id: c6
+    author: dev-lead
+    timestamp: 2026-08-05T04:55:00Z
+    body: |
+      [STRAP/agent:dev-lead] State: active -> resolved. FEATURE 00005 COMPLETE -- both remaining Stories (00044, 00045), all 8 Tasks (00053-00060) resolved and merged into feature/00005-image-pipeline-phase3, executed exactly per the 5-wave plan in c5 with zero wave reordering needed. 939/939 tests passing (up from 875 at Story 00044's close, 396 at this Feature's very first execution round), production build verified clean at every merge across all 5 waves, every merge independently re-verified by dev-lead against the actual build/test/disk output, not just trusted from agent self-reports.
+
+      **All 6 gallery-wiring patterns consolidated to exactly 1** (was 3 at Feature start): every gallery now builds through `scripts/build-gallery.mjs` into a per-slug manifest with per-image `thumbnailAlt`/`label`, consumed uniformly by `GalleryHub`/`GalleryLightbox`. AC-009 satisfied.
+
+      **Two real production defects found and fixed, not just built around, across this Feature's 8 Tasks:**
+      1. (Task 00053) A duplicate-thumbnail hazard -- two NC galleries' recursive glob would have silently shipped a low-resolution duplicate interleaved next to every real frame.
+      2. (Task 00060) **The site's OG/Twitter/JSON-LD social-share image has been a genuine 404 since the tag was written** -- wrong path, under a directory that's never served. Every social-media unfurl of jeffgoji.com has silently fallen back to crawler-scraped content until this fix. Not a cosmetic optimization; a live bug with real reach.
+
+      **One large, independently-verified deploy-weight win**: Task 00055 removed ~229MB of genuinely DUPLICATE deploy weight (Vite double-emitting full-size gallery originals a since-retired static-import pattern no longer needed) -- confirmed via `du -sh` on the actual built `dist/` before and after, not trusted from the agent report alone.
+
+      **Measured performance results, well past the AC-006/007/008 >=50% bar**: NC galleries -91.8%/-95.9%, nd-totd2025 (representative gallery) -92.7%, hero phone-width -95.3%, hero desktop widest-rung -62.6%. LCP/Lighthouse re-measurement was NOT done (no browser tool available to any dispatched agent across this entire Feature) -- flagging as a standing open verification item, consistent with the same gap noted at Feature B's close, not claiming it was met.
+
+      **One unresolved, CPO-flagged, explicitly-deferred finding carried past this Feature's close**: `dist/gallery/*/original/` still ships 881MB of untouched full-resolution gallery source photos (92% of the gallery build output, ~80% of the full deploy) -- every manifest's `full` field points at one and the lightbox can serve it on click. This was surfaced to the CPO when Story 00044 closed and again at Story 00045's close; no decision has been made yet on whether it needs its own Task. Also carried forward, not this Feature's scope: a misplaced 5th dead gallery consumer needing an explicit owner call, `src/entry-ssr.jsx`'s pre-existing dangling imports (tracked against Task 00047), and a Cars.json-keyed Garage-portrait rendition pipeline that would let 2 of 5 cards reuse already-built hero renditions.
+
+      This closes Feature 00005 (image pipeline overhaul + cookieless analytics) entirely -- both Stories, all 15 Tasks (00046-00060) across this Feature's full lifecycle, spanning the very first STRAP execution round of this project through today. Feature D (What's New page, 00006) is the one remaining Feature in the V2 initiative, not yet started.
+  - id: c7
+    author: dev-lead
+    timestamp: 2026-08-05T05:15:00Z
+    body: "[STRAP/agent:dev-lead] Feature stays resolved -- follow-up scope filed at the Story level, not reopened here. The 881MB dist/gallery/*/original/ finding flagged in c6 above now has an owner: Story 00044 reopened (resolved -> active), Task 00074 filed against it (devops-lead) to re-encode originals via mozjpeg q85/no-resize per explicit CPO direction, keeping full resolution intact for the confirmed download/wallpaper use case rather than downscaling."

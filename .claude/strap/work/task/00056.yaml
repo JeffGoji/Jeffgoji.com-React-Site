@@ -1,11 +1,11 @@
 id: "00056"
 type: task
 title: "Re-encode heavy source assets: NC source + 5 rotating-hero webp srcset + confirm TOTD frames"
-state: new
+state: resolved
 parent: "00044"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: devops-lead
 tags: [AI, strap:task]
 links:
   - target: "00053"
@@ -13,9 +13,9 @@ links:
 original_estimate: 5
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:45:00Z
+updated_at: 2026-08-05T03:20:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T03:20:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   NC source served as webp (no 2-9MB jpg where a rendition suffices); 5 hero srcset webp sets emitted at documented widths; `nd-totd2025` manifest built from the real TOTD frames; re-measured home + `nd-totd2025` show >=50% image-byte drop, LCP <=2.5s mobile, Lighthouse >=90/>=80 vs the C1 baseline. AC-006/007/008; AC-010 build side.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T03:20:00Z
+    body: "[STRAP/agent:devops-lead] State: new -> resolved. Merged into feature/00005-image-pipeline-phase3 (e7937fa), clean merge, zero overlap with Task 00054 (agent deliberately avoided touching build-gallery.mjs entirely, new companion script instead). NC gallery/hero source: CONFIRMED already fully handled by Task 00053's generalized pipeline, no extra work needed -- measured on disk, nc-eastcoast15 150.79MB->6.19MB (-95.9%), nc-yellowstone15 49.52MB->4.04MB (-91.8%), worst single frame 8.86MB->480KB. New: scripts/build-heroes.mjs emits 14 webp derivatives (480/960/1600w, quality 78, capped at 1600 deliberately -- this Story cuts bytes, a 2560 rung would exceed the JPG being replaced) + public/hero/manifest.json with a ready-to-paste srcSet string per car. CRITICAL DESIGN POINT for Task 00059 (the wiring task, not yet dispatched): 2 of 5 sources (na at 1024px, nc at 800px) are narrower than the 1600 ceiling -- the script appends the source's OWN native width as the top rung rather than just filtering the nominal ladder, because a browser ignores <img src> once srcSet is present; filter-only would have left `nc` a single 480w candidate, actually WORSE than today's no-srcset fallback. This native-width-append behavior is unit-tested (ladderFor()). nd-totd2025 CONFIRMED built from 125 real frames (103 camera + 22 pro action shots), zero placeholders, zero skipped, 463MB source -> 33.6MB display (-92.7%). Aggregate measured hero byte reduction: phone (480w) -95.3%, desktop widest rung -62.6%. 875/875 full suite (32 files, incl new build-heroes.test.js), build clean 21s. ~78K tokens. Added a Netlify _headers rule for /hero/* (max-age=86400, NOT immutable -- hero filenames are stable per-car slugs without a content hash, so immutable would serve a swapped photo stale for a year; this is the same class of gap the agent's own memory records as only partially fixed in Task 00046) -- flagged caveat: the rule also catches /hero/manifest.json by path-prefix precedence (a more specific manifest-only rule is listed first), acceptable ONLY if Task 00059 reads the manifest at build time, not runtime. FLAGGED, not this Task's territory, routing to whoever owns Task 00054/00059: `public/gallery/*/original/` copies full-resolution sources into the deploy (~660MB total) and the manifest's `full` field is referenced by nothing in src/ -- dead deploy weight, a real win to remove but touches processOne's manifest output (00054's file). FLAGGED: build-article-images.mjs has the same filter-only width-ladder logic as this script originally would have, with NO native-width append -- worth auditing whether any article source is narrower than 640px (not checked, out of this Task's scope). Content note, not a defect: ncEdit.jpg (800x533) is genuinely low-res for a full-bleed hero and will look soft regardless of format -- a higher-res NC hero source would be a real visual win, CPO call."

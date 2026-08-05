@@ -1,9 +1,9 @@
 id: "00045"
 type: story
 title: "Client-side responsive image delivery (ResponsiveImage + srcset/lazy) + OG swap (Phase 3)"
-state: new
+state: resolved
 parent: "00005"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:story]
@@ -12,9 +12,9 @@ links:
     type: predecessor
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T19:45:00Z
+updated_at: 2026-08-05T04:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T04:50:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -48,3 +48,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:45:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00005 (P4 client-side, frontend-engineer). Tasks 00057-00060."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-05T04:50:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> resolved. All 4 Tasks (00057 shared ResponsiveImage primitive, 00058 blogs+Garage, 00059 GoodbyeC8+hero, 00060 OG+gallery) resolved and merged into feature/00005-image-pipeline-phase3. AC-010 (client-side responsive delivery) satisfied across every surface: blog posts, Garage cards, GoodbyeC8's 7 images, the rotating hero (LCP-eager with a per-car width ladder), and the consolidated gallery (deliberately no srcset -- justified, see Task 00060's note on the 2-rung ladder). AC-011 (OG image) satisfied -- and turned out to be a genuine bug fix, not a cosmetic optimization: the OG/Twitter/JSON-LD image URL was a real 404 (wrong path, under an unserved directory) that has silently broken every social-media share/unfurl of this site since the tag was written. Now a real 67.5KB 1200x630 JPEG (deliberately non-webp for crawler compatibility). Consistent, deliberate design discipline across all 4 Tasks: ResponsiveImage stays manifest-agnostic (no pipeline constants baked in), single-rendition usage is treated as legitimate wherever no second rendition genuinely exists (blog/Garage/gallery-grid) rather than forcing a fake srcset, and two Tasks each independently declined to force srcset onto a surface where it would have made things WORSE (00060: gallery grid's 2-rung ladder would resolve to the 1600w image on any phone above 1x DPR). CARRIED FORWARD, not this Story's to fix: dist/gallery/*/original/ is still 881MB of unshipped-but-deployed full-resolution originals (flagged when Story 00044 closed, still unresolved -- CPO has not yet decided whether this needs its own Task); a ~640w middle gallery rendition rung would be the concrete prerequisite for ever giving the grid a real srcset; a Cars.json-keyed portrait pipeline would let 2 of 5 Garage cards use their already-built hero renditions instead of a full JPG. Full test suite grew from 875 (end of Story 00044) to 939 across these 4 Tasks; every merge independently re-verified by dev-lead (test counts, build output, and for 00060 specifically the OG file's exact byte count on disk) rather than trusted from agent reports alone."
