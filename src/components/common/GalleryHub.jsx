@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import GalleryLightbox from './GalleryLightbox'
 import { GALLERY_SETS } from './gallerySets'
 
 /**
@@ -44,6 +45,20 @@ function thumbnailAltFor(item, set, position) {
 }
 
 /**
+ * Normalises the manifest onto the one shape the grid and the lightbox both
+ * read, so a frame cannot be described one way under its thumbnail and another
+ * way in the lightbox caption. The two renditions fall back to each other
+ * because the older manifests carry only one of them.
+ */
+function framesFrom(items, set) {
+    return items.map((item, index) => ({
+        original: item.original ?? item.thumbnail,
+        thumbnail: item.thumbnail ?? item.original,
+        alt: thumbnailAltFor(item, set, index + 1),
+    }))
+}
+
+/**
  * The consolidated galleries hub: one surface, one "Choose set" switcher, one
  * thumbnail grid, replacing the six per-gallery routes the nav used to fan out
  * to. Ported from the mockups' gallery.html.
@@ -54,9 +69,11 @@ function thumbnailAltFor(item, set, position) {
  * what is on screen. An unrecognised `initialSlug` falls back to the first set
  * rather than rendering a hub with nothing selected.
  *
- * `onSelectImage` receives the clicked index. The lightbox itself is Task
- * 00040; until it lands the thumbs are the mockup's buttons with no action
- * behind them.
+ * The hub also owns which frame the lightbox is open on, because the lightbox
+ * needs the whole fetched set and this is the only component that holds it.
+ * `onSelectImage` still reports the clicked index outward, but it is a
+ * notification rather than the trigger — a caller that ignores it still gets a
+ * working lightbox.
  *
  * @param {object} props
  * @param {Array<{slug: string, car: string, label: string}>} [props.sets]
@@ -69,11 +86,13 @@ function GalleryHub({ sets = GALLERY_SETS, initialSlug, onSelectImage }) {
     )
     const [items, setItems] = useState([])
     const [loading, setLoading] = useState(true)
+    const [openIndex, setOpenIndex] = useState(null)
 
     useEffect(() => {
         let current = true
 
         setLoading(true)
+        setOpenIndex(null)
 
         loadManifestItems(slug).then((loaded) => {
             if (!current) {
@@ -90,6 +109,7 @@ function GalleryHub({ sets = GALLERY_SETS, initialSlug, onSelectImage }) {
     }, [slug])
 
     const selectedSet = sets.find((set) => set.slug === slug) ?? sets[0]
+    const frames = framesFrom(items, selectedSet)
 
     return (
         <section className="gallery-hub">
@@ -133,28 +153,35 @@ function GalleryHub({ sets = GALLERY_SETS, initialSlug, onSelectImage }) {
                     </p>
                 )}
 
-                {!loading && items.length > 0 && (
+                {!loading && frames.length > 0 && (
                     <div className="gallery-grid">
-                        {items.map((item, index) => (
+                        {frames.map((frame, index) => (
                             <button
-                                key={item.thumbnail ?? index}
+                                key={frame.thumbnail ?? index}
                                 type="button"
                                 className="thumb media--editorial"
                                 data-index={index}
                                 aria-label={`Open image ${index + 1}`}
-                                onClick={() => onSelectImage?.(index)}
+                                onClick={() => {
+                                    setOpenIndex(index)
+                                    onSelectImage?.(index)
+                                }}
                             >
                                 <span className="thumb__idx">
                                     {String(index + 1).padStart(2, '0')}
                                 </span>
-                                <img
-                                    src={item.thumbnail ?? item.original}
-                                    alt={thumbnailAltFor(item, selectedSet, index + 1)}
-                                    loading="lazy"
-                                />
+                                <img src={frame.thumbnail} alt={frame.alt} loading="lazy" />
                             </button>
                         ))}
                     </div>
+                )}
+
+                {openIndex !== null && frames.length > 0 && (
+                    <GalleryLightbox
+                        items={frames}
+                        startIndex={openIndex}
+                        onClose={() => setOpenIndex(null)}
+                    />
                 )}
             </div>
         </section>
