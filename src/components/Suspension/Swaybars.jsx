@@ -1,61 +1,63 @@
 function Swaybars() {
   return (
-    <div className="text-start mb-5">
+    <div>
           <p><strong>Swaybars</strong> in general are the icing on the cake of suspension tuning. Unless you are stuck in an autocross class where they are the primary source of increasing the roll-resistance much like bumpstops in the previous section. For the rest of the world as a rule, the swaybar should be considered one of the final peices to your suspension puzzle and selected after everything else has been accounted for.</p>
       <p>
         Swaybars (anti-roll bars, ARBs) are torsion springs that link opposite wheels across an axle. By resisting roll (body tilt) during cornering, they help keep tires flat on the road, sharpen turn-in, and tune under-/over-steer balance. Unlike springs, swaybars only engage when one wheel moves relative to the other, so they stiffen roll without affecting straight-line ride compliance.
       </p>
 
-      <h3>How Swaybar “Rate” Works</h3>
+      <h4>How Swaybar “Rate” Works</h4>
       <p>
         A swaybar’s <strong>rate</strong> is its torsional stiffness, often expressed as lb/in (force to twist the bar 1 inch) or ft-lb/deg (torque per degree of twist). Rate scales roughly with the fourth power of diameter (d⁴), so small diameter changes yield big stiffness gains. Adjustable bars provide multiple end-link positions to fine-tune effective leverage and balance.
       </p>
 
-      <h3>Miata Swaybar Specs by Generation</h3>
-      <table className="table table-bordered">
-        <thead>
-          <tr>
-            <th>Generation</th>
-            <th>Years</th>
-            <th>Stock Front (dia)</th>
-            <th>Stock Rear (dia)</th>
-            <th>Stock Rate Front</th>
-            <th>Stock Rate Rear</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>NA/NB</strong></td>
-            <td>1990–2005</td>
-            <td>19 mm hollow; R-Package: 20 mm</td>
-            <td>12 mm solid</td>
-            <td>~120 lb/in</td>
-            <td>~40 lb/in</td>
-          </tr>
-          <tr>
-            <td><strong>NC</strong></td>
-            <td>2006–2015</td>
-            <td>21.1 mm hollow</td>
-            <td>11.2 mm solid (base) / 12.1 mm (sport)</td>
-            <td>≈160 lb/in*</td>
-            <td>≈50 lb/in*</td>
-          </tr>
-          <tr>
-            <td><strong>ND</strong></td>
-            <td>2016+</td>
-            <td>22.9 mm hollow</td>
-            <td>11.2 mm solid</td>
-            <td>≈180 lb/in*</td>
-            <td>≈30 lb/in*</td>
-          </tr>
-        </tbody>
-      </table>
+      <h4>Miata Swaybar Specs by Generation</h4>
+      <div className="table-responsive">
+        <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th>Generation</th>
+              <th>Years</th>
+              <th>Stock Front (dia)</th>
+              <th>Stock Rear (dia)</th>
+              <th>Stock Rate Front</th>
+              <th>Stock Rate Rear</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>NA/NB</strong></td>
+              <td>1990–2005</td>
+              <td>19 mm hollow; R-Package: 20 mm</td>
+              <td>12 mm solid</td>
+              <td>~120 lb/in</td>
+              <td>~40 lb/in</td>
+            </tr>
+            <tr>
+              <td><strong>NC</strong></td>
+              <td>2006–2015</td>
+              <td>21.1 mm hollow</td>
+              <td>11.2 mm solid (base) / 12.1 mm (sport)</td>
+              <td>≈160 lb/in*</td>
+              <td>≈50 lb/in*</td>
+            </tr>
+            <tr>
+              <td><strong>ND</strong></td>
+              <td>2016+</td>
+              <td>22.9 mm hollow</td>
+              <td>11.2 mm solid</td>
+              <td>≈180 lb/in*</td>
+              <td>≈30 lb/in*</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <p>* Estimated from diameter scaling; actual rates vary by arm length and mounting geometry.</p>
 
-      <h3>Aftermarket & Application Recommendations</h3>
+      <h4>Aftermarket & Application Recommendations</h4>
 
-      <h4>NA/NB (1990–2005)</h4>
+      <h5>NA/NB (1990–2005)</h5>
       <p><strong>Street:</strong></p>
       <ul>
         <li>
@@ -75,7 +77,7 @@ function Swaybars() {
         </li>
       </ul>
 
-      <h4>NC (2006–2015)</h4>
+      <h5>NC (2006–2015)</h5>
       <p><strong>Street:</strong></p>
       <ul>
         <li>Base OEM: 21 mm front/11 mm rear provides mild roll control.</li>
@@ -91,7 +93,7 @@ function Swaybars() {
         <li>Adjust leverage to dial in transitional response and rotation.</li>
       </ul>
 
-      <h4>ND (2016+)</h4>
+      <h5>ND (2016+)</h5>
       <p><strong>Street:</strong></p>
       <ul>
         <li>ND OEM: 22.9 mm hollow front, 11.2 mm solid rear.</li>
@@ -103,7 +105,7 @@ function Swaybars() {
         <li>Use FM’s 1.125″ front for maximum roll control; pair with a lightweight 14 mm rear or disconnect to tune bias.</li>
       </ul>
 
-      <h3>Street vs. Autocross Setups</h3>
+      <h4>Street vs. Autocross Setups</h4>
       <ol>
         <li>
           <strong>Street:</strong> aim for balanced mid-corner grip with moderate bars (front: ~1.0″/25 mm; rear: 0.625″–0.75″/16–19 mm). Adjustable bars allow dialing for highway comfort and canyon carving.
@@ -113,7 +115,7 @@ function Swaybars() {
         </li>
       </ol>
 
-      <h3>Conclusion</h3>
+      <h4>Conclusion</h4>
       <p>
         By generation, Miata stock swaybars advance modestly from NA’s 19 mm to NC’s 21 mm and ND’s 22.9 mm fronts, with rear bars hovering around 11–12 mm. Aftermarket offerings span 19 mm–28 mm, with adjustability catering to everything from daily-driven grip to razor-sharp autocross performance. Matching bar diameter, wall thickness, and leverage ensures the perfect balance of roll control, compliance, and steering feel.
       </p>

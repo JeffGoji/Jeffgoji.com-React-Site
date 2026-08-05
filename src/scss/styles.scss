@@ -1223,3 +1223,198 @@ a {
   color: var(--text-hi);
   font-weight: 700;
 }
+
+// --- SHARED EDITORIAL PRIMITIVES --------------------------------------------
+// Ported from the mockups' base layer (assets/app.css:40-62). These are the two
+// rules every V2 surface opens with, so several Feature B tasks port them in
+// parallel off the same source — keep ONE copy at merge, not the union.
+//
+// The mockups only ever head a section with <h2> (assets/app.js:135). A page
+// whose section head IS the page title needs an <h1> there instead, so the h1
+// slot is an addition to the locked rule rather than a change to it: same
+// treatment, one step up the type scale.
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--goji-red);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: var(--goji-red);
+  display: inline-block;
+}
+
+.section-head {
+  margin-bottom: var(--space-7);
+}
+
+.section-head h1 {
+  font-size: var(--fs-h1);
+  text-transform: uppercase;
+}
+
+.section-head h2 {
+  font-size: var(--fs-h2);
+  text-transform: uppercase;
+}
+
+.section-head .sub {
+  color: var(--color-muted);
+  max-width: 60ch;
+}
+
+// --- SUSPENSION HUB (Task 00037) --------------------------------------------
+// No mockup covers this surface, so it extends the language the mockups already
+// establish: a section head over grouped disclosure panels whose bodies are the
+// same elevated reading panel .post uses for long-form prose.
+
+.suspension {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-5) var(--space-9);
+}
+
+.suspension__group {
+  margin-bottom: var(--space-7);
+}
+
+// The mockups' "section header with editorial rule" motif, carried onto the
+// group label so the four groups read as the page's spine.
+.suspension__group-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-heading);
+  border-bottom: var(--accent-bar);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+// React-Bootstrap's Accordion, re-pointed at the token layer through Bootstrap's
+// own --bs-accordion-* slots rather than by overriding its rules — the same seam
+// .site-nav uses for the navbar. Matched on .accordion.spec-accordion so the
+// override outranks Bootstrap's .accordion defaults on specificity rather than
+// on source order alone.
+//
+// The two chevrons are literals because Bootstrap ships them as data URIs, which
+// cannot reference a custom property; they track --text-lo and --goji-red and
+// drift silently if either moves. Same trade as the navbar toggler glyph above.
+.accordion.spec-accordion {
+  --bs-accordion-color: var(--color-text);
+  --bs-accordion-bg: var(--color-reading);
+  --bs-accordion-border-color: var(--color-border);
+  --bs-accordion-border-radius: var(--radius-lg);
+  --bs-accordion-inner-border-radius: var(--radius-lg);
+  --bs-accordion-btn-color: var(--color-heading);
+  --bs-accordion-btn-bg: var(--ink-800);
+  --bs-accordion-btn-padding-x: var(--space-5);
+  --bs-accordion-btn-padding-y: var(--space-4);
+  --bs-accordion-btn-focus-border-color: var(--goji-red);
+  --bs-accordion-btn-focus-box-shadow: var(--glow-red);
+  --bs-accordion-active-color: var(--color-heading);
+  --bs-accordion-active-bg: var(--ink-800);
+  --bs-accordion-body-padding-x: var(--space-6);
+  --bs-accordion-body-padding-y: var(--space-6);
+  --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%239C978D'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23E10600'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+
+  box-shadow: var(--shadow-card);
+}
+
+.spec-accordion .accordion-button {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h4);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+// The open panel's header carries the brand rule, so the expanded group is
+// findable at a glance in a page that is mostly collapsed bars.
+.spec-accordion .accordion-button:not(.collapsed) {
+  box-shadow: inset 0 -3px 0 var(--goji-red);
+}
+
+.spec-accordion .accordion-body {
+  font-size: var(--fs-read);
+  line-height: var(--lh-read);
+  overflow-wrap: break-word;
+}
+
+.spec-accordion .accordion-body h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+  color: var(--color-heading);
+  margin-top: var(--space-6);
+}
+
+.spec-accordion .accordion-body h5 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  color: var(--color-heading);
+  margin-top: var(--space-5);
+}
+
+// Formula runs (wheel rate, bounce frequency). Bootstrap's default code colour
+// is its own pink, which is the last unthemed slot this surface reaches.
+.spec-accordion code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--goji-red-bright);
+  background: var(--ink-800);
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+}
+
+// The spec tables. --bs-table-color otherwise resolves to Bootstrap's light-mode
+// emphasis colour (near-black on the charcoal panel), and --bs-table-bg to the
+// body canvas, which would paint a flat rectangle over the elevated panel.
+.spec-accordion .table {
+  --bs-table-color: var(--color-text);
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--color-border);
+  --bs-table-striped-color: var(--color-text);
+  --bs-table-hover-color: var(--color-heading);
+  --bs-table-hover-bg: rgba(225, 6, 0, 0.06);
+
+  font-size: var(--fs-sm);
+}
+
+.spec-accordion .table th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+// The swaybar spec table is six columns wide and cannot fit a 360px viewport,
+// so both tables ship inside Bootstrap's .table-responsive wrapper — it scrolls
+// the table in place rather than letting it push the page into overflow.
+.spec-accordion .table-responsive {
+  margin-block: var(--space-5);
+}
+
+@media (max-width: 768px) {
+  .suspension {
+    padding-inline: var(--space-4);
+  }
+
+  .accordion.spec-accordion {
+    --bs-accordion-btn-padding-x: var(--space-4);
+    --bs-accordion-body-padding-x: var(--space-4);
+  }
+}
