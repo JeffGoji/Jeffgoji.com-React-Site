@@ -159,9 +159,16 @@ describe('the section fits 360 through 1440 without overflowing', () => {
     });
 
     it('narrows the gutter at 360', () => {
-        const narrow = css.split('@media (max-width: 360px)').pop();
+        // Multiple Feature B surfaces each carry their own 360px block, so the
+        // LAST one in the file is not necessarily this one -- search every
+        // block for the one that mentions .driver-intro__inner instead of
+        // assuming position.
+        const narrow = css
+            .split('@media (max-width: 360px)')
+            .slice(1)
+            .find((segment) => segment.includes('.driver-intro__inner'));
 
-        expect(narrow).toContain('.driver-intro__inner');
+        expect(narrow, 'no 360px block mentions .driver-intro__inner').toBeDefined();
         expect(narrow).toContain('padding-inline: var(--space-4)');
     });
 

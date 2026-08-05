@@ -367,9 +367,16 @@ describe('the accordion chrome is driven by the token layer', () => {
     it('tightens the gutters below the tablet breakpoint', () => {
         expect(css).toMatch(/@media \(max-width: 768px\)/);
 
-        const collapsed = css.split('@media (max-width: 768px)').pop();
+        // Multiple Feature B surfaces each carry their own 768px block, so the
+        // LAST one in the file is not necessarily this one -- search every
+        // block for the one that mentions .suspension (not .suspension__*)
+        // instead of assuming position.
+        const collapsed = css
+            .split('@media (max-width: 768px)')
+            .slice(1)
+            .find((segment) => /\.suspension(?!__)/.test(segment));
 
-        expect(collapsed).toContain('.suspension');
+        expect(collapsed, 'no 768px block mentions .suspension').toBeDefined();
         expect(collapsed).toContain('padding-inline: var(--space-4)');
     });
 });
