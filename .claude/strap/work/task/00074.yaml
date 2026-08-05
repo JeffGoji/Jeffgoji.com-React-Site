@@ -1,0 +1,51 @@
+id: "00074"
+type: task
+title: "Re-encode full-resolution gallery originals (mozjpeg/optimized, same pixel dimensions)"
+state: new
+parent: "00044"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: devops-lead
+tags: [AI, strap:task]
+links: []
+original_estimate: 4
+created_at: 2026-08-05T05:15:00Z
+created_by: dev-lead
+updated_at: 2026-08-05T05:15:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-05T05:15:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Re-encode full-resolution gallery originals (mozjpeg/optimized, same pixel dimensions)
+
+  ## Description
+  Resolves the finding carried unresolved through Story 00044's close, Story 00045's close, and Feature 00005's close (comment c6): `dist/gallery/*/original/` ships **881MB** of untouched full-resolution source photos (92% of the gallery build, ~80% of the full deploy). `processOne()` in `scripts/build-gallery.mjs` currently writes the `original` rendition via a raw `fs.copyFile(fileAbs, outOriginal)` — a byte-for-byte copy of whatever the camera produced, no compression at all. CPO wants full resolution KEPT (these are served for download/wallpaper use, referenced by every manifest's `full` field and served directly by the lightbox on click) — this Task is a re-encode, not a downscale: same pixel dimensions, smarter compression.
+
+  CPO-validated approach (spot-tested by dev-lead against 3 real in-repo TOTD2025 source frames, 4000x1848 camera JPEGs): re-encoding via `sharp(fileAbs).jpeg({ quality: 85, mozjpeg: true })` with no `.resize()` call cuts file size 56-61% with no visible quality loss and identical dimensions. Extrapolated across the full 881MB this should land in the ~360-390MB range. WebP/AVIF were evaluated and rejected for this specific rendition — WebP saved about the same as mozjpeg90 (not enough better to justify format churn) and AVIF, while smallest (-75-80%), has materially weaker native OS "right-click → set as wallpaper" support today, which is the explicit use case for the `full` rendition.
+
+  ## Linked Story
+  **Story:** 00044
+  ## Original Estimate
+  **Hours (senior-developer):** 4
+  ## Implementation guidance
+  Replace the `fs.copyFile(fileAbs, outOriginal)` call in `processOne()` (`scripts/build-gallery.mjs`, the `outOriginal` block) with a sharp-based re-encode at quality ~85 with `mozjpeg: true`, no resize. **Before assuming every source is a JPEG**: check actual file extensions present in each of the 6 `GALLERIES[].srcDir` trees (the glob at `build-gallery.mjs` allows `.jpg/.jpeg/.png/.webp`) — re-encode JPEG sources via `.jpeg({quality:85, mozjpeg:true})`, and if any PNG/WebP sources exist, use the matching format's optimized encoder (e.g. `.png({compressionLevel:9, palette:false})`) rather than force-converting format, since the manifest's `full` path keeps the original filename+extension. Confirm sharp's default output strips EXIF (GPS/camera metadata) rather than round-tripping it — do not call `.withMetadata()`. Preserve the existing `original_estimate`/timing behavior (still writes to `original/<filename>`, same manifest shape, no other manifest field changes).
+  ## Dependencies
+  None blocking — all of Story 00044's original 4 Tasks (00053-00056) are resolved and merged into `main` already. This is new scope added post-close at CPO direction, not a reopened defect in prior work.
+  ## Definition of Done
+  All 6 gallery `original/` renditions re-encoded (same pixel dimensions as source, verified via `sharp().metadata()` before/after on a sample from each gallery); measured aggregate `dist/gallery/*/original/` size drop reported (`du -sh` before/after, real build, not estimated); spot-check re-encoded files open correctly and show no visible artifacting at 100% zoom on at least 2 samples per gallery; EXIF/GPS metadata confirmed stripped; full test suite still green; no manifest schema or `full`-field path changes.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T05:15:00Z
+    body: "[STRAP/agent:dev-lead] Task filed per explicit CPO direction, against Story 00044 (devops-lead's build-side domain — matches Story 00044's existing ownership from Feature 00005 comment c5). Addresses the 881MB dist/gallery/*/original/ finding flagged at Story 00044's close, reflagged at Story 00045's close, and carried unresolved through Feature 00005's close (comment c6). Allocated directly into current Sprint 2026.08.A (ends 2026-08-08) per the CPO-directed capacity-override pattern already established across Features A/B/C this project. dev-lead spot-tested the recommended method (mozjpeg q85, no resize) against 3 real TOTD2025 source files before filing: 56-61% size reduction, 0 dimension change."
