@@ -20,3 +20,9 @@
 
 /hero/*
   Cache-Control: public, max-age=86400, must-revalidate
+
+# The social card keeps one stable filename (not content-hashed) so a crawler's
+# cached URL keeps resolving. Same trade as hero/: a day, revalidated, so a
+# re-cropped card is not frozen behind a year of immutability.
+/og/*
+  Cache-Control: public, max-age=86400, must-revalidate

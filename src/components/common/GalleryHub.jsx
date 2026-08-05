@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import GalleryLightbox from './GalleryLightbox'
+import ResponsiveImage from './ResponsiveImage'
 import { GALLERY_SETS } from './gallerySets'
 
 /**
@@ -50,6 +51,11 @@ function thumbnailAltFor(item, set, position) {
  * read, so a frame cannot be described one way under its thumbnail and another
  * way in the lightbox caption. The two renditions fall back to each other
  * because the older manifests carry only one of them.
+ *
+ * `full` — the untouched multi-MB source the build script also records — is
+ * deliberately not carried through. There is no "view full res" affordance in
+ * this UI, and a frame that held the field would eventually find its way into a
+ * `src` or a candidate list.
  */
 function framesFrom(items, set) {
     return items.map((item, index) => ({
@@ -75,6 +81,15 @@ function framesFrom(items, set) {
  * `onSelectImage` still reports the clicked index outward, but it is a
  * notification rather than the trigger — a caller that ignores it still gets a
  * working lightbox.
+ *
+ * The thumbs go through `<ResponsiveImage>` for its alt contract and its lazy
+ * default, but carry no `srcSet`. The pipeline builds exactly two widths per
+ * frame, 320 and 1600, and the grid cell runs roughly 180-330px — so a
+ * two-candidate list would resolve to the 1600w display rendition on any phone
+ * above 1x DPR and pull a full-size photo per tile, tens of them per set. One
+ * correctly sized URL beats a candidate list whose only other rung is wrong.
+ * A middle rung in `scripts/build-gallery.mjs` is what would make a `srcSet`
+ * here worth having.
  *
  * @param {object} props
  * @param {Array<{slug: string, car: string, label: string}>} [props.sets]
@@ -171,7 +186,7 @@ function GalleryHub({ sets = GALLERY_SETS, initialSlug, onSelectImage }) {
                                 <span className="thumb__idx">
                                     {String(index + 1).padStart(2, '0')}
                                 </span>
-                                <img src={frame.thumbnail} alt={frame.alt} loading="lazy" />
+                                <ResponsiveImage src={frame.thumbnail} alt={frame.alt} />
                             </button>
                         ))}
                     </div>

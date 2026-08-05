@@ -3,6 +3,8 @@ import ReactImageGallery from 'react-image-gallery'
 
 import 'react-image-gallery/styles/css/image-gallery.css'
 
+import ResponsiveImage from './ResponsiveImage'
+
 /**
  * The lightbox's own slide markup, replacing react-image-gallery's default.
  *
@@ -10,12 +12,28 @@ import 'react-image-gallery/styles/css/image-gallery.css'
  * wrapper has to be the image's direct parent — which rules out grading the
  * library's own slide element from the outside.
  *
+ * `original` is the pipeline's 1600w display rendition despite its name, and is
+ * the only display-scale width the build emits — so the frame gets a single URL
+ * and no `srcSet`. The manifest's actual untouched source is `full`, which the
+ * hub does not carry down and this overlay must never reach for: it runs to
+ * several MB a frame.
+ *
+ * `eager` rather than the component default. The library renders every slide
+ * into the track at once and moves them by transform, so a lazy slide is one the
+ * browser may not fetch until it is already sliding into view — the visitor
+ * would watch it arrive. This preserves what the plain `<img>` here did before.
+ *
  * @param {{original: string, alt: string}} frame
  */
 function renderFrame(frame) {
     return (
         <div className="lightbox__frame media--editorial media--editorial--soft">
-            <img className="image-gallery-image" src={frame.original} alt={frame.alt} />
+            <ResponsiveImage
+                className="image-gallery-image"
+                src={frame.original}
+                alt={frame.alt}
+                loading="eager"
+            />
         </div>
     )
 }

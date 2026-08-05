@@ -32,3 +32,6 @@ public/articles/
 
 # Generated hero renditions (scripts/build-heroes.mjs)
 public/hero/
+
+# Generated social-unfurl card (scripts/build-og-image.mjs)
+public/og/
