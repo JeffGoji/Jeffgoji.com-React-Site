@@ -896,6 +896,168 @@
   margin-top: 6rem;
 }
 
+// --- EDITORIAL READING SURFACE ----------------------------------------------
+// Ported from the mockups' .eyebrow / .section-head / .post block
+// (assets/app.css:40-62 and :302-315), first needed by Task 00036 (the
+// GoodbyeC8 article, which has no dedicated mockup of its own and reuses this
+// language). Stories 00026/00027 port the SAME rules for the home and blog-list
+// surfaces — when those branches land, keep one copy of everything down to the
+// `.article` block and drop the duplicates.
+//
+// The mockups' `.container` and `.section` layout helpers are deliberately NOT
+// ported: `.container` is a live Bootstrap component class and its rule would
+// collide, exactly as `.nav` did for the navbar. The measure and block rhythm
+// they supply are carried on `.article` below instead.
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--goji-red);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+
+  &::before {
+    content: "";
+    width: 28px;
+    height: 2px;
+    background: var(--goji-red);
+    display: inline-block;
+  }
+}
+
+.section-head {
+  margin-bottom: var(--space-7);
+
+  h2 {
+    font-size: var(--fs-h2);
+    text-transform: uppercase;
+  }
+
+  .sub {
+    color: var(--color-muted);
+    max-width: 60ch;
+  }
+}
+
+.post {
+  background: var(--color-reading);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-6);
+}
+
+.post__media img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.post__body {
+  padding: var(--space-6);
+}
+
+.post__specs {
+  margin-bottom: var(--space-4);
+}
+
+.post__entry {
+  color: var(--color-text);
+  white-space: pre-line;
+  font-size: var(--fs-read);
+  line-height: var(--lh-read);
+  max-width: 68ch;
+
+  img {
+    border-radius: var(--radius);
+    margin: var(--space-5) auto;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+// Long-form article page shell. Stands in for the mockups'
+// `.section > .container > .blog` chain on a surface that has no hero: the
+// measure comes from `.blog` (assets/app.css:302) and the block rhythm from
+// `.section` (:36), collapsed onto one article-scoped name so neither has to
+// borrow Bootstrap's `.container`.
+.article {
+  max-width: 760px;
+  margin-inline: auto;
+  padding-block: var(--space-9);
+  padding-inline: var(--space-5);
+}
+
+// The blog list crops every post photo to a uniform 16/9 band because the posts
+// are a rhythmic feed. An article's photos are the content — one of these is a
+// 4.3:1 panorama — so a shared crop would amputate them, and the ratio is
+// released back to the file's own here. The intrinsic width/height attributes on
+// each <img> still reserve the box, so nothing reflows on load.
+.article .post__media img {
+  aspect-ratio: auto;
+}
+
+// `pre-line` exists for the blog's markdown, whose newlines are significant.
+// This article's prose is JSX with explicit <br /> and <p>, and JSX's own
+// whitespace collapsing leaves indentation in the text nodes that `pre-line`
+// would repaint as blank lines.
+.article .post__entry {
+  white-space: normal;
+  max-width: none;
+}
+
+.article h1 {
+  font-size: var(--fs-h1);
+  text-transform: uppercase;
+}
+
+.article__lede {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+}
+
+// Bulleted passages sit inside .post__entry and inherit its reading size; only
+// the marker gutter and the space between items need declaring.
+.article .post__entry ul {
+  padding-left: var(--space-5);
+  margin: 0;
+}
+
+.article .post__entry li + li {
+  margin-top: var(--space-4);
+}
+
+.article .post__entry li::marker {
+  color: var(--goji-red);
+}
+
+// The panel's inner padding is most of the 360px viewport once the page gutter
+// is taken out, so it steps down with the viewport rather than holding 2rem.
+//
+// The exclusive boundary matches the navbar's `991.98px` rather than the
+// footer's mockup-verbatim `768px`: this surface has no mockup to be faithful
+// to, and sharing the footer's exact query text would make the existing
+// "collapses at 768px" assertion — which reads the LAST such block in the
+// compiled sheet — start reading this block instead.
+@media (max-width: 767.98px) {
+  .article {
+    padding-block: var(--space-7);
+    padding-inline: var(--space-4);
+  }
+
+  .article .post__body {
+    padding: var(--space-5) var(--space-4);
+  }
+}
+
 // --- MIGRATED FROM src/assets/css/style.css (Task 00018) ---------------------
 // Only the rules a live surface still needs survived the migration. The rest of
 // that file was pre-V2 chrome the token layer now owns: the black body canvas

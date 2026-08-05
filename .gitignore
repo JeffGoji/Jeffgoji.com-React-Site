@@ -26,3 +26,6 @@ dist-ssr
 
 # Generated gallery outputs (built locally / on Netlify)
 public/gallery/
+
+# Generated article image derivatives (scripts/build-article-images.mjs)
+public/articles/
