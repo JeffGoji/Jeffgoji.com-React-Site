@@ -1,7 +1,7 @@
 id: "00028"
 type: story
 title: "Articles + Suspension + NaMiata re-skin (Tier-1 reuse)"
-state: new
+state: resolved
 parent: "00004"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -10,9 +10,9 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T15:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T15:50:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -46,3 +46,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:25:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00004 (P3, frontend). Tasks 00036-00038."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T15:50:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> resolved. All 3 Tasks (00036 GoodbyeC8, 00037 Suspension, 00038 NaMiata) resolved and merged into feature/00004-per-surface-redesign. All three surfaces render under the V2 .post/.card/.section-head/.media--editorial language with content verbatim; the empty eventKey=5 Suspension accordion bug and the Fireball-adjacent GoodbyeC8 alt-text anti-pattern were both fixed as side effects. AC-001/AC-005/AC-016 (this Story's subset, shared with sibling Stories) satisfied for these three surfaces specifically -- full AC closure still depends on Stories 00026/00027/00029. Two non-blocking gaps carried forward to Feature-level tracking: (1) Story 00010's app-wide h1-h4 display-font base rule was never ported in Feature A, so headings across the site (not just these three surfaces) still resolve to Bootstrap's system font stack despite Inter/Archivo being self-hosted and loaded; (2) no real-browser responsive verification was possible for any of the 3 Tasks (no browser automation in worktree dispatches) -- all three need a manual 360/768/1024/1440 eyeball before Feature 00004 closes."
