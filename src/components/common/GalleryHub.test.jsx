@@ -285,6 +285,58 @@ describe('the grid is the mockup thumbnail block', () => {
 })
 
 /**
+ * Task 00060. The grid went through <ResponsiveImage> for its alt contract and
+ * its lazy default, and deliberately stopped there.
+ */
+describe('the grid picks one rendition rather than a candidate list', () => {
+    /**
+     * The pipeline builds two widths per frame, 320 and 1600, and the grid cell
+     * runs roughly 180-330px. A two-candidate list would resolve to the 1600w
+     * display rendition on any phone above 1x DPR and pull a full-size photo per
+     * tile — the opposite of what this Story is for. Asserting the absence keeps
+     * a later "add a srcset" edit from landing without the middle rung that
+     * would make it correct.
+     */
+    it('advertises no srcset while the pipeline builds only two widths', async () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
+
+        for (const thumb of thumbsIn(container)) {
+            const img = thumb.querySelector('img')
+
+            expect(img.hasAttribute('srcset')).toBe(false)
+            expect(img.hasAttribute('sizes')).toBe(false)
+        }
+    })
+
+    /** `full` is the untouched multi-MB source; it must not reach the grid. */
+    it('never reaches for the untouched original', async () => {
+        stubFetch({
+            'set-one': [
+                {
+                    thumbnail: '/gallery/set-one/thumbs/0.webp',
+                    original: '/gallery/set-one/display/0.webp',
+                    full: '/gallery/set-one/original/0.jpg',
+                    alt: 'A frame',
+                },
+            ],
+        })
+
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(1))
+
+        expect(container.innerHTML).not.toContain('/original/')
+
+        fireEvent.click(thumbsIn(container)[0])
+
+        expect(container.querySelector('.lightbox')).not.toBeNull()
+        expect(container.innerHTML).not.toContain('/original/')
+    })
+})
+
+/**
  * Task 00040 wiring. The lightbox's own behaviour is covered in
  * GalleryLightbox.test.jsx; this asserts only the seam — that the hub opens it
  * on the clicked frame, hands it the fetched set, and takes it back down.
