@@ -1,19 +1,19 @@
 id: "00053"
 type: task
 title: "Generalize build-gallery.mjs to all galleries + 0-items guard + export-refactor + helper tests"
-state: new
+state: resolved
 parent: "00044"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: devops-lead
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-05T02:15:00Z
+updated_at: 2026-08-05T02:30:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T02:30:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   `npm run gallery:build` emits a populated `public/gallery/<slug>/manifest.json` for ALL slugs; a renamed/empty srcDir fails loud (not silent count:0); exported helpers importable; `npm test` green on the new unit tests.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T02:30:00Z
+    body: "[STRAP/agent:devops-lead] State: new -> resolved. Merged into feature/00005-image-pipeline-phase3 (0f4209c). All 6 gallery slugs now build: nd-totd2025 (125, srcDir src/assets/images/nd/TOTD2025), nd-hillcountry (80, .../nd/HillCountry) unchanged; NEW -- c8-autox (18, .../c8/autocross), nb-hillcountry (17, .../nb/HillCountry), nc-eastcoast15 (31, .../nc/15east), nc-yellowstone15 (15, .../nc/yellowstone). 286 items total (was 205), verified on disk post-merge, exact match to report, zero skipped. All 6 slugs confirmed verbatim-matching common/gallerySets.js (a test now asserts this equality so the two files can't drift). REAL DEFECT CAUGHT AND FIXED beyond the brief: nc/15east and nc/yellowstone each carry a `thumb/` subdir of legacy low-res tn_*.jpg duplicates (referenced nowhere in src/) -- the pipeline's recursive glob would have shipped both NC sets at double length with a low-res duplicate interleaved next to every real frame, invisible to the empty-source guard. Fixed via a per-gallery `ignore` fast-glob exclusion list (kept the glob recursive since nd-totd2025 depends on that to reach its action/ subdirectory) rather than a blanket non-recursive glob. Empty-source guard verified END-TO-END (not just unit tests): temporarily pointed a slug at a nonexistent dir, ran the real build, confirmed exit 1 + the correct id/path in the message, then confirmed the revert left no trace. Guard also now runs before ensureDir so a rejected gallery leaves no half-built output tree. 17/17 new unit tests, 861/861 full suite (agent ran full suite per explicit task brief override of its own centralized-execution guardrail), build clean 22.89s. ~78K tokens. SCOPE DEVIATION, justified: the brief's suggested entry-point-gate idiom (`` `file://${process.argv[1]}` `` string comparison) does NOT work on Windows -- process.argv[1] is a drive-letter path that never string-matches the file:/// URL import.meta.url produces, so the gate would have been permanently false and silently prevented the build from ever running. Used `pathToFileURL(process.argv[1]).href === import.meta.url` instead -- correct on both platforms. FLAGGED for whoever picks up 00054/00055/00056: nd-hillcountry (80 images, 2nd-largest set) is still built every push and consumed by nothing -- its component uses import.meta.globEager + client-side canvas thumbnailing, not the manifest. Cheapest win available once those Tasks rewire components onto manifests. Also flagged: the two thumb/ dirs (~46 orphaned files) are dead weight now that `ignore` excludes them -- deleting them is a clean follow-up, left alone as out of this Task's scope."
