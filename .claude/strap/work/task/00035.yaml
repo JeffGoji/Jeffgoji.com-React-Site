@@ -1,11 +1,11 @@
 id: "00035"
 type: task
 title: "Wire the 4 blog routes onto BlogList"
-state: new
+state: resolved
 parent: "00027"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00034"
@@ -13,9 +13,9 @@ links:
 original_estimate: 4
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T16:20:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T16:20:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   All 4 blog routes render the V2 build-log through `<BlogList>`; content intact (AC-016); per-source data-integrity (unique numeric id, required fields). Tests authored.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T16:20:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (a575888) with one conflict in App.test.jsx (both this branch and the already-merged Task 00041 added their own Task-coverage note to the same file-header doc comment) -- kept both notes, App.jsx itself merged clean. 98/98 scoped tests + full build green post-resolution. All 4 blog components (Miyoshi/Kiryu/Kasumi/Panda) collapsed to ~20 lines each: import data, build a banner, render one <BlogList>. Added a shared `buildCarBanner(name, entries)` helper (src/components/common/carBanner.js) rather than 4 near-duplicate banner literals -- reads the same Cars.json row the garage card reads (so /garage and the blog banner can't disagree about a car's identity), resolves the portrait through the existing carImages.js registry, derives the ODO chip from the newest log entry so it doesn't go stale. Headings kept VERBATIM (not swapped to the mockup's wording) per AC-016 content-intact -- flagging for CPO: mockup says 'NA6 MX-5 Build Log' etc., live site says 'Mazda NA MX5 Blog' etc.; a one-word-per-file change if the CPO wants the mockup's copy. ~78K tokens. Webp repoint (this Task's original brief) confirmed STILL PENDING Feature C -- zero .webp files exist anywhere in the repo; all `picture` paths left as-is, not touched. Data defect confirmed, not fixed: c8Blog.json id:2 has no `cost` field (BlogList already drops the chip gracefully) -- needs a real number from the CPO, not a placeholder. FLAGGED: naBlog.json/ndBlog.json use leading-slash-free image paths while MsmBlog.json/c8Blog.json use leading-slash paths -- both resolve today by accident (single-segment routes) but should be normalized whenever the webp repoint happens. FLAGGED (curator note): RTL's getByText does NOT match nested-element text (e.g. `<span>DATE <b>value</b></span>` only matches 'DATE') -- any .chip/.spec-row assertion in this codebase needs `.textContent`, not getByText, cost this agent a cycle and will recur given how many V2 surfaces use chips."
