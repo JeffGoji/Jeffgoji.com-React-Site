@@ -104,6 +104,31 @@ describe('the overlay is the mockup lightbox', () => {
         ).toEqual(FRAMES.map((frame) => frame.original))
     })
 
+    /**
+     * Task 00060. `original` is the only display-scale width the pipeline emits,
+     * so a candidate list would have nothing to choose between; and the library
+     * lays every slide into one track and moves them by transform, so a lazy
+     * slide is one the browser may not fetch until it is already sliding in.
+     */
+    it('loads the one display rendition eagerly and advertises no alternatives', () => {
+        const { container } = open()
+
+        for (const img of container.querySelectorAll('.lightbox__frame img')) {
+            expect(img.getAttribute('loading')).toBe('eager')
+            expect(img.hasAttribute('srcset')).toBe(false)
+            expect(img.hasAttribute('sizes')).toBe(false)
+        }
+    })
+
+    /** The library's slide styling hangs off this class; the swap must keep it. */
+    it('keeps the library slide class on the image', () => {
+        const { container } = open()
+
+        for (const img of container.querySelectorAll('.lightbox__frame img')) {
+            expect(img.classList.contains('image-gallery-image')).toBe(true)
+        }
+    })
+
     it('names every frame from the shape the hub passes down', () => {
         const { container } = open()
 

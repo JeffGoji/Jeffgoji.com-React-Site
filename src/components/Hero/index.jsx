@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import ResponsiveImage from '../common/ResponsiveImage'
+
 import { heroes, nightHero } from './heroes'
 
 /** Reads once per mount, through useState's lazy initializer — see below. */
@@ -24,6 +26,11 @@ const pickHero = () => heroes[Math.floor(Math.random() * heroes.length)]
  *
  * The nameplate keeps naming the picked car even after a load failure swaps the
  * frame, matching the mockup — it labels the rotation, not the pixels.
+ *
+ * The frame loads eagerly: it is the home surface's LCP element, and
+ * ResponsiveImage defers by default. `sizes` is a flat `100vw` because the block
+ * is full-bleed at every breakpoint; it is passed unconditionally and lands on
+ * the DOM only when the shot actually carries a ladder.
  */
 function Hero() {
     const [hero] = useState(pickHero)
@@ -34,11 +41,12 @@ function Hero() {
     return (
         <section className="hero">
             <div className="hero__media media--editorial media--editorial--hero">
-                <img
+                <ResponsiveImage
                     src={shown.img}
                     srcSet={shown.srcSet}
-                    sizes={shown.srcSet ? '100vw' : undefined}
+                    sizes="100vw"
                     alt={shown.alt}
+                    loading="eager"
                     onError={() => setFailed(true)}
                 />
             </div>

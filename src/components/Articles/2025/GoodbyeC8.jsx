@@ -1,4 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
+import ResponsiveImage from '../../common/ResponsiveImage';
+
 import c81 from '../../../assets/images/c8/c8-002.jpg';
 import c82 from '../../../assets/images/c8/autocross/1726961254977.jpg';
 import c83 from '../../../assets/images/c8/club-001.jpg';
@@ -37,10 +39,23 @@ const MEDIA = {
     c87: { src: C87, slug: 'c8_and_nd-001', width: 1919, height: 446 },
 };
 
+/**
+ * The candidate list for one source, truncated at its intrinsic width.
+ *
+ * `scripts/build-article-images.mjs` emits its derivatives flat, with no
+ * manifest, and silently declines to upscale — so a rung wider than the source
+ * names a file that was never written. `MEDIA`'s recorded `width` is the only
+ * record of where each ladder actually stops, which is why the filter lives here
+ * rather than in the shared component.
+ *
+ * @param {{slug: string, width: number}} media
+ * @returns {Array<{width: number, url: string}>}
+ */
 function srcSetFor({ slug, width }) {
-    return DERIVATIVE_WIDTHS.filter((candidate) => candidate <= width)
-        .map((candidate) => `${DERIVATIVE_ROOT}/${slug}-${candidate}.webp ${candidate}w`)
-        .join(', ');
+    return DERIVATIVE_WIDTHS.filter((candidate) => candidate <= width).map((candidate) => ({
+        width: candidate,
+        url: `${DERIVATIVE_ROOT}/${slug}-${candidate}.webp`,
+    }));
 }
 
 /**
@@ -50,11 +65,15 @@ function srcSetFor({ slug, width }) {
  * fallback behind the generated webp ladder. `eager` is reserved for the lead
  * photo, which sits inside the first viewport on a phone; everything below it
  * defers.
+ *
+ * `decoding` and `fetchpriority` are spelled out alongside `loading` rather than
+ * inherited: ResponsiveImage deliberately leaves the three uncoupled so each
+ * surface tunes them itself, and on this one the lead photo is the LCP element.
  */
 function ArticleMedia({ media, alt, eager = false }) {
     return (
         <figure className="post__media media--editorial">
-            <img
+            <ResponsiveImage
                 src={media.src}
                 srcSet={srcSetFor(media)}
                 sizes={PANEL_SIZES}

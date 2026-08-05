@@ -5,6 +5,48 @@ import ncOverlook from '../../assets/images/ncEdit.jpg'
 import ndBackRoad from '../../assets/images/nd/nd-001.jpg'
 
 /**
+ * The width ladders scripts/build-heroes.mjs emitted on the last build, keyed by
+ * the same `key` the shot list uses.
+ *
+ * Read through `import.meta.glob` rather than a plain import because
+ * `public/hero/` is generated and gitignored: a fresh clone has no manifest, and
+ * a bare import of a missing file is a hard resolve failure that would take the
+ * whole bundle — and the test run — down with it. A glob that matches nothing
+ * yields an empty record instead, which is precisely the pre-pipeline state this
+ * module already degrades to.
+ *
+ * Resolved at build time rather than fetched: the hero is the home surface's LCP
+ * element, and making its candidate list wait on a network round trip would cost
+ * more than the ladder saves.
+ */
+const manifests = import.meta.glob('../../../public/hero/manifest.json', {
+    eager: true,
+    import: 'default',
+});
+
+const renditions = Object.values(manifests)[0]?.heroes ?? {};
+
+/**
+ * Pairs each shot with the ladder the pipeline emitted for it, if any.
+ *
+ * The manifest's `srcSet` is taken verbatim. Its ladders are not uniform — `nc`
+ * stops at 800w and `na` at 1024w because those source photos are narrower than
+ * the nominal ceiling — so the string cannot be rebuilt from a constant on this
+ * side without silently advertising files the build never wrote.
+ *
+ * @param {HeroShot[]} shots
+ * @param {Record<string, {srcSet?: string}>} ladders
+ * @returns {HeroShot[]}
+ */
+export function withRenditions(shots, ladders) {
+    return shots.map((shot) => {
+        const srcSet = ladders?.[shot.key]?.srcSet;
+
+        return srcSet ? { ...shot, srcSet } : shot;
+    });
+}
+
+/**
  * The rotating hero's shot list — the "Random-Background-Feature" from Spec
  * 00002. One frame per car in the garage; the Hero picks one per session so a
  * return visit lands on a different car.
@@ -15,10 +57,9 @@ import ndBackRoad from '../../assets/images/nd/nd-001.jpg'
  * copying the mockup's duplicate (production never imports from a mockup path).
  * The `alt` strings are the designer's, verbatim from the mockup's mock-data.js.
  *
- * `srcSet` is the seam Feature C (Task 00056 emits the renditions, Task 00059
- * wires them) fills in. Until it does, each entry carries only the full-size
- * JPG and the Hero omits the srcset/sizes pair entirely — a srcset naming
- * renditions that do not exist would 404 and trip the error fallback.
+ * `srcSet` is absent whenever the pipeline has not run, and the Hero then omits
+ * the srcset/sizes pair entirely — a srcset naming renditions that do not exist
+ * would 404 and trip the error fallback.
  *
  * @typedef {object} HeroShot
  * @property {string} key   Stable identity for the car, used as the React key.
@@ -30,7 +71,7 @@ import ndBackRoad from '../../assets/images/nd/nd-001.jpg'
  *
  * @type {HeroShot[]}
  */
-export const heroes = [
+const SHOTS = [
     {
         key: 'na',
         img: naNight,
@@ -68,10 +109,17 @@ export const heroes = [
     },
 ]
 
+/** @type {HeroShot[]} */
+export const heroes = withRenditions(SHOTS, renditions)
+
 /**
  * The frame the Hero falls back to when the picked one fails to load — the
  * original night hero, which is also the NA entry's frame. Keeping the two on
  * one import means the fallback can never itself be a missing file.
+ *
+ * It carries whatever ladder the manifest gave the NA entry, which is safe for
+ * the same reason: the manifest and the renditions are written by one script in
+ * one pass, so a build that can name `na`'s candidates has also written them.
  *
  * @type {HeroShot}
  */

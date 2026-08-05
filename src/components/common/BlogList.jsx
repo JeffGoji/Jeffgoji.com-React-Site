@@ -11,11 +11,24 @@
  * path. Raw HTML authored into a JSON `entry` is therefore escaped to text
  * rather than mounted. Adding a raw-HTML plugin here re-opens stored XSS
  * through the content files and is guarded by BlogList.test.jsx.
+ *
+ * IMAGES (Task 00058): the banner and the per-post header both render through
+ * <ResponsiveImage>, single-rendition. A post's `picture` is a root-relative
+ * path into `public/images/`, which no build script processes — all three that
+ * exist read `src/assets/images/` and emit for the gallery, the article
+ * surfaces and the hero. Until a pipeline covers those files there are no
+ * candidates to advertise, so the shared primitive is here for its alt-text
+ * enforcement and its single loading policy rather than for a srcset. The
+ * markdown `img` override below is deliberately NOT routed through it: its
+ * props arrive from authored content where `alt` is often absent, and the
+ * primitive throws on a missing alt where that override falls back.
  */
 
 import { useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+
+import ResponsiveImage from './ResponsiveImage';
 
 const POSTS_PER_PAGE = 3;
 
@@ -77,12 +90,20 @@ function telemetryChips({ date, mileage, cost }) {
  * Car-identity banner. Ported from the mockups' blog.html header; the two
  * values that mockup carries on style attributes (the 44vh floor and the
  * h1-sized title) are class-borne on `.blog-hero` instead.
+ *
+ * Loads eagerly, unlike every other image on this surface. The banner is the
+ * blog route's LCP element the way the rotating hero is the home surface's, and
+ * <ResponsiveImage> defaults to lazy — taking that default would defer the one
+ * paint the reader is waiting on behind a layout pass. It carries no candidate
+ * list because none exists: the portrait resolves through `carImages.js` to a
+ * Vite asset import, and no build script renders width variants of those five
+ * files.
  */
 function BlogBanner({ image, imageAlt, eyebrow, title, chips }) {
     return (
         <header className="hero blog-hero">
             <div className="hero__media media--editorial">
-                <img src={image} alt={imageAlt} />
+                <ResponsiveImage src={image} alt={imageAlt} loading="eager" />
             </div>
             <div className="hero__scrim" />
             <div className="hero__content">
@@ -168,7 +189,7 @@ function BlogList({
                         {posts.map((post) => (
                             <article className="post" key={post.id}>
                                 <div className="post__media media--editorial">
-                                    <img
+                                    <ResponsiveImage
                                         src={post.picture}
                                         alt={`${title} — ${post.date}`}
                                         loading="lazy"
