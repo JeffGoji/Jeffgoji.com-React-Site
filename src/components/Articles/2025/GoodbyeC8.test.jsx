@@ -236,6 +236,23 @@ describe('every photo is graded, sized and deferred', () => {
     });
 
     /**
+     * ResponsiveImage deliberately leaves `decoding` uncoupled from `loading`,
+     * so the lead photo's synchronous decode is this surface's own call and can
+     * be dropped by an edit that only looks at `loading`.
+     */
+    it('decodes the lead photo synchronously and the rest off the main thread', () => {
+        renderArticle();
+
+        const [lead, ...below] = photos();
+
+        expect(lead.getAttribute('decoding')).toBe('sync');
+
+        for (const photo of below) {
+            expect(photo.getAttribute('decoding')).toBe('async');
+        }
+    });
+
+    /**
      * The pre-V2 markup labelled all seven photos "Panda", which gives a
      * screen-reader user no way to tell them apart.
      */
