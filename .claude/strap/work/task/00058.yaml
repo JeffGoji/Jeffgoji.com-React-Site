@@ -1,11 +1,11 @@
 id: "00058"
 type: task
 title: "Apply ResponsiveImage to blogs + Garage cards"
-state: new
+state: resolved
 parent: "00045"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00057"
@@ -13,9 +13,9 @@ links:
 original_estimate: 4
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-05T02:15:00Z
+updated_at: 2026-08-05T04:30:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T04:30:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   Each surface renders webp srcset; no raw multi-MB JPG import remains on these surfaces; descriptive alt. AC-010.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T04:30:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00005-image-pipeline-phase3 (742dc1d), clean merge, no overlap with 00059/00060. 901/901 full suite, build clean 24.71s. ~78K tokens. CONFIRMED, not assumed: no rendition pipeline exists for blog-post or Garage-portrait images -- all 3 build scripts (gallery/article/hero) read only from src/assets/images/, blog JSON `picture` fields point into public/images/ which nothing processes. Single-rendition ResponsiveImage usage (no srcSet) is therefore correct here, not a shortcut -- matches Task 00057's own documented contract for a legitimate one-rendition case. DELIBERATELY DID NOT wire the 2 Garage portraits (ncEdit.jpg, c8/c8-002.jpg) that happen to overlap with hero-pipeline renditions -- reaching them would require CarCard to fetch hero manifest.json at runtime, keyed by hero `key` not car id, for only 2 of 5 cards; flagged as a real follow-up candidate (a dedicated Cars.json-keyed portrait pipeline) rather than building an inconsistent partial fix. REAL DEVIATION FROM BRIEF, justified: blog banner image kept `loading=\"eager\"`, not lazy as briefed -- it's each blog route's LCP element and carried NO loading attribute before (implicit eager), so taking ResponsiveImage's lazy default would have been a real LCP regression on 4 routes under a Story whose whole point is performance. Post-body and CarCard images are lazy as briefed. Alt text: confirmed already fixed by Tasks 00033/00034 in Feature B (no generic 'this post's pic' survives) -- this Task's contribution is enforcement (missing alt now throws) not new copy. 'No raw multi-MB static import' DoD item: confirmed N/A to this Task's surfaces (car portraits are 211-731KB) -- the actual multi-MB assets in dist/ are all GoodbyeC8 article images, Task 00059's territory. FLAGGED for memory curation: frontend-engineer memory's Garage anti-pattern entry still cites the deleted Garage/Cards.jsx file and the already-fixed Fireball bug -- stale since Feature B Task 00033."
