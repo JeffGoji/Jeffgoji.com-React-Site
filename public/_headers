@@ -10,3 +10,13 @@
 
 /gallery/:gallery/manifest.json
   Cache-Control: public, max-age=300
+
+# hero/ renditions keep stable per-car filenames (not content-hashed), so a
+# swapped hero photo must not serve stale for a year -- a day, revalidated.
+# The manifest rule is listed first deliberately: /hero/* also matches it, and
+# the ladder must not outlive a rebuild that changes it.
+/hero/manifest.json
+  Cache-Control: public, max-age=300
+
+/hero/*
+  Cache-Control: public, max-age=86400, must-revalidate
