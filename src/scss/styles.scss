@@ -896,92 +896,16 @@
   margin-top: 6rem;
 }
 
-// --- EDITORIAL READING SURFACE ----------------------------------------------
-// Ported from the mockups' .eyebrow / .section-head / .post block
-// (assets/app.css:40-62 and :302-315), first needed by Task 00036 (the
-// GoodbyeC8 article, which has no dedicated mockup of its own and reuses this
-// language). Stories 00026/00027 port the SAME rules for the home and blog-list
-// surfaces — when those branches land, keep one copy of everything down to the
-// `.article` block and drop the duplicates.
+// --- EDITORIAL READING SURFACE (.article scope) -----------------------------
+// .eyebrow, .section-head, .post/.post__media/.post__body/.post__specs/
+// .post__entry are already ported above (Tasks 00030/00034/00038) -- this
+// branch's duplicate copies were dropped at merge time, as pre-flagged by the
+// agent. The .article-scoped rules below are unique to this Task and kept.
 //
 // The mockups' `.container` and `.section` layout helpers are deliberately NOT
 // ported: `.container` is a live Bootstrap component class and its rule would
 // collide, exactly as `.nav` did for the navbar. The measure and block rhythm
 // they supply are carried on `.article` below instead.
-
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--goji-red);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-
-  &::before {
-    content: "";
-    width: 28px;
-    height: 2px;
-    background: var(--goji-red);
-    display: inline-block;
-  }
-}
-
-.section-head {
-  margin-bottom: var(--space-7);
-
-  h2 {
-    font-size: var(--fs-h2);
-    text-transform: uppercase;
-  }
-
-  .sub {
-    color: var(--color-muted);
-    max-width: 60ch;
-  }
-}
-
-.post {
-  background: var(--color-reading);
-  border: var(--hairline);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-bottom: var(--space-6);
-}
-
-.post__media img {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-}
-
-.post__body {
-  padding: var(--space-6);
-}
-
-.post__specs {
-  margin-bottom: var(--space-4);
-}
-
-.post__entry {
-  color: var(--color-text);
-  white-space: pre-line;
-  font-size: var(--fs-read);
-  line-height: var(--lh-read);
-  max-width: 68ch;
-
-  img {
-    border-radius: var(--radius);
-    margin: var(--space-5) auto;
-  }
-
-  a {
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-}
 
 // Long-form article page shell. Stands in for the mockups'
 // `.section > .container > .blog` chain on a surface that has no hero: the
