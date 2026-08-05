@@ -246,11 +246,11 @@ describe('the grid is the mockup thumbnail block', () => {
     it('makes each thumb an operable control, so the lightbox has a trigger', async () => {
         const onSelectImage = vi.fn()
 
-        render(<GalleryHub sets={SETS} onSelectImage={onSelectImage} />)
+        const { container } = render(<GalleryHub sets={SETS} onSelectImage={onSelectImage} />)
 
-        const thumbs = await screen.findAllByRole('button')
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
 
-        fireEvent.click(thumbs[1])
+        fireEvent.click(thumbsIn(container)[1])
 
         expect(onSelectImage).toHaveBeenCalledWith(1)
     })
@@ -281,6 +281,83 @@ describe('the grid is the mockup thumbnail block', () => {
         expect(alts.slice(0, 3)).toEqual(['preferred', 'second', 'third'])
         expect(alts[3]).toContain('Set One')
         expect(alts[3].length).toBeGreaterThan(0)
+    })
+})
+
+/**
+ * Task 00040 wiring. The lightbox's own behaviour is covered in
+ * GalleryLightbox.test.jsx; this asserts only the seam — that the hub opens it
+ * on the clicked frame, hands it the fetched set, and takes it back down.
+ */
+describe('a thumb opens the lightbox on that frame', () => {
+    const lightboxIn = (container) => container.querySelector('.lightbox')
+
+    it('keeps the lightbox out of the document until a thumb is clicked', async () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
+
+        expect(lightboxIn(container)).toBeNull()
+    })
+
+    it('opens on the clicked frame rather than on the first', async () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
+
+        fireEvent.click(thumbsIn(container)[1])
+
+        expect(container.querySelector('.lightbox__cap').textContent).toBe(
+            '02 / 3 · set-one frame 1'
+        )
+    })
+
+    it('hands the lightbox the display renditions, not the thumbnails', async () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
+
+        fireEvent.click(thumbsIn(container)[0])
+
+        expect(
+            [...container.querySelectorAll('.lightbox__frame img')].map((img) =>
+                img.getAttribute('src')
+            )
+        ).toEqual(itemsFor('set-one', 3).map((item) => item.original))
+    })
+
+    it('closes on Escape, leaving the grid behind it', async () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
+
+        fireEvent.click(thumbsIn(container)[0])
+        expect(lightboxIn(container)).not.toBeNull()
+
+        fireEvent.keyDown(window, { key: 'Escape', keyCode: 27 })
+
+        expect(lightboxIn(container)).toBeNull()
+        expect(thumbsIn(container)).toHaveLength(3)
+    })
+
+    /**
+     * The switcher is behind the overlay, but the manifest for a set switched to
+     * earlier can still land while the lightbox is open — and an index into the
+     * old set means nothing in the new one.
+     */
+    it('closes when the visitor switches to another set', async () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
+
+        fireEvent.click(thumbsIn(container)[2])
+        expect(lightboxIn(container)).not.toBeNull()
+
+        fireEvent.change(screen.getByRole('combobox'), { target: { value: 'set-two' } })
+
+        expect(lightboxIn(container)).toBeNull()
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(2))
     })
 })
 
