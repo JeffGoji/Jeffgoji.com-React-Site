@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-08-05T05:15:00Z
+last_updated: 2026-08-05T14:45:00Z
 last_author: dev-lead
 status: active
 linked_work_items: ["00005", "00006"]
@@ -10,69 +10,70 @@ linked_work_items: ["00005", "00006"]
 
 ## What this is
 
-The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern dark motorsport-editorial look, image-loading/performance overhaul, and a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. **Features A (design foundation) and B (per-surface redesign) are both fully resolved and live on `main`.** **Feature C (image pipeline overhaul) is fully resolved and merged to `feature/strap-onboarding`, PR open to promote it to `main`.** One Feature remains: D (What's New page, not started).
+The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern dark motorsport-editorial look, image-loading/performance overhaul, and a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. **Features A, B, and C are all fully resolved and live on `main`** (PR #27 merged this session). One Feature remains: D (What's New page, not started) — but two small follow-up Tasks from Feature C are still open first (see below). **Session paused mid-work** — human had to shut down the machine (airport) with two agents mid-task; this file was updated as an emergency checkpoint, not a natural stopping point.
 
-## Where we left off
+## Where we left off — READ THIS FIRST, mid-session pause
 
-**Feature C (00005) closed out** across 5 dependency waves (more serial than Feature B's, build-pipeline nature — each step edits the file the last one produced): Wave 1 = Task 00053 solo → Wave 2 = 00054+00056 parallel → Wave 3 = 00055 → Wave 4 = 00057 solo → Wave 5 = 00058+00059+00060 parallel. All 8 Tasks, both Stories (00044, 00045), merged into `feature/00005-image-pipeline-phase3`. **PR #26 is open** (`feature/00005-image-pipeline-phase3` → `feature/strap-onboarding`) — not yet merged, awaiting CPO go-ahead. No Netlify checks have reported on it yet as of this checkpoint (checked via `gh pr checks 26`, empty).
+This session (continuing from a prior one): merged **PR #26** (`6eaf7c6`) and **PR #27** (`c0d2218`) — Feature C is now live on `main`. Then executed **Task 00074** (re-encode `dist/gallery/*/original/` via mozjpeg, no resize) end to end: devops-lead resolved it, merged into `feature/strap-onboarding` (`a5825a9`), real measured result **879.5 MiB → 388.9 MiB (-55.78%)** across all 286 files. It caught and fixed a real regression along the way: 17 source photos carry non-identity EXIF orientation, and the re-encode (which deliberately strips EXIF) would have shipped them rotated without an added `.rotate()` call.
 
-**Two real production defects were found and fixed as side effects, not just built around**: a duplicate-thumbnail hazard in 2 NC galleries (a recursive glob would have silently shipped a low-res duplicate next to every real frame), and — significant — **the site's OG/Twitter/JSON-LD social-share image has been a genuine 404 since the tag was written** (wrong path, under a directory that's never served). Every social-media share/unfurl of jeffgoji.com has silently fallen back to crawler-scraped content until Task 00060 fixed it with a real, verified 67.5KB 1200x630 JPEG.
+Task 00074's own report flagged two gaps, and the CPO (via AskUserQuestion) said fix both now:
+1. **No UI exposes the shrunk `full` rendition at all** — `GalleryHub.framesFrom` drops the `full` field, `GalleryLightbox` never renders it. → filed **Task 00075** (frontend-engineer): add a user-initiated download/wallpaper link in the lightbox wired to `frame.full`, without violating `GalleryHub`'s existing no-eager-fetch design intent.
+2. **The same 17 sideways photos are ALSO already live-broken today** in the `thumb`/`display` renditions (pre-existing bug, not introduced this session, just discovered as a side effect) — → filed **Task 00076** (devops-lead): mirror the `.rotate()` fix onto `outThumb`/`outDisplay` in the same `processOne()` function.
 
-**Gallery pipeline consolidated from 3 wiring patterns to exactly 1.** All 6 gallery slugs now build through `scripts/build-gallery.mjs` uniformly, matching `common/gallerySets.js`'s canonical slug ids verbatim. ~229MB of genuinely duplicate deploy weight removed (Vite was double-emitting full-size gallery originals a since-retired static-import pattern no longer needed) — independently confirmed via `du -sh` on the actual built `dist/`, not just trusted from the agent report.
+Both dispatched in parallel worktrees (`.worktrees/task-00075`, `.worktrees/task-00076`) off current `feature/strap-onboarding` (`a4daa1b`, includes Task 00074). **THEN THE HUMAN HAD TO SHUT DOWN FOR THE AIRPORT MID-DISPATCH.** Both agents were told to immediately checkpoint-commit whatever they had (marked `WIP:`) rather than finish cleanly, and NOT to flip their Task YAML to resolved. Whether they actually got a WIP commit in before the process died is **unconfirmed** — check first thing next session (see Quick resume).
 
-**New shared `<ResponsiveImage>` primitive** (`src/components/common/ResponsiveImage.jsx`) applied across blogs, Garage, GoodbyeC8 (7 images), the rotating hero (LCP-eager), and evaluated-but-deliberately-not-applied to the gallery grid/lightbox (only 2 rendition widths exist — 320/1600 — and a 2-candidate srcset would resolve to the 1600w image on any phone above 1x DPR, worse than the single thumb already in use).
+Both worktrees had real uncommitted diffs at the moment of the pause request:
+- `.worktrees/task-00075` (branch `task/00075-gallery-download-affordance`): modified `src/components/common/GalleryHub.jsx`, `GalleryLightbox.jsx`, `GalleryLightbox.test.jsx`, `src/scss/styles.scss`.
+- `.worktrees/task-00076` (branch `task/00076-gallery-thumb-rotation-fix`): modified `scripts/build-gallery.mjs`; two untracked scratch files `t76-probe.mjs`, `t76-verify.mjs` (throwaway verification scripts, safe to delete if still present and unused).
 
-**Measured byte reduction, all well past the Story's >=50% bar**: NC galleries -91.8%/-95.9%, representative gallery (`nd-totd2025`) -92.7%, hero phone-width -95.3%, hero desktop widest-rung -62.6%. LCP/Lighthouse re-measurement was NOT done anywhere in this Feature — no browser tool was available to any dispatched agent — flagged as a standing open verification gap, same as Feature B's.
+These are real file edits sitting on local disk in the worktrees — shutting the machine down does NOT lose them (they're not memory-only), the only open question is whether each agent's own `git commit` finished before the process was killed, or whether the raw uncommitted edits are still just sitting there unbound to a commit.
 
-**One unresolved, CPO-flagged finding, not yet acted on**: `dist/gallery/*/original/` still ships **881MB** of untouched full-resolution gallery source photos (92% of the gallery build output, ~80% of the total ~1.1GB deploy). Every manifest's `full` field points at one and the lightbox can serve it directly on click. Surfaced twice (Story 00044's close, Story 00045's close) — **CPO has not yet decided whether this needs its own Task.** Ask before starting Feature D.
+## Quick resume — do this first, in order
 
-## Files in flight
-
-None under version control — working tree is clean on `feature/strap-onboarding` (`f173f5a`), in sync with origin. Two untracked, gitignored local directories exist from build runs this session (`public/hero/`, `public/og/`) — harmless, regenerated by `npm run build`, do not need cleanup.
-
-## Open decisions
-
-- **PR #26 merged** (`feature/00005-image-pipeline-phase3` → `feature/strap-onboarding`, merge commit `6eaf7c6`, CPO-directed this session). Local branch synced (merge commit `8e43190` after re-committing this session's Task 00074 filing), 939/939 tests + clean build re-verified post-merge, pushed to origin. **Stage-2 PR #27 now open** (`feature/strap-onboarding` → `main`) — awaiting Netlify checks + CPO merge go-ahead, same as PRs #24/#25's pattern.
-- **The 881MB gallery-originals question is RESOLVED into scope**, not still open: CPO wants full resolution KEPT (confirmed download/wallpaper use case) but shrunk via better compression, not downscaling. **Task 00074 filed against Story 00044** (reopened resolved→active) — devops-lead, re-encode `scripts/build-gallery.mjs`'s `original` rendition via `sharp(...).jpeg({quality:85, mozjpeg:true})`, no `.resize()` call. dev-lead spot-tested this against 3 real TOTD2025 source files before filing: 56-61% size reduction, 0 dimension change, extrapolates to ~881MB→~360-390MB. WebP/AVIF evaluated and rejected for this specific rendition (AVIF has weak native "set as wallpaper" OS support; WebP wasn't meaningfully smaller than mozjpeg). Not yet executed — next session should dispatch devops-lead against Task 00074, same worktree pattern as the rest of Story 00044.
-- **Feature D (What's New page)** — Stories 00061-00063, Tasks 00064-00073, completely untouched this session. Predecessors 00003/00004/00005 all now satisfied once PR #26 lands on `main`. Next up per the locked execution order once C is fully promoted and Task 00074 clears.
-- **Local branch cruft**: `git branch -a` still lists ~14 old `task/000NN-*` branches from Feature A's execution (00012-00025) that were never locally cleaned up (their remotes are already gone). Harmless, but worth a `git branch -d` sweep next session if it gets noisy.
+1. `/context-fetch jeffgoji-site-update` to reload this context.
+2. **Check both worktrees' actual state before doing anything else:**
+   ```
+   git -C .worktrees/task-00075 log --oneline -3
+   git -C .worktrees/task-00075 status --short
+   git -C .worktrees/task-00076 log --oneline -3
+   git -C .worktrees/task-00076 status --short
+   ```
+   - If a `WIP:` commit is there: good, the agent checkpointed. Read the diff, assess how much is left, and either resume the same agent (SendMessage to its name if a fresh session still has the harness state) or just pick up the work directly yourself from the WIP commit.
+   - If `git status` still shows the same uncommitted modified files listed above with NO new commit: the process died before it could commit. The file edits are still there on disk (check `git diff` to see how far the agent actually got) — read them, judge whether they're salvageable or should be discarded (`git checkout -- <file>` per-file if you want to start that file over), and continue the Task fresh from that assessment.
+   - Either way, **do not trust `.claude/strap/work/task/00075.yaml` / `00076.yaml`'s `state` field alone** — they were explicitly told not to flip to resolved, so `state: new` there does NOT necessarily mean no progress was made; check the worktree, not just the YAML.
+3. Once 00075 and 00076 are both actually resolved and merged into `feature/strap-onboarding`, that closes out Feature C's tail entirely (Story 00044 → resolved again, Story 00045 → resolved again) — a fresh small PR `feature/strap-onboarding` → `main` is needed to ship them (no open PR exists for this yet, PR #27 already merged/closed).
+4. **Then** Feature D (What's New page) is the next and last Feature in the V2 initiative — read Stories 00061-00063 / Tasks 00064-00073 fresh, they haven't been touched or reconciled against current file layout yet.
+5. Clean up worktrees once their Tasks are merged: `git worktree remove .worktrees/task-00075 --force`, `git worktree remove .worktrees/task-00076 --force`, then `git branch -d task/00075-gallery-download-affordance task/00076-gallery-thumb-rotation-fix`. **Do this from the MAIN checkout, never from inside a worktree.**
 
 ## Open work items
 
-- `#00001`-`#00004` — resolved, live on `main`. (Requirement, Spec, Feature A, Feature B.)
-- `#00005` — feature stays **resolved**, now fully merged into `feature/strap-onboarding` (PR #26, merged) with **PR #27 open to `main`, not yet merged**. Child **Story 00044 is reopened (active)** for post-close scope: new **Task 00074** (re-encode gallery originals, devops-lead, not yet executed). Story 00045 and the rest of 00044's original 4 Tasks remain resolved/unaffected.
-- `#00006` — active, not yet touched — Feature D (What's New page). Stories 00061-00063, Tasks 00064-00073.
-
-## Quick resume
-
-1. `/context-fetch jeffgoji-site-update` to reload this context.
-2. Check whether the CPO wants **PR #27** merged into `main` (`gh pr view 27`, `gh pr checks 27`) — if yes, `gh pr merge 27 --merge --delete-branch`... except PR convention is to NEVER delete `feature/strap-onboarding` (it's the standing integration branch), so merge without `--delete-branch` here, unlike stage-1 PRs.
-3. Dispatch devops-lead against **Task 00074** (re-encode `dist/gallery/*/original/` via mozjpeg q85, no resize) — same worktree pattern as the rest of Story 00044. Not yet started.
-4. Once Task 00074 + PR #27 are both settled, Feature D (What's New page) is the next and last Feature in the V2 initiative — read Stories 00061-00063 / Tasks 00064-00073 fresh, they haven't been touched or reconciled against current file layout yet.
+- `#00001`-`#00004` — resolved, live on `main`.
+- `#00005` — Feature stays **resolved**, fully live on `main` (PR #26 + #27 both merged). Two child Stories reopened for tail work: **Story 00044** (active) — Task 00074 resolved+merged, **Task 00076 in progress (unconfirmed state, see above)**. **Story 00045** (active) — **Task 00075 in progress (unconfirmed state, see above)**.
+- `#00006` — active, not yet touched — Feature D (What's New page). Stories 00061-00063, Tasks 00064-00073. Blocked on 00075/00076 clearing first (not a hard predecessor, just the sane order — don't context-switch mid-cleanup).
 
 ## Critical context
 
-- **CPO-directed capacity override remains the default execution mode.** Used successfully across Features A, B, and C in full. No exceptions this project.
-- **`import.meta.glob('<path>', { eager: true, import: 'default' })` is the established pattern for consuming a gitignored `public/` manifest at build time for an LCP-critical/above-the-fold element.** A runtime `fetch` (the `GalleryHub` pattern) is wrong for anything above the fold — it makes the image ladder wait on a round trip. A plain `import` hard-fails when the file is gitignored and absent (fresh clone, pre-build test run). The glob degrades to `{}` gracefully when no file matches.
-- **`styles.scss`-style merge dedup risk generalizes to any shared script multiple parallel Tasks touch** — always diff-check for silently duplicated logic after a clean auto-merge, not just after a flagged conflict. Feature C had zero `build-gallery.mjs` collisions specifically because dispatch briefs explicitly partitioned which Task touched which function/section — worth continuing that discipline for any future multi-Task work on one shared file.
-- **Verify agent-reported numbers against the actual artifact, not just the report.** This session independently re-confirmed: gallery manifest item counts (`node -e` against the JSON), the 229MB `dist/` size delta (`du -sh` before/after), the OG image's exact byte count, and hero webp inlining into the JS bundle (`grep` the built chunk). Caught nothing wrong this time, but this is the standing bar, not optional.
-- **A stale local `main`/branch ref can produce a wildly wrong "commits ahead" count** — always `git fetch origin <branch>` and diff against `origin/<branch>`, never a possibly-unfetched local ref, before computing a promotion PR's scope.
-- **`resize_window` (claude-in-chrome) does not work against a maximized/snapped Chrome window**, and may be controlling a different window than the one the human is looking at. If a real browser responsive check is needed again: ask the human to use DevTools' own device-toolbar responsive mode (types an exact width) rather than relying on the automation tool's window resize — confirmed reliable, screenshots from it are visually shrunk by DevTools' auto-fit zoom though, so trust `window.innerWidth`/DOM checks over eyeballing screenshot pixels for anything precise.
-- **PUSH BEFORE YOU PR.** Local commits after a branch's last push are silently absent from `gh pr create`'s diff.
-- **Always operate git commands from the correct checkout** — never from inside a specialist's worktree.
-- **`CreateTeam` is unavailable in this harness.** Workaround: manual `git worktree add -b <task-branch> <path> <feature-branch>` + named background `Agent` calls. Confirmed reliable across ~40 dispatches this session (Features A, B, C in full).
-- **Worktrees ship with no `node_modules`.** Windows recipe: `New-Item -ItemType Junction` to the main checkout's `node_modules`; remove via PowerShell `(Get-Item .\node_modules).Delete()`, never `rm -rf`.
-- **devops-lead dispatches worked cleanly this session** (Feature C's Story 00044, first time this domain was used) — same worktree/briefing pattern as frontend-engineer, no adjustments needed.
-- **Netlify auto-deploys both `main` and PR previews.** Always confirm `gh pr checks <n>` is green before merging — note PR #26 has reported zero checks so far, worth re-checking before merge rather than assuming green.
-- **PR/merge convention**: feature branches → `feature/strap-onboarding` (stacked, `--merge` not squash, `--delete-branch` on the head) → separate PR `feature/strap-onboarding` → `main` when ready to deploy (also `--merge`). Never delete `feature/strap-onboarding` itself.
-- **Standing verification bar**: after merging to `main`, fetch the real deployed site and check compiled output directly — don't trust "the build succeeded" alone.
+- **CPO-directed capacity override remains the default execution mode.** Used successfully across Features A, B, C in full, and this session's Task 00074/00075/00076 follow-ons. No exceptions this project.
+- **A subagent's uncommitted worktree edits survive a host machine shutdown** — they're ordinary files on disk, not in-memory state. What does NOT reliably survive is the agent process finishing its own `git commit` in time, and possibly the harness's live conversation/task state for that agent depending on how the session was terminated. Always verify via `git log`/`git status` in the worktree directly; never assume a WIP commit landed just because it was requested.
+- **`GalleryHub.jsx` has a docblock explaining why the manifest's `full` field is deliberately dropped** (avoiding accidental eager/srcset fetch of multi-MB files) — Task 00075 needs to thread `full` through as an inert URL (fine, since the risk was always eager-loading behavior, not the string's mere presence) and should update that docblock's reasoning to note the new deliberate click-gated exception, not leave it claiming `full` is dropped entirely once it isn't.
+- **The `.rotate()` fix pattern is already proven** — Task 00074's merged diff to `outOriginal` in `scripts/build-gallery.mjs` (commit `a5825a9`) is the exact idiom Task 00076 mirrors onto `outThumb`/`outDisplay`. No new design decision needed there, just apply the same fix to two more `sharp` chains in the same function.
+- **`gallery:build` is expensive**: mozjpeg re-encoding across all 286 source photos took ~13 minutes wall time in Task 00074 (vs ~3 minutes for the old byte-copy). This affects local iteration speed on both 00075 and 00076's verification passes, and will affect Netlify build minutes once shipped — worth keeping in mind, not yet flagged to Netlify/CI config.
+- **Vitest picks up `.worktrees/*` as a second copy of the repo if you run tests from the main checkout while a worktree still exists** — doubles the reported test count (939 → 1878 seen this session). Not a real failure, just noise; either ignore the doubled count or remove/ignore the worktree before running the centralized test pass for a clean number.
+- **`CreateTeam` is unavailable in this harness.** Workaround: manual `git worktree add -b <task-branch> <path> <feature-branch>` + named background `Agent` calls, `node_modules` linked via PowerShell `New-Item -ItemType Junction`. Confirmed reliable across ~45 dispatches this project.
+- **PR/merge convention**: feature/task branches → `feature/strap-onboarding` (stacked, `--merge` not squash) → separate PR `feature/strap-onboarding` → `main` when ready to deploy (also `--merge`, no `--delete-branch` on this one — never delete `feature/strap-onboarding` itself). Stage-1 branches get `--delete-branch`; the integration branch never does.
+- **Netlify does not report PR status checks on this repo** (`gh pr checks` has come back empty on every PR this project, #24 through #27) — this is normal here, not a red flag; `mergeStateStatus`/`mergeable` via `gh pr view --json` is the real signal to check instead.
+- **PUSH BEFORE YOU PR / merge.** Local commits after a branch's last push are silently absent from `gh`'s view of that branch.
+- **Always operate git commands from the correct checkout** — never from inside a specialist's worktree unless deliberately inspecting that worktree's own state.
+- **Standing verification bar, still open**: LCP/Lighthouse re-measurement has never been done anywhere in this project (no browser tool available to any dispatched agent) — flagged repeatedly across Features B and C, still not actioned.
+- **Verify agent-reported numbers against the actual artifact, not just the report.** This session independently re-confirmed Task 00074's size/dimension/EXIF claims by reviewing its actual merged diff before merging further; this is the standing bar for every agent report, not optional.
 
 ## Source-of-truth pointers
 
-- `.claude/strap/memory/dev-lead/v2-initiative.md` — the durable V2 map; **stale**, doesn't reflect Feature C's completion — refresh when convenient, not blocking.
-- `.claude/strap/work/feature/00005.yaml` — Feature C's full audit trail across its ENTIRE lifecycle (both the original baseline round and this session's Phase 3) — comment c6 has the complete closing summary including the 881MB open finding.
-- PRs #24/#25 (Feature B, merged) and #26 (Feature C, open) — the reference examples of the two-stage stacked promotion flow.
-- `src/components/common/ResponsiveImage.jsx` — the new shared image primitive; read its own docblock before consuming it elsewhere (Feature D may need images).
-- `scripts/build-gallery.mjs`, `build-heroes.mjs`, `build-article-images.mjs`, `build-og-image.mjs` — the 4 build-time image pipelines, each with different manifest/no-manifest shapes; `ResponsiveImage` is deliberately agnostic to all of them.
-- `src/App.test.jsx` — shell-composition-level test file (route-parity, footer-mount, gallery-redirect guards); extend rather than duplicate for future App-level tests.
+- `.claude/strap/work/feature/00005.yaml` — Feature C's full audit trail, comment c7 is the most recent (notes Task 00074 filed, does not yet reflect 00074's completion or 00075/00076 — update when this tail work closes).
+- `.claude/strap/work/story/00044.yaml` comment c4, `.claude/strap/work/story/00045.yaml` comment c3 — the most current per-Story state, written right before the pause.
+- `.claude/strap/work/task/00074.yaml` — resolved, comment c2 has devops-lead's full verification report (real numbers, the EXIF-rotation defect catch, the two flags that spawned 00075/00076).
+- `.claude/strap/work/task/00075.yaml`, `00076.yaml` — **state likely still shows `new`/in-progress regardless of actual worktree progress** — see Quick resume step 2, check the worktree not just the YAML.
+- `scripts/build-gallery.mjs` — commit `a5825a9` on `feature/strap-onboarding` has Task 00074's merged `.rotate()`/mozjpeg fix on `outOriginal` — the reference pattern for Task 00076.
+- `src/components/common/GalleryHub.jsx`, `GalleryLightbox.jsx` — Task 00075's target files; read GalleryHub's existing docblock (~lines 55-56, ~89) before touching.
+- PRs #24-#27 (all merged) — reference examples of the two-stage stacked promotion flow.
 - `.claude/strap/state/{code,devops}-connection.yaml` — GitHub (JeffGoji/Jeffgoji.com-React-Site) + local strap-agile profiles.
