@@ -6,9 +6,8 @@
  * page's own <main>; nothing may wrap it here, because a second <main> is a
  * competing landmark and App.test.jsx fails on it.
  *
- * The heading is the pre-V2 heading verbatim. AC-016 keeps the content intact
- * across the re-skin — the mockup's "NA6 MX-5 Build Log" would be a copy edit,
- * which is not this Task's to make.
+ * The heading is the mockup's own title (blog.html:45's `mountBlog` call),
+ * swapped in from the pre-V2 "Mazda NA MX5 Blog" per CPO direction.
  */
 
 import BlogList from '../../common/BlogList';
@@ -17,6 +16,6 @@ import data from '../../../assets/Data/naBlog.json';
 
 const BANNER = buildCarBanner('Miyoshi', data);
 
-const NABlog = () => <BlogList data={data} title="Mazda NA MX5 Blog" banner={BANNER} />;
+const NABlog = () => <BlogList data={data} title="NA6 MX-5 Build Log" banner={BANNER} />;
 
 export default NABlog;

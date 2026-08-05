@@ -50,10 +50,10 @@ const sourceOf = (folder) =>
         .replace(/^\s*\/\/.*$/gm, '');
 
 const ROUTES = [
-    ['Miyoshi', NABlog, naBlog, 'Mazda NA MX5 Blog'],
-    ['Kiryu', MsmBlog, msmBlog, 'Mazdaspeed Miata Blog'],
-    ['Kasumi', NDBlog, ndBlog, 'Mazda MX5 RF GTS Blog'],
-    ['Panda', C8Blog, c8Blog, 'C8 Z51 Corvette Blog'],
+    ['Miyoshi', NABlog, naBlog, 'NA6 MX-5 Build Log'],
+    ['Kiryu', MsmBlog, msmBlog, 'NB Mazdaspeed Build Log'],
+    ['Kasumi', NDBlog, ndBlog, 'ND GTS RF Build Log'],
+    ['Panda', C8Blog, c8Blog, 'C8 Corvette Z51 Build Log'],
 ];
 
 const newestOf = (data) => [...data].sort((a, b) => b.id - a.id)[0];
@@ -75,7 +75,7 @@ describe.each(ROUTES)('the %s route renders through the shared BlogList', (
         expect(screen.getAllByRole('main')).toHaveLength(1);
     });
 
-    it('keeps the pre-V2 heading as the log title', () => {
+    it('uses the mockup heading as the log title', () => {
         render(<Route />);
 
         expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(heading);

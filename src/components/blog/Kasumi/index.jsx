@@ -1,8 +1,9 @@
 /**
  * The ND RF GTS build log.
  *
- * See Miyoshi for why this route is configuration only and why the heading is
- * carried over rather than re-worded.
+ * See Miyoshi for why this route is configuration only. Title follows the
+ * mockup's "<chassis+model> Build Log" pattern (blog.html:45), read straight
+ * from this car's own Cars.json `model` field rather than invented.
  */
 
 import BlogList from '../../common/BlogList';
@@ -11,6 +12,6 @@ import data from '../../../assets/Data/ndBlog.json';
 
 const BANNER = buildCarBanner('Kasumi', data);
 
-const NDBlog = () => <BlogList data={data} title="Mazda MX5 RF GTS Blog" banner={BANNER} />;
+const NDBlog = () => <BlogList data={data} title="ND GTS RF Build Log" banner={BANNER} />;
 
 export default NDBlog;
