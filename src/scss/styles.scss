@@ -1149,6 +1149,11 @@ a {
   h2 {
     font-size: var(--fs-h2);
   }
+
+  .sub {
+    color: var(--color-muted);
+    max-width: 60ch;
+  }
 }
 
 // Long-form reading panel — one step off the canvas, roomy leading, and a
@@ -1224,54 +1229,9 @@ a {
   font-weight: 700;
 }
 
-// --- SHARED EDITORIAL PRIMITIVES --------------------------------------------
-// Ported from the mockups' base layer (assets/app.css:40-62). These are the two
-// rules every V2 surface opens with, so several Feature B tasks port them in
-// parallel off the same source — keep ONE copy at merge, not the union.
-//
-// The mockups only ever head a section with <h2> (assets/app.js:135). A page
-// whose section head IS the page title needs an <h1> there instead, so the h1
-// slot is an addition to the locked rule rather than a change to it: same
-// treatment, one step up the type scale.
-
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--goji-red);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-}
-
-.eyebrow::before {
-  content: "";
-  width: 28px;
-  height: 2px;
-  background: var(--goji-red);
-  display: inline-block;
-}
-
-.section-head {
-  margin-bottom: var(--space-7);
-}
-
-.section-head h1 {
-  font-size: var(--fs-h1);
-  text-transform: uppercase;
-}
-
-.section-head h2 {
-  font-size: var(--fs-h2);
-  text-transform: uppercase;
-}
-
-.section-head .sub {
-  color: var(--color-muted);
-  max-width: 60ch;
-}
+// .eyebrow already ported above (Task 00030's block) and .section-head above
+// (Task 00038's block, now carrying this branch's .sub addition too) --
+// dropped as duplicates here.
 
 // --- SUSPENSION HUB (Task 00037) --------------------------------------------
 // No mockup covers this surface, so it extends the language the mockups already
