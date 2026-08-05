@@ -1,120 +1,16 @@
-import { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Image, ListGroup, Button } from "react-bootstrap";
-import data from "../../../assets/Data/MsmBlog.json";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-// import AdSenseSlot from '../../AdSense/AdSenseSlot';
+/**
+ * The Mazdaspeed Miata build log.
+ *
+ * See Miyoshi for why this route is configuration only and why the heading is
+ * carried over rather than re-worded.
+ */
 
-const POSTS_PER_PAGE = 3;
+import BlogList from '../../common/BlogList';
+import { buildCarBanner } from '../../common/carBanner';
+import data from '../../../assets/Data/MsmBlog.json';
 
-function MsmBlog() {
-  const [page, setPage] = useState(1);
+const BANNER = buildCarBanner('Kiryu', data);
 
-  const sortedData = [...data].sort((a, b) => b.id - a.id);
-  const totalPages = Math.ceil(sortedData.length / POSTS_PER_PAGE);
-
-  const paginatedData = sortedData.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, [page]);
-
-  const msmBlogList = paginatedData.map((data) => (
-    <Row className="justify-content-center mb-4" key={data.id}>
-      <Col lg={6} md={10} sm={12} className="mt-3">
-        <Card className="bg-dark rounded p-2 text-white">
-          <div className="text-center">
-            <Image src={data.picture} className="img-fluid rounded" alt="this post's pic" />
-          </div>
-
-          <ListGroup className="mt-3 rounded">
-            <ListGroup.Item className="p-1 bg-dark text-white">Date: {data.date}</ListGroup.Item>
-            <ListGroup.Item className="p-1 bg-dark text-white">Mileage: {data.mileage} miles</ListGroup.Item>
-            <ListGroup.Item className="p-1 bg-dark text-white">Cost for this entry: {data.cost}</ListGroup.Item>
-          </ListGroup>
-
-          <hr />
-
-          {/* Markdown version of your entry */}
-          <Card.Text className="mb-0">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                // Keep paragraphs looking like your existing pre-line behavior
-                p: function P(props) {
-                  return <p {...props} style={{ whiteSpace: "pre-line", marginBottom: "1rem" }} />;
-                },
-                // Make markdown images match your bootstrap styling
-                img: function Img(props) {
-                  return (
-                    <img
-                      {...props}
-                      className="img-fluid rounded"
-                      alt={props.alt || "blog image"}
-                      loading="lazy"
-                    />
-                  );
-                },
-                // Make links safe/consistent
-                a: function A(props) {
-                  return <a {...props} target="_blank" rel="noreferrer" />;
-                },
-              }}
-            >
-              {data.entry}
-            </ReactMarkdown>
-          </Card.Text>
-
-          <p className="text-center">
-            <a href="#top">Back to top</a>
-          </p>
-
-          <hr className="bloghr" />
-        </Card>
-      </Col>
-    </Row>
-  ));
-
-  return (
-    <Container fluid>
-      <Row className="justify-content-center text-white mt-0 bg-primary-1">
-        <Col lg={12} md={12} sm={12}>
-          {/* <AdSenseSlot client='ca-pub-8417979887134577' slot='1042016675' /> */}
-          <h2 className="text-center mt-3">Mazdaspeed Miata Blog</h2>
-
-          {msmBlogList}
-
-          {totalPages > 1 && (
-            <div className="d-flex justify-content-center my-3">
-              <Button
-                variant="secondary"
-                className="mx-1"
-                style={{ width: "100px" }}
-                disabled={page === 1}
-                onClick={() => setPage(page - 1)}
-              >
-                Previous
-              </Button>
-
-              <span className="align-self-center mx-2">
-                Page {page} of {totalPages}
-              </span>
-
-              <Button
-                variant="secondary"
-                className="mx-1"
-                style={{ width: "100px" }}
-                disabled={page === totalPages}
-                onClick={() => setPage(page + 1)}
-              >
-                Next
-              </Button>
-            </div>
-          )}
-        </Col>
-      </Row>
-    </Container>
-  );
-}
+const MsmBlog = () => <BlogList data={data} title="Mazdaspeed Miata Blog" banner={BANNER} />;
 
 export default MsmBlog;
