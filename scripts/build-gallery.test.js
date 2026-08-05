@@ -13,7 +13,8 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import sharp from 'sharp';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import {
     GALLERIES,
@@ -179,5 +180,108 @@ describe('buildGallery refuses to ship an empty gallery', () => {
         await expect(
             fs.access(path.resolve('public/gallery/fixture-no-output'))
         ).rejects.toThrow();
+    });
+});
+
+/**
+ * Exercises the real pipeline over a generated fixture set rather than unit
+ * testing `processOne`, which is not exported: the thing under test is the JSON
+ * that reaches the hub over the network, and only a real build produces it.
+ *
+ * Three frames, two of them date-stamped, because the defect this schema closes
+ * is per-image fields collapsing to one shared string — which a single-frame
+ * fixture cannot show.
+ */
+describe('the manifest a build writes', () => {
+    const GALLERY_ID = 'fixture-schema-00054';
+    const LABEL = 'Fixture Drive';
+    const OUT_DIR = path.resolve('public/gallery', GALLERY_ID);
+
+    const DATED = '20221112_101351.jpg';
+    const ALSO_DATED = '20240301_080000.jpg';
+    const UNDATED = 'scan-01.jpg';
+
+    let items;
+
+    beforeAll(async () => {
+        const srcDir = await fs.mkdtemp(path.join(os.tmpdir(), 'gallery-schema-'));
+
+        for (const filename of [DATED, ALSO_DATED, UNDATED]) {
+            await sharp({
+                create: { width: 8, height: 8, channels: 3, background: '#333' },
+            })
+                .jpeg()
+                .toFile(path.join(srcDir, filename));
+        }
+
+        try {
+            await buildGallery({ id: GALLERY_ID, label: LABEL, srcDir });
+        } finally {
+            await fs.rm(srcDir, { recursive: true, force: true });
+        }
+
+        const manifest = JSON.parse(
+            await fs.readFile(path.join(OUT_DIR, 'manifest.json'), 'utf8')
+        );
+
+        items = Object.fromEntries(
+            manifest.items.map((item) => [item._thumbId.split('/').pop(), item])
+        );
+    });
+
+    afterAll(async () => {
+        await fs.rm(OUT_DIR, { recursive: true, force: true });
+    });
+
+    it('carries the date-stamped label on both new fields', () => {
+        const item = items[DATED];
+
+        expect(item.thumbnailAlt).toBe(`${LABEL} — 11/12/2022 10:13`);
+        expect(item.label).toBe(`${LABEL} — 11/12/2022 10:13`);
+    });
+
+    it('falls back to the bare filename when the name carries no date', () => {
+        const item = items[UNDATED];
+
+        expect(item.thumbnailAlt).toBe(`${LABEL} — ${UNDATED}`);
+        expect(item.label).toBe(`${LABEL} — ${UNDATED}`);
+    });
+
+    it('describes each frame distinctly rather than reusing the set label', () => {
+        const built = Object.values(items);
+
+        expect(built).toHaveLength(3);
+        expect(new Set(built.map((item) => item.thumbnailAlt)).size).toBe(built.length);
+        expect(new Set(built.map((item) => item.label)).size).toBe(built.length);
+        expect(new Set(built.map((item) => item.originalAlt))).toEqual(new Set([LABEL]));
+    });
+
+    it('agrees with the alt the hub already fell back to, so the two cannot diverge', () => {
+        for (const item of Object.values(items)) {
+            expect(item.thumbnailAlt).toBe(item.alt);
+            expect(item.label).toBe(item.alt);
+        }
+    });
+
+    it('adds the new fields without dropping any the manifest already carried', () => {
+        const item = items[DATED];
+
+        expect(Object.keys(item).sort()).toEqual(
+            [
+                '_thumbId',
+                'alt',
+                'description',
+                'full',
+                'label',
+                'loading',
+                'original',
+                'originalAlt',
+                'thumbnail',
+                'thumbnailAlt',
+            ].sort()
+        );
+        expect(item.description).toBe(`${LABEL} photo taken 11/12/2022 10:13`);
+        expect(item.original).toBe(`/gallery/${GALLERY_ID}/display/${DATED}.webp`);
+        expect(item.thumbnail).toBe(`/gallery/${GALLERY_ID}/thumbs/${DATED}.webp`);
     });
 });

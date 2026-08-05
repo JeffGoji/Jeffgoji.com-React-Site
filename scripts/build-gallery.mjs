@@ -99,6 +99,18 @@ const OUT_ROOT = "public/gallery";
 const THUMB_W = 320;
 const DISPLAY_W = 1600;
 
+/**
+ * Builds one manifest item.
+ *
+ * `thumbnailAlt` and `label` are the two fields the hub's degradation chain
+ * (`GalleryHub.jsx`'s `thumbnailAltFor`) prefers over `alt`, and the lightbox
+ * caption reads whichever one wins — so all three are derived from the single
+ * string `parseDateAlt` returns rather than from separate rules. A second
+ * derivation would let the same frame be described one way under its thumbnail
+ * and another way in its caption, which is the exact failure the chain exists to
+ * prevent. They are emitted alongside `alt`, not instead of it: the hub's
+ * fallbacks still have to serve manifests built before this schema.
+ */
 async function processOne(fileAbs, g, outDir) {
     const filename = path.basename(fileAbs);
     const { alt, description } = parseDateAlt(filename, g.label);
@@ -131,6 +143,8 @@ async function processOne(fileAbs, g, outDir) {
         // If you want “download full res” later:
         full: cleanName(`/gallery/${g.id}/original/${filename}`),
         alt,
+        thumbnailAlt: alt,
+        label: alt,
         description,
         loading: "lazy",
         originalAlt: g.label,
