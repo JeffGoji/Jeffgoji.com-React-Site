@@ -119,12 +119,32 @@ async function processOne(fileAbs, g, outDir) {
     const outDisplay = path.join(outDir, "display", `${filename}.webp`);
     const outOriginal = path.join(outDir, "original", filename);
 
-    // Copy original (optional but nice)
-    await fs.copyFile(fileAbs, outOriginal);
-
-    // Build thumb + display
     const input = sharp(fileAbs, { failOn: "none" });
 
+    /**
+     * The `full` rendition is re-encoded rather than copied. Every source is
+     * untouched camera output, so a byte copy shipped ~880MB of frames carrying
+     * no compression at all; mozjpeg at q85 roughly halves that at unchanged
+     * display dimensions, which the download/wallpaper use case depends on.
+     *
+     * `rotate()` takes no argument on purpose: it bakes the source's EXIF
+     * orientation into the pixels. That is load-bearing here because sharp
+     * writes no metadata unless `withMetadata()` is called — which this
+     * deliberately does not, so camera and GPS tags do not reach the web — and
+     * 17 of the source frames carry a non-identity orientation they would
+     * otherwise rely on to hang the right way up. Without this they would ship
+     * rotated, which the byte copy never was.
+     *
+     * Every source is a JPEG (the glob also admits png/webp; none exist), so
+     * the encoder is unconditional.
+     */
+    await input
+        .clone()
+        .rotate()
+        .jpeg({ quality: 85, mozjpeg: true })
+        .toFile(outOriginal);
+
+    // Build thumb + display
     await input
         .clone()
         .resize({ width: THUMB_W, withoutEnlargement: true })
