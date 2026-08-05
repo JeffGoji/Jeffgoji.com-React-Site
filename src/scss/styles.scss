@@ -1464,3 +1464,40 @@ a {
     --bs-accordion-body-padding-x: var(--space-4);
   }
 }
+
+// Home's garage preview, ported from home.html's GARAGE PREVIEW section
+// (home.html:58-69). Task 00032.
+//
+// The measure is repeated on this block rather than taken from a ported
+// `.container`, the same trade `.garage__inner` and `.driver-intro__inner`
+// make: Bootstrap owns that class name and its breakpoint ladder is still live
+// on every un-migrated surface.
+.garage-preview__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+// home.html:60 inlines the head row so the "All builds" link can sit opposite
+// the heading. It is class-borne here for the same reason the rest of the
+// mockups' style attributes are: an inline style cannot be overridden by the
+// cascade, and the mockups use them only because they have no build step.
+//
+// `flex-wrap` is what keeps the row off a horizontal overflow at 360 — the
+// link drops under the heading rather than pushing the section wide.
+.garage-preview__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+// The mockups tighten the container gutter here (assets/app.css:586); the
+// preview measure follows its siblings.
+@media (max-width: 360px) {
+  .garage-preview__inner {
+    padding-inline: var(--space-4);
+  }
+}
