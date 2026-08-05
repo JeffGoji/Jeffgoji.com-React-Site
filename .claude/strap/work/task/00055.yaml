@@ -1,11 +1,11 @@
 id: "00055"
 type: task
 title: "Retire pattern-a (static Vite-import arrays) + pattern-b (runtime canvas thumbnailing)"
-state: new
+state: resolved
 parent: "00044"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: devops-lead
 tags: [AI, strap:task]
 links:
   - target: "00054"
@@ -13,9 +13,9 @@ links:
 original_estimate: 4
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-05T02:15:00Z
+updated_at: 2026-08-05T03:40:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-05T03:40:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   No `images.js` static-import arrays remain; no runtime canvas thumbnailing path remains; every gallery surface reads built webp manifest output; grep-clean of `import.meta.globEager`; galleries still render via react-image-gallery. AC-009.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T03:40:00Z
+    body: "[STRAP/agent:devops-lead] State: new -> resolved. Merged into feature/00005-image-pipeline-phase3 (97647b7), clean merge, 9 files deleted (745 lines), nothing else touched. src/components/Gallery/ is now empty and gone entirely. All 4 remaining static-import galleries (C8/autocross, NB/HillCountry, NC/EastCoast15, NC/Yellowstone15) plus the orphaned NB/index.jsx switcher retired -- verified via grep across src+test (zero live imports beyond GalleryHub/GalleryLightbox and their own tests), App.jsx route check, and a real filename set-difference between each images.js's import list and its manifest's items[].full basenames (all 73 statically-imported images present in manifests; the pipeline actually recovers 8 images the hand-maintained arrays had silently dropped). import.meta.globEager and canvas-thumbnailing both confirmed still fully absent (regression check, not new work -- already removed by Feature B). 875/875 full suite, build clean 31.7s. ~78K tokens. This was the last Task in Story 00044 -- Story 00044 fully resolved by this merge. REAL FINDING, VERIFIED BY DEV-LEAD DIRECTLY (du -sh on the built dist/, not just trusted from the report): deleting the static imports recovered ~229MB of DUPLICATE deploy weight (Vite was emitting a second full-size copy of every image into dist/assets/ on top of the pipeline's own public/gallery/original/ copy) -- confirmed dist/assets/ dropped to 14MB post-merge. BLOCKER-GRADE FINDING FOR STORY 00045, confirmed independently: dist/gallery/*/original/ is 881MB, 92% of the 954MB dist/gallery/ and ~80% of the full 1.1GB dist/ -- manifest.items[].full points at these untouched full-resolution originals and GalleryLightbox can serve one on click. This needs an explicit AC in Story 00045, not an assumption that Story 00045's srcset work handles it -- flagging for dev-lead to add one when dispatching Task 00057 or a task therein. Two adjacent dead files deliberately left alone (correct scope discipline, not oversight): src/assets/images/nb/HillCountry/index.jsx (a 5th, already-broken pattern-a consumer misplaced in the assets tree, sits inside build-gallery.mjs's nb-hillcountry srcDir -- needs an explicit owner call before deletion) and src/entry-ssr.jsx's dangling Gallery import lines (already broken before this Task, nothing bundles the file, tracked as an existing Task-00047 follow-up)."
