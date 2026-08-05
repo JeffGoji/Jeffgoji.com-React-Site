@@ -167,7 +167,6 @@ describe('the retired pre-V2 palette is gone from styles.scss', () => {
 describe('the legacy stylesheet is absorbed rather than layered (Task 00018)', () => {
     it.each([
         ['.splash-background', 'the home hero wash'],
-        ['.img-hover:hover', 'the garage card affordance'],
     ])('carries %s forward for %s', (selector) => {
         expect(emitted).toContain(selector);
     });
@@ -187,8 +186,15 @@ describe('the legacy stylesheet is absorbed rather than layered (Task 00018)', (
         expect(emitted).not.toContain('background-attachment: fixed');
     });
 
-    it('drives the card hover glow from the palette instead of a raw red', () => {
-        expect(declarationsOf('.img-hover:hover').get('box-shadow')).toBe('var(--glow-red)');
+    /**
+     * `.img-hover` was the legacy garage card affordance, kept alive only until
+     * the mockup's own card treatment landed. Task 00033 ported that treatment
+     * and deleted the one element that carried the class, so the rule goes with
+     * it rather than lingering as dead CSS.
+     */
+    it('retires the legacy .img-hover affordance the ported card supersedes', () => {
+        expect(emitted).not.toContain('.img-hover');
+        expect(declarationsOf('.card:hover').get('transform')).toBe('translateY(-4px)');
     });
 
     it('strips link underlines app-wide, as every mockup surface does', () => {
