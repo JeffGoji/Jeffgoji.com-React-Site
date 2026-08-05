@@ -349,6 +349,73 @@ describe('each post carries its telemetry chips', () => {
     });
 });
 
+/**
+ * Task 00058. The two chrome images on this surface route through the shared
+ * <ResponsiveImage> rather than a bare <img>. Nothing here asserts a srcset:
+ * `picture` points into public/images/ and the banner portrait comes from a
+ * Vite asset import, and no build script renders width variants of either, so
+ * the single-rendition branch of the primitive's contract is the correct one
+ * until a pipeline exists. When one lands, the assertions below are what should
+ * fail first.
+ */
+describe('the surface images render through the shared responsive primitive', () => {
+    const banner = {
+        image: 'images/nd/car-nd.jpg',
+        imageAlt: 'ND MX-5 at dusk',
+        title: 'Kasumi',
+    };
+
+    it('routes both chrome images through it, leaving only the markdown override on a bare img', () => {
+        expect(SOURCE).toContain("import ResponsiveImage from './ResponsiveImage'");
+        expect(CODE.match(/<ResponsiveImage/g)).toHaveLength(2);
+        expect(CODE.match(/<img/g)).toHaveLength(1);
+    });
+
+    /**
+     * The primitive throws on a missing alt rather than degrading. Proving the
+     * banner inherits that is the one assertion that distinguishes it from a
+     * bare <img>, whose DOM output is identical for a single rendition.
+     */
+    it('inherits the primitive`s refusal to render the banner without alt text', () => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        expect(() => renderList({ banner: { ...banner, imageAlt: undefined } })).toThrow(
+            /alt/i
+        );
+    });
+
+    it('advertises no candidates for a post image, since none are built', () => {
+        renderList({ data: [post(1)] });
+
+        const image = document.querySelector('.post__media img');
+
+        expect(image.hasAttribute('srcset')).toBe(false);
+        expect(image.hasAttribute('sizes')).toBe(false);
+        expect(image.getAttribute('loading')).toBe('lazy');
+    });
+
+    /**
+     * The banner is the blog route's LCP element, so it opts out of the
+     * primitive's lazy default the way the home hero does. Taking the default
+     * would defer the one paint the reader is waiting on.
+     */
+    it('loads the banner eagerly and the post images lazily', () => {
+        renderList({ data: [post(1)], banner });
+
+        expect(document.querySelector('.hero__media img').getAttribute('loading')).toBe('eager');
+        expect(document.querySelector('.post__media img').getAttribute('loading')).toBe('lazy');
+    });
+
+    it('advertises no candidates for the banner either', () => {
+        renderList({ banner });
+
+        const image = document.querySelector('.hero__media img');
+
+        expect(image.hasAttribute('srcset')).toBe(false);
+        expect(image.hasAttribute('sizes')).toBe(false);
+    });
+});
+
 describe('the car-identity banner is optional and driven by the caller', () => {
     const banner = {
         image: 'images/nd/car-nd.jpg',

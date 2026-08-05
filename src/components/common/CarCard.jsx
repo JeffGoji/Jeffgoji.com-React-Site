@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { resolveCarImage } from './carImages';
+import ResponsiveImage from './ResponsiveImage';
 
 /**
  * The bloglink a car carries when it has no build log of its own.
@@ -28,6 +29,15 @@ export const isRetired = (bloglink) => bloglink === RETIRED_BLOGLINK;
  * than by each caller -- an unresolved path is a data defect, not a per-surface
  * one, and centralising it keeps a consumer from silently rendering a broken
  * portrait.
+ *
+ * The portrait renders through <ResponsiveImage> (Task 00058) with no candidate
+ * list. Two of the five Cars.json photos happen to share a source file with the
+ * hero ladder (`ncEdit.jpg`, `c8/c8-002.jpg`), so renditions for those two do
+ * exist under `/hero/` -- but they are addressed by hero key, not by car, and
+ * reaching them means fetching `public/hero/manifest.json` at runtime. Wiring a
+ * fetch into this component to widen two cards out of five would buy an
+ * inconsistent surface and a coupling to another surface's pipeline; the
+ * portraits want a pipeline of their own, keyed off Cars.json.
  *
  * variant `hub` (the /garage page) carries the number tag and a build-log call
  * to action; variant `preview` (the home garage strip) drops both and makes the
@@ -71,7 +81,11 @@ function CarCard({
     const content = (
         <>
             <div className="card__media media--editorial">
-                <img src={resolveCarImage(img)} alt={`${name} - ${label}`} loading="lazy" />
+                <ResponsiveImage
+                    src={resolveCarImage(img)}
+                    alt={`${name} - ${label}`}
+                    loading="lazy"
+                />
                 {isHub && <span className="numtag card__numtag">#{id}</span>}
             </div>
             <div className="card__body">
