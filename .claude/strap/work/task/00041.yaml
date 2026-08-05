@@ -1,11 +1,11 @@
 id: "00041"
 type: task
 title: "Old-route redirects + gallery cleanup + route-audit guard"
-state: new
+state: resolved
 parent: "00029"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00039"
@@ -13,9 +13,9 @@ links:
 original_estimate: 4
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T16:05:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T16:05:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -44,3 +44,8 @@ description: |
   Every legacy gallery URL lands on `/galleries` (redirect guard test passes); hub reachable; no dead per-gallery routes. Tests authored.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T16:05:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (1d3a105), clean auto-merge, no conflicts (this Task didn't touch styles.scss). `/galleries` added; legacy paths (6 gallery routes + /gallery) redirect via a list DERIVED from gallerySets.js's legacyPath field, not re-listed, so a future set rename/add can't leave an unredirected URL behind. 10 dead files removed (~792 lines): both retirement patterns named in the Story (pattern-a images.js, pattern-b _thumbs/thumbs.js+chunk.js), the old Gallery switcher shell, and a misplaced duplicate HillCountry component in assets/images/. Production bundle shrank 655KB -> 567KB from the dead-code removal. import.meta.globEager is now FULLY GONE from src/ (confirmed via repo-wide grep) -- this was the stated blocker on upgrading past Vite 4.4/Vitest 2-3; project-profile.md and frontend-engineer memory both still record it as live and should be updated. 32/32 App.test.jsx tests (2 pre-existing route-parity assertions rewritten, not deleted, since they encoded the exact contract this Task supersedes -- /totdtrip guards from Task 00024 kept intact in their own block), 726/726 full suite, build clean. ~72K tokens. RETIREMENT SEQUENCING (per Story's Feature-C-AC-009 coordination note): build-gallery.mjs's GALLERIES array only emits nd-totd2025 and nd-hillcountry today -- those 2 components were retired (manifest exists); 4 slugs deferred, left on disk unreferenced/unbundled since no manifest exists yet (c8-autox, nb-hillcountry, nc-eastcoast15, nc-yellowstone15) -- this is the exact backlog for whoever picks up Feature C AC-009. FLAGGED, not yet fixed: NavMenu/index.jsx:57-92 still fans out to all 6 legacy paths via dropdowns (its own docblock comment claiming the route 'doesn't exist yet' is now false) and Footer/index.jsx:63 links /gallery directly -- both merely hit a redirect so nothing is broken, but AC-016 'reachable through the hub' isn't fully clean until someone repoints these. Also flagged: redirects lose set context (a /nc-yellowstone15 bookmark lands on the hub showing the FIRST set, not Yellowstone) -- GalleryHub's initialSlug prop could fix this per-legacy-path if wanted, out of this Task's specified scope (plain redirect was the brief)."
