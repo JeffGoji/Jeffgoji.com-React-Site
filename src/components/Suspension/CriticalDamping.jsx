@@ -1,6 +1,6 @@
 function CriticalDamping() {
     return (
-        <div className="text-start mb-5">
+        <div>
             <p>
                 In suspension tuning, the <strong>low-speed</strong> damping ratio (often expressed as a percentage of “critical damping,” ζ) governs how the car responds to slow body motions—think roll under cornering, dive under braking, and squat under acceleration.
             </p>
@@ -41,6 +41,7 @@ function CriticalDamping() {
                 Suspension dampers are effectively two dampers in one: <strong>low-speed</strong> valving for slow chassis motions, and <strong>high-speed</strong> valving for rapid wheel impacts.
             </p>
 
+            <div className="table-responsive">
             <table className="table">
                 <thead>
                     <tr>
@@ -86,6 +87,7 @@ function CriticalDamping() {
                     </tr>
                 </tbody>
             </table>
+            </div>
 
             <p>
                 <strong>Putting It All Together</strong><br />

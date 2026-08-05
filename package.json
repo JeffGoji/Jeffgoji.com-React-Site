@@ -5,9 +5,10 @@
     "type": "module",
     "scripts": {
         "gallery:build": "node scripts/build-gallery.mjs",
-        "dev": "vite",
-        "dev:gallery": "npm run gallery:build && vite",
-        "build": "npm run gallery:build && vite build",
+        "articles:build": "node scripts/build-article-images.mjs",
+        "dev": "npm run articles:build && vite",
+        "dev:gallery": "npm run gallery:build && npm run articles:build && vite",
+        "build": "npm run gallery:build && npm run articles:build && vite build",
         "preview": "vite preview",
         "test": "vitest run"
     },

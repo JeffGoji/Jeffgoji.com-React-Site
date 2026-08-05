@@ -2,7 +2,7 @@
 
 function CompDamping() {
     return (
-<div className="text-start">
+<div>
                 <p>
                     <strong>Compression damping</strong> is the resistance a shock absorber provides when its piston is pushed inward—when the wheel moves upward relative to the car body (over a bump, dip, or during body roll). Inside the damper, hydraulic fluid must flow through tiny orifices or past adjustable shims/valves; the smaller the opening (or the stiffer the shim stack), the more resistance the fluid encounters, and the firmer the compression damping feels.
                 </p>

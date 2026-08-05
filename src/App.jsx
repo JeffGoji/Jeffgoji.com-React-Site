@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 // Components and Pages
 import Header from './components/Header'
@@ -21,16 +21,21 @@ import C8Blog from './components/blog/Panda'
 import GoodbyeC8 from './components/Articles/2025/GoodbyeC8';
 
 // Gallery links
-import Gallery from './components/Gallery'
-import MSMGallery from './components/Gallery/NB/HillCountry'
-import EastCoast15 from './components/Gallery/NC/EastCoast15'
-import Yellowstone15 from './components/Gallery/NC/Yellowstone15'
-import NDHillCountry from './components/Gallery/ND/HillCountry'
-import C8AutoxGallery from './components/Gallery/C8/autocross'
-import TailOfTheDragonGallery from './components/Gallery/ND/TailOfTheDragon';
+import GalleryHub from './components/common/GalleryHub'
+import { GALLERY_SETS } from './components/common/gallerySets'
 
 import ScrollToTop from './components/CustomComponents/ScrollToTop'
 import PageviewTracker from './components/CustomComponents/PageviewTracker'
+
+/**
+ * The pre-V2 gallery URLs, every one of which now lands on the single hub.
+ *
+ * Derived from the set config rather than re-listed here so a set that is
+ * renamed or added in the switcher cannot leave its old URL behind
+ * unredirected. `/gallery` is appended by hand because it was the switcher
+ * landing page rather than a set, so it has no entry to derive from.
+ */
+const LEGACY_GALLERY_PATHS = [...GALLERY_SETS.map((set) => set.legacyPath), '/gallery']
 
 function App() {
   return (
@@ -52,13 +57,10 @@ function App() {
           <Route path="goodbye-c8" element={<GoodbyeC8 />} />
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
-          <Route path="gallery" element={<Gallery />} />
-          <Route path="msm-gallery" element={<MSMGallery />} />
-          <Route path="nc-eastcoast15" element={<EastCoast15 />} />
-          <Route path="nc-yellowstone15" element={<Yellowstone15 />} />
-          <Route path="nd-hillcountry" element={<NDHillCountry />} />
-          <Route path="c8-autox" element={<C8AutoxGallery />} />
-          <Route path="totdgallery" element={<TailOfTheDragonGallery/>} />
+          <Route path="galleries" element={<GalleryHub />} />
+          {LEGACY_GALLERY_PATHS.map((path) => (
+            <Route key={path} path={path} element={<Navigate to="/galleries" replace />} />
+          ))}
         </Routes>
         <Footer />
       </div>
