@@ -35,9 +35,10 @@ function renderFrame(frame) {
  * `slideToIndex` already normalises an out-of-range index to the other end of
  * the set, which is why the prev/next handlers pass a raw offset.
  *
- * `alt` doubles as the caption's label. The manifest carries no label field of
- * its own (see GalleryHub's note on the degradation chain), and inventing a
- * second chain for the caption would let the two disagree about the same frame.
+ * `alt` doubles as the caption's label. The hub has already resolved the
+ * manifest's own label through its degradation chain by the time a frame gets
+ * here, and inventing a second chain for the caption would let the thumbnail and
+ * the caption disagree about the same frame.
  *
  * @param {object} props
  * @param {Array<{original: string, thumbnail: string, alt: string}>} props.items

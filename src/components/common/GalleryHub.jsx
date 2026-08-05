@@ -35,10 +35,11 @@ async function loadManifestItems(slug) {
 }
 
 /**
- * The build script writes no per-image `thumbnailAlt` or `label` — the fields
- * the mockup's data layer assumes — so the alt text degrades through what the
- * manifest does carry before falling back to the set's own label. Logged
- * against Feature C as a build-script enhancement in Story 00029.
+ * The build script emits per-image `thumbnailAlt` and `label`, so the first link
+ * of this chain is the one that normally wins. The rest of it is not vestigial:
+ * a manifest built before that schema landed carries only `alt`, and the deploy
+ * serves `manifest.json` from cache independently of the bundle, so the two can
+ * be a cache lifetime out of step with each other.
  */
 function thumbnailAltFor(item, set, position) {
     return item.thumbnailAlt || item.alt || item.label || `${set.label} — photo ${position}`
