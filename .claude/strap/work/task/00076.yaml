@@ -1,0 +1,51 @@
+id: "00076"
+type: task
+title: "Fix pre-existing rotation defect in thumb/display gallery renditions"
+state: new
+parent: "00044"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: devops-lead
+tags: [AI, strap:task]
+links:
+  - target: "00074"
+    type: related
+original_estimate: 2
+created_at: 2026-08-05T05:45:00Z
+created_by: dev-lead
+updated_at: 2026-08-05T05:45:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field | Value |
+  |---|---|
+  | Authored By | dev-lead |
+  | Authored At | 2026-08-05T05:45:00Z |
+  | Completed By | _(set at resolution)_ |
+  | Completed At | _(set at resolution)_ |
+
+  ---
+
+  # Fix pre-existing rotation defect in thumb/display gallery renditions
+
+  ## Description
+  While implementing Task 00074 (re-encoding the `original` rendition), devops-lead discovered that 17 of the 286 gallery source photos across 4 galleries (nd-hillcountry x10, nc-eastcoast15 x4, nd-totd2025 x1, nc-yellowstone15 x1) carry a non-identity EXIF orientation tag (12x 90deg, 5x 180deg). Task 00074's fix applies to the `original` rendition only (via `.rotate()`). The **`thumb` and `display` renditions never call `.rotate()` either**, and never have — this is a live, pre-existing, user-visible defect: those 17 photos are currently being served sideways in the gallery grid and lightbox in production, independent of anything this session has touched.
+
+  ## Linked Story
+  **Story:** 00044
+  ## Original Estimate
+  **Hours (senior-developer):** 2
+  ## Implementation guidance
+  In `processOne()` (`scripts/build-gallery.mjs`), add `.rotate()` to the `sharp` chains for both the `outThumb` and `outDisplay` builds (same fix pattern Task 00074 already applied to `outOriginal` — see that Task's merged commit for the exact idiom and the reasoning comment). Re-run the full gallery build and verify the same 17 previously-identified files (nd-hillcountry x10, nc-eastcoast15 x4, nd-totd2025 x1, nc-yellowstone15 x1) now render upright in thumb + display output, not just original.
+  ## Dependencies
+  Related: Task 00074 (same root cause, same file, same `processOne()` function — coordinate to avoid a redundant second diff to the same lines if Task 00075/00074's branch state is still fresh; rebase onto latest `feature/strap-onboarding`).
+  ## Definition of Done
+  All 3 renditions (thumb, display, original) apply EXIF-orientation correction consistently; the previously-identified 17 sideways files confirmed upright in all 3 output sizes (programmatic as-displayed-dimension check, not just visual sampling, matching Task 00074's verification bar); full test suite green; production build clean.
+  ## Quality Checklist
+  - [x] One-paragraph description; Story linked; estimate >=3h... _(2h, sub-3h exception: single documented root-cause fix mirroring Task 00074's already-reviewed pattern, not novel scope)_; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-05T05:45:00Z
+    body: "[STRAP/agent:dev-lead] Task filed per CPO direction after devops-lead's Task 00074 report flagged this as a live, pre-existing defect (not introduced by 00074, and explicitly left untouched there per that Task's brief). CPO confirmed they want it fixed now rather than deferred, since it's the same file/function/root cause already fresh in context. Filed against Story 00044 (devops-lead's build-side domain, same as 00074)."
