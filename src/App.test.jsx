@@ -16,6 +16,11 @@
  * Covers Task 00023: the footer's composition into the shell, which is a
  * separate concern from the footer's own contract and lives here for the same
  * reason — the defect was in App.jsx, not in the component.
+ *
+ * Covers Task 00035: the blog routes now render a <main> of their own, from
+ * inside <BlogList>. Whether that lands as one landmark or two is a property of
+ * the assembled shell, so it is asserted here as well as in the route's own
+ * test.
  */
 
 import { readFileSync } from 'node:fs';
@@ -221,4 +226,20 @@ describe('the shell mounts the footer on every route (Task 00023)', () => {
         expect(footer.parentElement.contains(banner)).toBe(true);
         expect(footer.parentElement.lastElementChild).toBe(footer);
     });
+});
+
+/**
+ * <BlogList> brings its own <main>, so a per-car route that also wrapped one
+ * would give the shell two competing landmarks — invisible on screen and only
+ * catchable from an assembled render.
+ */
+describe('each blog route contributes exactly one main landmark (Task 00035)', () => {
+    it.each(['/na-blog', '/msm-blog', '/nd-blog', '/c8-blog'])(
+        'mounts a single main on %s',
+        (route) => {
+            renderAt(route);
+
+            expect(screen.getAllByRole('main')).toHaveLength(1);
+        }
+    );
 });
