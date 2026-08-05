@@ -1,7 +1,7 @@
 id: "00004"
 type: feature
 title: "Re-skin every primary surface to the V2 design system (home, garage, blogs, articles, suspension, videos, consolidated galleries hub)"
-state: active
+state: resolved
 parent: null
 iteration: null
 area: null
@@ -24,9 +24,9 @@ links:
     type: related
 created_at: 2026-08-01T18:45:00Z
 created_by: spec-lead
-updated_at: 2026-08-01T19:27:00Z
+updated_at: 2026-08-04T17:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T17:00:00Z
 closed_at: null
 description: |
   | Field        | Value                       |
@@ -101,3 +101,31 @@ comments:
     author: dev-lead
     timestamp: 2026-08-04T14:00:00Z
     body: "[STRAP/agent:dev-lead] CPO-DIRECTED CAPACITY OVERRIDE (bypasses /plan-sprint's single-sprint capacity gate, per explicit CPO direction to continue the pattern established in Feature 00003). All 4 Stories (00026-00029) + all 12 Tasks (00030-00041, 54h) allocated directly to Sprint 2026.08.A (ends 2026-08-08), which already carries 80h against a 42h nominal total from Feature 00003's two override rounds -- now 134h nominal against 42h, ~92h over. Justification unchanged from precedent: original_estimate is a human senior-dev-hours planning fiction, not a wall-clock constraint on agent execution speed. Execution plan: single feature branch off feature/strap-onboarding (predecessor Feature 00003 already merged to main), manual git-worktree + background-Agent dispatch (CreateTeam still unavailable this session). Two dependency waves per the Task graph: Wave 1 (8 parallel, no predecessors) = 00030 (hero), 00031 (video grid), 00033 (CarCard+Garage hub), 00034 (BlogList), 00036 (GoodbyeC8), 00037 (Suspension), 00038 (NaMiata), 00039 (galleries hub UI). Wave 2 (4 parallel, depend on Wave 1) = 00032 (Home compose, needs 00030/00031/00033), 00035 (4 blog routes, needs 00034), 00040 (lightbox, needs 00039), 00041 (redirects+cleanup, needs 00039). All 12 Tasks assigned to frontend-engineer solo (not designer+frontend as Feature A's foundation work required) -- the visual contract for every Tier-1 surface (home/garage/blog/galleries) is already locked in the approved Spec-00002 mockups (home.html/garage.html/blog.html/gallery.html + app.css), so this Feature is mockup-port implementation, not new visual design authoring. Designer will be pulled in ad hoc only if a fidelity gap surfaces during review."
+  - id: c4
+    author: dev-lead
+    timestamp: 2026-08-04T17:00:00Z
+    body: |
+      [STRAP/agent:dev-lead] State: active -> resolved. FEATURE 00004 COMPLETE -- all 4 Stories (00026-00029), all 12 Tasks (00030-00041) resolved and merged into feature/00004-per-surface-redesign. AC-001 (every primary route renders V2), AC-005 (responsive 360/768/1024/1440, structural/CSS-verified), and AC-016 (all content/galleries/blogs/videos reachable and intact, P8 markdown-safety guard in place) satisfied across every surface this Feature owns.
+
+      Executed in two dependency waves across 8 manual git-worktree + background-Agent dispatches (Wave 1) then 4 more (Wave 2), all frontend-engineer solo. 844/844 full test suite passing, production `vite build` verified clean at every merge step across both waves.
+
+      **Real defect fixed, not just re-skinned:** the Fireball id-6 image mismatch bug (Task 00033) -- root-caused and fixed via a portrait registry re-keyed by the data's own `img` path, not patched around. Also fixed: an empty `eventKey="5"` Suspension accordion stub (Task 00037, root cause was eventKey being scoped per-Accordion-root not per-page, not a missing panel) and invalid HTML (three `<h4>`s directly inside one `<ul>` on NaMiata, Task 00038).
+
+      **Real integration bug caught by a full-suite checkpoint, not shipped silently:** after Wave 1's 8 tasks all merged, three tests (Hero, DriverIntro, Footer) started failing because each grabbed the LAST `@media (max-width: Npx)` block in the compiled stylesheet rather than the one containing its own selector -- true only by accident until multiple surfaces added same-breakpoint blocks. Fixed by searching every block for the one that actually mentions the component's own selector; Suspension's equivalent latent fragility fixed pre-emptively in the same pass. `DriverIntro/index.test.jsx`'s 768px assertion still has a milder, currently-dormant version of this same class of fragility (uses the FIRST block via destructuring rather than searching) -- flagged, not yet triggered, worth a follow-up before it bites Feature D.
+
+      **styles.scss required deliberate de-duplication at 5 of the 12 Task merges**, not blind auto-merge acceptance -- multiple agents independently ported the same shared mockup primitives (`.eyebrow`, `.section-head`, `.card`/`.card__title`, `.post`/`.post__entry`, `.spec-row`/`.chip`, `.btn--primary`/`.btn--ghost`) since Feature A's Story 00010 never landed a shared base layer for them. Every duplicate was resolved by keeping the more complete/correct version (sometimes requiring a manual merge of two partial versions into one, e.g. `.card__title`'s typography + nested `small`) and verified against the full test suite, never by picking arbitrarily.
+
+      **Two real, deliberate scope boundaries carried forward, both already flagged on their owning Story, not silently dropped:** (1) blog `picture` fields and hero `srcset` are unpopulated seams -- zero .webp files exist anywhere in the repo yet, this Feature explicitly does not build the image pipeline (that's Feature C); (2) 4 of 6 gallery slugs (c8-autox, nb-hillcountry, nc-eastcoast15, nc-yellowstone15) render the hub's empty state because Feature C hasn't emitted their manifests yet -- their old per-gallery components are deliberately left on disk, unreferenced and unbundled, as the exact retirement backlog for whoever picks up Feature C's AC-009.
+
+      **Bonus, unplanned win:** `import.meta.globEager` is now completely gone from `src/` (its last two call sites were retired gallery components) -- this was the stated blocker on upgrading past Vite 4.4 / Vitest 2-3. Worth a fast-follow to actually attempt that upgrade.
+
+      **Open items requiring a CPO decision, not blocking this Feature's resolution:**
+      - `pages/Intro.jsx` + its `/intro` route: unlinked from Home's composition now, but not deleted (public-URL removal wasn't authorized unilaterally). Either delete it or correct `DriverIntro`'s docblock, which currently claims it's already retired.
+      - `c8Blog.json` entry `id:2` has no `cost` field -- needs a real number from the CPO, not a placeholder.
+      - Blog headings kept verbatim rather than swapped to the mockups' wording (a content-intact call, not a re-skin call) -- flag if the CPO wants the mockup copy instead.
+      - NavMenu and Footer still link the 6 legacy gallery paths directly rather than `/galleries` -- harmless (redirects catch them) but not fully clean.
+      - Photo alt text on the GoodbyeC8 article was inferred from filenames (the agent could not see the actual photos) -- worth a CPO eyeball.
+
+      **Standing verification bar not yet met:** no real-browser responsive check was possible for ANY of the 12 Tasks (no browser automation available in any worktree dispatch) -- every 360/768/1024/1440 claim across this entire Feature rests on compiled-CSS and structural assertions, not visual confirmation. Recommend an actual browser pass across all 9 re-skinned surfaces before this Feature is considered visually verified, matching the standing bar set after Feature 00003 (fetch and eyeball the real deployed site, not just trust the build).
+
+      Feature C (image pipeline, gallery-data rewire) and Feature D (What's New page) remain. Per the locked execution order, Feature C's remaining Phase-3 overflow (Stories 00044/00045) is next up now that Feature B's surfaces exist for it to rewire onto.

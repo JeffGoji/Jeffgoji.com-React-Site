@@ -1,7 +1,7 @@
 id: "00029"
 type: story
 title: "Consolidated galleries hub + lightbox + old-route redirects (adopted delta)"
-state: new
+state: resolved
 parent: "00004"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -10,9 +10,9 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T16:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T16:50:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -46,3 +46,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:25:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00004 (P3, frontend). Tasks 00039-00041."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T16:50:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> resolved. All 3 Tasks (00039 GalleryHub, 00040 lightbox, 00041 redirects+cleanup) resolved and merged into feature/00004-per-surface-redesign. `/galleries` renders the consolidated hub with set-switcher + lightbox; all 6 legacy gallery routes + `/gallery` redirect in (derived from gallerySets.js, not re-listed, so a future set rename can't leave a URL unredirected); 10 dead files (~792 lines) retired. AC-001/AC-005/AC-016 (this Story's subset) satisfied for the 2 slugs Feature C has actually built manifests for (nd-totd2025, nd-hillcountry) -- the other 4 slugs (c8-autox, nb-hillcountry, nc-eastcoast15, nc-yellowstone15) render the hub's empty state until Feature C's AC-009 emits their manifests; their old components are deliberately left on disk (unreferenced, unbundled) as the exact retirement backlog for that future work, not deleted prematurely. import.meta.globEager is now fully gone from src/ -- was the stated blocker on upgrading past Vite 4.4/Vitest 2-3, now cleared. Two stale nav/footer links (NavMenu still fans out to all 6 legacy paths; Footer links /gallery directly) still point at redirects rather than the hub directly -- harmless (nothing 404s) but not fully clean; flagged for a follow-up, not blocking this Story's resolution."

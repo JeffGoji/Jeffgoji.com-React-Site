@@ -1,7 +1,7 @@
 id: "00027"
 type: story
 title: "Garage hub + 4 build blogs (data-driven BlogList collapse)"
-state: new
+state: resolved
 parent: "00004"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -10,9 +10,9 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T16:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T16:50:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -46,3 +46,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:25:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00004 (P3, frontend). Tasks 00033-00035."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T16:50:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> resolved. All 3 Tasks (00033 CarCard+Garage hub, 00034 BlogList, 00035 blog routes) resolved and merged into feature/00004-per-surface-redesign. `/garage` renders the V2 5-car number-tag hub with the retired-car tribute state; all 4 blog routes render through the shared `<BlogList>`; the Fireball id-6 image mismatch is fixed via a re-keyed image registry (root-cause fix); the `ndBlogList` var misname cleanup was superseded by the routes collapsing to ~20 lines each. AC-001/AC-005/AC-016 (this Story's subset, including the primary P8 markdown-safety assertion) satisfied. Two items NOT done, both explicitly deferred to Feature C per this Story's own stated dependency: (1) blog `picture` fields still point at original (non-webp) paths -- zero .webp files exist anywhere in the repo yet; (2) a real data gap, c8Blog.json entry id:2 has no `cost` field -- needs a number from the CPO, not a placeholder, BlogList already degrades gracefully by dropping the chip."

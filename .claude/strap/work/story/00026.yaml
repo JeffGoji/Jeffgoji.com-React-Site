@@ -1,7 +1,7 @@
 id: "00026"
 type: story
 title: "Home surface: rotating multi-car hero + intro + poster-facade video grid"
-state: new
+state: resolved
 parent: "00004"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -10,9 +10,9 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T16:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T16:50:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -46,3 +46,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T19:25:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00004 (P3, frontend). Tasks 00030-00032."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-04T16:50:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> resolved. All 3 Tasks (00030 hero+intro, 00031 video grid, 00032 Home compose) resolved and merged into feature/00004-per-surface-redesign. `/` now composes Hero -> DriverIntro -> garage-preview (3 CarCards) -> VideoGrid; the old eager Intro/Garage/YouTube mount is fully retired from Home's composition. AC-001/AC-005/AC-016 (this Story's subset) satisfied for the Home surface. Open item carried to Feature-level tracking, not blocking this Story: `pages/Intro.jsx` + its `/intro` route were NOT deleted (Home's composition no longer references it, but the route/file itself survives, unlinked) -- needs an explicit CPO call on whether to remove it, since that's a public-URL removal Task 00032 wasn't authorized to make unilaterally."
