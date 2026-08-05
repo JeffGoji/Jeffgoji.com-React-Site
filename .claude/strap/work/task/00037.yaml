@@ -1,19 +1,19 @@
 id: "00037"
 type: task
 title: "Re-skin the Suspension hub + 7 sub-components"
-state: new
+state: resolved
 parent: "00028"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
 created_at: 2026-08-01T19:25:00Z
 created_by: dev-lead
-updated_at: 2026-08-04T14:00:00Z
+updated_at: 2026-08-04T15:35:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-04T15:35:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -42,3 +42,8 @@ description: |
   `/suspension` + all 7 panels render V2; empty accordion item fixed; content intact; responsive.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-04T15:35:00Z
+    body: "[STRAP/agent:frontend-engineer] State: new -> resolved. Merged into feature/00004-per-surface-redesign (9ec25f3, dev-lead dedup follow-up) -- auto-merged cleanly at the git level but silently duplicated .eyebrow (already merged from Task 00030) and .section-head (already merged from Task 00038); dev-lead caught it via a post-merge duplicate-selector scan (git's line-based merge doesn't catch non-overlapping-context duplicates), dropped both copies, folded this branch's genuinely new `.section-head .sub` styling into the canonical copy. 324/324 scoped tests + full build green post-dedup. EVENTKEY BUG ROOT CAUSE: not a missing panel -- all 7 sub-components were already rendered (8 eventKeys numbered 0-7 across what should have been 4 independent Accordion roots, since eventKey is scoped per-root not per-page); the stub `<Accordion.Item eventKey=\"5\" />` had no header/body and painted as an empty clickable-looking row. Fixed by deleting the stub and renumbering each of the 4 roots independently from 0. Kept 4 separate Accordion roots (not consolidated to 1) to preserve existing multi-open-across-groups behavior. ~95K tokens. FLAGGED (design question, non-blocking): the 3 single-panel groups now show a group title directly above an identically-named accordion header -- redundancy inherited from pre-V2 markup, more visually prominent in V2, worth a designer look. FLAGGED (repo-wide, for frontend memory): @testing-library/user-event is NOT installed in this repo (only dom+react testing-library packages) -- use fireEvent, not user-event. No real-browser responsive check possible -- structural/compiled-CSS assertions only, flagged for a manual eyeball at 360px especially (two spec tables wrapped in .table-responsive to avoid overflow)."
