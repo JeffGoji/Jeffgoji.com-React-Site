@@ -9,12 +9,23 @@
  * build log, so nothing about it may render as a link.
  */
 
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import CarCard, { isRetired } from './CarCard';
 import carsData from '../Garage/Cars.json';
+
+/**
+ * Resolved from the Vitest root rather than import.meta.url: under jsdom
+ * import.meta.url is a document-relative http URL, not a file URL.
+ */
+const CODE = readFileSync(resolve(process.cwd(), 'src/components/common/CarCard.jsx'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
 
 const live = carsData.cars.find((car) => !isRetired(car.bloglink));
 const retired = carsData.cars.find((car) => isRetired(car.bloglink));
@@ -196,6 +207,40 @@ describe('the preview variant is the compact home-strip card', () => {
         for (const part of ['.card__media', '.card__kicker', '.card__title', '.card__text']) {
             expect(card.querySelector(part), `${part} missing from the preview`).not.toBeNull();
         }
+    });
+});
+
+/**
+ * Task 00058. The portrait routes through the shared <ResponsiveImage>. It
+ * carries no candidate list: Cars.json's five photos are Vite asset imports and
+ * no build script renders width variants of them. Two of the five share a
+ * source file with the hero ladder, so renditions for those two exist under
+ * /hero/ -- but they are addressed by hero key and reached through a runtime
+ * manifest fetch, which is not a coupling a card should own.
+ */
+describe('the portrait renders through the shared responsive primitive', () => {
+    it('leaves no bare img on the card', () => {
+        expect(CODE).toContain("import ResponsiveImage from './ResponsiveImage'");
+        expect(CODE).toContain('<ResponsiveImage');
+        expect(CODE).not.toContain('<img');
+    });
+
+    it.each(['hub', 'preview'])(
+        'advertises no candidates in the %s variant, since none are built',
+        (variant) => {
+            renderCard(live, variant);
+
+            const image = screen.getByRole('img');
+
+            expect(image.hasAttribute('srcset')).toBe(false);
+            expect(image.hasAttribute('sizes')).toBe(false);
+        }
+    );
+
+    it('lazy-loads the preview portrait too, not just the hub`s', () => {
+        renderCard(live, 'preview');
+
+        expect(screen.getByRole('img').getAttribute('loading')).toBe('lazy');
     });
 });
 
