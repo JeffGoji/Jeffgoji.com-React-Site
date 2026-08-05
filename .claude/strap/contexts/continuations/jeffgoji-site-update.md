@@ -32,7 +32,7 @@ None under version control — working tree is clean on `feature/strap-onboardin
 
 ## Open decisions
 
-- **CPO has not yet said whether to merge PR #26.** It's clean, mergeable, 939/939 tests passing, awaiting the go-ahead (same two-stage stacked pattern as Feature B: this PR into `feature/strap-onboarding` first, then a second PR from there into `main`).
+- **PR #26 merged** (`feature/00005-image-pipeline-phase3` → `feature/strap-onboarding`, merge commit `6eaf7c6`, CPO-directed this session). Local branch synced (merge commit `8e43190` after re-committing this session's Task 00074 filing), 939/939 tests + clean build re-verified post-merge, pushed to origin. **Stage-2 PR #27 now open** (`feature/strap-onboarding` → `main`) — awaiting Netlify checks + CPO merge go-ahead, same as PRs #24/#25's pattern.
 - **The 881MB gallery-originals question is RESOLVED into scope**, not still open: CPO wants full resolution KEPT (confirmed download/wallpaper use case) but shrunk via better compression, not downscaling. **Task 00074 filed against Story 00044** (reopened resolved→active) — devops-lead, re-encode `scripts/build-gallery.mjs`'s `original` rendition via `sharp(...).jpeg({quality:85, mozjpeg:true})`, no `.resize()` call. dev-lead spot-tested this against 3 real TOTD2025 source files before filing: 56-61% size reduction, 0 dimension change, extrapolates to ~881MB→~360-390MB. WebP/AVIF evaluated and rejected for this specific rendition (AVIF has weak native "set as wallpaper" OS support; WebP wasn't meaningfully smaller than mozjpeg). Not yet executed — next session should dispatch devops-lead against Task 00074, same worktree pattern as the rest of Story 00044.
 - **Feature D (What's New page)** — Stories 00061-00063, Tasks 00064-00073, completely untouched this session. Predecessors 00003/00004/00005 all now satisfied once PR #26 lands on `main`. Next up per the locked execution order once C is fully promoted and Task 00074 clears.
 - **Local branch cruft**: `git branch -a` still lists ~14 old `task/000NN-*` branches from Feature A's execution (00012-00025) that were never locally cleaned up (their remotes are already gone). Harmless, but worth a `git branch -d` sweep next session if it gets noisy.
@@ -40,15 +40,15 @@ None under version control — working tree is clean on `feature/strap-onboardin
 ## Open work items
 
 - `#00001`-`#00004` — resolved, live on `main`. (Requirement, Spec, Feature A, Feature B.)
-- `#00005` — feature stays **resolved** (merged to `feature/strap-onboarding`, **PR #26 open to `main`, not yet merged**), but child **Story 00044 is reopened (active)** for post-close scope: new **Task 00074** (re-encode gallery originals, devops-lead, not yet executed). Story 00045 and the rest of 00044's original 4 Tasks remain resolved/unaffected.
+- `#00005` — feature stays **resolved**, now fully merged into `feature/strap-onboarding` (PR #26, merged) with **PR #27 open to `main`, not yet merged**. Child **Story 00044 is reopened (active)** for post-close scope: new **Task 00074** (re-encode gallery originals, devops-lead, not yet executed). Story 00045 and the rest of 00044's original 4 Tasks remain resolved/unaffected.
 - `#00006` — active, not yet touched — Feature D (What's New page). Stories 00061-00063, Tasks 00064-00073.
 
 ## Quick resume
 
 1. `/context-fetch jeffgoji-site-update` to reload this context.
-2. Check whether the CPO wants PR #26 merged (`gh pr view 26`, `gh pr checks 26`) — if yes, `gh pr merge 26 --merge --delete-branch`, sync local `feature/strap-onboarding`, then open the second-stage PR to `main` (same pattern as PR #25).
-3. Ask the CPO about the 881MB gallery-originals finding before starting Feature D — it may change Feature D's scope or warrant its own quick pass first.
-4. Once both are resolved, Feature D (What's New page) is the next and last Feature in the V2 initiative — read Stories 00061-00063 / Tasks 00064-00073 fresh, they haven't been touched or reconciled against current file layout yet.
+2. Check whether the CPO wants **PR #27** merged into `main` (`gh pr view 27`, `gh pr checks 27`) — if yes, `gh pr merge 27 --merge --delete-branch`... except PR convention is to NEVER delete `feature/strap-onboarding` (it's the standing integration branch), so merge without `--delete-branch` here, unlike stage-1 PRs.
+3. Dispatch devops-lead against **Task 00074** (re-encode `dist/gallery/*/original/` via mozjpeg q85, no resize) — same worktree pattern as the rest of Story 00044. Not yet started.
+4. Once Task 00074 + PR #27 are both settled, Feature D (What's New page) is the next and last Feature in the V2 initiative — read Stories 00061-00063 / Tasks 00064-00073 fresh, they haven't been touched or reconciled against current file layout yet.
 
 ## Critical context
 
