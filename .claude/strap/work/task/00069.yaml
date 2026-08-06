@@ -1,7 +1,7 @@
 id: "00069"
 type: task
 title: "Wire TARGET-vs-SHIPPED metric badges to Feature C perf outputs"
-state: active
+state: resolved
 parent: "00062"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -13,17 +13,17 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T02:30:00Z
+updated_at: 2026-08-06T02:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T02:45:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-06T02:45:00Z |
 
   ---
 
@@ -49,3 +49,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T02:30:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00069, branch task/00069-target-shipped-wiring off feature/00006-whats-new-page. Task 00067's InstrumentCluster is merged and already reads `target` off each metrics.js row to badge TARGET/SHIPPED -- the render contract is done; this Task is the data-sourcing/documentation half only."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T02:45:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00069-target-shipped-wiring into feature/00006-whats-new-page. Completed By: frontend-engineer. Rigorous, correct outcome: nothing flipped to SHIPPED. All three real measured Feature C numbers checked (Task 00056's -92.7%/-95.9%/-91.8%/-95.3% source-to-rendition ratios, Task 00074's -55.78% deploy-weight reduction) were the WRONG DENOMINATOR for AC-006's authoritative cold-load-transferred-bytes measure -- correctly identified that the gallery's -92.7% predates V2 entirely (V1 already served webp there) and that Task 00074 shrank the download-only `full` rendition, which no page cold-loads. LCP/Lighthouse have zero post-V2 measurement anywhere in the project (third consecutive Feature to hit this same gap per fe's own note) so correctly left at TARGET. Independently spot-verified: cited v1-perf-baseline.md figures (13373ms/2500ms LCP, 82/67/93/60 Lighthouse) all confirmed accurate against the actual file. Docblock-only change to metrics.js, no render/value changes -- InstrumentCluster's existing TARGET/SHIPPED render contract and metrics.test.js's shape-only test both already cover this correctly. Escalated but NOT actioned without CPO direction (consistent with how Tasks 00075/00076 were filed only after explicit CPO confirmation): a real Lighthouse/LCP re-measurement gap exists project-wide, is CPO-runnable (scripts/perf/lh-baseline.mjs + v1-perf-baseline.md's reproducible methodology) but not agent-runnable (no browser tool available to any dispatched agent), and Feature D's own page now makes this gap publicly visible via three TARGET badges. Flagged to CPO in the Feature D completion report rather than auto-filed as a new Task. tokens_used: ~62k."
