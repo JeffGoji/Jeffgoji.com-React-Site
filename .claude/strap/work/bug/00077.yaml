@@ -1,7 +1,7 @@
 id: "00077"
 type: bug
 title: "/galleries hub causes catastrophic layout shift (CLS 0.812 desktop / 0.193 mobile) via unbounded grid injection"
-state: active
+state: resolved
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -17,17 +17,17 @@ links:
 original_estimate: null
 created_at: 2026-08-06T02:50:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T03:06:00Z
+updated_at: 2026-08-06T03:26:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T03:26:00Z
 closed_at: null
 description: |
   | Field        | Value                       |
   |--------------|-----------------------------|
   | Authored By  | spec-lead                   |
   | Authored At  | 2026-08-06T02:50:00Z        |
-  | Completed By | _(set at resolution)_       |
-  | Completed At | _(set at resolution)_       |
+  | Completed By | frontend-engineer           |
+  | Completed At | 2026-08-06T03:26:00Z        |
 
   ---
 
@@ -114,3 +114,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T03:06:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /fix-bugs). Sequence position: 2. Specialist: frontend-engineer, dispatched in worktree .worktrees/bug-00077, branch fix/00077-gallery-cls off fix/bug-fixes-20260806. Bug 00078 (perf harness URL fix, resolved first) is already merged into this fix branch, so this specialist's own verification run will measure the real canonical /galleries URL."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T03:26:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /fix-bugs). Merged from fix/00077-gallery-cls into fix/bug-fixes-20260806 (commit 0e9b3be). Completed By: frontend-engineer. Empirically verified with a real Lighthouse 12.8.2 run against a built dist/ -- pre-fix baseline reproduced the filed numbers almost exactly (0.8140/0.1932 vs filed 0.812/0.193), confirming same measurement environment. Post-fix: CLS 0.814->0.0029 desktop, 0.193->0.0000 mobile on /galleries; AC-008 now satisfied on both profiles (Perf 99-100 desktop, 82-83 mobile). Implementation: a `--reserved` state modifier on .gallery-hub__body (min-height:100vh) carried in every no-grid state (loading, empty, missing-manifest) and dropped the instant the grid mounts -- deliberately NOT an unconditional min-height (would waste a viewport of space under small sets like c8-autox's 18 items) and NOT a skeleton grid (would itself need to collapse on a small/empty set, reintroducing a shift of similar magnitude). Bonus: also fixed the secondary Task-00041 contributor (the legacy-redirect route's own intermittent shift, 0.31 desktop/0.78 mobile on /totdgallery) via a LegacyGalleryRedirect wrapper carrying the same min-height contract -- proportionate scope, 6 lines + 1 CSS rule, not scope creep. 6 new tests cover every state transition including the empty/missing-manifest edge cases the fix's own docblock reasons about. Known residual, explicitly NOT fixed here per the agent's own judgment (correct call, separate concern): mid-session set-switching still collapses the outgoing grid to the reservation before the new one loads -- excluded from Lighthouse's CLS metric (follows user input) and would require keeping the outgoing grid mounted during the fetch, a loading-behavior change beyond this Bug's geometry-only scope. Noted as a candidate follow-up, not filed without CPO direction. tokens_used: ~78k."
