@@ -100,6 +100,12 @@ function framesFrom(items, set) {
  * A middle rung in `scripts/build-gallery.mjs` is what would make a `srcSet`
  * here worth having.
  *
+ * The body carries `--reserved` in every state that has no grid in it, which is
+ * what holds the page's height steady across the manifest fetch (Bug 00077).
+ * The reservation is a static viewport rather than a computed one on purpose:
+ * the item count is not knowable until the fetch it is reserving space for has
+ * already resolved.
+ *
  * @param {object} props
  * @param {Array<{slug: string, car: string, label: string}>} [props.sets]
  * @param {string} [props.initialSlug]
@@ -135,6 +141,7 @@ function GalleryHub({ sets = GALLERY_SETS, initialSlug, onSelectImage }) {
 
     const selectedSet = sets.find((set) => set.slug === slug) ?? sets[0]
     const frames = framesFrom(items, selectedSet)
+    const hasGrid = !loading && frames.length > 0
 
     return (
         <section className="gallery-hub">
@@ -165,7 +172,11 @@ function GalleryHub({ sets = GALLERY_SETS, initialSlug, onSelectImage }) {
                 </div>
             </header>
 
-            <div className="gallery-hub__inner gallery-hub__body">
+            <div
+                className={`gallery-hub__inner gallery-hub__body${
+                    hasGrid ? '' : ' gallery-hub__body--reserved'
+                }`}
+            >
                 {loading && (
                     <p className="gallery-hub__status" role="status">
                         Loading {selectedSet.label}…
@@ -178,7 +189,7 @@ function GalleryHub({ sets = GALLERY_SETS, initialSlug, onSelectImage }) {
                     </p>
                 )}
 
-                {!loading && frames.length > 0 && (
+                {hasGrid && (
                     <div className="gallery-grid">
                         {frames.map((frame, index) => (
                             <button

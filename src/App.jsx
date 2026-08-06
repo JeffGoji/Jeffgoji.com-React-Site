@@ -38,6 +38,26 @@ import PageviewTracker from './components/CustomComponents/PageviewTracker'
  */
 const LEGACY_GALLERY_PATHS = [...GALLERY_SETS.map((set) => set.legacyPath), '/gallery']
 
+/**
+ * `<Navigate>` commits its navigation from an effect and renders nothing until
+ * it does, so the browser can paint one frame with the shell holding no route
+ * content at all — the footer directly under the nav, a viewport away from
+ * where the hub is about to put it. That frame is a measured layout shift of its
+ * own (Bug 00077: 0.31 desktop / 0.78 mobile on /totdgallery, intermittent
+ * because it depends on whether the paint beats the effect).
+ *
+ * Holding a viewport of height for that one frame keeps the footer below the
+ * fold across the swap, which is the same contract `.gallery-hub__body--reserved`
+ * carries on the destination.
+ */
+export function LegacyGalleryRedirect() {
+  return (
+    <div className="route-reserve">
+      <Navigate to="/galleries" replace />
+    </div>
+  )
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -61,7 +81,7 @@ function App() {
           <Route path="galleries" element={<GalleryHub />} />
           <Route path="whats-new" element={<WhatsNew />} />
           {LEGACY_GALLERY_PATHS.map((path) => (
-            <Route key={path} path={path} element={<Navigate to="/galleries" replace />} />
+            <Route key={path} path={path} element={<LegacyGalleryRedirect />} />
           ))}
         </Routes>
         <Footer />

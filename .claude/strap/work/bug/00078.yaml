@@ -1,11 +1,11 @@
 id: "00078"
 type: bug
 title: "Perf harness (scripts/perf/lh-baseline.mjs) audits /totdgallery, a legacy redirect, instead of the canonical /galleries"
-state: new
+state: resolved
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: frontend-engineer
+assigned_to: dev-lead
 tags: [AI, strap:bug, file-bugs, "env:development"]
 links:
   - target: "00048"
@@ -15,17 +15,17 @@ links:
 original_estimate: null
 created_at: 2026-08-06T02:50:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T02:50:00Z
+updated_at: 2026-08-06T03:04:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T03:04:00Z
 closed_at: null
 description: |
   | Field        | Value                       |
   |--------------|-----------------------------|
   | Authored By  | spec-lead                   |
   | Authored At  | 2026-08-06T02:50:00Z        |
-  | Completed By | _(set at resolution)_       |
-  | Completed At | _(set at resolution)_       |
+  | Completed By | dev-lead                    |
+  | Completed At | 2026-08-06T03:04:00Z        |
 
   ---
 
@@ -83,3 +83,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T02:50:00Z
     body: "[STRAP/agent:dev-lead] State: new (via /file-bugs). Authored By: spec-lead. Bug; Severity: 3 - Medium. Filed alongside Bug 00077 (the real CLS regression this tooling defect was discovered while investigating) per CPO direction to keep the two as separate tickets, since they have unrelated root causes and fixes despite sharing a discovery context. Recommended to fix before any future perf baseline re-capture so recorded numbers measure the real canonical /galleries page rather than a redirect."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T03:02:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /fix-bugs). Sequence position: 1. Specialist: dev-lead direct (single-line fix, infrastructure domain, no ambiguity). Mode: direct on fix/bug-fixes-20260806."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T03:04:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /fix-bugs). Completed By: dev-lead. Commit: 4f65593. Fix branch: fix/bug-fixes-20260806. Changed TARGETS' totdgallery entry to point at ${ORIGIN}/galleries instead of ${ORIGIN}/totdgallery, with a comment recording why. No test authored -- this is a one-line constant change in a standalone measurement script with no existing test harness; verification is functional (confirmed via node --check for syntax, and will be confirmed for real when Bug 00077's fix is verified using this corrected script in the same run)."
