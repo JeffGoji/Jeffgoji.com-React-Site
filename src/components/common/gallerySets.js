@@ -56,4 +56,31 @@ export const GALLERY_SETS = [
     },
 ]
 
+/**
+ * The query key the hub reads its opening set from.
+ *
+ * It lives beside the slugs because it is the only thing that gives a slug
+ * meaning in a URL, and the nav's links and the pre-V2 redirects both have to
+ * spell it the same way for either of them to work.
+ */
+export const GALLERY_SET_PARAM = 'set'
+
+/**
+ * The hub URL that opens on `slug`.
+ *
+ * An unrecognised or absent slug yields the bare hub rather than a query naming
+ * nothing. The hub falls back to its first set either way, so the only thing a
+ * bogus query would add is a URL advertising a set it will not honour — and a
+ * link built from a slug that has since been renamed reads as an ordinary
+ * default landing instead of a broken one.
+ *
+ * @param {string} [slug]
+ * @returns {string}
+ */
+export function galleryHubPath(slug) {
+    return GALLERY_SETS.some((set) => set.slug === slug)
+        ? `/galleries?${GALLERY_SET_PARAM}=${encodeURIComponent(slug)}`
+        : '/galleries'
+}
+
 export default GALLERY_SETS

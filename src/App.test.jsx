@@ -24,6 +24,12 @@
  * the assembled shell, so it is asserted here as well as in the route's own
  * test.
  *
+ * Covers Bug 00079: the nav's gallery entries and the pre-V2 redirects both
+ * carry the clicked set into the hub, where all six used to arrive stripped of
+ * it and open the first set. The nav-link assertion below previously pinned the
+ * pre-V2 /totdgallery href, which was the contract that let this ship; it is
+ * rewritten here rather than dropped.
+ *
  * Covers Task 00066: /whats-new's route registration. The page's own contract is
  * components/WhatsNew/index.test.jsx's business; that the shell actually serves
  * the destination the nav and footer have been advertising since Task 00023 is a
@@ -40,14 +46,31 @@ import { MemoryRouter } from 'react-router-dom';
 
 import { GALLERY_SETS } from './components/common/gallerySets';
 
+/** What the stub hub reports when it was handed no set to open on. */
+const HUB_DEFAULT = '(default)';
+
 /**
  * The real hub fetches a build-time manifest per set; that is
  * GalleryHub.test.jsx's business. The stub keeps these assertions on route
  * resolution and off the network.
+ *
+ * It does reproduce the one property of the real hub these assertions turn on:
+ * `initialSlug` seeds the selection once and never steers it afterwards, so the
+ * set on screen only follows the URL if the route genuinely remounts the hub.
+ * A stub that read the prop on every render would pass the Bug 00079 cases
+ * against a route that still cannot.
  */
-vi.mock('./components/common/GalleryHub', () => ({
-    default: () => <div data-testid="gallery-hub" />,
-}));
+vi.mock('./components/common/GalleryHub', async () => {
+    const { useState } = await import('react');
+
+    return {
+        default: function GalleryHubStub({ initialSlug }) {
+            const [seeded] = useState(initialSlug ?? HUB_DEFAULT);
+
+            return <div data-testid="gallery-hub">{seeded}</div>;
+        },
+    };
+});
 
 const { default: App, LegacyGalleryRedirect } = await import('./App');
 
@@ -197,12 +220,26 @@ const surveyNav = (container) => {
 };
 
 describe('the nav offers exactly what the app registers', () => {
-    it('links the surviving gallery route and nothing at the removed one', () => {
+    /**
+     * Rewritten for Bug 00079. This used to assert the nav offered
+     * /totdgallery — true at the time, and precisely the arrangement that broke
+     * the other five entries once that URL started redirecting. The contract is
+     * now that every entry names the hub and its own set, and that no pre-V2
+     * gallery URL is advertised from the nav at all.
+     */
+    it('links every gallery through the hub carrying its own set', () => {
         const { container } = renderAt('/');
 
         const { hrefs } = surveyNav(container);
 
-        expect(hrefs).toContain('/totdgallery');
+        for (const set of GALLERY_SETS) {
+            expect(hrefs).toContain(`/galleries?set=${set.slug}`);
+        }
+
+        for (const path of LEGACY_GALLERY_PATHS) {
+            expect(hrefs).not.toContain(path);
+        }
+
         expect(hrefs).not.toContain('/totdtrip');
     });
 
@@ -284,6 +321,121 @@ describe('the nav offers exactly what the app registers', () => {
         const { container } = renderAt('/');
 
         expect(surveyNav(container).text).not.toMatch(/coming soon/i);
+    });
+});
+
+/** Which per-chassis submenu each set's entry lives behind. */
+const SUBMENU_FOR_SLUG = {
+    'nb-hillcountry': 'nb-gallery-dropdown-toggle',
+    'nc-eastcoast15': 'nc-gallery-dropdown-toggle',
+    'nc-yellowstone15': 'nc-gallery-dropdown-toggle',
+    'nd-hillcountry': 'nd-gallery-dropdown-toggle',
+    'nd-totd2025': 'nd-gallery-dropdown-toggle',
+    'c8-autox': 'c8-gallery-dropdown-toggle',
+};
+
+/**
+ * Clicks a set's entry the way a visitor reaches it — through the Galleries
+ * panel and then its chassis submenu. Both have to be opened first:
+ * react-bootstrap withholds a Dropdown.Menu's children until it has been shown.
+ */
+const clickGalleryEntry = (container, slug) => {
+    fireEvent.click(container.querySelector('#galleries-nav-dropdown'));
+    fireEvent.click(container.querySelector(`#${SUBMENU_FOR_SLUG[slug]}`));
+    fireEvent.click(container.querySelector(`a[href="/galleries?set=${slug}"]`), {
+        button: 0,
+    });
+};
+
+const shownSet = () => screen.getByTestId('gallery-hub').textContent;
+
+/**
+ * Bug 00079. Every route into the hub used to arrive with the chosen set
+ * already discarded — the nav pointed at a pre-V2 URL, the redirect off it
+ * named only /galleries, and the hub fell back to its first set. Five of the
+ * six advertised entry points therefore opened Tail of the Dragon.
+ */
+describe('the hub opens on the set it was asked for (Bug 00079)', () => {
+    it.each(GALLERY_SETS.map((set) => set.slug))('seeds the hub from ?set=%s', (slug) => {
+        renderAt(`/galleries?set=${slug}`);
+
+        expect(shownSet()).toBe(slug);
+    });
+
+    /** A standing bookmark on a pre-V2 URL keeps the gallery it was taken on. */
+    it.each(GALLERY_SETS)('carries $slug through the $legacyPath redirect', (set) => {
+        renderAt(set.legacyPath);
+
+        expect(window.location.pathname).toBe('/galleries');
+        expect(window.location.search).toBe(`?set=${set.slug}`);
+        expect(shownSet()).toBe(set.slug);
+    });
+
+    /**
+     * /gallery was the pre-V2 switcher landing page rather than a set, so it
+     * has no identity to preserve and the hub's own default is correct for it.
+     * A query naming nothing would be the regression here.
+     */
+    it('lands /gallery on the hub default with no set named', () => {
+        renderAt('/gallery');
+
+        expect(window.location.search).toBe('');
+        expect(shownSet()).toBe(HUB_DEFAULT);
+    });
+
+    it.each(GALLERY_SETS.map((set) => set.slug))(
+        'opens %s when its nav entry is clicked from elsewhere',
+        (slug) => {
+            const { container } = renderAt('/');
+
+            clickGalleryEntry(container, slug);
+
+            expect(window.location.pathname).toBe('/galleries');
+            expect(shownSet()).toBe(slug);
+        }
+    );
+
+    /**
+     * The case a seed-only fix misses. React Router reuses the mounted element
+     * across a navigation that resolves to the same path, so the URL changed
+     * and the screen did not — the hub's `useState` initializer had already
+     * run. Asserted from the second set's own entry rather than from a fresh
+     * mount, because a fresh mount is exactly what is under test.
+     */
+    it('switches sets when a second nav entry is clicked from the hub', () => {
+        const { container } = renderAt('/galleries?set=nd-totd2025');
+
+        expect(shownSet()).toBe('nd-totd2025');
+
+        clickGalleryEntry(container, 'c8-autox');
+
+        expect(window.location.search).toBe('?set=c8-autox');
+        expect(shownSet()).toBe('c8-autox');
+    });
+
+    /**
+     * The switcher owns the selection once the hub is mounted and never writes
+     * the URL, so re-clicking the entry the visitor has since switched away
+     * from has to land somewhere — keying the route on the query alone would
+     * leave this navigation inert.
+     */
+    it('reopens the set whose entry is clicked twice in a row', () => {
+        const { container } = renderAt('/galleries?set=c8-autox');
+
+        clickGalleryEntry(container, 'nc-yellowstone15');
+        expect(shownSet()).toBe('nc-yellowstone15');
+
+        clickGalleryEntry(container, 'nc-yellowstone15');
+        expect(shownSet()).toBe('nc-yellowstone15');
+    });
+
+    /**
+     * The hub is the one owner of the selected slug; the URL seeds it and
+     * stops there. A `?set=` write from App would put a second owner on the
+     * same value and let the switcher and the address bar disagree.
+     */
+    it('leaves the hub route reading the query rather than writing it', () => {
+        expect(APP_SOURCE).not.toMatch(/setSearchParams/);
     });
 });
 

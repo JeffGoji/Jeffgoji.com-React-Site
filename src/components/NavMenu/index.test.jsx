@@ -11,6 +11,10 @@
  * route is marked, every dropdown id is unique and the mobile collapse survives.
  *
  * Covers Task 00021: the permanent "What's New" flag pill.
+ *
+ * Covers Bug 00079: where the Galleries entries point. This file asserted the
+ * panel's structure and its ids but never its destinations, which is what let
+ * six entries into the same gallery ship unguarded.
  */
 
 import { readdirSync, readFileSync } from 'node:fs';
@@ -21,6 +25,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 
 import NavMenu from './index';
+import { GALLERY_SETS } from '../common/gallerySets';
 
 /**
  * Resolved from the Vitest root rather than import.meta.url: under jsdom
@@ -291,6 +296,86 @@ describe('NavMenu dropdown identity', () => {
         openGalleries(container);
 
         expect(container.textContent).not.toMatch(/coming soon/i);
+    });
+});
+
+const GALLERY_SUBMENU_TOGGLES = [
+    'nb-gallery-dropdown-toggle',
+    'nc-gallery-dropdown-toggle',
+    'nd-gallery-dropdown-toggle',
+    'c8-gallery-dropdown-toggle',
+];
+
+/**
+ * Every entry the Galleries panel offers, keyed by href.
+ *
+ * Accumulated after each toggle rather than read once at the end: the menus
+ * withhold their children until shown, and the root-close handler that fires on
+ * the next toggle's click can take the previous one back out of the tree.
+ * Scoped to the Galleries panel so the Articles menu cannot leak in.
+ */
+function surveyGalleryEntries(container) {
+    const entries = new Map();
+
+    const sample = () => {
+        const panel = container.querySelector('#galleries-nav-dropdown').parentElement;
+
+        for (const item of panel.querySelectorAll('a.dropdown-item[href]')) {
+            entries.set(item.getAttribute('href'), item);
+        }
+    };
+
+    openGalleries(container);
+    sample();
+
+    for (const id of GALLERY_SUBMENU_TOGGLES) {
+        fireEvent.click(container.querySelector(`#${id}`));
+        sample();
+    }
+
+    return entries;
+}
+
+/**
+ * Guards Bug 00079. Each entry used to name the pre-V2 URL for its gallery,
+ * which redirects to the hub with nothing left to say which gallery was asked
+ * for — so five of the six opened Tail of the Dragon.
+ */
+describe('NavMenu gallery destinations', () => {
+    afterEach(cleanup);
+
+    /**
+     * Compared against the set config as a whole rather than entry by entry:
+     * that is what fails if an entry names a slug the config has since renamed,
+     * which resolves to the bare hub and would otherwise look like a working
+     * link.
+     */
+    it('points every entry at the hub carrying its own set', () => {
+        const { container } = renderNavAt('/garage');
+
+        const hrefs = [...surveyGalleryEntries(container).keys()].sort();
+
+        expect(hrefs).toEqual(
+            GALLERY_SETS.map((set) => `/galleries?set=${set.slug}`).sort()
+        );
+    });
+
+    /**
+     * The entries are plain Links for this reason: NavLink's active match
+     * ignores the query, so six links sharing /galleries would every one of
+     * them mark itself the current page as soon as the hub is open.
+     */
+    it('marks no entry as the current page while the hub is open', () => {
+        const { container } = renderNavAt('/galleries');
+
+        const entries = surveyGalleryEntries(container);
+
+        expect(entries.size).toBe(GALLERY_SETS.length);
+
+        for (const [href, item] of entries) {
+            expect(item.classList.contains('active'), `${href} is active`).toBe(false);
+            expect(item.getAttribute('aria-current'), `${href} is current`).toBeNull();
+        }
     });
 });
 

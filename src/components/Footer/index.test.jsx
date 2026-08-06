@@ -198,7 +198,7 @@ describe('every footer link resolves to a router route', () => {
             '/na-blog',
             '/nd-blog',
             '/c8-blog',
-            '/gallery',
+            '/galleries',
             '/youtube',
             '/suspension',
             '/whats-new',

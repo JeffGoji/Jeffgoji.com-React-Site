@@ -1,4 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useSearchParams,
+} from 'react-router-dom'
 
 // Components and Pages
 import Header from './components/Header'
@@ -23,20 +30,33 @@ import GoodbyeC8 from './components/Articles/2025/GoodbyeC8';
 
 // Gallery links
 import GalleryHub from './components/common/GalleryHub'
-import { GALLERY_SETS } from './components/common/gallerySets'
+import {
+  GALLERY_SETS,
+  GALLERY_SET_PARAM,
+  galleryHubPath,
+} from './components/common/gallerySets'
 
 import ScrollToTop from './components/CustomComponents/ScrollToTop'
 import PageviewTracker from './components/CustomComponents/PageviewTracker'
 
 /**
- * The pre-V2 gallery URLs, every one of which now lands on the single hub.
+ * The pre-V2 gallery URLs, every one of which now lands on the single hub, each
+ * paired with the set it used to serve.
  *
  * Derived from the set config rather than re-listed here so a set that is
  * renamed or added in the switcher cannot leave its old URL behind
- * unredirected. `/gallery` is appended by hand because it was the switcher
- * landing page rather than a set, so it has no entry to derive from.
+ * unredirected. Carrying the slug is what keeps a standing bookmark on one of
+ * these URLs pointed at the gallery it was taken on: the redirect used to drop
+ * that identity and land every one of them on the hub's first set (Bug 00079).
+ *
+ * `/gallery` is appended by hand with no slug because it was the switcher
+ * landing page rather than a set, so the hub's own default is the correct
+ * destination for it.
  */
-const LEGACY_GALLERY_PATHS = [...GALLERY_SETS.map((set) => set.legacyPath), '/gallery']
+const LEGACY_GALLERY_REDIRECTS = [
+  ...GALLERY_SETS.map((set) => ({ path: set.legacyPath, slug: set.slug })),
+  { path: '/gallery', slug: undefined },
+]
 
 /**
  * `<Navigate>` commits its navigation from an effect and renders nothing until
@@ -49,12 +69,44 @@ const LEGACY_GALLERY_PATHS = [...GALLERY_SETS.map((set) => set.legacyPath), '/ga
  * Holding a viewport of height for that one frame keeps the footer below the
  * fold across the swap, which is the same contract `.gallery-hub__body--reserved`
  * carries on the destination.
+ *
+ * @param {object} props
+ * @param {string} [props.slug] the set this pre-V2 URL served, handed to the
+ *   hub through its query so the redirect does not spend it.
  */
-export function LegacyGalleryRedirect() {
+export function LegacyGalleryRedirect({ slug }) {
   return (
     <div className="route-reserve">
-      <Navigate to="/galleries" replace />
+      <Navigate to={galleryHubPath(slug)} replace />
     </div>
+  )
+}
+
+/**
+ * Binds the hub to the URL in the one direction the hub allows.
+ *
+ * `?set=` seeds the hub and nothing more; the switcher never writes it back,
+ * because a second owner for the selected slug would let the URL and the
+ * on-screen selection disagree (see GalleryHub's own docblock). Seeding alone
+ * is not enough on this route, though: React Router reuses a mounted element
+ * across a navigation that resolves to the same path, so a nav click from one
+ * set to another changed the URL and left the screen on the previous set.
+ * Keying on the location is what forces the fresh mount that re-runs the seed.
+ *
+ * The key is the location rather than the query so that re-clicking the entry
+ * the switcher has since been moved off also lands where it says it will. Only
+ * a navigation mints a new location key, and the switcher performs none — so
+ * this cannot reach back into the selection the switcher owns.
+ */
+export function GalleryHubRoute() {
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
+
+  return (
+    <GalleryHub
+      key={location.key}
+      initialSlug={searchParams.get(GALLERY_SET_PARAM) ?? undefined}
+    />
   )
 }
 
@@ -78,10 +130,10 @@ function App() {
           <Route path="goodbye-c8" element={<GoodbyeC8 />} />
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
-          <Route path="galleries" element={<GalleryHub />} />
+          <Route path="galleries" element={<GalleryHubRoute />} />
           <Route path="whats-new" element={<WhatsNew />} />
-          {LEGACY_GALLERY_PATHS.map((path) => (
-            <Route key={path} path={path} element={<LegacyGalleryRedirect />} />
+          {LEGACY_GALLERY_REDIRECTS.map(({ path, slug }) => (
+            <Route key={path} path={path} element={<LegacyGalleryRedirect slug={slug} />} />
           ))}
         </Routes>
         <Footer />
