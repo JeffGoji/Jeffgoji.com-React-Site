@@ -1,7 +1,7 @@
 id: "00061"
 type: story
 title: "Add /whats-new route + page scaffold + data module"
-state: active
+state: resolved
 parent: "00006"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -10,17 +10,17 @@ tags: [AI, strap:story]
 links: []
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T00:49:00Z
+updated_at: 2026-08-06T03:35:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T03:35:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-06T03:35:00Z |
 
   ---
 
@@ -50,3 +50,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T00:49:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 1 (Tasks 00064, 00065) dispatched to frontend-engineer."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T03:35:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). All 3 Tasks (00064 route+scaffold, 00065 data module, 00066 route-parity guard) resolved and merged into feature/00006-whats-new-page. AC-014 satisfied for this Story's scope: /whats-new registered and reachable, asserted in the shared route-parity guard alongside every other route."
