@@ -3,7 +3,7 @@ type: story
 title: "Add /whats-new route + page scaffold + data module"
 state: new
 parent: "00006"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:story]

@@ -3,7 +3,7 @@ type: task
 title: "Draft the Clarkson-voice changelog entry set (structure + voice + traceability spine)"
 state: new
 parent: "00063"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:task]

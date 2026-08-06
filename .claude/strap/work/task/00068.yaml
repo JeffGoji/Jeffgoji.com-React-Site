@@ -3,7 +3,7 @@ type: task
 title: "Build the numbered changelog ledger (entries + WHY/HOW readout)"
 state: new
 parent: "00062"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:task]

@@ -3,7 +3,7 @@ type: task
 title: "Build the telemetry instrument cluster (status strip + stat tiles)"
 state: new
 parent: "00062"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:task]

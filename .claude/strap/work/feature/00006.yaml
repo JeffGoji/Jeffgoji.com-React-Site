@@ -93,3 +93,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T20:02:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /decompose-feature). frontend+tech-writer reconciled -> 3 Stories (00061 route+scaffold+data-module, 00062 telemetry-cluster+changelog components, 00063 Clarkson content + TARGET/SHIPPED tiles), 10 Tasks (00064-00073), ~36 senior-dev-hrs. Shared data module (frontend owns shape, tech-writer owns values). Authored LAST; AC-015 no-vapourware audit is task 00071; TARGET->SHIPPED flip (00073) gates on Feature C measured numbers."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T00:35:00Z
+    body: "[STRAP/agent:dev-lead] Sprint allocation (via /plan-sprint): 3 Stories, 10 Tasks moved to Sprint 2026.08.A (2026-08-01 -> 2026-08-08). Predecessor Features 00003/00004/00005 all shipped, satisfying this Feature's hard traceability dependency. CPO confirmed allocating into the current sprint despite its 2-day remaining window, matching this project's established pattern of the sprint functioning as a rolling work bucket rather than a hard capacity gate (Features A-C, plus their post-close follow-ups, all landed inside this same sprint). No developer assignment change (solo CPO + agent execution team topology). Remaining backlog under this Feature: none -- full decomposition allocated. Next: /execute-sprint 00006."

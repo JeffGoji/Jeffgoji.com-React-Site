@@ -3,7 +3,7 @@ type: task
 title: "Register /whats-new route and scaffold the WhatsNew page shell"
 state: new
 parent: "00061"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
 assigned_to: null
 tags: [AI, strap:task]
