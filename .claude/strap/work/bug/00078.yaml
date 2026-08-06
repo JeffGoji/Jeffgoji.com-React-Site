@@ -1,0 +1,85 @@
+id: "00078"
+type: bug
+title: "Perf harness (scripts/perf/lh-baseline.mjs) audits /totdgallery, a legacy redirect, instead of the canonical /galleries"
+state: new
+parent: "00005"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:bug, file-bugs, "env:development"]
+links:
+  - target: "00048"
+    type: related
+  - target: "00077"
+    type: related
+original_estimate: null
+created_at: 2026-08-06T02:50:00Z
+created_by: dev-lead
+updated_at: 2026-08-06T02:50:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | spec-lead                   |
+  | Authored At  | 2026-08-06T02:50:00Z        |
+  | Completed By | _(set at resolution)_       |
+  | Completed At | _(set at resolution)_       |
+
+  ---
+
+  # Perf harness (scripts/perf/lh-baseline.mjs) audits /totdgallery, a legacy redirect, instead of the canonical /galleries
+
+  ## Repro Steps
+
+  1. Open `scripts/perf/lh-baseline.mjs`.
+  2. Read the `TARGETS` array (line 31-34): `{ name: "totdgallery", url: `${ORIGIN}/totdgallery` }`.
+  3. Read `src/App.jsx` lines 61-65: `/totdgallery` is one of `LEGACY_GALLERY_PATHS`, which all render `<Navigate to="/galleries" replace />` — a client-side redirect, not a real page.
+  4. Run the harness against both URLs directly (bypassing the script's hardcoded target) and compare: `/galleries` (canonical) measures CLS ≈ 0.812 desktop; `/totdgallery` (what the script actually audits) measures CLS ≈ 1.021 — a +0.207 inflation purely from the redirect's extra committed render cycle (`<Navigate>` commits in an effect, producing one paint where `<Routes>` renders nothing between `<Header>` and `<Footer>`).
+
+  ## Expected vs Actual
+
+  **Expected:** The perf harness measures the real, canonical URL a visitor actually lands on (`/galleries`), so its numbers are directly actionable and comparable to the V1 baseline's own methodology (which measured a real page, not a since-introduced redirect).
+
+  **Actual:** The harness measures `/totdgallery`, a route that has redirected to `/galleries` since Task 00041 landed. This both overstates any CLS-related regression by ~0.2 (the redirect's own extra shift, unrelated to the page's real content) and means the canonical URL — the one AC-008 and every real visitor actually care about — has never been measured by this script at all.
+
+  ## Severity
+
+  **Severity:** 3 - Medium. This does not affect the shipped product — it's a defect in a measurement/tooling script, not user-facing code. Moderate impact: every past and future run of this harness produces a number that's both wrong (inflated) and measuring the wrong thing, which risks either overstating a real regression's severity or masking whether the canonical page's own numbers are improving. Reasonable workaround exists today (measure `/galleries` directly, as done to discover this bug) but the script itself should be fixed so it's correct by default for anyone who runs it without knowing to work around it.
+
+  ## Linked artifacts
+
+  - **Task 00048** — built this script and used it to capture the V1 baseline in `.claude/strap/project-docs/v1-perf-baseline.md`, which itself correctly used the real `/totdgallery` URL because at V1-baseline-capture time that URL WAS the real page (Task 00041's redirect didn't exist yet). The script's target was never updated after the redirect landed.
+  - **Bug 00077** — the CLS regression this tooling defect was discovered while investigating. Distinct root cause and fix (that bug is a React/CSS defect in `GalleryHub.jsx`; this one is a one-line URL constant in a Node script), filed separately per CPO direction.
+
+  ## Root cause
+
+  **CONFIRMED.** `scripts/perf/lh-baseline.mjs:33` hardcodes `${ORIGIN}/totdgallery` as the gallery target. This was correct when Task 00048 captured the V1 baseline (pre-redirect), but Task 00041 (Story 00029, Feature 00004) later introduced `/totdgallery` as a legacy redirect to `/galleries` — the script's target was never updated to track that change, so every post-Task-00041 run of this harness silently measures a redirect instead of a page.
+
+  ## Affected files
+
+  | File | Lines | Role |
+  |---|---|---|
+  | `scripts/perf/lh-baseline.mjs` | 31-34 | `TARGETS` array — the `totdgallery` entry's `url` needs to point at `${ORIGIN}/galleries` instead of `${ORIGIN}/totdgallery` |
+
+  Suggested fix: change line 33's url to `${ORIGIN}/galleries` (the `name` field can stay `totdgallery` for continuity with the historical baseline doc's naming, or be renamed to `galleries` — implementer's call). No other files need changes; this is a one-line fix.
+
+  ## Impact
+
+  Affects only whoever runs this measurement script (CPO or a future agent dispatch) — no end-user impact. Blast radius: every perf number this script has ever produced for the gallery page since Task 00041 landed is measuring the wrong URL, which means historical or future comparisons against it (including the numbers already reported for Bug 00077) are measuring a slightly-worse-than-real proxy rather than the actual canonical page. The CLS defect in Bug 00077 is real and confirmed independent of this bug (0.812 on the canonical URL is still far over the 0.1 "good" bar), but this bug's fix should land before any future baseline re-capture so the recorded numbers are accurate.
+
+  ## Quality Checklist
+
+  - [x] Repro Steps are numbered and deterministic.
+  - [x] Expected vs Actual is concrete on both sides.
+  - [x] Severity is set per the project rubric (3 - Medium) with explicit reasoning.
+  - [x] Linked artifacts identify the originating Task and the related Bug it was discovered alongside.
+  - [x] Root cause is confirmed (traced directly in the script and App.jsx), not a guess.
+  - [x] Affected files include path and line numbers.
+  - [x] Impact captures who is affected and the blast radius.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T02:50:00Z
+    body: "[STRAP/agent:dev-lead] State: new (via /file-bugs). Authored By: spec-lead. Bug; Severity: 3 - Medium. Filed alongside Bug 00077 (the real CLS regression this tooling defect was discovered while investigating) per CPO direction to keep the two as separate tickets, since they have unrelated root causes and fixes despite sharing a discovery context. Recommended to fix before any future perf baseline re-capture so recorded numbers measure the real canonical /galleries page rather than a redirect."

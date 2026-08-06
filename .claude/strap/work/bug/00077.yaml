@@ -1,0 +1,112 @@
+id: "00077"
+type: bug
+title: "/galleries hub causes catastrophic layout shift (CLS 0.812 desktop / 0.193 mobile) via unbounded grid injection"
+state: new
+parent: "00005"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: null
+tags: [AI, strap:bug, file-bugs, "env:production"]
+links:
+  - target: "00039"
+    type: related
+  - target: "00041"
+    type: related
+  - target: "00048"
+    type: related
+original_estimate: null
+created_at: 2026-08-06T02:50:00Z
+created_by: dev-lead
+updated_at: 2026-08-06T02:50:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | spec-lead                   |
+  | Authored At  | 2026-08-06T02:50:00Z        |
+  | Completed By | _(set at resolution)_       |
+  | Completed At | _(set at resolution)_       |
+
+  ---
+
+  # /galleries hub causes catastrophic layout shift (CLS 0.812 desktop / 0.193 mobile) via unbounded grid injection
+
+  ## Repro Steps
+
+  1. `npm run build`
+  2. `npx vite preview --port 4173 --host 127.0.0.1`
+  3. Install Lighthouse 12.8.2 out-of-tree (see `scripts/perf/lh-baseline.mjs:9-19` for the short-path requirement on Windows).
+  4. Run a Lighthouse desktop-config (1350x940) audit against `http://127.0.0.1:4173/galleries`, 3 iterations.
+  5. Observe median CLS ≈ 0.812, Performance ≈ 69 (V1 baseline: CLS 0.090, Performance 93). Repeat against `/totdgallery` (legacy redirect) for CLS ≈ 1.021.
+  6. Inspect the Lighthouse `layout-shifts` audit (Lighthouse 12.x; NOT the older `layout-shift-elements`, which returns empty) — culprit node is `div.gallery-hub__body`.
+
+  Non-Lighthouse visual confirmation: open `/galleries` at ≥1300px in Chrome DevTools → Rendering → Layout Shift Regions, cache disabled. Everything below the set-switcher visibly flashes as the thumbnail grid lands.
+
+  ## Expected vs Actual
+
+  **Expected:** `/galleries` holds a stable layout while the manifest loads. CLS ≤ 0.1 ("good") and Lighthouse Performance ≥90 desktop / ≥80 mobile, per Spec 00002 AC-008 (`.claude/strap/work/spec/00002.yaml:162`), which Feature 00005 (state: resolved) claims to satisfy.
+
+  **Actual:** CLS 0.812 (canonical `/galleries`) / 1.021 (legacy `/totdgallery` redirect) — 8-10x over the "good" threshold, 3-4x over the "poor" threshold (0.25). Lighthouse Performance 68-75, failing AC-008 by 15-22 points, despite LCP (1450ms→810ms), FCP (596ms→564ms), and TBT (5ms→0ms) all improving over the V1 baseline.
+
+  ## Severity
+
+  **Severity:** 2 - High. Measured, deterministic, reproducible (three consecutive desktop runs returned CLS 0.8123 with zero variance). Regresses a shipped Acceptance Criterion (AC-008) from passing (93, V1) to failing well below the bar (68-75, V2) on the site's flagship photo-gallery surface, hit by every visitor on the primary form factor. Not Sev 1: no data loss, no security exposure, no outage — the grid renders correctly, the lightbox works, all content is reachable. The displaced element (the footer) sits below what a visitor is actively looking at, so perceived user pain is more moderate than the raw CLS number suggests; the AC-008 failure is the sharper driver of this severity than direct user complaint volume would be.
+
+  ## Linked artifacts
+
+  - **Spec 00002** (`.claude/strap/work/spec/00002.yaml:162`) / **Feature 00005** (`.claude/strap/work/feature/00005.yaml:64`, state: resolved) — own AC-008, the criterion this defect violates.
+  - **Task 00039** — "/galleries hub UI + set-switcher + thumbnail grid" (Feature 00004, Story 00029) — primary origin; built `GalleryHub.jsx` and the `.gallery-hub__*`/`.gallery-grid`/`.thumb` CSS.
+  - **Task 00041** — "Old-route redirects + gallery cleanup + route-audit guard" — secondary contributor; the legacy-path `<Navigate>` redirect adds a second footer displacement (+0.207 CLS) on top of the primary defect.
+  - **Task 00048** — captured the V1 performance baseline (gallery desktop Perf 93 / LCP 1450ms) that this defect regresses against. CLS was not captured in that baseline, so this defect had no tripwire until now.
+
+  ## Root cause
+
+  **CONFIRMED** — traced in code and reproduced in-browser via direct measurement (Lighthouse `layout-shifts` audit + `PerformanceObserver` capture).
+
+  `GalleryHub` (`src/components/common/GalleryHub.jsx`) fetches its manifest after mount (`useEffect` at lines 116-134) and renders a single-line `<p className="gallery-hub__status">` placeholder (lines 169-179) inside `.gallery-hub__inner.gallery-hub__body` (line 168) while the fetch is in flight. Once it resolves, the placeholder is replaced with the full `.gallery-grid` (lines 181-202) — for `nd-totd2025` (125 items), a grid roughly 4,200px tall at desktop width. Nothing on `.gallery-hub__body` (`src/scss/styles.scss:748-750`, `padding-block: var(--space-7)` only — no `min-height` or other reservation) holds space for that grid before it arrives, so the footer and everything after it are displaced ~4,000px in one shift the instant the grid mounts.
+
+  Lighthouse names the culprit node directly, consistently across three runs: `shift score=0.8094  node=div#root > div.container-fluid > section.gallery-hub > div.gallery-hub__inner`, snippet `<div class="gallery-hub__inner gallery-hub__body">`.
+
+  **REFUTED, checked and cleared:** individual thumbnail sizing is NOT the cause. `.thumb` (`styles.scss:795-821`) already correctly declares `aspect-ratio: 1` (line 799) with a `background: var(--ink-800)` placeholder fill (line 803) and `img { width:100%; height:100%; object-fit:cover }` — each tile is a definite-size box from the moment the grid renders, so images paint into an already-reserved square with zero individual contribution to CLS. Lighthouse's `unsized-images` audit returns 0 items on both URLs. `ResponsiveImage.jsx` forwards `width`/`height` cleanly (line 92) and `GalleryHub` correctly declines to pass them, since the CSS already reserves the box — no change needed there.
+
+  The desktop/mobile asymmetry (0.812 vs 0.193) is explained by *impact fraction*, not thumbnail count: on mobile's narrower 412x823 viewport the hub's header chrome takes up proportionally more space, so the footer sits at or below the fold both before and after the grid lands — an element not visible before or after a shift contributes little to the CLS score, regardless of how many thumbnails loaded.
+
+  **Why V1 scored 93 on the same URL:** V1's gallery component (`src/components/Gallery/ND/TailOfTheDragon/index.jsx`, retired in Task 00055) used the same async-manifest-then-swap pattern, but swapped in a bounded-height carousel widget rather than an unbounded grid. V2's consolidation onto a single responsive grid (all 125 items at once) inherited the async-swap pattern but lost the height bound that made it harmless.
+
+  **Deliberate scope decision, or oversight?** An oversight, not a documented trade-off. Repo-wide search across `.claude/strap/work/**/*.yaml` for "CLS" or "layout shift" returns zero matches. Tasks 00039/00040/00041 document many scope decisions in detail; none mentions layout stability. Task 00048's baseline capture recorded only Performance/LCP/image-bytes, so CLS had no tripwire before this defect shipped.
+
+  ## Affected files
+
+  | File | Lines | Role |
+  |---|---|---|
+  | `src/scss/styles.scss` | 748-750 | `.gallery-hub__body` — primary fix site; no height reservation during loading |
+  | `src/scss/styles.scss` | 785-789 | `.gallery-grid` — unbounded-height auto-fill grid (not itself the bug, but explains the injected height) |
+  | `src/scss/styles.scss` | 795-821 | `.thumb` — correct as-is, `aspect-ratio: 1` at line 799; do not change |
+  | `src/components/common/GalleryHub.jsx` | 168 | `<div className="gallery-hub__inner gallery-hub__body">` — the node Lighthouse names as the shift culprit |
+  | `src/components/common/GalleryHub.jsx` | 169-179 | One-line loading/empty-state placeholder — the pre-shift state with no reserved height |
+  | `src/components/common/GalleryHub.jsx` | 181-202 | Grid render gated on `!loading && frames.length > 0` — the injection point |
+  | `src/components/common/GalleryHub.jsx` | 116-134 | Post-mount manifest fetch; re-fires on every set-switcher change, so the collapse-then-inject cycle recurs mid-session |
+  | `src/App.jsx` | 63-65 | Legacy-route `<Navigate>` redirects — secondary +0.207 CLS contributor via an extra committed render with no `<Routes>` content between Header and Footer |
+
+  Suggested fix direction (not prescriptive — `/fix-bugs` implementer's call): reserve roughly one viewport-height of `min-height` on `.gallery-hub__body` during the loading state, or render a static skeleton grid of placeholder tiles. Either pushes the footer below the fold *before* the real grid lands, so the eventual swap contributes ~0 impact fraction. Item count isn't knowable before the manifest fetch resolves, so the reservation must be a static estimate, not computed from the real item count.
+
+  ## Impact
+
+  Every visitor to `/galleries` — the site's primary photo-gallery surface — on desktop form factor experiences a severe, visible layout jolt (the footer and any content below the fold visibly jumps) within roughly a second of the page settling. Mobile visitors experience the same defect at lower visual severity due to viewport geometry, but are still well over Lighthouse's "good" CLS threshold. The defect regresses a shipped, CPO-confirmed Acceptance Criterion (AC-008) from passing to failing on the flagship surface, which both damages the real user experience and would be caught by any future automated performance gate checking that AC. No data loss, security, or availability impact.
+
+  ## Quality Checklist
+
+  - [x] Repro Steps are numbered and deterministic.
+  - [x] Expected vs Actual is concrete on both sides; Expected is anchored to Spec 00002 AC-008.
+  - [x] Severity is set per the project rubric (2 - High) with explicit reasoning.
+  - [x] Linked artifacts identify the affected Spec, Feature, and the Tasks that introduced the regression.
+  - [x] Root cause distinguishes confirmed cause (traced + measured) from refuted hypothesis (aspect-ratio, explicitly checked and cleared) — no guesses presented as findings.
+  - [x] Affected files include paths and line numbers.
+  - [x] Impact captures who is affected, the size of the affected population, and the blast radius.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T02:50:00Z
+    body: "[STRAP/agent:dev-lead] State: new (via /file-bugs). Authored By: spec-lead. Bug; Severity: 2 - High. Filed after running the real Lighthouse perf harness (scripts/perf/lh-baseline.mjs) against dist/ built from main post-Feature-D-merge and finding a genuine regression: gallery desktop Lighthouse Performance dropped from 93 (V1) to 75 (initial CPO-run measurement) / 68-70 (spec-lead's independent re-measurement), driven entirely by CLS exploding from 0.090 to 0.81-1.02. spec-lead's read-only investigation confirmed the root cause in code (GalleryHub.jsx's unbounded grid injection with no height reservation on .gallery-hub__body) and explicitly refuted the dev-lead's initial aspect-ratio hypothesis with direct evidence (`.thumb` already correctly reserves a 1:1 box; unsized-images audit returns 0). A related but distinct tooling defect (the perf harness itself measures the wrong URL) was filed separately as Bug 00078 per CPO direction, since it has an unrelated root cause and owner even though it was discovered in the same investigation."
