@@ -1,7 +1,7 @@
 id: "00006"
 type: feature
 title: "Ship the permanent self-documenting 'What's New' page enumerating V2 changes in Top Gear/Clarkson voice"
-state: active
+state: resolved
 parent: null
 iteration: null
 area: null
@@ -26,17 +26,17 @@ links:
     type: related
 created_at: 2026-08-01T18:45:00Z
 created_by: spec-lead
-updated_at: 2026-08-01T20:02:00Z
+updated_at: 2026-08-06T03:50:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T03:50:00Z
 closed_at: null
 description: |
   | Field        | Value                       |
   |--------------|-----------------------------|
   | Authored By  | spec-lead                   |
   | Authored At  | 2026-08-01T18:45:00Z        |
-  | Completed By | _(set at resolution)_       |
-  | Completed At | _(set at resolution)_       |
+  | Completed By | dev-lead (CPO-approved)     |
+  | Completed At | 2026-08-06T03:50:00Z        |
 
   ---
 
@@ -93,3 +93,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T20:02:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /decompose-feature). frontend+tech-writer reconciled -> 3 Stories (00061 route+scaffold+data-module, 00062 telemetry-cluster+changelog components, 00063 Clarkson content + TARGET/SHIPPED tiles), 10 Tasks (00064-00073), ~36 senior-dev-hrs. Shared data module (frontend owns shape, tech-writer owns values). Authored LAST; AC-015 no-vapourware audit is task 00071; TARGET->SHIPPED flip (00073) gates on Feature C measured numbers."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T00:35:00Z
+    body: "[STRAP/agent:dev-lead] Sprint allocation (via /plan-sprint): 3 Stories, 10 Tasks moved to Sprint 2026.08.A (2026-08-01 -> 2026-08-08). Predecessor Features 00003/00004/00005 all shipped, satisfying this Feature's hard traceability dependency. CPO confirmed allocating into the current sprint despite its 2-day remaining window, matching this project's established pattern of the sprint functioning as a rolling work bucket rather than a hard capacity gate (Features A-C, plus their post-close follow-ups, all landed inside this same sprint). No developer assignment change (solo CPO + agent execution team topology). Remaining backlog under this Feature: none -- full decomposition allocated. Next: /execute-sprint 00006."
+  - id: c4
+    author: dev-lead
+    timestamp: 2026-08-06T03:50:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). PR #29 opened against feature/strap-onboarding (feature/00006-whats-new-page -> feature/strap-onboarding), confirmed MERGEABLE/CLEAN. All 3 Stories (00061/00062/00063) and 10 Tasks (00064-00073) resolved and merged. AC-014 traced end-to-end: /whats-new registered in App.jsx, nav pill + footer link both resolve to it, asserted in the shared route-parity guard. AC-015 traced end-to-end: every ledger entry's `how` claim maps to a resolved Feature/Story/Task record via the traceability table Task 00071 wrote into whatsNew.js's docblock. AC-016 verified: zero dangerouslySetInnerHTML anywhere under src/components/WhatsNew/. Full suite grew 950 -> 1031 across this Feature's execution; production build clean throughout.\n\nThis Feature's execution ran an unusually deep AC-015 verification pass and it earned its keep: Task 00071's audit caught a real vapourware-adjacent error dev-lead's own earlier spot-check of Task 00070 had missed (claimed 'six gallery mechanisms', consistent project record says three), plus 6 further corrections. Task 00072 caught two factual defects in metric-tile copy that a values-only check could not have found (invented LCP baseline, mislabeled Lighthouse field/lab distinction). Tasks 00069/00073 rigorously declined to badge any of the three perf tiles SHIPPED despite real Feature C numbers being available, because every available number was the wrong measurement for the specific claim -- all three tiles correctly stay TARGET.\n\nOPEN FOLLOW-UP, surfaced not auto-filed (CPO's call per this project's established pattern): no post-V2 LCP/Lighthouse re-measurement exists anywhere in this project -- Feature D's own page now makes this gap publicly visible via three TARGET badges. scripts/perf/lh-baseline.mjs (Task 00048) is a reproducible, re-runnable harness, but it needs a browser tool no agent dispatched on this project has ever had, so it is CPO-runnable, not agent-runnable. If run, note it writes no artifact on its own -- the result must be transcribed into project-docs/v1-perf-baseline.md or it leaves no durable record (Task 00073's finding)."

@@ -119,20 +119,44 @@ async function processOne(fileAbs, g, outDir) {
     const outDisplay = path.join(outDir, "display", `${filename}.webp`);
     const outOriginal = path.join(outDir, "original", filename);
 
-    // Copy original (optional but nice)
-    await fs.copyFile(fileAbs, outOriginal);
-
-    // Build thumb + display
     const input = sharp(fileAbs, { failOn: "none" });
 
+    /**
+     * `rotate()` takes no argument on purpose: it bakes the source's EXIF
+     * orientation into the pixels. Every rendition needs it, because sharp
+     * writes no metadata unless `withMetadata()` is called — which this
+     * deliberately does not, so camera and GPS tags do not reach the web — and
+     * 17 of the source frames carry a non-identity orientation they would
+     * otherwise rely on to hang the right way up. It precedes `resize()` so the
+     * width bound applies to the upright frame rather than the stored one.
+     */
+
+    /**
+     * The `full` rendition is re-encoded rather than copied. Every source is
+     * untouched camera output, so a byte copy shipped ~880MB of frames carrying
+     * no compression at all; mozjpeg at q85 roughly halves that at unchanged
+     * display dimensions, which the download/wallpaper use case depends on.
+     *
+     * Every source is a JPEG (the glob also admits png/webp; none exist), so
+     * the encoder is unconditional.
+     */
     await input
         .clone()
+        .rotate()
+        .jpeg({ quality: 85, mozjpeg: true })
+        .toFile(outOriginal);
+
+    // Build thumb + display
+    await input
+        .clone()
+        .rotate()
         .resize({ width: THUMB_W, withoutEnlargement: true })
         .webp({ quality: 70 })
         .toFile(outThumb);
 
     await input
         .clone()
+        .rotate()
         .resize({ width: DISPLAY_W, withoutEnlargement: true })
         .webp({ quality: 82 })
         .toFile(outDisplay);

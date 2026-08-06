@@ -1,11 +1,11 @@
 id: "00066"
 type: task
 title: "Author the /whats-new route-presence test (reconcile with Feature A route-parity guard)"
-state: new
+state: resolved
 parent: "00061"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00064"
@@ -13,17 +13,17 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T01:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T01:45:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-06T01:45:00Z |
 
   ---
 
@@ -37,10 +37,23 @@ description: |
   ## Original Estimate
   **Hours (senior-developer):** 3
   ## Implementation guidance
-  `src/components/WhatsNew/__tests__/WhatsNew.route.test.jsx`; render via `MemoryRouter initialEntries={['/whats-new']}`. Coordinate with Feature A's nav-pill route-parity test — the presence assertion lives once. Do NOT run the suite (dev-lead runs `npm test`).
+  CORRECTED 2026-08-06 (Task 00064's own report caught two errors in this brief as originally filed): this repo has NO `__tests__/` folders anywhere — the actual convention is co-located `<Module>.test.jsx` next to the module, which Task 00064's own `src/components/WhatsNew/index.test.jsx` already follows. Do not create a `__tests__/` directory. Task 00064's page-shell test deliberately defers route-registration assertion to this Task ("Task 00066's contribution to the shared route-parity guard in src/App.test.jsx" — see its docblock) — so this Task's real target is `src/App.test.jsx`, contributing a `/whats-new` presence case to the existing shared route-parity guard rather than a new standalone WhatsNew test file. Render via `MemoryRouter initialEntries={['/whats-new']}` (or App's existing harness pattern) and assert the WhatsNew page renders at that path. Also reconcile `src/components/Footer/index.test.jsx:206`, which currently excludes `/whats-new` from its "every footer link resolves to a route" parity check with a comment saying the route doesn't exist yet — that's now stale and hides a real regression if the route were ever removed; update it to expect `/whats-new` to resolve like every other footer link. (Separately noted, not this Task's scope: the same Footer test's `served` route set lists `/gallery` but not `/galleries` — worth a follow-up look, but don't fold it in here.)
   ## Dependencies
-  Predecessor: 00064. P9 Vitest harness (Feature A Story 00011). Reconcile with Feature A route-parity guard (Task 00025).
+  Predecessor: 00064 (resolved — merged into feature/00006-whats-new-page). P9 Vitest harness (Feature A Story 00011). Reconcile with Feature A route-parity guard (Task 00025) in `src/App.test.jsx`.
   ## Definition of Done
   Test authored + colocated; asserts route presence + page render; documented as D-side contribution to the shared guard.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T01:20:00Z
+    body: "[STRAP/agent:dev-lead] Implementation guidance corrected before dispatch: Task 00064's closing report caught that this brief's original `__tests__/` folder path contradicts the repo's actual co-located-test convention, and that 00064's own test explicitly defers route-registration assertion to this Task's App.test.jsx contribution rather than a new WhatsNew-local file. Both fixed in the Implementation guidance above. Also folded in: Footer/index.test.jsx:206's stale /whats-new route-parity exclusion, which 00064 flagged as this Task's to reconcile."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T01:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00066, branch task/00066-whatsnew-route-test off feature/00006-whats-new-page."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T01:45:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00066-whatsnew-route-test into feature/00006-whats-new-page. Completed By: frontend-engineer. Two cases added to App.test.jsx's shared route-parity guard (pill destination resolves + single-main-landmark check); Footer's stale /whats-new exclusion removed and its comment rewritten to record why the exclusion existed and why it's gone. Correctly used App's own BrowserRouter-based renderAt harness rather than MemoryRouter, since App owns its router (the corrected brief's 'or App's existing harness pattern' branch). Real finding, independently corroborated against Task 00064's own workaround: @testing-library/dom's buildElementRoleList does not honour aria-query's role-level (not attribute-level) 'scoped to body' constraint on the banner role, so getAllByRole('banner') cannot distinguish a properly-nested non-banner <header> from the shell's real banner -- both 00064 and 00066 independently used a `main > header.wn-dash` selector query instead, and this is now a candidate memory item since it will recur on any surface nesting a <header>. Deliberately did NOT assert the 'no banner' half of WhatsNew's own docblock claim via role query for that reason -- correct call, not a gap. Flagged, not actioned (correctly out of scope here): the Footer served-set is a hand-maintained literal that can drift from App.jsx's real route table since it isn't derived from it; worth a future Task if it proves to actually drift. tokens_used: ~50k."

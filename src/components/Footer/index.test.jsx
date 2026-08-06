@@ -184,8 +184,10 @@ describe('every footer link resolves to a router route', () => {
     });
 
     /**
-     * /whats-new is Feature D's route and does not exist yet; it ships here for
-     * the same reason the nav ships it (AC-014). Excluded from the parity check.
+     * /whats-new shipped here ahead of its destination and was excluded from
+     * this check while it dead-ended. Task 00064 registered the route and Task
+     * 00066 folded it back in: the exclusion now hides the regression it was
+     * only ever meant to defer.
      */
     it('points every other link at a path App.jsx serves', () => {
         renderFooter();
@@ -199,11 +201,12 @@ describe('every footer link resolves to a router route', () => {
             '/gallery',
             '/youtube',
             '/suspension',
+            '/whats-new',
         ]);
 
-        const targets = [...screen.getByRole('contentinfo').querySelectorAll('a[href]')]
-            .map((anchor) => anchor.getAttribute('href'))
-            .filter((href) => href !== '/whats-new');
+        const targets = [...screen.getByRole('contentinfo').querySelectorAll('a[href]')].map(
+            (anchor) => anchor.getAttribute('href')
+        );
 
         expect(targets.length).toBeGreaterThan(0);
 

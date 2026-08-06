@@ -1,7 +1,7 @@
 id: "00074"
 type: task
 title: "Re-encode full-resolution gallery originals (mozjpeg/optimized, same pixel dimensions)"
-state: new
+state: resolved
 parent: "00044"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,17 +11,17 @@ links: []
 original_estimate: 4
 created_at: 2026-08-05T05:15:00Z
 created_by: dev-lead
-updated_at: 2026-08-05T05:15:00Z
-updated_by: dev-lead
-resolved_at: null
+updated_at: 2026-08-05T10:05:00Z
+updated_by: devops-lead
+resolved_at: 2026-08-05T10:05:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-05T05:15:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | devops-lead |
+  | Completed At | 2026-08-05T10:05:00Z |
 
   ---
 
@@ -49,3 +49,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-05T05:15:00Z
     body: "[STRAP/agent:dev-lead] Task filed per explicit CPO direction, against Story 00044 (devops-lead's build-side domain — matches Story 00044's existing ownership from Feature 00005 comment c5). Addresses the 881MB dist/gallery/*/original/ finding flagged at Story 00044's close, reflagged at Story 00045's close, and carried unresolved through Feature 00005's close (comment c6). Allocated directly into current Sprint 2026.08.A (ends 2026-08-08) per the CPO-directed capacity-override pattern already established across Features A/B/C this project. dev-lead spot-tested the recommended method (mozjpeg q85, no resize) against 3 real TOTD2025 source files before filing: 56-61% size reduction, 0 dimension change."
+  - id: c2
+    author: devops-lead
+    timestamp: 2026-08-05T10:05:00Z
+    body: "[STRAP/agent:devops-lead] State: new -> resolved. Branch task/00074-gallery-original-reencode off feature/strap-onboarding; single-file diff to scripts/build-gallery.mjs (processOne), no manifest schema / outOriginal path / other-rendition changes. REAL MEASURED RESULT, full build not extrapolation: public/gallery/*/original/ 922,244,469 B (879.5 MiB) -> 407,777,646 B (388.9 MiB), -514,466,823 B / -55.78%, all 286 files, 0 skipped. Beats the Task's projected 360-390MB band at its top edge. Per gallery: nd-totd2025 485,531,655->202,198,472 (-58.4%), nd-hillcountry 188,908,090->103,981,717 (-45.0%), nc-eastcoast15 157,799,463->55,324,152 (-64.9%), nc-yellowstone15 51,782,161->18,932,328 (-63.4%), nb-hillcountry 26,739,458->22,315,230 (-16.5%, its sources were already compressed -- lowest yield of the six), c8-autox 11,483,642->5,025,747 (-56.2%). Whole public/gallery 997,614,917->483,148,094 B. dist/ measured at 574,943,936 B (548 MiB) post-change; since only original/ bytes moved, the pre-change dist was 1,089,410,759 B (1,038.9 MiB) -- deploy roughly halved. Verification was done against the real artifact across ALL 286 files, not samples: a throwaway script compared every source's AS-DISPLAYED dimensions (EXIF orientation applied) against its rebuilt output -- 0 drift, 0 missing outputs, 0 metadata leaks, 0 unexpected output formats. npm test -- --run 939/939 green across 34 files (incl. build-gallery.test.js 22/22); npm run build exit 0, vite built in 21.17s (the >500kB chunk warning is pre-existing and unrelated). Visual spot-check of before/after pairs incl. a night low-light frame showed no artifacting or gradient banding. DEFECT CAUGHT AND FIXED beyond the brief -- the brief's approach as literally written would have SHIPPED A REGRESSION: 17 of the 286 sources carry a non-identity EXIF orientation (12x orientation=6 / 90deg, 5x orientation=3 / 180deg) spanning 4 of the 6 galleries (nd-hillcountry x10, nc-eastcoast15 x4, nd-totd2025 x1, nc-yellowstone15 x1). sharp does NOT auto-rotate unless rotate() is called, and the re-encode intentionally drops EXIF -- so a literal `sharp(f).jpeg({quality:85,mozjpeg:true})` would have written those 17 frames rotated 90/180deg, where the old byte copy displayed them correctly via the retained EXIF tag. The dev-lead spot-test could not have surfaced this: all 3 TOTD2025 probe frames are orientation=1. Fixed with a bare `.rotate()` before `.jpeg()`, which bakes the source orientation into the pixels so the frame is upright with no metadata needed. CONSEQUENCE worth reviewer attention: for the 12 orientation=6 files the STORED dimensions transpose (e.g. nc-17.jpg 5312x2988 -> 2988x5312). That is the correct outcome, not a downscale -- it now matches what a viewer always saw for the source -- but it means 'stored dimensions byte-identical' is true for 274/286 and 'as-displayed dimensions identical' is true for 286/286, which is the invariant that actually matters. EXIF/GPS strip confirmed two ways: sharp 0.34.5 defaults keepMetadata:0 (node_modules/sharp/lib/constructor.js:309) and neither withMetadata() nor any keep*() is called; plus empirical re-probe of all 286 outputs showing exif/icc/xmp/iptc all absent. Camera, GPS and timestamp tags that were previously being published verbatim in the byte copies are now gone -- a privacy improvement the Task framed only as a side condition. Source extensions were checked before choosing an encoder as the brief required: all 286 are .jpg / sharp-format jpeg / sRGB, so the encoder is unconditional .jpeg({quality:85,mozjpeg:true}); no PNG/WebP branch was added since none exist and it would be untested unreachable code. FLAGGED for dev-lead/CPO, does not block merge but changes the economics of this Task: the `full` field these 389MB back is NOT consumed by any UI today. GalleryHub.framesFrom (src/components/common/GalleryHub.jsx:60-66) deliberately drops `full` when normalising manifest items, and GalleryLightbox renders frame.original (the 1600w display webp) -- its own docblock says `full` 'must never reach' the overlay. So the Task brief's premise that the lightbox 'serves it directly on click for download/wallpaper use' does not match the current code: there is no download affordance, and the deploy still carries 389MB nothing links to. Two coherent follow-ups for the CPO to choose between -- add the download affordance the rendition was built for, or stop emitting original/ entirely and drop the remaining 389MB (~71% of dist). SECOND FLAG, pre-existing and NOT introduced here: because the thumb/display webp renditions also never called .rotate(), those same 17 frames are already being served sideways in the grid and lightbox today. Left alone as out of this Task's scope (brief said do not touch other renditions), but it is a live user-visible defect and a 1-line fix in the same function. COST NOTE for CI: gallery:build went 3m9s -> 13m8s wall (mozjpeg is ~4x the byte-copy cost) on 286 frames; Netlify build time rises accordingly and is worth watching against build-minute limits."

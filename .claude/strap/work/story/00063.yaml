@@ -1,28 +1,28 @@
 id: "00063"
 type: story
 title: "Author the What's New content: Clarkson-voice entries + telemetry tiles (traceable to shipped work)"
-state: new
+state: resolved
 parent: "00006"
-iteration: null
+iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: tech-writer
 tags: [AI, strap:story]
 links:
   - target: "00061"
     type: predecessor
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T03:35:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T03:35:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-06T03:35:00Z |
 
   ---
 
@@ -48,3 +48,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T20:00:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00006 (P7 content, tech-writer). Tasks 00070-00073. Merged tech-writer's 2 content stories into one 4-task story."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T01:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Predecessor Story 00061's Tasks 00064/00065 resolved and merged; Features A/B/C shipped, satisfying this Story's traceability blocker. Task 00070 dispatched (Wave 2); Tasks 00071-00073 follow in Wave 3."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T03:35:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). All 4 Tasks (00070 entries, 00071 WHY/HOW + AC-015 audit, 00072 metric values, 00073 flip confirmation) resolved and merged into feature/00006-whats-new-page. AC-015 satisfied and genuinely tested, not assumed: Task 00071's audit caught and corrected a real vapourware-adjacent error in Task 00070's content (claimed six gallery mechanisms when the record consistently says three) that dev-lead's own earlier spot-check had missed, plus six further corrections of lesser materiality -- all independently re-verified by dev-lead against source records before merging. Task 00072 separately caught two factual defects in the metric tile copy (an invented V1 LCP baseline, a mislabeled Lighthouse field/lab distinction) that a values-only check could not have found. Every claim in the shipped ledger and tile set traces to a resolved Feature/Story/Task record."
