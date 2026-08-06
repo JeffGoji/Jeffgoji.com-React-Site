@@ -85,6 +85,11 @@ function framesFrom(items, set) {
  * what is on screen. An unrecognised `initialSlug` falls back to the first set
  * rather than rendering a hub with nothing selected.
  *
+ * The seed therefore runs once per mount: a caller that needs a later
+ * `initialSlug` honoured has to remount the hub rather than re-render it. That
+ * is the same property that keeps a caller from overwriting a selection the
+ * visitor has already made in the switcher.
+ *
  * The hub also owns which frame the lightbox is open on, because the lightbox
  * needs the whole fetched set and this is the only component that holds it.
  * `onSelectImage` still reports the clicked index outward, but it is a

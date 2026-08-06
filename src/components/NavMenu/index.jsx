@@ -1,6 +1,8 @@
 import { Link, NavLink } from 'react-router-dom'
 import { Navbar, Container, Nav, NavDropdown, Dropdown } from 'react-bootstrap'
 
+import { galleryHubPath } from '../common/gallerySets'
+
 /**
  * The logo is injected as markup rather than referenced with <Image src>: its
  * wordmark is live <text>, so it only resolves the self-hosted Archivo /
@@ -24,9 +26,15 @@ import logoMarkup from '../../assets/logo.svg?raw'
  * Nav.Link folds `className` through the `classnames` package, which silently
  * drops function arguments before the router ever sees them.
  *
- * Galleries still fan out per set. Spec 00002's adopted delta routes them
- * through one `/galleries` hub, but Feature B has not built that route yet, so
- * pointing at it here would 404.
+ * The Galleries panel still fans out per set, but every entry in it now names
+ * the one `/galleries` hub and identifies its set in the query rather than
+ * pointing at the pre-V2 per-gallery URL. Routing through the old URL only to
+ * be redirected off it was what discarded the set the visitor had picked, so
+ * all six entries opened the same gallery (Bug 00079).
+ *
+ * These are plain `Link`s where the rest of the nav uses `NavLink`: the active
+ * match ignores the query, so six links that share `/galleries` would all mark
+ * themselves current the moment the hub is open.
  *
  * The trailing "What's New" pill is permanent chrome (AC-014). It shipped ahead
  * of its destination and dead-ended until Task 00064 registered `/whats-new`;
@@ -60,7 +68,7 @@ function NavMenu() {
                                     NB Mazdaspeed Miata
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={NavLink} to="/msm-gallery">Texas Hill Country Trip 2023</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nb-hillcountry')}>Texas Hill Country Trip 2023</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Dropdown drop="end">
@@ -68,8 +76,8 @@ function NavMenu() {
                                     NC Miata
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={NavLink} to="/nc-eastcoast15">East Coast Trip 2015</Dropdown.Item>
-                                    <Dropdown.Item as={NavLink} to="/nc-yellowstone15">Yellowstone West Coast Trip 2015</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nc-eastcoast15')}>East Coast Trip 2015</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nc-yellowstone15')}>Yellowstone West Coast Trip 2015</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Dropdown drop="end">
@@ -77,8 +85,8 @@ function NavMenu() {
                                     ND Miata
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={NavLink} to="/nd-hillcountry">Texas Hill Country</Dropdown.Item>
-                                    <Dropdown.Item as={NavLink} to="/totdgallery">Tail of the Dragon 2025</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nd-hillcountry')}>Texas Hill Country</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nd-totd2025')}>Tail of the Dragon 2025</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Dropdown drop="end">
@@ -86,7 +94,7 @@ function NavMenu() {
                                     C8 Corvette
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={NavLink} to="/c8-autox">Autocross</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('c8-autox')}>Autocross</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </NavDropdown>

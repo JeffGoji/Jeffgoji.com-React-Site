@@ -1,7 +1,7 @@
 id: "00079"
 type: bug
 title: "Galleries nav dropdown: every set links to its legacy URL, which redirects to /galleries with the set identity discarded — hub always opens on nd-totd2025"
-state: new
+state: resolved
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -17,17 +17,17 @@ links:
 original_estimate: null
 created_at: 2026-08-06T03:15:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T03:15:00Z
+updated_at: 2026-08-06T04:10:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T04:10:00Z
 closed_at: null
 description: |
   | Field        | Value                       |
   |--------------|-----------------------------|
   | Authored By  | spec-lead                   |
   | Authored At  | 2026-08-06T03:15:00Z        |
-  | Completed By | _(set at resolution)_       |
-  | Completed At | _(set at resolution)_       |
+  | Completed By | frontend-engineer           |
+  | Completed At | 2026-08-06T04:10:00Z        |
 
   ---
 
@@ -120,3 +120,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T03:15:00Z
     body: "[STRAP/agent:dev-lead] State: new (via /file-bugs). Authored By: spec-lead. Bug; Severity: 2 - High. Filed from a direct CPO report matching the symptom exactly. spec-lead's read-only investigation confirmed the full root-cause chain in code (NavMenu's legacy-path links -> App.jsx's identity-discarding redirect -> GalleryHub's initialSlug fallback to GALLERY_SETS[0]) and found strong corroborating evidence: Task 00041's own resolution comment explicitly flagged this exact gap as deliberately deferred scope at merge time, and the flag was never converted into a backlog item -- this Bug is the direct cost of that gap. CPO confirmed scope via two gates: (1) fix the nav dropdown only, do not make the in-page 'Choose set' switcher URL-syncing (smaller, lower-risk scope); (2) also fix legacy bookmark URLs (e.g. /nc-yellowstone15) to preserve set identity, not just the nav dropdown, since Task 00041 flagged both as the same underlying gap and the fix data (gallerySets.js's legacyPath->slug mapping) already exists for both. Sequencing: CPO has directed this Bug to wait until Bug 00077 (CLS regression, same file GalleryHub.jsx, currently in flight) lands and merges, to avoid working the same file in parallel across two specialists."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T03:48:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /fix-bugs). Sequence position: 1. Specialist: frontend-engineer, dispatched in worktree .worktrees/bug-00079, branch fix/00079-gallery-dropdown-selection off main. Bugs 00077 (CLS regression) and 00078 (perf harness URL) both merged into main via PR #30 before this branch was cut, per CPO direction to wait for that PR rather than stack on top of it -- this specialist works against the already-fixed GalleryHub.jsx with no risk of conflicting with or reverting that work."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T04:10:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /fix-bugs). Commit d5d1f78 on fix/00079-gallery-dropdown-selection. Completed By: frontend-engineer. One mechanism fixes both CPO-confirmed scope items: gallerySets.js's new galleryHubPath(slug) builds /galleries?set=<slug>, validated against the live GALLERY_SETS config so a renamed/removed slug degrades to the default landing rather than a dead query. NavMenu's six dropdown entries repointed directly at galleryHubPath() (also retiring the stale 'route doesn't exist yet' docblock); the legacy per-gallery redirects now carry the same slug through LEGACY_GALLERY_REDIRECTS, so old bookmarks (e.g. /nc-yellowstone15) resolve correctly too -- both in-scope requirements satisfied by one data flow. Two real traps caught and handled, one of them NOT flagged in the original investigation: (1) the investigation's own flagged remount trap (GalleryHub's initialSlug seeds once, so nav-clicking a different set while already on /galleries wouldn't update the display) -- solved by keying the route element on location.key rather than the search param itself, specifically so re-clicking a nav entry after the in-page switcher moved elsewhere still navigates correctly, and specifically NOT keyed on the param so the switcher's own selections (which write no URL) can never be silently overwritten by a stale seed; (2) NEW finding: NavLink's active-match ignores the query string, so if the six entries had stayed NavLinks sharing /galleries as their pathname, all six would have painted themselves 'active' simultaneously the instant the hub was open -- changed to plain Links, guarded by a new test. Correctly did NOT make the in-page switcher URL-syncing, matching the CPO's explicit scope decision. Existing stale test (App.test.jsx:175, pinning /totdgallery) rewritten to the new contract rather than deleted, matching this project's established convention; its GalleryHub mock was also upgraded to reproduce real seed-once semantics, since a naive always-fresh stub would have passed this exact bug undetected. 153 real tests pass in the four affected files per the agent's own run; re-verified centrally: 1064/1064 full suite, clean build. One real process error on dev-lead's part surfaced by the agent: the worktree was created with a scratch branch (fe-00079-work) instead of the intended fix/00079-gallery-dropdown-selection, because that branch was already checked out in the primary checkout when the worktree was cut -- git cannot check out the same branch twice. Agent recovered cleanly via a clean rebase + fast-forward push, no data lost, no force-push needed. Noted for future worktree creation: never git checkout -b the target branch in the primary checkout before cutting its worktree."

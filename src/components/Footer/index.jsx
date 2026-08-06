@@ -60,7 +60,7 @@ function Footer() {
                 </div>
                 <div>
                     <h4>More</h4>
-                    <Link to="/gallery">Galleries</Link>
+                    <Link to="/galleries">Galleries</Link>
                     <Link to="/youtube">Videos</Link>
                     <Link to="/whats-new">What&apos;s New</Link>
                     <Link to="/suspension">Suspension</Link>
