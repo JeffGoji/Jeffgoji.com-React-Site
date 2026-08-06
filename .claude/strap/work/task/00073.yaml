@@ -1,11 +1,11 @@
 id: "00073"
 type: task
 title: "Flip TARGET->SHIPPED once Feature C's measured numbers land"
-state: new
+state: active
 parent: "00063"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: tech-writer
 tags: [AI, strap:task]
 links:
   - target: "00072"
@@ -13,7 +13,7 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T03:05:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -44,3 +44,8 @@ description: |
   Perf tiles carry measured values; `target` flags reflect actual met/not-met; no tile claims SHIPPED for an unmeasured/unmet number; delta reads honestly vs the recorded V1 baseline.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T03:05:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3 of 3 (final task). Dispatched to tech-writer in worktree .worktrees/task-00073, branch task/00073-target-shipped-flip off feature/00006-whats-new-page. IMPORTANT CONTEXT: Task 00069 (merged) already did the sourcing investigation this Task depends on and concluded NONE of the three perf tiles can honestly flip -- no post-V2 LCP/Lighthouse measurement exists anywhere in the project, and the real Feature C numbers that do exist (Task 00056/00074) are the wrong denominator for AC-006's cold-load-bytes claim. This Task's real job now is to confirm that conclusion still holds (nothing has changed since 00069 merged minutes ago) and close it out rather than re-litigate the same investigation."
