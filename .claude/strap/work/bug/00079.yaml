@@ -1,0 +1,122 @@
+id: "00079"
+type: bug
+title: "Galleries nav dropdown: every set links to its legacy URL, which redirects to /galleries with the set identity discarded — hub always opens on nd-totd2025"
+state: new
+parent: "00005"
+iteration: "Sprint 2026.08.A"
+area: null
+assigned_to: frontend-engineer
+tags: [AI, strap:bug, file-bugs, "env:production"]
+links:
+  - target: "00041"
+    type: related
+  - target: "00039"
+    type: related
+  - target: "00077"
+    type: related
+original_estimate: null
+created_at: 2026-08-06T03:15:00Z
+created_by: dev-lead
+updated_at: 2026-08-06T03:15:00Z
+updated_by: dev-lead
+resolved_at: null
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | spec-lead                   |
+  | Authored At  | 2026-08-06T03:15:00Z        |
+  | Completed By | _(set at resolution)_       |
+  | Completed At | _(set at resolution)_       |
+
+  ---
+
+  # Galleries nav dropdown: every set links to its legacy URL, which redirects to /galleries with the set identity discarded — hub always opens on nd-totd2025
+
+  ## Repro Steps
+
+  1. `npm run dev` (or `npm run build && npm run preview`); open the site root.
+  2. Click **Galleries** in the navbar to open the dropdown.
+  3. Click the **C8 Corvette** submenu toggle, then click **Autocross**.
+  4. Observe the URL bar settles on `/galleries` (the intermediate `/c8-autox` is replaced via redirect, not pushed).
+  5. Observe the page: eyebrow reads `ND Miata`, heading reads `ND — Tail of the Dragon 2025`, "Choose set" shows the same. Expected: `C8 Corvette` / `C8 — Autocross`.
+  6. Repeat from step 2 with **NB Mazdaspeed → Texas Hill Country Trip 2023**, **NC Miata → East Coast Trip 2015**, **NC Miata → Yellowstone West Coast Trip 2015**, **ND Miata → Texas Hill Country**. All four land on `ND — Tail of the Dragon 2025`.
+  7. Control: **ND Miata → Tail of the Dragon 2025** also lands correctly, but only incidentally — it's what the fallback produces regardless of which entry is clicked.
+  8. Control (proves the hub itself is sound): from any of the above, use the on-page "Choose set" dropdown and pick `C8 — Autocross`. Switches correctly, grid loads.
+
+  Edge case a fix must not miss: while already on `/galleries`, re-open the nav dropdown and pick a different set — today nothing changes at all, since the redirect resolves to the same pathname and no state update is triggered.
+
+  ## Expected vs Actual
+
+  **Expected** (anchored to Spec 00002:128 and Feature 00004 AC-016 "remain reachable"): clicking a named gallery in the nav dropdown opens `/galleries` with that set selected — its `car` eyebrow, `label` heading, and thumbnail grid are the clicked set's, and "Choose set" reflects it.
+
+  **Actual**: all six dropdown entries land on `/galleries` showing `ND — Tail of the Dragon 2025` (`nd-totd2025`). Only that one entry appears to work, and does so by coincidence — it's `GALLERY_SETS[0]`, what the fallback produces regardless of which link was actually clicked.
+
+  ## Severity
+
+  **Severity:** 2 - High. The galleries hub is the flagship photo-browsing surface of a photography site, and five of six advertised dropdown entry points silently produce the wrong result — no error, no empty state, just a plausible-looking gallery that isn't the one clicked. A visitor could reasonably conclude the other five sets don't exist. Not Sev 1: no data loss or security exposure, and a genuine workaround exists — the on-page "Choose set" switcher (`GalleryHub.jsx:152-163`) works correctly, so any set is reachable in one extra click. Not Sev 3: this isn't a partially-broken feature — every non-default nav entry point is 100% wrong, and the failure is silent rather than visibly broken, which is worse than a visible error.
+
+  ## Linked artifacts
+
+  - **Spec 00002** (line 128) / **Feature 00004** (state: resolved) — own AC-016, "remain reachable," the criterion this defect violates.
+  - **Story 00029** (state: resolved) — "Consolidated galleries hub + lightbox + old-route redirects (adopted delta)."
+  - **Task 00039** (state: resolved) — "/galleries hub UI + set-switcher + thumbnail grid" — built `GalleryHub.jsx` and its `initialSlug` seeding logic.
+  - **Task 00041** (state: resolved) — "Old-route redirects + gallery cleanup + route-audit guard" — built the redirect that discards set identity, and **explicitly flagged this exact defect as deliberately out of scope** in its own resolution comment (see Root cause below). Primary link.
+  - **Feature 00003** / **Story 00010** (both resolved) — rebuilt NavMenu/Header for V2; origin of the dropdown markup and its now-stale "route doesn't exist yet" docblock comment.
+  - **Bug 00077** (active) — CLS regression on `/galleries`. Same file (`GalleryHub.jsx`), different fault, currently in flight in a separate worktree. **Sequence these two rather than working them in parallel** — CPO has directed this Bug to wait until 00077 lands.
+  - **Bug 00078** (resolved) — established `/galleries` as the canonical URL over legacy `/totdgallery` in the perf harness; this Bug's fix direction should stay consistent with that (canonical URL preferred over legacy paths where practical).
+
+  ## Root cause
+
+  **CONFIRMED** — a five-link chain, every link verified directly in source, no hypothesis required:
+
+  1. `src/components/NavMenu/index.jsx:57-92` (items at lines 63, 71, 72, 80, 81, 89) — all six gallery `Dropdown.Item`s point at their pre-V2 legacy paths (`/msm-gallery`, `/nc-eastcoast15`, `/nc-yellowstone15`, `/nd-hillcountry`, `/totdgallery`, `/c8-autox`), not at the hub directly.
+  2. `src/App.jsx:39, 63-65` — `LEGACY_GALLERY_PATHS` maps every one of those to `<Navigate to="/galleries" replace />`, a bare path string with no query string, route param, or router `state`. **This is where set identity is destroyed.**
+  3. `src/App.jsx:61` — `<Route path="galleries" element={<GalleryHub />} />` mounts the hub with zero props, so `initialSlug` is always `undefined`. Confirmed: `useSearchParams` and `useParams` appear nowhere in `src/` (the only router-hook consumers, `ScrollToTop.js` and `usePageviews.js`, use `useLocation` for pathname only).
+  4. `src/components/common/GalleryHub.jsx:108-111` — `sets.some((set) => set.slug === initialSlug)` is `false` for `undefined`, so the `useState` initializer falls back to `sets[0].slug`.
+  5. `src/components/common/gallerySets.js:20-26` — `GALLERY_SETS[0]` is `{ slug: 'nd-totd2025', label: 'ND — Tail of the Dragon 2025' }` — matches the reported symptom exactly.
+
+  **Corroborating evidence — a known, deliberately deferred gap, not a regression.** Task 00041's own resolution comment (`.claude/strap/work/task/00041.yaml`, comment `c1`) flagged both halves of this exact defect verbatim at merge time: "FLAGGED, not yet fixed: NavMenu/index.jsx:57-92 still fans out to all 6 legacy paths via dropdowns... Also flagged: redirects lose set context (a /nc-yellowstone15 bookmark lands on the hub showing the FIRST set, not Yellowstone) — GalleryHub's initialSlug prop could fix this per-legacy-path if wanted, out of this Task's specified scope (plain redirect was the brief)." The flag was recorded on the Task but never converted into a backlog item, so it surfaced via a CPO bug report instead of a planned follow-up.
+
+  **Related stale artifact in the blast radius, not itself the cause:** `NavMenu/index.jsx:27-29` carries a docblock asserting "Feature B has not built that route yet, so pointing at it here would 404" — false since Task 00041 shipped the redirect. `Footer/index.jsx:63` links `/gallery` directly; behaviorally harmless (no set to preserve, default landing is correct there) but the same staleness class.
+
+  ## Affected files
+
+  | File | Lines | Role |
+  |---|---|---|
+  | `src/components/NavMenu/index.jsx` | 57-92 (items at 63, 71, 72, 80, 81, 89); stale docblock 27-29 | Dropdown items point at legacy paths instead of the canonical hub with set identity |
+  | `src/App.jsx` | 39, 61, 63-65 | `LEGACY_GALLERY_PATHS` redirect discards set identity; `/galleries` route passes no props to `GalleryHub` |
+  | `src/components/common/GalleryHub.jsx` | 108-111 (`initialSlug` seeding), 136 | Falls back to `sets[0].slug` when nothing is passed |
+  | `src/components/common/gallerySets.js` | 20-57 | `legacyPath` → `slug` mapping already exists here; the fix's data source |
+  | `src/App.test.jsx` | 84-89, 170-177 | Existing route-parity guards; line 175 actively pins the stale `/totdgallery` href and will need rewriting (not deleting) once nav links change, same pattern Task 00041 used for its own superseded assertions |
+  | `src/components/NavMenu/index.test.jsx` | 273-294 | Asserts submenu structure/ids but never link targets — the gap that let this ship unguarded |
+  | `src/components/Footer/index.jsx` | 63 | Same staleness class as NavMenu's docblock; behaviorally benign, worth a look while in the area |
+
+  ## Fix-shape notes (scoping only — not a prescription; CPO has confirmed scope: fix both the nav dropdown AND legacy-URL bookmarks, but do NOT make the in-page "Choose set" switcher URL-syncing)
+
+  Given the confirmed scope, the cleanest direction: preserve set identity through the existing redirect machinery (`gallerySets.js` already has the `legacyPath` → `slug` mapping `App.jsx` derives `LEGACY_GALLERY_PATHS` from) so both the nav dropdown AND any legacy bookmark resolve correctly through one mechanism, rather than requiring two separate fixes. `GalleryHub` (or a wrapper) would read a search param (e.g. `?set=<slug>`) once at mount to seed `initialSlug` — same wiring `useSearchParams` would need either way.
+
+  **The edge case flagged in Repro Steps must be handled explicitly**: since the switcher is intentionally NOT being made URL-syncing, clicking a different nav dropdown entry while already on `/galleries` needs to actually change the displayed set. Because `initialSlug` only seeds state once (by design — see `GalleryHub.jsx`'s docblock at lines 83-86, which explicitly does not want the URL and the switcher fighting over ownership), a same-route navigation via `<Navigate>`/link click won't re-run the `useState` initializer on its own. The implementer needs a way to force a fresh seed on nav (e.g. keying the route element on the search param so React remounts it) without turning that into full two-way URL sync with the in-page switcher — those are two different things and only the former is in scope here.
+
+  Repointing `NavMenu`'s dropdown links directly at `/galleries?set=<slug>` (bypassing the legacy-path redirect entirely) would also fix the stale "route doesn't exist yet" docblock and tidy up AC-016 "reachable through the hub" cleanliness — worth doing if it's low-cost alongside the redirect fix, but not required to close this Bug's DoD if the redirect-preservation approach alone resolves both confirmed-in-scope cases (nav + bookmarks).
+
+  Existing tests encoding the stale contract (`App.test.jsx:175`) should be rewritten to reflect the new correct behavior, not deleted — same spirit Task 00041 used for its own superseded assertions.
+
+  ## Impact
+
+  Every visitor who uses the nav dropdown to browse a gallery other than Tail of the Dragon — five of six advertised entry points — silently lands on the wrong content with no error or indication anything went wrong. The workaround (the in-page switcher) is real but undiscoverable without first noticing the wrong gallery loaded. This undermines trust in the site's navigation on its flagship photo-browsing feature and violates a shipped, CPO-confirmed Acceptance Criterion (AC-016). No data loss, security, or availability impact.
+
+  ## Quality Checklist
+
+  - [x] Repro Steps are numbered and deterministic.
+  - [x] Expected vs Actual is concrete on both sides; Expected is anchored to Spec 00002 AC-016.
+  - [x] Severity is set per the project rubric (2 - High) with explicit reasoning.
+  - [x] Linked artifacts identify the affected Spec, Feature, and the Task that introduced (and explicitly flagged) this gap.
+  - [x] Root cause is confirmed end-to-end in code, not a guess — five links in the chain, all verified.
+  - [x] Affected files include paths and line numbers.
+  - [x] Impact captures who is affected, the size of the affected population, and the blast radius.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T03:15:00Z
+    body: "[STRAP/agent:dev-lead] State: new (via /file-bugs). Authored By: spec-lead. Bug; Severity: 2 - High. Filed from a direct CPO report matching the symptom exactly. spec-lead's read-only investigation confirmed the full root-cause chain in code (NavMenu's legacy-path links -> App.jsx's identity-discarding redirect -> GalleryHub's initialSlug fallback to GALLERY_SETS[0]) and found strong corroborating evidence: Task 00041's own resolution comment explicitly flagged this exact gap as deliberately deferred scope at merge time, and the flag was never converted into a backlog item -- this Bug is the direct cost of that gap. CPO confirmed scope via two gates: (1) fix the nav dropdown only, do not make the in-page 'Choose set' switcher URL-syncing (smaller, lower-risk scope); (2) also fix legacy bookmark URLs (e.g. /nc-yellowstone15) to preserve set identity, not just the nav dropdown, since Task 00041 flagged both as the same underlying gap and the fix data (gallerySets.js's legacyPath->slug mapping) already exists for both. Sequencing: CPO has directed this Bug to wait until Bug 00077 (CLS regression, same file GalleryHub.jsx, currently in flight) lands and merges, to avoid working the same file in parallel across two specialists."
