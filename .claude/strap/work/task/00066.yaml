@@ -37,10 +37,15 @@ description: |
   ## Original Estimate
   **Hours (senior-developer):** 3
   ## Implementation guidance
-  `src/components/WhatsNew/__tests__/WhatsNew.route.test.jsx`; render via `MemoryRouter initialEntries={['/whats-new']}`. Coordinate with Feature A's nav-pill route-parity test — the presence assertion lives once. Do NOT run the suite (dev-lead runs `npm test`).
+  CORRECTED 2026-08-06 (Task 00064's own report caught two errors in this brief as originally filed): this repo has NO `__tests__/` folders anywhere — the actual convention is co-located `<Module>.test.jsx` next to the module, which Task 00064's own `src/components/WhatsNew/index.test.jsx` already follows. Do not create a `__tests__/` directory. Task 00064's page-shell test deliberately defers route-registration assertion to this Task ("Task 00066's contribution to the shared route-parity guard in src/App.test.jsx" — see its docblock) — so this Task's real target is `src/App.test.jsx`, contributing a `/whats-new` presence case to the existing shared route-parity guard rather than a new standalone WhatsNew test file. Render via `MemoryRouter initialEntries={['/whats-new']}` (or App's existing harness pattern) and assert the WhatsNew page renders at that path. Also reconcile `src/components/Footer/index.test.jsx:206`, which currently excludes `/whats-new` from its "every footer link resolves to a route" parity check with a comment saying the route doesn't exist yet — that's now stale and hides a real regression if the route were ever removed; update it to expect `/whats-new` to resolve like every other footer link. (Separately noted, not this Task's scope: the same Footer test's `served` route set lists `/gallery` but not `/galleries` — worth a follow-up look, but don't fold it in here.)
   ## Dependencies
-  Predecessor: 00064. P9 Vitest harness (Feature A Story 00011). Reconcile with Feature A route-parity guard (Task 00025).
+  Predecessor: 00064 (resolved — merged into feature/00006-whats-new-page). P9 Vitest harness (Feature A Story 00011). Reconcile with Feature A route-parity guard (Task 00025) in `src/App.test.jsx`.
   ## Definition of Done
   Test authored + colocated; asserts route presence + page render; documented as D-side contribution to the shared guard.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T01:20:00Z
+    body: "[STRAP/agent:dev-lead] Implementation guidance corrected before dispatch: Task 00064's closing report caught that this brief's original `__tests__/` folder path contradicts the repo's actual co-located-test convention, and that 00064's own test explicitly defers route-registration assertion to this Task's App.test.jsx contribution rather than a new WhatsNew-local file. Both fixed in the Implementation guidance above. Also folded in: Footer/index.test.jsx:206's stale /whats-new route-parity exclusion, which 00064 flagged as this Task's to reconcile."
