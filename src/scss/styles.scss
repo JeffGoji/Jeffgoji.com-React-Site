@@ -1675,3 +1675,184 @@ a {
   color: var(--text-lo);
   text-align: center;
 }
+
+// --- WHAT'S NEW - THE NUMBERED CHANGELOG LEDGER (Task 00068) ----------------
+// The `.cl-*` rows that sit inside Task 00064's `.wn-ledger__inner`, ported from
+// assets/app.css:482-539 plus the max-width:480 rule at :547.
+//
+// The rail is one gradient on `.changelog::before` with a node per row on
+// `.cl-item::before`; the row's left padding, the rail's offset and the node's
+// offset are the same two clamps read three ways, so the three values below must
+// move together or the nodes drift off the line.
+.changelog {
+  position: relative;
+  max-width: 920px;
+  margin-inline: auto;
+  padding-left: clamp(var(--space-6), 9vw, 92px);
+}
+
+.changelog::before {
+  content: "";
+  position: absolute;
+  left: clamp(28px, 4.5vw, 44px);
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: linear-gradient(var(--goji-red), transparent 92%);
+}
+
+.cl-head {
+  margin-bottom: var(--space-7);
+}
+
+// whats-new.html:80 inlines the ledger heading's size and casing, class-borne
+// here for the reason Task 00064's `.wn-dash__title` is: the cascade cannot
+// override a style attribute, and the mockups use them only for want of a build
+// step.
+.cl-head__title {
+  font-size: var(--fs-h2);
+  text-transform: uppercase;
+}
+
+.cl-item {
+  position: relative;
+  padding-bottom: var(--space-7);
+}
+
+.cl-item:last-child {
+  padding-bottom: 0;
+}
+
+.cl-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * clamp(var(--space-6), 9vw, 92px) + clamp(28px, 4.5vw, 44px) - 4px);
+  top: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--goji-red);
+  box-shadow: 0 0 0 4px var(--ink-1000), 0 0 0 5px var(--ink-500);
+}
+
+.cl-num {
+  position: absolute;
+  left: calc(-1 * clamp(var(--space-6), 9vw, 92px));
+  top: -6px;
+  width: clamp(48px, 7vw, 74px);
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink-400);
+}
+
+.cl-card {
+  padding: var(--space-6);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  transition: border-color var(--dur), transform var(--dur) var(--ease-out);
+}
+
+.cl-item:hover .cl-card {
+  border-color: var(--ink-400);
+  transform: translateX(3px);
+}
+
+.cl-item:hover .cl-num {
+  color: var(--goji-red);
+}
+
+.cl-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.cl-tag {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--goji-red);
+}
+
+.cl-goal {
+  padding: 2px 8px;
+  border: 1px solid var(--ink-500);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+.cl-card__title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+}
+
+.cl-card__body {
+  margin: 0;
+  font-size: var(--fs-body);
+  color: var(--text-mid);
+}
+
+.cl-readout {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: var(--hairline);
+}
+
+// The mockup names these three `.row` / `.k` / `.v`. `.row` is Bootstrap's grid
+// row, and Bootstrap's `.row > *` sets `width: 100%` on every child — which
+// would collapse this two-column grid onto one column regardless of the
+// `grid-template-columns` here, because that descendant rule outranks the bare
+// `.cl-readout__k` element rules that would otherwise size them. Renaming is the
+// same trade `.wn-ledger__inner` makes against `.container`; `.k` / `.v` follow
+// it so the readout keeps one naming scheme.
+.cl-readout__row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.cl-readout__k {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text-lo);
+}
+
+.cl-readout__k b {
+  font-weight: 700;
+  color: var(--goji-red);
+}
+
+.cl-readout__v {
+  font-size: var(--fs-sm);
+  color: var(--text-mid);
+}
+
+// The readout stacks its label over its value once the two columns stop fitting
+// (assets/app.css:545-547).
+@media (max-width: 480px) {
+  .cl-readout__row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

@@ -24,6 +24,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import WhatsNew from './index';
+import { whatsNew } from './data/whatsNew';
 
 /**
  * Resolved from the Vitest root rather than import.meta.url: under jsdom
@@ -121,15 +122,24 @@ describe('the page composes the two clusters', () => {
     });
 
     /**
-     * Both clusters render their container with nothing in it until the data
-     * module (Task 00065) is threaded through. An empty grid must stay empty
-     * rather than paint a placeholder tile a visitor would read as a real one.
+     * The cluster renders its grid with nothing in it until the data module
+     * (Task 00065) is threaded through. An empty grid must stay empty rather
+     * than paint a placeholder tile a visitor would read as a real one.
      */
-    it('leaves both clusters empty while they are unwired', () => {
+    it('leaves the instrument cluster empty while it is unwired', () => {
         const { container } = render(<WhatsNew />);
 
         expect(container.querySelector('.tele-grid').childElementCount).toBe(0);
-        expect(container.querySelector('.changelog').childElementCount).toBe(0);
+    });
+
+    /**
+     * This page is the only reader of the data module, so the wiring is asserted
+     * here; what the ledger does with the rows is Changelog.test.jsx's contract.
+     */
+    it('feeds the ledger the whatsNew entries from the data module', () => {
+        const { container } = render(<WhatsNew />);
+
+        expect(container.querySelectorAll('.changelog .cl-item')).toHaveLength(whatsNew.length);
     });
 });
 
