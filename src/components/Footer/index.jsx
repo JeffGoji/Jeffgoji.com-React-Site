@@ -29,8 +29,8 @@ import logoMarkup from '../../assets/logo.svg?raw'
  * Two link targets deviate from the mockup, both because the mockup names a page
  * this app does not have: "Design System" is a mockup-only surface with no route,
  * replaced here by /suspension (which the nav also carries), and "What's New"
- * ships ahead of its destination exactly as it does in the nav — /whats-new is
- * Feature D's route and 404s until that lands.
+ * shipped ahead of its destination exactly as it did in the nav — /whats-new
+ * dead-ended until Task 00064 registered it.
  */
 function Footer() {
     const currentYear = new Date().getFullYear()

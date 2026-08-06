@@ -28,9 +28,9 @@ import logoMarkup from '../../assets/logo.svg?raw'
  * through one `/galleries` hub, but Feature B has not built that route yet, so
  * pointing at it here would 404.
  *
- * The trailing "What's New" pill is permanent chrome (AC-014) and ships ahead of
- * its destination: `/whats-new` is Feature D's route and does not exist yet, so
- * the link 404s until that lands.
+ * The trailing "What's New" pill is permanent chrome (AC-014). It shipped ahead
+ * of its destination and dead-ended until Task 00064 registered `/whats-new`;
+ * the route-parity guard in App.test.jsx is what keeps the two together.
  */
 function NavMenu() {
     return (
