@@ -1,7 +1,7 @@
 id: "00071"
 type: task
 title: "Author the WHY->goal / HOW->shipped readouts and run the AC-015 no-vapourware audit"
-state: active
+state: resolved
 parent: "00063"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -13,17 +13,17 @@ links:
 original_estimate: 4
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T02:30:00Z
+updated_at: 2026-08-06T03:15:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T03:15:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | tech-writer |
+  | Completed At | 2026-08-06T03:15:00Z |
 
   ---
 
@@ -49,3 +49,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T02:30:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3 of 3. Dispatched to tech-writer in worktree .worktrees/task-00071, branch task/00071-why-how-audit off feature/00006-whats-new-page. Task 00070's six entries are merged with working-draft why/how fields explicitly flagged as this Task's to sharpen. dev-lead independently spot-verified 3 of Task 00070's highest-risk factual claims before merging (es2015/SSR removal against Task 00047, Ryoko flood-2018 against Cars.json, OG-404 against Story 00045) -- your audit should still cover all 6 entries end-to-end per the DoD, not just re-trust the spot-checks."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T03:15:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00071-why-how-audit into feature/00006-whats-new-page (clean, no conflicts). Completed By: tech-writer. This audit caught a REAL AC-015 violation dev-lead's own earlier spot-check of Task 00070 missed entirely: entry 05's title/body claimed 'six entirely different mechanisms' for the galleries when the consistent record across Feature 00005's description, AC-009, and Story 00044 c2 all say three (six is the gallery-set count, not the mechanism count) -- corrected to 'three ways'. Two more material corrections, also independently verified by dev-lead before merging: entry 04's 'every image is webp now' overstated coverage (Task 00058 c1: 'CONFIRMED, not assumed: no rendition pipeline exists for blog-post or Garage-portrait images' -- confirmed verbatim), and entry 03's 'dead link' for Ryoko's pre-tribute state was wrong (Cars.json id 3's bloglink is '/', a silent bounce-home, not a dead link -- confirmed verbatim). Four more corrections of lesser materiality (Footer 'sitting for years' -> dormant, no false duration -- confirmed Footer's first commit is 2026-05-27, ~2 months before V2, not years; build 'used to fail' claim was invented history per Task 00046's actual rationale; NavMenu had two coming-soon placeholders removed, not one; duplicate /totdtrip claim verified correct as originally written via git show on pre-removal App.jsx). Traceability table for all 6 entries written into the file's own docblock. Real gap surfaced in the dispatch brief: dev-lead's brief claimed Task 00070 left a 'Claims I want you to double-check' section in the file for 00071 to prioritize -- it did not exist; the agent correctly caught this, derived the risk surface from scratch instead, and still found everything above. Noting for future dispatch-brief accuracy. Full suite 1031/1031 per the agent's own run, re-verified at the wave-boundary centralized pass. tokens_used: ~93k."
