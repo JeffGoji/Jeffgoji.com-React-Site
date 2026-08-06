@@ -1,7 +1,7 @@
 id: "00079"
 type: bug
 title: "Galleries nav dropdown: every set links to its legacy URL, which redirects to /galleries with the set identity discarded — hub always opens on nd-totd2025"
-state: new
+state: active
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -17,7 +17,7 @@ links:
 original_estimate: null
 created_at: 2026-08-06T03:15:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T03:15:00Z
+updated_at: 2026-08-06T03:48:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -120,3 +120,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T03:15:00Z
     body: "[STRAP/agent:dev-lead] State: new (via /file-bugs). Authored By: spec-lead. Bug; Severity: 2 - High. Filed from a direct CPO report matching the symptom exactly. spec-lead's read-only investigation confirmed the full root-cause chain in code (NavMenu's legacy-path links -> App.jsx's identity-discarding redirect -> GalleryHub's initialSlug fallback to GALLERY_SETS[0]) and found strong corroborating evidence: Task 00041's own resolution comment explicitly flagged this exact gap as deliberately deferred scope at merge time, and the flag was never converted into a backlog item -- this Bug is the direct cost of that gap. CPO confirmed scope via two gates: (1) fix the nav dropdown only, do not make the in-page 'Choose set' switcher URL-syncing (smaller, lower-risk scope); (2) also fix legacy bookmark URLs (e.g. /nc-yellowstone15) to preserve set identity, not just the nav dropdown, since Task 00041 flagged both as the same underlying gap and the fix data (gallerySets.js's legacyPath->slug mapping) already exists for both. Sequencing: CPO has directed this Bug to wait until Bug 00077 (CLS regression, same file GalleryHub.jsx, currently in flight) lands and merges, to avoid working the same file in parallel across two specialists."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T03:48:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /fix-bugs). Sequence position: 1. Specialist: frontend-engineer, dispatched in worktree .worktrees/bug-00079, branch fix/00079-gallery-dropdown-selection off main. Bugs 00077 (CLS regression) and 00078 (perf harness URL) both merged into main via PR #30 before this branch was cut, per CPO direction to wait for that PR rather than stack on top of it -- this specialist works against the already-fixed GalleryHub.jsx with no risk of conflicting with or reverting that work."
