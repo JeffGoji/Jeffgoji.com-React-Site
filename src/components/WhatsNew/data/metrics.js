@@ -9,6 +9,9 @@
  *   tech-writer owns the VALUES (Story 00063), together with whoever runs the
  *     performance pass that produces the measured figures.
  *
+ * The three perf tiles below carry the Spec's V2 TARGET figures, badged TARGET
+ * rather than SHIPPED, and stay that way until real measurements replace them.
+ *
  * The array may be empty. The consumer maps over it with no index arithmetic, so
  * an empty cluster is a valid render.
  *
@@ -61,7 +64,15 @@
  *                             badges it SHIPPED (measured fact).
  */
 
-/** @type {Metric[]} */
+/**
+ * The three `target: true` values are Spec 00002's AC-006/007/008 bars verbatim
+ * (>=50% image-byte reduction, <=2.5s LCP, >=90 desktop / >=80 mobile Lighthouse) --
+ * do not round them up. The V1 figures quoted in `delta` are medians from the
+ * measured baseline at `.claude/strap/project-docs/v1-perf-baseline.md`; AC-007 and
+ * the 80 bar are mobile-profile criteria, which is why the copy says so.
+ *
+ * @type {Metric[]}
+ */
 export const metrics = [
     {
         value: '−50',
@@ -77,9 +88,9 @@ export const metrics = [
         value: '2.5',
         unit: 's',
         label: 'LCP',
-        delta: '▼ from ~4s+',
+        delta: '▼ from 11-13s',
         trend: 'down',
-        note: 'largest contentful paint',
+        note: 'largest contentful paint · mobile',
         gauge: 62,
         target: true
     },
@@ -87,9 +98,9 @@ export const metrics = [
         value: '90',
         unit: '+',
         label: 'Lighthouse',
-        delta: '▲ perf · 80+ field',
+        delta: '▲ desktop · 80+ mobile',
         trend: 'up',
-        note: 'mobile lab score',
+        note: 'performance, lab score',
         gauge: 90,
         target: true
     },

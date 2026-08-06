@@ -38,10 +38,11 @@ function WhatsNew() {
                     </p>
                     <InstrumentCluster metrics={metrics} />
                     <p className="tele-caption">
-                        <b>Note:</b> figures marked TARGET are the V2 performance goals used here
-                        as representative placeholders &mdash; the real measured numbers land when
-                        the perf/analytics pass ships. Everything in the ledger below is already
-                        done.
+                        <b>About those three:</b> the figures marked TARGET are goals, not
+                        trophies. The work aimed at them has shipped &mdash; nobody has yet stood
+                        over the site with a stopwatch to prove it landed, so until somebody does,
+                        they stay goals and the measured numbers replace them later. The ledger
+                        below is a different matter entirely: every line of it already exists.
                     </p>
                 </div>
             </header>
