@@ -25,6 +25,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 
 import WhatsNew from './index';
 import { metrics } from './data/metrics';
+import { whatsNew } from './data/whatsNew';
 
 /**
  * Resolved from the Vitest root rather than import.meta.url: under jsdom
@@ -122,9 +123,12 @@ describe('the page composes the two clusters', () => {
     });
 
     /**
-     * The page is where the data module is read; the clusters take their rows
-     * as props. Asserting the count against the module rather than a literal is
-     * what lets tech-writer add a metric (Story 00063) without touching a test.
+     * The page is where both data modules are read; the clusters take their
+     * rows as props. Asserting the counts against the modules rather than a
+     * literal is what lets tech-writer add a metric or an entry (Story 00063)
+     * without touching a test. Both clusters are wired as of Task 00068 (the
+     * second of the two to land) -- there is no longer an "unwired" state for
+     * either to be caught empty in.
      */
     it('feeds the cluster the telemetry module', () => {
         const { container } = render(<WhatsNew />);
@@ -132,15 +136,10 @@ describe('the page composes the two clusters', () => {
         expect(container.querySelectorAll('.tele-grid > .tele-tile')).toHaveLength(metrics.length);
     });
 
-    /**
-     * The ledger renders its container with nothing in it until the data module
-     * is threaded through (Task 00068). An empty ledger must stay empty rather
-     * than paint a placeholder entry a visitor would read as a real one.
-     */
-    it('leaves the ledger empty while it is unwired', () => {
+    it('feeds the ledger the whatsNew entries from the data module', () => {
         const { container } = render(<WhatsNew />);
 
-        expect(container.querySelector('.changelog').childElementCount).toBe(0);
+        expect(container.querySelectorAll('.changelog .cl-item')).toHaveLength(whatsNew.length);
     });
 });
 

@@ -1,6 +1,7 @@
 import Changelog from './Changelog';
 import InstrumentCluster from './InstrumentCluster';
 import { metrics } from './data/metrics';
+import { whatsNew } from './data/whatsNew';
 
 /**
  * The V2 "What's New" surface, ported from the mockups' whats-new.html: a
@@ -19,9 +20,9 @@ import { metrics } from './data/metrics';
  *
  * The two clusters are children rather than inline markup so the tile grid
  * (Task 00067) and the ledger (Task 00068) can be built and tested against their
- * own data contracts. The page is where Task 00065's `data/{metrics,whatsNew}.js`
- * is read and threaded down: the children take their rows as props and stay pure
- * presentational, so each is renderable against a fixture in its own test.
+ * own data contracts. This page is the only place Task 00065's
+ * `data/{metrics,whatsNew}.js` is read: the children take their rows as props so
+ * each stays a pure presentational unit that a test can drive with a fixture.
  */
 function WhatsNew() {
     return (
@@ -46,7 +47,7 @@ function WhatsNew() {
             </header>
             <section className="section">
                 <div className="wn-ledger__inner">
-                    <Changelog />
+                    <Changelog whatsNew={whatsNew} />
                     <p className="card__text wn-legend">
                         Every entry traces to shipped work &middot; GOAL 1 = enthusiast-native
                         visual system &middot; GOAL 2 = performance
