@@ -1,7 +1,7 @@
 id: "00066"
 type: task
 title: "Author the /whats-new route-presence test (reconcile with Feature A route-parity guard)"
-state: active
+state: resolved
 parent: "00061"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -13,17 +13,17 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T01:30:00Z
+updated_at: 2026-08-06T01:45:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T01:45:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-06T01:45:00Z |
 
   ---
 
@@ -53,3 +53,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T01:30:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00066, branch task/00066-whatsnew-route-test off feature/00006-whats-new-page."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T01:45:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00066-whatsnew-route-test into feature/00006-whats-new-page. Completed By: frontend-engineer. Two cases added to App.test.jsx's shared route-parity guard (pill destination resolves + single-main-landmark check); Footer's stale /whats-new exclusion removed and its comment rewritten to record why the exclusion existed and why it's gone. Correctly used App's own BrowserRouter-based renderAt harness rather than MemoryRouter, since App owns its router (the corrected brief's 'or App's existing harness pattern' branch). Real finding, independently corroborated against Task 00064's own workaround: @testing-library/dom's buildElementRoleList does not honour aria-query's role-level (not attribute-level) 'scoped to body' constraint on the banner role, so getAllByRole('banner') cannot distinguish a properly-nested non-banner <header> from the shell's real banner -- both 00064 and 00066 independently used a `main > header.wn-dash` selector query instead, and this is now a candidate memory item since it will recur on any surface nesting a <header>. Deliberately did NOT assert the 'no banner' half of WhatsNew's own docblock claim via role query for that reason -- correct call, not a gap. Flagged, not actioned (correctly out of scope here): the Footer served-set is a hand-maintained literal that can drift from App.jsx's real route table since it isn't derived from it; worth a future Task if it proves to actually drift. tokens_used: ~50k."
