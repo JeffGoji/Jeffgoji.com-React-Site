@@ -1,7 +1,7 @@
 id: "00067"
 type: task
 title: "Build the telemetry instrument cluster (status strip + stat tiles)"
-state: active
+state: resolved
 parent: "00062"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,17 +11,17 @@ links: []
 original_estimate: 5
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T01:30:00Z
+updated_at: 2026-08-06T02:15:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T02:15:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-06T02:15:00Z |
 
   ---
 
@@ -47,3 +47,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T01:30:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00067, branch task/00067-instrument-cluster off feature/00006-whats-new-page. NOTE carried from Task 00064's report: `.tele-caption` (the note paragraph under InstrumentCluster in WhatsNew/index.jsx) is rendered but deliberately left unstyled by Task 00064 -- style it as part of this Task's `.tele-*` port. Do NOT re-port `.wn-dash`, `.wn-dash__inner`, `.wn-ledger__inner`, `.wn-dash__title`, `.wn-dash__lead`, or `.wn-legend` -- Task 00064 already owns and styled those; a duplicate rule will collide at merge."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T02:15:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00067-instrument-cluster into feature/00006-whats-new-page (clean, no conflicts as first of two Wave 2 component merges). Completed By: frontend-engineer. InstrumentCluster returns the `.tele-strip` telltale row (static chrome, correctly not wired to metrics -- it describes deploy properties, not measurements) plus the `.tele-grid` mapped from `metrics[]`; ported `.tele-caption` styling per the note carried from Task 00064; correctly avoided re-porting Task 00064's shell rules. One thoughtful accessibility addition beyond the brief: the LIVE dot's pulse animation is gated behind `prefers-reduced-motion: no-preference` (the mockup runs it unconditionally) -- this is this file's first `@keyframes` in the codebase, good precedent set and worth a memory note for future animated ports. Flagged, not actioned: `.tele-tile__label` exists in the mockup's CSS but is never emitted by the mockup's own template -- correctly identified as dead mockup CSS and not carried over, rather than guessed at. 22 RTL cases authored, not run by the agent per convention; re-verified at the wave-boundary centralized test pass. tokens_used: ~78k."

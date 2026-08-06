@@ -1,7 +1,7 @@
 id: "00068"
 type: task
 title: "Build the numbered changelog ledger (entries + WHY/HOW readout)"
-state: active
+state: resolved
 parent: "00062"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -11,17 +11,17 @@ links: []
 original_estimate: 4
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T01:30:00Z
+updated_at: 2026-08-06T02:15:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T02:15:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-06T02:15:00Z |
 
   ---
 
@@ -47,3 +47,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T01:30:00Z
     body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00068, branch task/00068-changelog-ledger off feature/00006-whats-new-page. NOTE carried from Task 00064's report: do NOT re-port `.wn-legend` or `.wn-ledger__inner` -- Task 00064 already owns and styled the ledger section's outer chrome; this Task's scope is `.cl-*` (the `.cl-head` heading and `.cl-item` rows) only."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T02:15:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00068-changelog-ledger into feature/00006-whats-new-page. Completed By: frontend-engineer. Changelog ports `.cl-head` + `.cl-item` rows from `whatsNew[]`; title/body/why/how render as plain JSX children only, no dangerouslySetInnerHTML anywhere on the path (AC-016 verified two ways in the agent's own test: source-scan for the raw-HTML APIs, and a hostile-payload render check). Real defect caught and avoided, not just described: the mockup's `.cl-readout .row`/`.k`/`.v` class names collide with Bootstrap's live `.row > *` descendant rule (sets width:100% on every child), which would have silently broken the two-column WHY/HOW layout at every viewport width -- renamed to `.cl-readout__row`/`__k`/`__v` (BEM-style, same trade Task 00064 made with `.container`), guarded by a test asserting the Bootstrap-colliding names are absent from both the compiled CSS and the component. AS EXPECTED (both agents flagged this independently before either merged): this Task's branch conflicted with Task 00067's in WhatsNew/index.jsx, WhatsNew/index.test.jsx, and styles.scss, since both wired a previously-empty placeholder in the same shared shell file at the same insertion point. Resolved by hand: index.jsx/styles.scss conflicts were non-overlapping appends, concatenated; index.test.jsx's 'leaves both clusters empty while unwired' case had been independently split by each agent into a per-cluster 'empty' assertion -- both are now false (neither cluster is unwired after this merge), so both were dropped and replaced with the two 'feeds X the data module' assertions each agent had already written. Verified post-resolution via direct sass.compile (both .tele-grid and .cl-readout__row rules present in output) and esbuild parse of both touched JS files; full suite re-verified at the centralized wave-boundary test pass. tokens_used: ~74k."
