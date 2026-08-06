@@ -30,7 +30,10 @@ const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 
 const TARGETS = [
   { name: "home", url: `${ORIGIN}/` },
-  { name: "totdgallery", url: `${ORIGIN}/totdgallery` },
+  // `/totdgallery` has redirected to `/galleries` since Task 00041; audit the
+  // canonical URL directly so the redirect's own layout shift doesn't leak
+  // into these numbers (Bug 00078).
+  { name: "totdgallery", url: `${ORIGIN}/galleries` },
 ];
 
 const median = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
