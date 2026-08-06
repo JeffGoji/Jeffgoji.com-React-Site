@@ -24,6 +24,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import WhatsNew from './index';
+import { metrics } from './data/metrics';
 
 /**
  * Resolved from the Vitest root rather than import.meta.url: under jsdom
@@ -121,14 +122,24 @@ describe('the page composes the two clusters', () => {
     });
 
     /**
-     * Both clusters render their container with nothing in it until the data
-     * module (Task 00065) is threaded through. An empty grid must stay empty
-     * rather than paint a placeholder tile a visitor would read as a real one.
+     * The page is where the data module is read; the clusters take their rows
+     * as props. Asserting the count against the module rather than a literal is
+     * what lets tech-writer add a metric (Story 00063) without touching a test.
      */
-    it('leaves both clusters empty while they are unwired', () => {
+    it('feeds the cluster the telemetry module', () => {
         const { container } = render(<WhatsNew />);
 
-        expect(container.querySelector('.tele-grid').childElementCount).toBe(0);
+        expect(container.querySelectorAll('.tele-grid > .tele-tile')).toHaveLength(metrics.length);
+    });
+
+    /**
+     * The ledger renders its container with nothing in it until the data module
+     * is threaded through (Task 00068). An empty ledger must stay empty rather
+     * than paint a placeholder entry a visitor would read as a real one.
+     */
+    it('leaves the ledger empty while it is unwired', () => {
+        const { container } = render(<WhatsNew />);
+
         expect(container.querySelector('.changelog').childElementCount).toBe(0);
     });
 });

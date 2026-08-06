@@ -1,5 +1,6 @@
 import Changelog from './Changelog';
 import InstrumentCluster from './InstrumentCluster';
+import { metrics } from './data/metrics';
 
 /**
  * The V2 "What's New" surface, ported from the mockups' whats-new.html: a
@@ -18,9 +19,9 @@ import InstrumentCluster from './InstrumentCluster';
  *
  * The two clusters are children rather than inline markup so the tile grid
  * (Task 00067) and the ledger (Task 00068) can be built and tested against their
- * own data contracts. Neither is wired to data yet: Task 00065's
- * `data/{metrics,whatsNew}.js` is imported here and threaded down as props when
- * it lands.
+ * own data contracts. The page is where Task 00065's `data/{metrics,whatsNew}.js`
+ * is read and threaded down: the children take their rows as props and stay pure
+ * presentational, so each is renderable against a fixture in its own test.
  */
 function WhatsNew() {
     return (
@@ -34,7 +35,7 @@ function WhatsNew() {
                         &ldquo;coming soon&rdquo;. We got rid of that too. Here are the numbers
                         &mdash; then the ledger of exactly what changed and why.
                     </p>
-                    <InstrumentCluster />
+                    <InstrumentCluster metrics={metrics} />
                     <p className="tele-caption">
                         <b>Note:</b> figures marked TARGET are the V2 performance goals used here
                         as representative placeholders &mdash; the real measured numbers land when
