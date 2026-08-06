@@ -541,6 +541,85 @@ describe('the hub survives a set with no frames behind it', () => {
     })
 })
 
+/**
+ * Bug 00077. The manifest lands after mount, so the grid arrives into a body
+ * that was holding one line of text — a 4,200px injection that displaced the
+ * footer and scored CLS 0.812 on desktop. The body reserves a viewport of
+ * height in every state that has no grid in it, which is what keeps the footer
+ * below the fold until the grid is there to hold it down.
+ */
+describe('the body reserves the grid space before the grid arrives', () => {
+    const bodyIn = (container) => container.querySelector('.gallery-hub__body')
+
+    const isReserved = (container) =>
+        bodyIn(container).classList.contains('gallery-hub__body--reserved')
+
+    it('reserves while the manifest is in flight', () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        expect(isReserved(container)).toBe(true)
+    })
+
+    /**
+     * Dropping the reservation here would shift the page by the same distance
+     * as the defect did, in the other direction: a set with no manifest never
+     * gets a grid to take the reservation's place.
+     */
+    it('keeps reserving when the set turns out to be empty', async () => {
+        stubFetch({ 'set-one': [] })
+
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(container.querySelector('.gallery-grid')).toBeNull())
+
+        expect(isReserved(container)).toBe(true)
+    })
+
+    it('keeps reserving when the manifest is missing entirely', async () => {
+        stubFetch({})
+
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(screen.getByRole('status')).toBeDefined())
+
+        expect(isReserved(container)).toBe(true)
+    })
+
+    it('hands the height back to the grid once the grid is up', async () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
+
+        expect(isReserved(container)).toBe(false)
+    })
+
+    it('reserves again while a newly selected set loads', async () => {
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(3))
+
+        fireEvent.change(screen.getByRole('combobox'), { target: { value: 'set-two' } })
+
+        expect(isReserved(container)).toBe(true)
+    })
+
+    /**
+     * jsdom performs no layout, so the reservation's size is read off the
+     * compiled stylesheet. A viewport is the floor that matters: less than one
+     * and the footer starts on screen, which is the whole of the defect.
+     */
+    it('reserves at least a viewport of height', () => {
+        const rule = css.match(/\.gallery-hub__body--reserved \{([^}]*)\}/)
+
+        expect(rule, 'no reservation rule emitted').not.toBeNull()
+
+        const minHeight = rule[1].match(/min-height: (\d+)vh/)
+
+        expect(minHeight, 'the reservation is not sized in viewport units').not.toBeNull()
+        expect(Number(minHeight[1])).toBeGreaterThanOrEqual(100)
+    })
+})
+
 /** jsdom performs no layout, so these read the compiled stylesheet instead. */
 describe('the grid reflows on measure rather than on breakpoints', () => {
     it('fills columns against a 180px floor', () => {

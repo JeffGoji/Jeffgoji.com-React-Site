@@ -749,6 +749,29 @@
   padding-block: var(--space-7);
 }
 
+// The manifest is fetched after mount, so the grid — roughly 4,200px for the
+// largest set — used to inject into a body holding one line of status text and
+// displace the footer in a single shift (Bug 00077: CLS 0.812 desktop). A
+// viewport of reserved height keeps the footer below the fold until the grid
+// lands, so the injection has no visible element left to move.
+//
+// The reservation is carried only while the grid is absent — loading, and the
+// empty state, which is where it also has to hold, since collapsing out of the
+// loading state into a one-line message would shift by the same distance in the
+// other direction. Once the grid is up its own height takes over, so a small
+// set does not sit above a viewport of dead space.
+.gallery-hub__body--reserved {
+  min-height: 100vh;
+}
+
+// The other half of the same contract, on the route that redirects into the hub
+// rather than on the hub itself: a client-side redirect paints one frame with no
+// route content between the shell's header and footer. See LegacyGalleryRedirect
+// in App.jsx for why that frame exists at all.
+.route-reserve {
+  min-height: 100vh;
+}
+
 .gallery-hub__title {
   font-size: var(--fs-h1);
   text-transform: uppercase;
