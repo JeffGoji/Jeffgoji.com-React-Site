@@ -1,11 +1,11 @@
 id: "00070"
 type: task
 title: "Draft the Clarkson-voice changelog entry set (structure + voice + traceability spine)"
-state: new
+state: active
 parent: "00063"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: tech-writer
 tags: [AI, strap:task]
 links:
   - target: "00065"
@@ -13,7 +13,7 @@ links:
 original_estimate: 5
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T01:30:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -44,3 +44,8 @@ description: |
   `whatsNew[]` covers every change in the coverage map; each entry has ver/tag/goal/title/body populated; voice matches the mockup exemplars; no entry references unshipped work; array validates against the shape.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T01:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2 of 3. Dispatched to tech-writer in worktree .worktrees/task-00070, branch task/00070-clarkson-entries off feature/00006-whats-new-page. Task 00065's data module (whatsNew.js) is merged and ships two clearly-marked PLACEHOLDER entries for you to replace in place, not add to."

@@ -1,11 +1,11 @@
 id: "00066"
 type: task
 title: "Author the /whats-new route-presence test (reconcile with Feature A route-parity guard)"
-state: new
+state: active
 parent: "00061"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00064"
@@ -13,7 +13,7 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T01:30:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -49,3 +49,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T01:20:00Z
     body: "[STRAP/agent:dev-lead] Implementation guidance corrected before dispatch: Task 00064's closing report caught that this brief's original `__tests__/` folder path contradicts the repo's actual co-located-test convention, and that 00064's own test explicitly defers route-registration assertion to this Task's App.test.jsx contribution rather than a new WhatsNew-local file. Both fixed in the Implementation guidance above. Also folded in: Footer/index.test.jsx:206's stale /whats-new route-parity exclusion, which 00064 flagged as this Task's to reconcile."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T01:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00066, branch task/00066-whatsnew-route-test off feature/00006-whats-new-page."

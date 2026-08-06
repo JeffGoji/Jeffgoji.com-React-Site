@@ -1,17 +1,17 @@
 id: "00067"
 type: task
 title: "Build the telemetry instrument cluster (status strip + stat tiles)"
-state: new
+state: active
 parent: "00062"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 5
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T01:30:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -42,3 +42,8 @@ description: |
   One tile per metric with correct badge/delta/meter; matches the mockup; unit test authored (tile count = metrics length; badge = TARGET when target else SHIPPED; meter width = gauge; trend class applied); empty-metrics renders an empty grid without error.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T01:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00067, branch task/00067-instrument-cluster off feature/00006-whats-new-page. NOTE carried from Task 00064's report: `.tele-caption` (the note paragraph under InstrumentCluster in WhatsNew/index.jsx) is rendered but deliberately left unstyled by Task 00064 -- style it as part of this Task's `.tele-*` port. Do NOT re-port `.wn-dash`, `.wn-dash__inner`, `.wn-ledger__inner`, `.wn-dash__title`, `.wn-dash__lead`, or `.wn-legend` -- Task 00064 already owns and styled those; a duplicate rule will collide at merge."
