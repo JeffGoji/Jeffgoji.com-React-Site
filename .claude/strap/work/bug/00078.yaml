@@ -5,7 +5,7 @@ state: new
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:bug, file-bugs, "env:development"]
 links:
   - target: "00048"
