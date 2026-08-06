@@ -43,7 +43,15 @@
  *
  * Flipping any of the three means re-running v1-perf-baseline.md's Methodology
  * unchanged against V2 and recording the result there first. AC-015 forbids a
- * SHIPPED badge on a figure that has not been measured and met.
+ * SHIPPED badge on a figure that has not been measured and met. The harness is
+ * `scripts/perf/lh-baseline.mjs`, still re-runnable; it prints to stdout and
+ * writes no artifact, so a run only counts once its output lands in
+ * v1-perf-baseline.md.
+ *
+ * Task 00073 re-checked the above independently and confirms it: as of
+ * 2026-08-06 the baseline doc carries pre-V2 numbers only, and neither the
+ * doc nor the harness has been touched since Task 00048 captured V1. No tile
+ * flips.
  *
  * The fourth tile is SHIPPED because it is not a performance measurement: it
  * asserts that the ledger below it enumerates delivered work, which the ledger
