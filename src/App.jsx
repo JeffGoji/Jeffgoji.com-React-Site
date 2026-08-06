@@ -8,6 +8,7 @@ import Home from './components/pages/Home'
 import Intro from './components/pages/Intro'
 import YouTube from './components/YouTube'
 import Suspension from './components/Suspension'
+import WhatsNew from './components/WhatsNew'
 
 // Blog links
 import NaMiata from './components/pages/NaMiata'
@@ -58,6 +59,7 @@ function App() {
           <Route path="youtube" element={<YouTube />} />
           <Route path="suspension" element={<Suspension />} />
           <Route path="galleries" element={<GalleryHub />} />
+          <Route path="whats-new" element={<WhatsNew />} />
           {LEGACY_GALLERY_PATHS.map((path) => (
             <Route key={path} path={path} element={<Navigate to="/galleries" replace />} />
           ))}
