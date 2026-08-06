@@ -1,27 +1,27 @@
 id: "00064"
 type: task
 title: "Register /whats-new route and scaffold the WhatsNew page shell"
-state: new
+state: resolved
 parent: "00061"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T01:15:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T01:15:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-06T01:15:00Z |
 
   ---
 
@@ -42,3 +42,12 @@ description: |
   `/whats-new` renders both cluster regions; `npm run build` succeeds; no console errors; Feature A's nav pill resolves here.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T00:49:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 1 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00064, branch task/00064-whatsnew-route-scaffold off feature/00006-whats-new-page."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T01:15:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00064-whatsnew-route-scaffold into feature/00006-whats-new-page. Completed By: frontend-engineer. /whats-new registered and renders both mockup regions (wn-dash telemetry band, ledger section) with InstrumentCluster/Changelog as inert placeholders pending Tasks 00067/00068's data wiring. Deliberate deviations, all sound: wn-dash nested inside the shell's one <main> rather than a <body> sibling (avoids a second banner landmark, same trade Home.jsx makes); mockup .container not ported (Bootstrap owns that name, per-block __inner measure matches existing convention); placeholders take no props since Task 00065's data module wasn't yet merged when this was dispatched (now is). NavMenu/Footer JSDoc updated to drop the now-false '/whats-new 404s' claims -- no behavior change, comment-only. SCSS ownership note carried into Wave 2 dispatch: 00064 took .wn-dash/.wn-dash__inner/.wn-ledger__inner/.wn-dash__title/.wn-dash__lead/.wn-legend; .tele-caption is rendered by this shell but intentionally left unstyled for Task 00067 to style alongside its .tele-* port (avoids a duplicate-rule collision this file has hit before). Two corrections applied to Task 00066's brief before its dispatch: the __tests__/ folder convention named in its original guidance doesn't exist in this repo (co-located *.test.jsx is the actual convention, which this Task's own index.test.jsx follows); and Footer/index.test.jsx:206's stale '/whats-new excluded, route doesn't exist yet' comment now needs updating as part of 00066's route-parity work. tokens_used: ~78k."

@@ -1,27 +1,27 @@
 id: "00065"
 type: task
 title: "Create the whatsNew[] + metrics[] data module with shape contract"
-state: new
+state: resolved
 parent: "00061"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T01:05:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T01:05:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-06T01:05:00Z |
 
   ---
 
@@ -42,3 +42,12 @@ description: |
   Both files export well-formed arrays matching the shapes; import renders without error; an empty array renders an empty cluster/ledger gracefully.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T00:49:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 1 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00065, branch task/00065-whatsnew-data-module off feature/00006-whats-new-page."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T01:05:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00065-whatsnew-data-module into feature/00006-whats-new-page. Completed By: frontend-engineer. whatsNew.js + metrics.js authored with well-documented shape contracts (JSDoc typedefs), seam banners for the tech-writer handoff (Story 00063), and structural-only contract tests (exact-key-set, non-empty-string, trend/gauge domain, target boolean) that guard the seam without asserting on copy. Two judgment calls worth tracking into Story 00063: (1) whatsNew.js ships two clearly-marked PLACEHOLDER entries rather than porting the mockup's Clarkson prose, deliberately avoiding pre-empting tech-writer's content and avoiding shipping unverified claims; metrics.js ships the mockup's four TARGET tiles verbatim since the mockup's own banner already declares them placeholders and target:true already badges them correctly. (2) The 'Shipped 100%' tile (target:false, 'every claim below = real work') reads oddly sitting above two PLACEHOLDER ledger rows right now -- self-resolves once Story 00063 lands real copy, flagged to tech-writer's Task 00072 as a must-reconcile if it doesn't. Named exports (not default) -- `import { whatsNew } from './data/whatsNew'` -- noted for Task 00066's author. tokens_used: ~48k."

@@ -1,11 +1,11 @@
 id: "00072"
 type: task
 title: "Author the metric tile values + honesty framing (TARGET badges)"
-state: new
+state: resolved
 parent: "00063"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: tech-writer
 tags: [AI, strap:task]
 links:
   - target: "00065"
@@ -13,17 +13,17 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T03:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T03:00:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | tech-writer |
+  | Completed At | 2026-08-06T03:00:00Z |
 
   ---
 
@@ -44,3 +44,12 @@ description: |
   Four tiles populated to the `metrics` shape; perf tiles badged TARGET, Shipped tile badged SHIPPED; values match Spec AC-006/007/008 targets; honesty caption authored.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T02:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3 of 3. Dispatched to tech-writer in worktree .worktrees/task-00072, branch task/00072-metric-tile-values off feature/00006-whats-new-page. IMPORTANT: Task 00065's data module already shipped all four metrics.js tiles with these exact values (-50%/2.5s/90+/Shipped 100%), and Task 00064 already authored a TARGET-vs-SHIPPED honesty caption in WhatsNew/index.jsx. dev-lead independently verified the three perf values against Spec 00002 AC-006/AC-007/AC-008 and they match exactly. This Task is mostly verification + polish, not fresh authoring -- do not duplicate what's already shipped; confirm the match yourself, and consider whether the existing caption's voice could be sharpened to match the ledger entries' Clarkson register (it currently reads more instructional than entertaining)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T03:00:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00072-metric-tile-values into feature/00006-whats-new-page (one conflict: both this Task and Task 00069 touched metrics.js's docblock header -- kept both agents' text, no content lost). Completed By: tech-writer. This was NOT a no-op verification as I'd predicted -- correctly found and fixed two real factual defects in the delta/note copy that a values-only check (mine included) had missed: (1) LCP delta cited an invented '~4s+' V1 baseline; real measured V1 mobile LCP was 13-13.4s (home)/11.2s (gallery) per project-docs/v1-perf-baseline.md, now corrected to '11-13s' with a 'mobile' qualifier since AC-007 is mobile-scoped; (2) Lighthouse note mislabeled the 80 bar as 'field' data when this project has zero field/RUM instrumentation (Plausible is cookieless pageviews only) -- it's a lab score, and the note also had desktop/mobile backwards relative to which figure (90 vs 80) the tile's own value represents. Both independently spot-verified by dev-lead against the actual v1-perf-baseline.md figures and NavMenu/index.test.jsx:316 (a supporting logo.gif claim) -- both confirmed accurate. Also rewrote the TARGET-vs-SHIPPED caption to fix a stale claim (it said measured numbers land 'when the perf/analytics pass ships' -- that pass already shipped with Feature C; what's actually outstanding is the re-measurement, now stated honestly) and sharpened its voice to match the ledger's register. Escalated, not actioned (CPO's call, matching the file-only-after-confirmation pattern): the image-payload tile's -50% may be significantly understating shipped reality (Feature C measured -91.8% to -95.9% on per-asset reductions) but a cold-load re-measurement would be needed to responsibly flip it, since AC-006's authoritative measure is cold-load transferred bytes, not per-asset ratios -- same distinction Task 00069 already drew. Full suite 1031/1031 passing per the agent's own run, re-verified at the wave-boundary centralized pass. tokens_used: ~80k."

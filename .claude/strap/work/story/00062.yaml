@@ -1,28 +1,28 @@
 id: "00062"
 type: story
 title: "Port the telemetry instrument cluster + numbered changelog ledger components"
-state: new
+state: resolved
 parent: "00006"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:story]
 links:
   - target: "00061"
     type: predecessor
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T03:35:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T03:35:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | dev-lead |
+  | Completed At | 2026-08-06T03:35:00Z |
 
   ---
 
@@ -48,3 +48,11 @@ comments:
     author: dev-lead
     timestamp: 2026-08-01T20:00:00Z
     body: "[STRAP/agent:dev-lead] Story via /decompose-feature 00006 (P7 route/component, frontend). Tasks 00067-00069."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T01:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Predecessor Story 00061's Tasks 00064/00065 resolved and merged. Tasks 00067, 00068 dispatched (Wave 2); Task 00069 follows in Wave 3."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-06T03:35:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). All 3 Tasks (00067 instrument cluster, 00068 changelog ledger, 00069 TARGET/SHIPPED wiring) resolved and merged into feature/00006-whats-new-page. AC-015's badge-honesty requirement satisfied: Task 00069's rigorous sourcing check declined to flip any perf tile to SHIPPED, since no post-V2 LCP/Lighthouse measurement exists anywhere in the project and the real Feature C numbers available were the wrong denominator for each tile's specific claim -- correctly left all three TARGET rather than badging a projection as fact."

@@ -1,11 +1,11 @@
 id: "00070"
 type: task
 title: "Draft the Clarkson-voice changelog entry set (structure + voice + traceability spine)"
-state: new
+state: resolved
 parent: "00063"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: tech-writer
 tags: [AI, strap:task]
 links:
   - target: "00065"
@@ -13,17 +13,17 @@ links:
 original_estimate: 5
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T02:00:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T02:00:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-01T20:00:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | tech-writer |
+  | Completed At | 2026-08-06T02:00:00Z |
 
   ---
 
@@ -44,3 +44,12 @@ description: |
   `whatsNew[]` covers every change in the coverage map; each entry has ver/tag/goal/title/body populated; voice matches the mockup exemplars; no entry references unshipped work; array validates against the shape.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T01:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 2 of 3. Dispatched to tech-writer in worktree .worktrees/task-00070, branch task/00070-clarkson-entries off feature/00006-whats-new-page. Task 00065's data module (whatsNew.js) is merged and ships two clearly-marked PLACEHOLDER entries for you to replace in place, not add to."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T02:00:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved (via /execute-sprint). Merged from task/00070-clarkson-entries into feature/00006-whats-new-page. Completed By: tech-writer. Six entries authored (redesign, navigation, home page, imagery, galleries, under-the-bonnet), each ver/tag/goal/title/body in-voice, why/how left as working drafts for Task 00071 to sharpen (documented as such in-file). Independently spot-checked three of the highest-risk claims before merging, given AC-015's zero-aspirational-items bar: (1) the es2015/SSR-residue removal claim in entry 06 -- confirmed against resolved Task 00047 (removed vite.config.js target:'es2015', main.jsx's Object.hasOwn polyfill, App.jsx's custom-render-ready dispatch; current vite.config.js/main.jsx/App.jsx all confirm zero remaining references) -- accurate; (2) the Ryoko flood-2018 detail in entry 03 -- confirmed verbatim against Garage/Cars.json id 3 ('totaled in a flood back in 2018') -- accurate; (3) the OG-image-404 claim in entry 04 -- already independently verified this session's own Story 00045 c2 comment -- accurate. No numerals in prose (numbers deliberately deferred to Task 00072's tiles), no dangerouslySetInnerHTML risk (plain strings only). One deliberate new goal-chip value not in the mockup's exemplar set: entry 05 uses 'GOAL 1 + 2' rather than forcing the galleries entry into a single goal -- approved as-is, flagged for Task 00068's `.cl-goal` chip to sanity-check against the longer string. 3/3 co-located test files reported green by the agent (24 tests); re-verified centrally at the wave boundary. tokens_used: ~78k."
