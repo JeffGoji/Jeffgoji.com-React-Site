@@ -1675,3 +1675,230 @@ a {
   color: var(--text-lo);
   text-align: center;
 }
+
+// --- WHAT'S NEW - THE INSTRUMENT CLUSTER (Task 00067) -----------------------
+// The telltale strip and the stat tiles inside the band above
+// (assets/app.css:396-480), plus the caption that closes it. The shell's own
+// rules stay with Task 00064; nothing here re-declares them.
+
+// The dash telltale row: mono readouts on a smoked panel.
+.tele-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-5);
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  background: rgba(10, 10, 12, 0.6);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+.tele-strip span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tele-strip b {
+  color: var(--text-hi);
+  font-weight: 700;
+}
+
+.tele-strip .live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--goji-red);
+}
+
+// The mockup pulses the LIVE dot unconditionally. The pulse carries no
+// information the lit dot does not already carry, and it never stops, so it is
+// held behind the same motion query `.media--editorial` uses in _grade.scss --
+// readers who ask for less motion get the steady dot instead.
+@keyframes telePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.55);
+  }
+
+  70% {
+    box-shadow: 0 0 0 7px rgba(225, 6, 0, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(225, 6, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tele-strip .live {
+    animation: telePulse 1.8s infinite;
+  }
+}
+
+.tele-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.tele-tile {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--ink-700), var(--ink-900));
+  transition:
+    transform var(--dur) var(--ease-out),
+    border-color var(--dur),
+    box-shadow var(--dur);
+}
+
+.tele-tile:hover {
+  transform: translateY(-4px);
+  border-color: var(--ink-400);
+  box-shadow: var(--shadow-card);
+}
+
+// The corner notch that reads as an instrument bezel cue.
+.tele-tile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 46px;
+  height: 3px;
+  background: var(--goji-red);
+}
+
+.tele-tile__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+.tele-badge {
+  padding: 2px 7px;
+  border: 1px solid var(--ink-400);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--text-lo);
+  white-space: nowrap;
+}
+
+.tele-badge--target {
+  border-color: rgba(225, 6, 0, 0.5);
+  color: var(--goji-red-bright);
+}
+
+.tele-badge--live {
+  border-color: var(--ink-400);
+  color: var(--text-hi);
+}
+
+.tele-tile__value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: clamp(2.4rem, 5.4vw, 3.6rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: var(--tracking-mega);
+  color: var(--text-hi);
+}
+
+// Sized off the value it trails rather than off the type scale, so the unit
+// keeps its proportion through the value's whole clamp range.
+.tele-tile__unit {
+  font-size: 0.42em;
+  font-weight: 700;
+  color: var(--goji-red-bright);
+}
+
+.tele-tile__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-mid);
+}
+
+// A moved number is the tile's headline; a flat one keeps the muted default.
+.tele-tile__delta.is-down,
+.tele-tile__delta.is-up {
+  color: var(--goji-red-bright);
+}
+
+.tele-tile__meter {
+  position: relative;
+  height: 6px;
+  margin-top: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--ink-600);
+  overflow: hidden;
+}
+
+// Width is the tile's `gauge`, set inline by the component.
+.tele-tile__meter i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--goji-red-deep), var(--goji-red-bright));
+  box-shadow: 0 0 10px rgba(225, 6, 0, 0.5);
+}
+
+.tele-tile__note {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+  color: var(--text-lo);
+}
+
+// The honesty note under the cluster (whats-new.html:38-42) -- what makes the
+// TARGET badges legible as goals rather than as measurements.
+.tele-caption {
+  max-width: 78ch;
+  margin-top: var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  color: var(--text-lo);
+}
+
+.tele-caption b {
+  color: var(--goji-red-bright);
+  font-weight: 700;
+}
+
+// The tile row halves, then stacks (assets/app.css:541-548).
+@media (max-width: 900px) {
+  .tele-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .tele-grid {
+    grid-template-columns: 1fr;
+  }
+}
