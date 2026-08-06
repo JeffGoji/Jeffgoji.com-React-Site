@@ -1,11 +1,11 @@
 id: "00069"
 type: task
 title: "Wire TARGET-vs-SHIPPED metric badges to Feature C perf outputs"
-state: new
+state: active
 parent: "00062"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links:
   - target: "00067"
@@ -13,7 +13,7 @@ links:
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T02:30:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -44,3 +44,8 @@ description: |
   Tiles show SHIPPED for any Feature-C-backed figure, TARGET otherwise; the source of each figure documented in `metrics.js`; page renders in both states.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T02:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 3 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00069, branch task/00069-target-shipped-wiring off feature/00006-whats-new-page. Task 00067's InstrumentCluster is merged and already reads `target` off each metrics.js row to badge TARGET/SHIPPED -- the render contract is done; this Task is the data-sourcing/documentation half only."
