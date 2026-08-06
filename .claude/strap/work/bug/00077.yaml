@@ -1,7 +1,7 @@
 id: "00077"
 type: bug
 title: "/galleries hub causes catastrophic layout shift (CLS 0.812 desktop / 0.193 mobile) via unbounded grid injection"
-state: new
+state: active
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -17,7 +17,7 @@ links:
 original_estimate: null
 created_at: 2026-08-06T02:50:00Z
 created_by: dev-lead
-updated_at: 2026-08-06T02:50:00Z
+updated_at: 2026-08-06T03:06:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -110,3 +110,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-06T02:50:00Z
     body: "[STRAP/agent:dev-lead] State: new (via /file-bugs). Authored By: spec-lead. Bug; Severity: 2 - High. Filed after running the real Lighthouse perf harness (scripts/perf/lh-baseline.mjs) against dist/ built from main post-Feature-D-merge and finding a genuine regression: gallery desktop Lighthouse Performance dropped from 93 (V1) to 75 (initial CPO-run measurement) / 68-70 (spec-lead's independent re-measurement), driven entirely by CLS exploding from 0.090 to 0.81-1.02. spec-lead's read-only investigation confirmed the root cause in code (GalleryHub.jsx's unbounded grid injection with no height reservation on .gallery-hub__body) and explicitly refuted the dev-lead's initial aspect-ratio hypothesis with direct evidence (`.thumb` already correctly reserves a 1:1 box; unsized-images audit returns 0). A related but distinct tooling defect (the perf harness itself measures the wrong URL) was filed separately as Bug 00078 per CPO direction, since it has an unrelated root cause and owner even though it was discovered in the same investigation."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T03:06:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /fix-bugs). Sequence position: 2. Specialist: frontend-engineer, dispatched in worktree .worktrees/bug-00077, branch fix/00077-gallery-cls off fix/bug-fixes-20260806. Bug 00078 (perf harness URL fix, resolved first) is already merged into this fix branch, so this specialist's own verification run will measure the real canonical /galleries URL."
