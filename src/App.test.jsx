@@ -23,6 +23,12 @@
  * inside <BlogList>. Whether that lands as one landmark or two is a property of
  * the assembled shell, so it is asserted here as well as in the route's own
  * test.
+ *
+ * Covers Task 00066: /whats-new's route registration. The page's own contract is
+ * components/WhatsNew/index.test.jsx's business; that the shell actually serves
+ * the destination the nav and footer have been advertising since Task 00023 is a
+ * seam property, so it joins the parity guard here rather than starting a
+ * standalone file.
  */
 
 import { readFileSync } from 'node:fs';
@@ -209,6 +215,35 @@ describe('the nav offers exactly what the app registers', () => {
             expect(pill.classList.contains('site-nav__link--flag')).toBe(true);
         }
     );
+
+    /**
+     * The other half of the pill above (Task 00066). The nav and the footer have
+     * advertised /whats-new since Task 00023, ahead of anything serving it; this
+     * is the case that fails if the route is dropped from App.jsx and the two
+     * link surfaces are left pointing at a 404.
+     *
+     * Both of the page's regions are named rather than just one, because a route
+     * bound to the wrong element would still paint something at the path.
+     */
+    it("resolves the What's New pill's destination to the page", () => {
+        const { container } = renderAt('/whats-new');
+
+        expect(window.location.pathname).toBe('/whats-new');
+        expect(container.querySelector('main > header.wn-dash')).not.toBeNull();
+        expect(container.querySelector('main .wn-ledger__inner')).not.toBeNull();
+    });
+
+    /**
+     * The page nests its dashboard <header> inside its own <main> so the shell's
+     * banner stays unrivalled, which only means anything once the two are
+     * assembled. Counted from the composed tree for the same reason Task 00035's
+     * blog case is.
+     */
+    it("contributes exactly one main landmark on What's New", () => {
+        renderAt('/whats-new');
+
+        expect(screen.getAllByRole('main')).toHaveLength(1);
+    });
 
     /**
      * Standing regression guard for Task 00020's removal of the "NA Miata
