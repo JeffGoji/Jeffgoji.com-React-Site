@@ -344,6 +344,21 @@ describe('the primary nav ports the mockup chrome (Task 00020)', () => {
     });
 });
 
+/**
+ * Bug 00077. The shell paints one frame with no route content while a
+ * client-side redirect commits; a viewport of reserved height is what keeps the
+ * footer below the fold across that frame. Sized in viewport units on purpose --
+ * the reservation is against the fold, not against a fixed page height.
+ */
+describe('the redirect frame reserves the height the shell is about to need', () => {
+    it('holds at least a viewport', () => {
+        const reserve = topLevelDeclarationsOf('.route-reserve').get('min-height');
+
+        expect(reserve).toMatch(/^\d+vh$/);
+        expect(Number.parseInt(reserve, 10)).toBeGreaterThanOrEqual(100);
+    });
+});
+
 describe('no unthemed Bootstrap default survives the collapse', () => {
     it('reaches no default blue from :root or a component slot', () => {
         for (const [name, value] of root) {

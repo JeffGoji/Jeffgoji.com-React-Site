@@ -36,6 +36,7 @@ import { resolve } from 'node:path';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import { GALLERY_SETS } from './components/common/gallerySets';
 
@@ -48,7 +49,7 @@ vi.mock('./components/common/GalleryHub', () => ({
     default: () => <div data-testid="gallery-hub" />,
 }));
 
-const { default: App } = await import('./App');
+const { default: App, LegacyGalleryRedirect } = await import('./App');
 
 /**
  * Resolved from the Vitest root rather than import.meta.url: under jsdom
@@ -106,6 +107,35 @@ describe('the legacy gallery URLs redirect into the hub (Task 00041)', () => {
      */
     it('imports no per-gallery component', () => {
         expect(APP_SOURCE).not.toMatch(/from '\.\/components\/Gallery/);
+    });
+});
+
+/**
+ * Bug 00077. `<Navigate>` renders nothing and commits its navigation from an
+ * effect, so the shell can paint one frame with the footer a viewport above
+ * where the hub is about to put it — a measured 0.31 desktop / 0.78 mobile
+ * layout shift on the legacy URLs, intermittent because it turns on whether
+ * that paint beats the effect.
+ */
+describe('the legacy redirect holds the page height while it commits', () => {
+    /**
+     * Rendered on its own rather than through the route table: inside <Routes>
+     * the redirect has already unmounted by the time a rendered tree can be
+     * asserted on, and the frame under test is the one before that.
+     */
+    it('reserves a viewport behind the redirect', () => {
+        const { container } = render(
+            <MemoryRouter initialEntries={['/totdgallery']}>
+                <LegacyGalleryRedirect />
+            </MemoryRouter>
+        );
+
+        expect(container.querySelector('.route-reserve')).not.toBeNull();
+    });
+
+    /** A bare <Navigate> as a route element is the regression this guards. */
+    it('routes every legacy path through that reservation', () => {
+        expect(APP_SOURCE).not.toMatch(/element=\{<Navigate/);
     });
 });
 
