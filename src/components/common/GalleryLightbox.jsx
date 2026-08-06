@@ -14,9 +14,10 @@ import ResponsiveImage from './ResponsiveImage'
  *
  * `original` is the pipeline's 1600w display rendition despite its name, and is
  * the only display-scale width the build emits — so the frame gets a single URL
- * and no `srcSet`. The manifest's actual untouched source is `full`, which the
- * hub does not carry down and this overlay must never reach for: it runs to
- * several MB a frame.
+ * and no `srcSet`. The manifest's source rendition, `full`, stays out of the
+ * slide: the hub does carry it down now, but only for the download control's
+ * href. Nothing the browser resolves by itself may name it — it runs to several
+ * MB a frame, and every slide is in the track at once.
  *
  * `eager` rather than the component default. The library renders every slide
  * into the track at once and moves them by transform, so a lazy slide is one the
@@ -58,8 +59,15 @@ function renderFrame(frame) {
  * here, and inventing a second chain for the caption would let the thumbnail and
  * the caption disagree about the same frame.
  *
+ * The download control (Task 00075) is chrome rather than slide content: one
+ * anchor bound to the frame on screen, alongside the caption that already
+ * tracks it. Rendering one per slide would put the whole set — 125 anchors on
+ * the largest gallery — into the tab order, all but one of them naming a frame
+ * the visitor cannot see. It is the only route by which `full` reaches anyone,
+ * and it reaches them by deliberate click.
+ *
  * @param {object} props
- * @param {Array<{original: string, thumbnail: string, alt: string}>} props.items
+ * @param {Array<{original: string, thumbnail: string, full: string, alt: string}>} props.items
  * @param {number} [props.startIndex]
  * @param {() => void} props.onClose
  */
@@ -148,6 +156,13 @@ function GalleryLightbox({ items, startIndex = 0, onClose }) {
             <div className="lightbox__cap">
                 {`${String(index + 1).padStart(2, '0')} / ${items.length} · ${items[index].alt}`}
             </div>
+            <a
+                className="btn btn--ghost btn--sm lightbox__download"
+                href={items[index].full}
+                download
+            >
+                ↓ Download full resolution
+            </a>
             <button
                 type="button"
                 className="lightbox__nav lightbox__nav--next"

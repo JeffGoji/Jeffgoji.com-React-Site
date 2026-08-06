@@ -46,6 +46,14 @@ const itemsFor = (slug, count) =>
         alt: `${slug} frame ${index}`,
     }))
 
+/** The shape the current build script writes, `full` included. */
+const FRAME_WITH_FULL = {
+    thumbnail: '/gallery/set-one/thumbs/0.webp',
+    original: '/gallery/set-one/display/0.webp',
+    full: '/gallery/set-one/original/0.jpg',
+    alt: 'A frame',
+}
+
 const manifestOf = (items) => ({
     ok: true,
     json: async () => ({ id: 'set', label: 'Set', count: items.length, items }),
@@ -310,29 +318,69 @@ describe('the grid picks one rendition rather than a candidate list', () => {
         }
     })
 
-    /** `full` is the untouched multi-MB source; it must not reach the grid. */
+    /** `full` is the multi-MB source rendition; it must not reach the grid. */
     it('never reaches for the untouched original', async () => {
-        stubFetch({
-            'set-one': [
-                {
-                    thumbnail: '/gallery/set-one/thumbs/0.webp',
-                    original: '/gallery/set-one/display/0.webp',
-                    full: '/gallery/set-one/original/0.jpg',
-                    alt: 'A frame',
-                },
-            ],
-        })
+        stubFetch({ 'set-one': [FRAME_WITH_FULL] })
 
         const { container } = render(<GalleryHub sets={SETS} />)
 
         await waitFor(() => expect(thumbsIn(container)).toHaveLength(1))
 
         expect(container.innerHTML).not.toContain('/original/')
+    })
+})
+
+/**
+ * Task 00075. `full` is carried through normalisation now, because the lightbox
+ * download control is the reason the pipeline keeps a full-resolution rendition
+ * at all. The rule it used to be dropped under still binds everywhere else: it
+ * may be an href a visitor clicks, and nothing the browser resolves unasked.
+ */
+describe('the full rendition reaches the visitor only through the download control', () => {
+    const downloadIn = (container) => container.querySelector('.lightbox__download')
+
+    const openFirstFrame = async (items) => {
+        stubFetch({ 'set-one': items })
+
+        const { container } = render(<GalleryHub sets={SETS} />)
+
+        await waitFor(() => expect(thumbsIn(container)).toHaveLength(1))
 
         fireEvent.click(thumbsIn(container)[0])
 
-        expect(container.querySelector('.lightbox')).not.toBeNull()
-        expect(container.innerHTML).not.toContain('/original/')
+        return container
+    }
+
+    it('hands the lightbox the full URL from the manifest', async () => {
+        const container = await openFirstFrame([FRAME_WITH_FULL])
+
+        expect(downloadIn(container).getAttribute('href')).toBe(FRAME_WITH_FULL.full)
+    })
+
+    it('leaves every image on the display rendition', async () => {
+        const container = await openFirstFrame([FRAME_WITH_FULL])
+
+        for (const img of container.querySelectorAll('img')) {
+            expect(img.getAttribute('src')).not.toBe(FRAME_WITH_FULL.full)
+            expect(img.hasAttribute('srcset')).toBe(false)
+        }
+    })
+
+    /**
+     * The deploy serves manifest.json from cache independently of the bundle, so
+     * a manifest predating the `full` field can still be the one in front of a
+     * current build. A control with no href would be dead chrome.
+     */
+    it('falls back to the display rendition on a manifest with no full field', async () => {
+        const container = await openFirstFrame([
+            {
+                thumbnail: '/gallery/set-one/thumbs/0.webp',
+                original: '/gallery/set-one/display/0.webp',
+                alt: 'A frame',
+            },
+        ])
+
+        expect(downloadIn(container).getAttribute('href')).toBe('/gallery/set-one/display/0.webp')
     })
 })
 
