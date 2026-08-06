@@ -1,17 +1,17 @@
 id: "00064"
 type: task
 title: "Register /whats-new route and scaffold the WhatsNew page shell"
-state: new
+state: active
 parent: "00061"
 iteration: "Sprint 2026.08.A"
 area: null
-assigned_to: null
+assigned_to: frontend-engineer
 tags: [AI, strap:task]
 links: []
 original_estimate: 3
 created_at: 2026-08-01T20:00:00Z
 created_by: dev-lead
-updated_at: 2026-08-01T20:00:00Z
+updated_at: 2026-08-06T00:49:00Z
 updated_by: dev-lead
 resolved_at: null
 closed_at: null
@@ -42,3 +42,8 @@ description: |
   `/whats-new` renders both cluster regions; `npm run build` succeeds; no console errors; Feature A's nav pill resolves here.
   ## Quality Checklist
   - [x] One-paragraph description; Story linked; estimate >=3h; real files; DoD testable.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-06T00:49:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active (via /execute-sprint). Wave 1 of 3. Dispatched to frontend-engineer in worktree .worktrees/task-00064, branch task/00064-whatsnew-route-scaffold off feature/00006-whats-new-page."
