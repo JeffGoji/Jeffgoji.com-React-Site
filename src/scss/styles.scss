@@ -882,6 +882,15 @@
   color: var(--text-mid);
 }
 
+// Task 00075. The mockup has no download affordance to port, so it borrows the
+// close control's `btn btn--ghost btn--sm` rather than introducing a second
+// button treatment inside one overlay. It sits in the column flow under the
+// caption — the two chrome elements that both re-read on every slide — while
+// close and nav stay absolutely positioned against the viewport.
+.lightbox__download {
+  margin-top: var(--space-4);
+}
+
 .lightbox__close {
   position: absolute;
   top: var(--space-5);

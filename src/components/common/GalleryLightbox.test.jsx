@@ -36,15 +36,32 @@ const css = sass.compile(resolve(SCSS_DIR, 'styles.scss'), {
 }).css
 
 const FRAMES = [
-    { original: '/display/0.webp', thumbnail: '/thumbs/0.webp', alt: 'First frame' },
-    { original: '/display/1.webp', thumbnail: '/thumbs/1.webp', alt: 'Second frame' },
-    { original: '/display/2.webp', thumbnail: '/thumbs/2.webp', alt: 'Third frame' },
+    {
+        original: '/display/0.webp',
+        thumbnail: '/thumbs/0.webp',
+        full: '/original/0.jpg',
+        alt: 'First frame',
+    },
+    {
+        original: '/display/1.webp',
+        thumbnail: '/thumbs/1.webp',
+        full: '/original/1.jpg',
+        alt: 'Second frame',
+    },
+    {
+        original: '/display/2.webp',
+        thumbnail: '/thumbs/2.webp',
+        full: '/original/2.jpg',
+        alt: 'Third frame',
+    },
 ]
 
 const open = (props = {}) =>
     render(<GalleryLightbox items={FRAMES} onClose={() => {}} {...props} />)
 
 const captionIn = (container) => container.querySelector('.lightbox__cap').textContent
+
+const downloadsIn = (container) => [...container.querySelectorAll('.lightbox__download')]
 
 /** keyCode is what react-image-gallery reads; `key` alone leaves it at 0. */
 const ARROW_LEFT = { key: 'ArrowLeft', keyCode: 37 }
@@ -192,6 +209,114 @@ describe('the caption reads NN / total · label', () => {
         fireEvent.click(container.querySelector('.lightbox__nav--next'))
 
         expect(captionIn(container)).toBe('02 / 3 · Second frame')
+    })
+})
+
+/**
+ * Task 00075. The pipeline keeps a full-resolution rendition of every frame
+ * specifically so a visitor can take one home as a wallpaper, and until now
+ * nothing in the UI reached it. The constraint the affordance has to respect is
+ * that `full` runs to several MB a frame and every slide is in the track at
+ * once — so it may appear as an href a visitor clicks, and nowhere else.
+ */
+describe('the overlay offers the full-resolution rendition', () => {
+    it('carries a download control', () => {
+        const { container } = open()
+
+        expect(downloadsIn(container)).toHaveLength(1)
+    })
+
+    it('points at the full rendition of the frame it opened on', () => {
+        const { container } = open({ startIndex: 1 })
+
+        expect(downloadsIn(container)[0].getAttribute('href')).toBe(FRAMES[1].full)
+    })
+
+    it('follows the frame the visitor moves to', () => {
+        const { container } = open({ startIndex: 0 })
+
+        expect(downloadsIn(container)[0].getAttribute('href')).toBe(FRAMES[0].full)
+
+        fireEvent.click(container.querySelector('.lightbox__nav--next'))
+
+        expect(downloadsIn(container)[0].getAttribute('href')).toBe(FRAMES[1].full)
+    })
+
+    /** Without it the browser navigates to the photo instead of saving it. */
+    it('asks the browser to save rather than navigate', () => {
+        const { container } = open()
+
+        expect(downloadsIn(container)[0].hasAttribute('download')).toBe(true)
+    })
+
+    /**
+     * The whole point of the control is that `full` is fetched on a click and
+     * never before. A `src`, a `srcset` or a preload naming it would pull
+     * several MB per slide across the whole track the moment the overlay opens.
+     */
+    it('keeps the full rendition out of everything the browser fetches unasked', () => {
+        const { container } = open()
+
+        const fulls = FRAMES.map((frame) => frame.full)
+
+        for (const img of container.querySelectorAll('img')) {
+            expect(fulls).not.toContain(img.getAttribute('src'))
+            expect(img.hasAttribute('srcset')).toBe(false)
+        }
+
+        expect(container.querySelector('link[rel="preload"], link[rel="prefetch"]')).toBeNull()
+    })
+
+    /**
+     * One control for the frame on screen, not one per slide: the library
+     * renders every slide into the track at once, so a per-slide anchor would
+     * put the whole set into the tab order pointing at frames nobody can see.
+     */
+    it('offers exactly one download target however large the set', () => {
+        const { container } = render(
+            <GalleryLightbox
+                items={Array.from({ length: 12 }, (_, index) => ({
+                    original: `/display/${index}.webp`,
+                    thumbnail: `/thumbs/${index}.webp`,
+                    full: `/original/${index}.jpg`,
+                    alt: `Frame ${index}`,
+                }))}
+                onClose={() => {}}
+            />
+        )
+
+        expect(downloadsIn(container)).toHaveLength(1)
+    })
+
+    /**
+     * It sits inside the overlay, so the backdrop handler must let it be.
+     *
+     * The click is defused first: jsdom implements no navigation, and letting it
+     * follow the href logs an unimplemented-navigation error that has nothing to
+     * do with what this asserts. Cancelling still leaves the event bubbling to
+     * the backdrop handler, which is the whole subject here.
+     */
+    it('does not close the overlay when it is clicked', () => {
+        const onClose = vi.fn()
+        const { container } = open({ onClose })
+
+        const download = downloadsIn(container)[0]
+
+        download.addEventListener('click', (event) => event.preventDefault())
+        fireEvent.click(download)
+
+        expect(onClose).not.toHaveBeenCalled()
+    })
+
+    /** Borrowed from the close control rather than given its own treatment. */
+    it('wears the existing overlay button treatment', () => {
+        const { container } = open()
+
+        const download = downloadsIn(container)[0]
+
+        for (const name of ['btn', 'btn--ghost', 'btn--sm']) {
+            expect(download.classList.contains(name)).toBe(true)
+        }
     })
 })
 

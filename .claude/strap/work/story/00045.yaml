@@ -1,7 +1,7 @@
 id: "00045"
 type: story
 title: "Client-side responsive image delivery (ResponsiveImage + srcset/lazy) + OG swap (Phase 3)"
-state: active
+state: resolved
 parent: "00005"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -12,9 +12,9 @@ links:
     type: predecessor
 created_at: 2026-08-01T19:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-05T14:40:00Z
+updated_at: 2026-08-06T00:17:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T00:17:00Z
 closed_at: null
 description: |
   | Field | Value |
@@ -56,3 +56,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-05T14:40:00Z
     body: "[STRAP/agent:dev-lead] State: resolved -> active. Reopened for new post-close scope: Task 00074 (Story 00044) shrank dist/gallery/*/original/ by 55.78% but its own report flagged that nothing in the current client UI actually exposes the `full` field -- GalleryHub.framesFrom deliberately drops it, GalleryLightbox never renders it. CPO confirmed the missing download/wallpaper affordance is real gap, not acceptable as-is. New Task 00075 filed (frontend-engineer, this Story's existing client-side domain) to wire a user-initiated download link to `frame.full` in the lightbox without disturbing the deliberate no-eager-fetch design GalleryHub's existing docblock already documents."
+  - id: c4
+    author: dev-lead
+    timestamp: 2026-08-06T00:17:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved. Task 00075 resolved: GalleryHub carries `full` through with a fallback chain for older manifests, GalleryLightbox exposes one download anchor bound to the current slide (chrome, not per-slide slide content), the deliberate no-eager-fetch/no-srcset constraint on `full` verified by dedicated tests. Full suite 950/950, production build clean."

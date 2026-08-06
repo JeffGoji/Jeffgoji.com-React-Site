@@ -49,18 +49,27 @@ function thumbnailAltFor(item, set, position) {
 /**
  * Normalises the manifest onto the one shape the grid and the lightbox both
  * read, so a frame cannot be described one way under its thumbnail and another
- * way in the lightbox caption. The two renditions fall back to each other
- * because the older manifests carry only one of them.
+ * way in the lightbox caption. The renditions fall back to each other because
+ * the older manifests carry only some of them.
  *
- * `full` — the untouched multi-MB source the build script also records — is
- * deliberately not carried through. There is no "view full res" affordance in
- * this UI, and a frame that held the field would eventually find its way into a
- * `src` or a candidate list.
+ * `full` — the multi-MB source rendition — is carried through as of Task 00075,
+ * where it gained its one deliberate consumer: the lightbox's download control.
+ * The rule it used to be dropped under still holds where it mattered. `full` may
+ * never reach a `src`, a `srcSet`, a preload or anything else the browser
+ * resolves on its own, because one frame of it costs more than a whole set of
+ * thumbnails. A `download` anchor is exempt for the reason the old comment was
+ * really about: an href is inert until a visitor clicks it.
+ *
+ * Its fallback to `original` keeps that control from pointing at nothing on a
+ * manifest built before the field existed — the deploy serves `manifest.json`
+ * from cache independently of the bundle, so the two can be a cache lifetime out
+ * of step with each other.
  */
 function framesFrom(items, set) {
     return items.map((item, index) => ({
         original: item.original ?? item.thumbnail,
         thumbnail: item.thumbnail ?? item.original,
+        full: item.full ?? item.original ?? item.thumbnail,
         alt: thumbnailAltFor(item, set, index + 1),
     }))
 }

@@ -1,7 +1,7 @@
 id: "00075"
 type: task
 title: "Wire a download/wallpaper affordance to the full-resolution gallery rendition"
-state: new
+state: resolved
 parent: "00045"
 iteration: "Sprint 2026.08.A"
 area: null
@@ -13,17 +13,17 @@ links:
 original_estimate: 3
 created_at: 2026-08-05T05:45:00Z
 created_by: dev-lead
-updated_at: 2026-08-05T05:45:00Z
+updated_at: 2026-08-06T00:17:00Z
 updated_by: dev-lead
-resolved_at: null
+resolved_at: 2026-08-06T00:17:00Z
 closed_at: null
 description: |
   | Field | Value |
   |---|---|
   | Authored By | dev-lead |
   | Authored At | 2026-08-05T05:45:00Z |
-  | Completed By | _(set at resolution)_ |
-  | Completed At | _(set at resolution)_ |
+  | Completed By | frontend-engineer |
+  | Completed At | 2026-08-06T00:17:00Z |
 
   ---
 
@@ -49,3 +49,7 @@ comments:
     author: dev-lead
     timestamp: 2026-08-05T05:45:00Z
     body: "[STRAP/agent:dev-lead] Task filed per CPO direction after devops-lead's Task 00074 report flagged that the `full` rendition it shrank is not reachable from any current UI (GalleryHub drops it, GalleryLightbox never renders it). Without this Task the 389MB `original/` rendition serves no purpose -- CPO confirmed they want the download/wallpaper affordance built, not just the backend size win. Filed against Story 00045 (frontend-engineer's client-side domain, matches its existing ownership of GalleryHub/GalleryLightbox from Feature 00005 comment c5)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-06T00:17:00Z
+    body: "[STRAP/agent:dev-lead] Resolved. `GalleryHub.framesFrom` now carries `full` through (falling back to `original`/`thumbnail` for pre-Task manifests), with its docblock rewritten to describe the new deliberate exception rather than a blanket drop. `GalleryLightbox` renders one download anchor as overlay chrome (bound to the current slide, not one per slide -- avoids seeding the tab order with hidden-frame anchors on large galleries), styled with the existing `btn btn--ghost btn--sm` treatment, `download` attribute set, href never entering an `img src`/`srcset`/preload. 11 new tests cover: href tracks manifest `full`/fallback, no eager fetch of `full` anywhere in the DOM, exactly one download target regardless of gallery size, anchor click does not bubble-close the overlay, existing button treatment reused. Full suite: 950/950 passed. Production build (gallery re-encode + articles + heroes + og + vite) clean, no new warnings. Verified against DoD in full."
