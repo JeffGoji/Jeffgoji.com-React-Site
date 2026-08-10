@@ -1,0 +1,106 @@
+id: "00080"
+type: bug
+title: "Mobile nav accordion never retracts on selection — collapseOnSelect silently broken by null event keys"
+state: resolved
+parent: "00003"
+iteration: null
+area: null
+assigned_to: dev-lead
+tags: [AI, strap:bug, "env:production"]
+links:
+  - target: "00010"
+    type: related
+  - target: "00079"
+    type: related
+original_estimate: null
+created_at: 2026-08-10T21:40:00Z
+created_by: dev-lead
+updated_at: 2026-08-10T22:25:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-10T22:25:00Z
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | dev-lead                    |
+  | Authored At  | 2026-08-10T21:40:00Z        |
+  | Completed By | dev-lead                    |
+  | Completed At | 2026-08-10T22:25:00Z        |
+
+  ---
+
+  # Mobile nav accordion never retracts on selection — collapseOnSelect silently broken by null event keys
+
+  ## Repro Steps
+
+  1. Load the site at a viewport under the `lg` (992px) breakpoint so `NavMenu` renders as a collapsed accordion.
+  2. Tap the hamburger toggle to open the menu.
+  3. Tap any direct link (Home, Car Blogs, Videos, Suspension, What's New) or a Galleries leaf item (e.g. Galleries → NB Mazdaspeed Miata → Texas Hill Country Trip 2023).
+  4. Observe: navigation happens (URL/route changes correctly), but the accordion panel stays open — it never retracts.
+
+  ## Expected vs Actual
+
+  **Expected**: selecting a direct nav link or a leaf gallery item closes the mobile accordion on that press, per `<Navbar collapseOnSelect>`. Opening "Galleries" itself, or an intermediate per-car submenu toggle (e.g. "NB Mazdaspeed Miata"), should NOT close the accordion — only an actual navigable selection should.
+
+  **Actual**: nothing ever closed the accordion — not direct links, not Galleries leaf items, confirmed via live DOM inspection (`.navbar-collapse` stayed at class `collapse show` after every kind of selection). Only the toggle button itself changed accordion state.
+
+  ## Severity
+
+  **Severity:** 2 - High. This is the primary navigation mechanism for every mobile visitor (the majority of traffic on a personal/portfolio site) — every link tap leaves a stale, overlapping menu panel obscuring the page it just navigated to, forcing a second manual tap to dismiss it on every single navigation. Not Sev 1: no data loss, no broken navigation (the link itself works), and there's an easy manual workaround (tap the toggle again). Not Sev 3: it's not a cosmetic nit — it's a functional break in the main nav's core promise (collapseOnSelect) that degrades every mobile session, not an edge case.
+
+  ## Linked artifacts
+
+  - **Feature 00003** / **Story 00010** (both resolved) — built `NavMenu/index.jsx` and its `collapseOnSelect` contract; this Bug is a defect in that shipped behavior, not new scope.
+  - **Bug 00079** (resolved) — same file (`NavMenu/index.jsx`), different fault (gallery link destinations); this Bug's fix touches the same Galleries dropdown markup Bug 00079 repointed at `galleryHubPath()`, with no conflict — 00079 changed `to=`, this Bug adds `eventKey=` alongside it.
+
+  ## Root cause
+
+  **CONFIRMED** — traced end-to-end through `react-bootstrap` and `@restart/ui` source in `node_modules`, then verified live via DOM/JS instrumentation in a real Chrome session at mobile viewport:
+
+  1. Every selectable item in `NavMenu/index.jsx` renders via react-router's `to` prop (`Nav.Link as={NavLink} to="..."`, `Dropdown.Item as={Link} to="..."`), never `href`.
+  2. `react-bootstrap`'s own `NavLink`/`DropdownItem` derive their internal selection key via `makeEventKey(eventKey, props.href)` (`@restart/ui/SelectableContext.js`) — since neither an explicit `eventKey` nor `href` was ever passed, every item's derived key was `null`.
+  3. `@restart/ui/NavItem.js`'s `useNavItem` click handler has an early `if (key == null) return;` guard — for plain `Nav.Link`s (Home, Car Blogs, Videos, Suspension, What's New) this bails out *before* ever notifying the parent `SelectableContext`, so `Navbar`'s `collapseOnSelect` handler is never invoked at all.
+  4. For Dropdown-nested items (NavDropdown.Item, and the plain `Dropdown.Item`s under the Galleries panel), the click *does* propagate up through each nested `Dropdown`'s own `handleSelect` (which unconditionally forwards to its parent context) — but the outermost `<Nav>` wrapping the whole menu (`@restart/ui/Nav.js`) has the *same* `if (key == null) return;` guard in its own `handleSelect`, so the chain is cut off one level before it reaches `Navbar`'s `collapseOnSelect`, regardless of nesting depth.
+
+  Net effect: no item anywhere in the tree ever produced a non-null event key, so `collapseOnSelect` was fully inert since the nav was first built (Story 00010) — not a regression from any later change, a latent defect present since the app shell shipped.
+
+  ## Affected files
+
+  | File | Lines | Role |
+  |---|---|---|
+  | `src/components/NavMenu/index.jsx` | 56-105 | Every `Nav.Link`, `NavDropdown.Item`, and `Dropdown.Item` lacked an explicit `eventKey`, leaving the derived selection key `null` throughout the tree |
+  | `src/components/NavMenu/index.test.jsx` | mobile collapse describe block | Had no coverage of `collapseOnSelect` behavior at all — the gap that let this ship unguarded |
+
+  ## Fix
+
+  Added explicit `eventKey` props to every selectable item (`Nav.Link`s keyed by route path; `Dropdown.Item`s keyed by gallery slug). Dropdown/NavDropdown *toggles* were deliberately left untouched, since they intentionally shouldn't participate in selection — confirmed both live and in tests that opening "Galleries" or a per-car submenu toggle keeps the accordion open, and only an actual leaf selection closes it (and closes the intermediate submenus with it, via the same propagation chain now unblocked).
+
+  Verified in three stages: (1) live DOM/JS-driven click testing against a local dev server at mobile viewport, confirming the `.navbar-collapse` class transitions from `collapse show` to `collapse` on direct-link and gallery-leaf selection, and stays `collapse show` through Galleries/submenu-toggle opens; (2) two new Vitest regression tests added to `NavMenu/index.test.jsx` (29/29 passing); (3) re-verified against the live production bundle at jeffgoji.com post-deploy (bundle `index-0caf3a50.js`), same DOM-driven scenarios, plus manual confirmation from the CPO.
+
+  ## Impact
+
+  Every mobile visitor navigating via the hamburger menu — the majority of traffic path on a personal site — hit a stale, overlapping menu panel after every single tap, on every link and every gallery selection, since the nav shipped. No data loss, security, or availability impact; purely a UX/usability defect, but a pervasive one given how frequently the primary nav is used.
+
+  ## Quality Checklist
+
+  - [x] Repro Steps are numbered and deterministic.
+  - [x] Expected vs Actual is concrete on both sides.
+  - [x] Severity is set per the project rubric (2 - High) with explicit reasoning.
+  - [x] Linked artifacts identify the originating Feature/Story and the related prior Bug in the same file.
+  - [x] Root cause is confirmed end-to-end in library source, not a guess — traced through `node_modules` and verified live via DOM instrumentation.
+  - [x] Affected files include paths and the nature of the gap.
+  - [x] Fix and verification are described in enough detail to reproduce the confirmation.
+  - [x] Impact captures who is affected and the size of the affected population.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-10T21:40:00Z
+    body: "[STRAP/agent:dev-lead] State: new. Reported directly by the CPO mid-session (interrupting an unrelated /context-fetch): mobile nav accordion doesn't retract on link/option selection, but should stay open through the Galleries drill-down until an actual gallery is picked. Investigated directly in this session (no specialist dispatch) via a local dev server + Chrome browser automation at mobile viewport, then traced the exact break through react-bootstrap/@restart-ui source in node_modules. Root cause confirmed: every nav item uses react-router's `to` prop instead of `href`, so react-bootstrap's href-based event-key fallback always resolved to null, and both `@restart/ui/NavItem.js` and `@restart/ui/Nav.js` bail out of their select handlers on a null key before ever reaching `Navbar`'s `collapseOnSelect`. No CPO scope gates needed — straightforward, narrowly-scoped fix (explicit `eventKey` props) with no design-decision surface."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-10T22:05:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active. Fixed directly on `main` (no branch/worktree; matches this tail of work's established direct-to-main convention per Bugs 00077-00079). Added explicit `eventKey` to every Nav.Link (keyed by route path) and every Dropdown.Item under Articles/Galleries (keyed by gallery slug); NavDropdown/Dropdown toggles left untouched since they must not participate in selection. Added two regression tests to `NavMenu/index.test.jsx` covering direct-link retraction and the full Galleries drill-down (stays open through two toggle levels, closes only on leaf selection). Full NavMenu suite: 29/29 passing (27 existing + 2 new)."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-10T22:25:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved. Commit 294bb4b pushed directly to `main` (no PR, per this tail of work's established convention). Verified live on production at jeffgoji.com after Netlify's deploy landed (new bundle index-0caf3a50.js, ~4 minutes after push, gallery:build's ~13-minute mozjpeg step included): direct-link selection (Car Blogs) closes the accordion on first press; the Galleries -> NB Mazdaspeed Miata -> Texas Hill Country Trip 2023 drill-down stays open through both intermediate levels and closes only once the leaf gallery is selected, navigating correctly to /galleries?set=nb-hillcountry. CPO independently confirmed on their own device: 'I have tested it and it works perfectly.'"
