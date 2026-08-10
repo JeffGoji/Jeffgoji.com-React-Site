@@ -1,79 +1,68 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-08-05T14:50:00Z
+last_updated: 2026-08-10T23:15:00Z
 last_author: dev-lead
 status: parked
-linked_work_items: ["00044", "00045", "00075", "00076", "00006"]
+linked_work_items: []
 ---
 
 # jeffgoji.com V2 site update
 
 ## What this is
 
-The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern dark motorsport-editorial look, image-loading/performance overhaul, and a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. **Features A, B, and C are all fully resolved and live on `main`.** Two small follow-up Tasks from Feature C are mid-execution, paused intentionally. Feature D (What's New page) is the one remaining Feature, not yet started, and should not be picked up until the follow-ups below close.
+The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern dark motorsport-editorial look, image-loading/performance overhaul, and a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. **Features A, B, C, and D are all fully resolved and merged to `main`** (Spec 00002 itself is `resolved`). Post-launch, this initiative has settled into a tail of one-off Bug fixes surfaced by real Lighthouse audits and CPO manual testing. No active or new Feature/Bug/Task work items remain in `.claude/strap/work/` as of this writing — this continuation exists for the loose ends below, not for in-flight execution.
 
 ## Where we left off
 
-Session parked intentionally — human had to leave for the airport mid-dispatch. Immediately prior: merged PR #26 and PR #27 (Feature C fully live on `main`), then executed **Task 00074** end to end (devops-lead, mozjpeg re-encode of `dist/gallery/*/original/`, real measured **-55.78%**, 879.5 MiB → 388.9 MiB, merged into `feature/strap-onboarding` at `a5825a9`). That Task's closing report flagged two gaps, CPO confirmed both should be fixed now: **Task 00075** (frontend-engineer — no UI currently exposes the shrunk `full` rendition for download/wallpaper use) and **Task 00076** (devops-lead — the same 17 EXIF-rotated source photos are *already* live-broken in the `thumb`/`display` renditions today, a pre-existing bug found as a side effect).
+Session parked at a natural stopping point, not mid-task. Prior session: ran a real Lighthouse audit, filed and fixed Bugs 00077/00078/00079 (CLS regression, perf-harness URL bug, gallery nav dropdown selection), PRs #30/#31, all merged. This session: CPO interrupted an unrelated `/context-fetch` to report the mobile nav accordion never retracts on selection — investigated directly (no specialist dispatch), traced the root cause through `react-bootstrap`/`@restart/ui` source (every nav item derives a `null` event key because it uses react-router's `to` prop instead of `href`, so both `NavItem` and `Nav`'s select handlers bail out before reaching `Navbar`'s `collapseOnSelect`), fixed by adding explicit `eventKey` props throughout `NavMenu/index.jsx`, added two regression tests (29/29 passing), and filed/resolved **Bug 00080** directly on `main` (commit `294bb4b` fix + `0e41440` tracking record, no PR, no branch). Verified live on production; CPO independently confirmed. **Session then ended without running `/context-prep`** — this pass is a catch-up, not new work.
 
-Both were dispatched into separate worktrees off `feature/strap-onboarding` (`a4daa1b`). Told to stop and checkpoint when the pause request came in:
-
-- **Task 00076 checkpointed successfully**: commit `48b694f` on `task/00076-gallery-thumb-rotation-fix`. Done: added `.rotate()` to the `outThumb`/`outDisplay` sharp chains in `processOne()` (`scripts/build-gallery.mjs` ~line 148-166), before `.resize()`, consolidated the rationale comment. **Not done**: the agent's own `npm run gallery:build` was killed ~4min into a ~13min run, so the worktree's `public/gallery/` is a partial, gitignored, mixed-state tree — must rebuild from scratch, not resume. Also not done: delete two scratch verification scripts (`t76-probe.mjs`, `t76-verify.mjs`) left in the WIP commit only to preserve the verification approach — they must NOT land in the final commit; re-run the 17-file pixel-level rotation check (dimensions alone miss the 5 files that are 180°-rotated); `npm test`; `npm run build`; resolve the YAML.
-- **Task 00075 had NOT checkpointed** when the session ended — no WIP commit, just uncommitted edits sitting in the worktree (`.worktrees/task-00075`, branch `task/00075-gallery-download-affordance`): `GalleryHub.jsx`, `GalleryHub.test.jsx`, `GalleryLightbox.jsx`, `GalleryLightbox.test.jsx`, `src/scss/styles.scss` all modified. These survive the shutdown fine (ordinary files on disk), but there's no commit message summarizing progress — read the raw diff cold to assess how far it got.
-
-A real data-quality bug surfaced during Task 00076's pre-fix verification, not yet corrected anywhere: the "17 rotated files" split quoted in both Task 00074's comment c2 and Task 00076's own description (nd-hillcountry×10, nc-eastcoast15×4, nd-totd2025×1, nc-yellowstone15×1) sums to 16, not 17. The devops-lead agent's actual measured split is **nd-hillcountry×11** (not 10) — sums to 17, matches the 12×90°/5×180° orientation-type breakdown. Fix this in `00076.yaml` when it resolves; leave the already-resolved `00074.yaml` alone.
+**Final measured state**: gallery desktop CLS 1.024→0.003, Perf 75→99 (beats V1's 93) as of Bugs 00077-00079. Mobile nav accordion now correctly retracts on direct-link and gallery-leaf selection while staying open through Galleries/submenu toggles (Bug 00080, verified live). Two items remain open — see below — that predate this tail of work and are unrelated to any of the four Bugs fixed so far.
 
 ## Files in flight
 
-- `.worktrees/task-00075/src/components/common/GalleryHub.jsx`, `GalleryHub.test.jsx`, `GalleryLightbox.jsx`, `GalleryLightbox.test.jsx`, `src/scss/styles.scss` — uncommitted, in-progress download/wallpaper affordance, unknown completeness.
-- `.worktrees/task-00076/scripts/build-gallery.mjs` — committed at `48b694f` (WIP), `.rotate()` added to thumb/display, verified working via diff review but NOT via a full rebuild.
-- `.worktrees/task-00076/t76-probe.mjs`, `t76-verify.mjs` — committed into the WIP checkpoint, must be deleted before the final resolve commit.
-- `.worktrees/task-00076/public/gallery/` — gitignored, currently a partial/killed build, needs a from-scratch rebuild.
+None. Working tree is clean; `main` is fully synced with origin; no worktrees or scratch branches remain (all worktrees created this session were cleaned up after each merge).
 
 ## Open decisions
 
-- No CPO decisions are pending — both follow-up Tasks were explicitly approved before the pause (AskUserQuestion, both "recommended" options chosen). This is purely an execution resume, not a re-litigation point.
-- Whether to merge Tasks 00075/00076 into `feature/strap-onboarding` together or as they each individually finish — no strong reason to force them together; merge each as soon as it's independently green, same as every other Task this project.
+- **Two Lighthouse numbers were left un-transcribed.** `project-docs/v1-perf-baseline.md` says a measurement only counts as durable once it lands in that doc's "Phase-3 re-measurement" section (Bug 00073's own finding — `lh-baseline.mjs` prints to stdout and writes no artifact). This session ran the harness three times post-fix but never wrote the results into the doc. If anyone runs `/dora-report`-style perf tracking or a future agent asks "has V2 been measured?", the honest answer is still "not durably" until this is done. Quick to do — the numbers are in this conversation's final comparison table.
+- **What's New page's metric tiles are stale relative to reality.** `src/components/WhatsNew/data/metrics.js`'s image-payload tile is still `target: true` (TARGET, not SHIPPED) at `-50%`. This session's real numbers show gallery mobile alone hit -96%, and home desktop/mobile both now clear 50%+ — genuinely flippable now, at least partially. CPO has not yet said whether to update the tiles or file a Task for it.
+- **Two AC gaps are open, unfiled, and pre-date this session's bug fixes** (confirmed not caused or fixable by Bugs 00077/00078/00079):
+  - Home mobile: Perf 73 (<80), LCP 6543ms (>2500ms target) — known root cause per earlier investigation is the CSS-background hero image lacking `fetchpriority`/preload; Lighthouse's `prioritize-lcp-image` audit already named this.
+  - Gallery desktop: image-byte reduction is 49.9%, just short of the 50% AC-006 bar — essentially a rounding-distance gap, not something either bug fix touched.
+  - CPO has not indicated whether either is worth filing as a Bug/Task.
 
 ## Open work items
 
-- `#00005` — resolved — Feature C (image pipeline overhaul), fully live on `main` (PRs #26 + #27 merged).
-- `#00044` — active — Story: gallery pipeline overhaul, reopened for Task 00076's tail work.
-- `#00045` — active — Story: client-side responsive delivery, reopened for Task 00075's tail work.
-- `#00074` — resolved — Task: re-encode gallery originals (mozjpeg, -55.78%), merged.
-- `#00075` — new, WIP uncommitted — Task: download/wallpaper affordance for the gallery lightbox.
-- `#00076` — new, WIP checkpointed (`48b694f`) — Task: fix pre-existing sideways-photo defect in thumb/display renditions.
-- `#00006` — active, not started — Feature D (What's New page). Stories 00061-00063, Tasks 00064-00073. Do not start until 00075/00076 both clear.
+None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are `resolved` (`.next-id` is `80`, matching Bug 00080 as the latest). PRs #28-#31 are all merged to `main`; Bug 00080 shipped without a PR (direct-to-main, per this tail of work's convention). If the two items above get actioned, they'd be new `/file-bugs` or `/new-requirement` intake, not a resume of existing work.
 
 ## Quick resume
 
-1. `git -C .worktrees/task-00076 status --short` and `git -C .worktrees/task-00075 status --short` first, to confirm nothing changed since this file was written (in case either agent kept working past the checkpoint request).
-2. **Task 00076**: in `.worktrees/task-00076`, delete `t76-probe.mjs`/`t76-verify.mjs`, run `npm run gallery:build` fresh (~13min, let it finish), re-verify the corrected 17-file split (11+4+1+1) is upright in both renditions, `npm test -- --run`, `npm run build`, update `.claude/strap/work/task/00076.yaml` to resolved with the corrected file-count and real numbers, commit, merge into `feature/strap-onboarding` from the main checkout.
-3. **Task 00075**: in `.worktrees/task-00075`, read the uncommitted diff cold (`git diff`), assess what's done vs. left against the Task's Definition of Done in `.claude/strap/work/task/00075.yaml`, finish the download affordance, verify tests/build, resolve the YAML, commit, merge into `feature/strap-onboarding`.
-4. Once both are merged and verified, open a fresh PR `feature/strap-onboarding` → `main` (no PR currently open for this tail work — #27 already merged/closed) — this closes Feature C entirely, including its post-close follow-ups.
-5. Clean up both worktrees from the **main checkout** (`git worktree remove .worktrees/task-0007X --force`, `git branch -d task/0007X-...`) once merged.
-6. Then, and only then, start Feature D — read Stories 00061-00063 / Tasks 00064-00073 fresh against current file layout.
+1. If picking up the perf-baseline-doc gap: read this conversation's final Lighthouse comparison table (or re-run `LH_DIR=/c/lh/node_modules node scripts/perf/lh-baseline.mjs` against a fresh `npm run build` + `vite preview --port 4173`) and transcribe into `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section.
+2. If picking up the What's New metric tiles: read `src/components/WhatsNew/data/metrics.js`'s existing `SOURCING` docblock (written by Tasks 00069/00073) before touching values — it documents exactly which numbers are safe to flip and why the other two aren't yet.
+3. If the CPO wants either open AC gap (home mobile LCP, gallery desktop's 49.9%-vs-50%) turned into real work: `/file-bugs` or `/new-requirement`, dev-lead's call per severity — home mobile is the more user-visible of the two.
+4. Otherwise: this topic can likely go to `status: done` next `/context-prep` pass if the CPO doesn't want to action either open item — the V2 initiative itself has nothing left undone.
 
 ## Critical context
 
-- **Uncommitted worktree edits survive a host machine shutdown** — ordinary files on disk, not memory-only. What's NOT guaranteed is whether an agent's own `git commit` finished in time; always verify via `git log`/`git status` in the worktree directly, never trust a Task YAML's `state` field alone for in-progress work.
-- **The `.rotate()` fix pattern is proven and consistent** — same idiom on `outOriginal` (Task 00074, merged) and `outThumb`/`outDisplay` (Task 00076, WIP): a bare `.rotate()` before `.resize()`/`.jpeg()`/`.webp()`, no argument, bakes EXIF orientation into pixels since this pipeline deliberately never calls `.withMetadata()`.
-- **`GalleryHub.jsx` has a docblock explaining why `full` is deliberately dropped** from normalized frames (avoiding accidental eager/srcset fetch of multi-MB files) — Task 00075 needs to thread `full` through as an inert, click-gated-only URL and update that docblock to describe the new deliberate exception, not leave it claiming `full` is dropped entirely.
-- **`gallery:build` takes ~13 minutes** (mozjpeg re-encoding 286 photos), up from ~3 minutes pre-Task-00074. Affects local iteration speed and will affect Netlify build minutes once shipped.
-- **Vitest double-counts tests if a worktree still exists when running from the main checkout** (939 → 1878 seen this session) — not a real failure, just noise; remove/ignore worktrees before trusting the centralized test-pass number.
-- **PR/merge convention**: task/feature branches → `feature/strap-onboarding` (stacked, `--merge`, `--delete-branch` on the head) → separate PR `feature/strap-onboarding` → `main` when shipping (also `--merge`, but NEVER `--delete-branch` — that branch is the standing integration branch).
-- **Netlify reports zero PR status checks on this repo** across every PR so far (#24-#27) — normal here, not a red flag. Use `gh pr view --json mergeable,mergeStateStatus` as the real merge-readiness signal.
+- **`scripts/perf/lh-baseline.mjs` prints to stdout and writes no artifact.** A perf run that isn't manually transcribed into `v1-perf-baseline.md` leaves no durable record — confirmed as a real gap this session (see Open decisions).
+- **Lighthouse must be installed out-of-tree** (`C:\lh` this session) — it's a ~200MB dep deliberately excluded from `package.json`. On Windows the install path must be short (~66-char nested-package-json read fails past that). See `lh-baseline.mjs`'s own header comment for the exact install command.
+- **`gallery:build` takes ~13 minutes** (mozjpeg re-encoding 286 photos) — every `npm run build` this session paid that cost; budget for it when planning perf work.
+- **Vitest double-counts tests if a worktree still exists when running from the main checkout** — always `git worktree remove` before trusting a centralized test count.
+- **PR/merge convention for this tail of work**: task/fix branches → `main` directly (NOT via `feature/strap-onboarding`, which was Feature A-D's staging branch and has served its purpose — Bugs 00077/00078/00079 all branched straight off `main`). No standing integration branch is currently in play; `main` is the live trunk.
+- **`CreateTeam` is unavailable in this harness.** Workaround, confirmed reliable across ~50+ dispatches this project: manual `git worktree add -b <branch> <path> <base>` + named background `Agent` dispatch, `node_modules` linked via PowerShell `New-Item -ItemType Junction`. **One real trap hit this session**: never `git checkout -b <branch>` in the *primary* checkout and then try to `git worktree add -b <same-branch>` for a specialist — git can't check out one branch in two places, so it silently creates a different branch than intended. Cut the worktree's branch first, or use a distinct scratch name and rebase after.
+- **Netlify reports pending-not-failing PR checks on this repo** (`Header rules`, `Pages changed`, `Redirect rules`, `netlify/.../deploy-preview`) — `mergeStateStatus: UNSTABLE` from these alone is normal, not a merge blocker; confirm via `mergeable: MERGEABLE` instead.
 - **PUSH BEFORE YOU PR/merge** — local commits after a branch's last push are silently invisible to `gh`.
-- **`CreateTeam` is unavailable in this harness.** Workaround: manual `git worktree add -b <task-branch> <path> <feature-branch>` + named background `Agent` dispatch, `node_modules` linked via PowerShell `New-Item -ItemType Junction`. Confirmed reliable across ~45 dispatches this project.
-- **LCP/Lighthouse re-measurement has never been done anywhere in this project** (no browser tool available to any dispatched agent) — flagged repeatedly across Features B and C, still open, still not blocking.
-- **Verify agent-reported numbers against the actual artifact before merging further** — this session caught the 17-file split's off-by-one this way; it's the standing bar, not optional.
+- **Verify agent-reported numbers against the actual artifact before merging** — standing discipline all session; caught real issues in Bug 00070's content (a "six mechanisms" claim that should've been three) and Bug 00072's metric copy (an invented LCP baseline).
+- **react-bootstrap/`@restart/ui` derive selection `eventKey` from `href`, not react-router's `to`.** Any nav item using `to=` alone gets a `null` derived key, and both `NavItem` and `Nav`'s select handlers silently no-op on `null` — this is what made `collapseOnSelect` fully inert since the nav first shipped (Bug 00080). Any future nav/dropdown addition must set an explicit `eventKey` or it will silently fail to participate in selection.
+- **Don't forget `/context-prep` before ending a session** — this continuation itself went one full session stale (missed Bug 00080) because the prior session ended without running it; the committed and working-tree copies had drifted apart as a result.
 
 ## Source-of-truth pointers
 
-- `.claude/strap/work/task/00074.yaml` comment c2 — devops-lead's full verification report for the merged re-encode (real numbers, EXIF-rotation catch); note its 17-file split is off-by-one, corrected in this file above.
-- `.claude/strap/work/task/00075.yaml`, `00076.yaml` — read these for full Task briefs; their `state` fields do not yet reflect actual worktree progress, see Quick resume.
-- `.claude/strap/work/story/00044.yaml` comment c4, `.claude/strap/work/story/00045.yaml` comment c3 — most current per-Story audit trail.
-- `scripts/build-gallery.mjs` at commit `a5825a9` on `feature/strap-onboarding` — Task 00074's merged `.rotate()`/mozjpeg pattern, the reference Task 00076 mirrors.
-- `src/components/common/GalleryHub.jsx`, `GalleryLightbox.jsx` — Task 00075's target files; read GalleryHub's existing docblock before touching.
-- PRs #24-#27 (all merged) — reference examples of the two-stage stacked promotion flow.
+- `.claude/strap/project-docs/v1-perf-baseline.md` — the authoritative V1 comparison doc; Phase-3 section is where this session's numbers still need to land (see Open decisions).
+- `scripts/perf/lh-baseline.mjs` — the re-runnable Lighthouse harness; now correctly targets canonical `/galleries` (Bug 00078's fix).
+- `src/components/common/gallerySets.js` — `galleryHubPath(slug)`, the single mechanism both the nav and legacy redirects now use to preserve gallery-set identity (Bug 00079).
+- `src/components/NavMenu/index.jsx` — nav's `eventKey` props (Bug 00080) and `galleryHubPath()`-based `to=` targets (Bug 00079) now coexist on the same Dropdown.Items without conflict.
+- `src/components/WhatsNew/data/metrics.js` — What's New page's metric tiles; docblock explains current TARGET/SHIPPED sourcing, relevant to the open decision above.
+- `.claude/strap/work/bug/0007{7,8,9,80}.yaml` — full investigation + fix record for this tail of work's four Bugs, including root-cause chains and verification numbers.
 - `.claude/strap/state/{code,devops}-connection.yaml` — GitHub (JeffGoji/Jeffgoji.com-React-Site) + local strap-agile profiles.
+- PRs #28-#31 (all merged); Bug 00080 shipped direct-to-main with no PR.
