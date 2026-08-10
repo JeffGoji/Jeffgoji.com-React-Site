@@ -54,13 +54,19 @@ function NavMenu() {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="ms-auto">
-                        {/* `end` keeps "/" from prefix-matching every route and underlining Home everywhere. */}
-                        <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
-                        <Nav.Link as={NavLink} to="/garage">Car Blogs</Nav.Link>
-                        <Nav.Link as={NavLink} to="/youtube">Videos</Nav.Link>
-                        <Nav.Link as={NavLink} to="/suspension">Suspension</Nav.Link>
+                        {/* `end` keeps "/" from prefix-matching every route and underlining Home everywhere.
+                            `eventKey` is set explicitly on every selectable item below: react-bootstrap derives
+                            its selection key from `href`, but these render through react-router's `to` prop
+                            instead, so without an explicit key every item's derived key is null. Both Nav's own
+                            select handler and NavItem's bail out early on a null key, which silently broke
+                            `collapseOnSelect` — the mobile accordion never retracted on any click, Galleries
+                            leaf selections included (Bug 00080). */}
+                        <Nav.Link as={NavLink} to="/" end eventKey="/">Home</Nav.Link>
+                        <Nav.Link as={NavLink} to="/garage" eventKey="/garage">Car Blogs</Nav.Link>
+                        <Nav.Link as={NavLink} to="/youtube" eventKey="/youtube">Videos</Nav.Link>
+                        <Nav.Link as={NavLink} to="/suspension" eventKey="/suspension">Suspension</Nav.Link>
                         <NavDropdown title="Articles" id="articles-nav-dropdown">
-                            <NavDropdown.Item as={NavLink} to="/goodbye-c8">Goodbye C8</NavDropdown.Item>
+                            <NavDropdown.Item as={NavLink} to="/goodbye-c8" eventKey="/goodbye-c8">Goodbye C8</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Galleries" id="galleries-nav-dropdown">
                             <Dropdown drop="end">
@@ -68,7 +74,7 @@ function NavMenu() {
                                     NB Mazdaspeed Miata
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to={galleryHubPath('nb-hillcountry')}>Texas Hill Country Trip 2023</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nb-hillcountry')} eventKey="nb-hillcountry">Texas Hill Country Trip 2023</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Dropdown drop="end">
@@ -76,8 +82,8 @@ function NavMenu() {
                                     NC Miata
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to={galleryHubPath('nc-eastcoast15')}>East Coast Trip 2015</Dropdown.Item>
-                                    <Dropdown.Item as={Link} to={galleryHubPath('nc-yellowstone15')}>Yellowstone West Coast Trip 2015</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nc-eastcoast15')} eventKey="nc-eastcoast15">East Coast Trip 2015</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nc-yellowstone15')} eventKey="nc-yellowstone15">Yellowstone West Coast Trip 2015</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Dropdown drop="end">
@@ -85,8 +91,8 @@ function NavMenu() {
                                     ND Miata
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to={galleryHubPath('nd-hillcountry')}>Texas Hill Country</Dropdown.Item>
-                                    <Dropdown.Item as={Link} to={galleryHubPath('nd-totd2025')}>Tail of the Dragon 2025</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nd-hillcountry')} eventKey="nd-hillcountry">Texas Hill Country</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nd-totd2025')} eventKey="nd-totd2025">Tail of the Dragon 2025</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Dropdown drop="end">
@@ -94,11 +100,11 @@ function NavMenu() {
                                     C8 Corvette
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item as={Link} to={galleryHubPath('c8-autox')}>Autocross</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('c8-autox')} eventKey="c8-autox">Autocross</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </NavDropdown>
-                        <Nav.Link as={NavLink} to="/whats-new" className="site-nav__link--flag">
+                        <Nav.Link as={NavLink} to="/whats-new" className="site-nav__link--flag" eventKey="/whats-new">
                             What&apos;s New
                         </Nav.Link>
                     </Nav>

@@ -396,6 +396,46 @@ describe('NavMenu mobile collapse', () => {
         expect(collapse).not.toBeNull();
         expect(toggle.getAttribute('aria-controls')).toBe(collapse.id);
     });
+
+    /**
+     * Guards Bug 00080. Every selectable item routes through react-router's
+     * `to` rather than `href`, so react-bootstrap's own event-key derivation
+     * (which falls back to `href`) produced a null key everywhere. Nav's
+     * select handler bails out on a null key before it ever reaches Navbar's
+     * `collapseOnSelect`, so the accordion never retracted on any click. The
+     * toggle's "collapsed" class is driven directly by the `expanded` boolean
+     * (NavbarToggle), independent of the Collapse transition, so it flips
+     * synchronously with the click and needs no animation wait.
+     */
+    it('retracts on the first press of a direct link', () => {
+        const { container } = renderNavAt('/garage');
+        const toggle = container.querySelector('button.navbar-toggler');
+
+        fireEvent.click(toggle);
+        expect(toggle.classList.contains('collapsed')).toBe(false);
+
+        const carBlogs = navLinks(container).find((link) => link.textContent === 'Car Blogs');
+        fireEvent.click(carBlogs);
+
+        expect(toggle.classList.contains('collapsed')).toBe(true);
+    });
+
+    it('stays open while drilling into the Galleries panel, and only retracts once a gallery is picked', () => {
+        const { container } = renderNavAt('/garage');
+        const toggle = container.querySelector('button.navbar-toggler');
+
+        fireEvent.click(toggle);
+        openGalleries(container);
+        expect(toggle.classList.contains('collapsed')).toBe(false);
+
+        fireEvent.click(container.querySelector('#nb-gallery-dropdown-toggle'));
+        expect(toggle.classList.contains('collapsed')).toBe(false);
+
+        const leaf = screen.getByText('Texas Hill Country Trip 2023');
+        fireEvent.click(leaf);
+
+        expect(toggle.classList.contains('collapsed')).toBe(true);
+    });
 });
 
 describe('logo.gif retirement', () => {
