@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import ResponsiveImage from '../common/ResponsiveImage'
+import { galleryHubPath } from '../common/gallerySets'
+import { LATEST_GALLERY_FALLBACK, loadLatestGallery } from '../common/latestGallery'
 
 import { heroes, nightHero } from './heroes'
 
@@ -31,10 +33,32 @@ const pickHero = () => heroes[Math.floor(Math.random() * heroes.length)]
  * ResponsiveImage defers by default. `sizes` is a flat `100vw` because the block
  * is full-bleed at every breakpoint; it is passed unconditionally and lands on
  * the DOM only when the shot actually carries a ladder.
+ *
+ * The ghost CTA points at whichever gallery scripts/build-gallery.mjs found
+ * most recently touched (public/gallery/latest.json), not a fixed set — so
+ * uploading new photos to any gallery, or adding a new one, repoints and
+ * relabels the button on the next build with no code change here.
  */
 function Hero() {
     const [hero] = useState(pickHero)
     const [failed, setFailed] = useState(false)
+    const [latestGallery, setLatestGallery] = useState(LATEST_GALLERY_FALLBACK)
+
+    useEffect(() => {
+        let current = true
+
+        loadLatestGallery().then((result) => {
+            if (!current) {
+                return
+            }
+
+            setLatestGallery({ slug: result.slug, label: result.label })
+        })
+
+        return () => {
+            current = false
+        }
+    }, [])
 
     const shown = failed ? nightHero : hero
 
@@ -73,8 +97,8 @@ function Hero() {
                         <Link className="btn btn--primary" to="/garage">
                             Enter the garage ›
                         </Link>
-                        <Link className="btn btn--ghost" to="/totdgallery">
-                            Tail of the Dragon gallery
+                        <Link className="btn btn--ghost" to={galleryHubPath(latestGallery.slug)}>
+                            {latestGallery.label} gallery
                         </Link>
                     </div>
                 </div>

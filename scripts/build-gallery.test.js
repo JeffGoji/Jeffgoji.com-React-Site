@@ -20,8 +20,11 @@ import {
     GALLERIES,
     buildGallery,
     cleanName,
+    lastCommitDate,
     parseDateAlt,
+    pickLatest,
     sortKeys,
+    writeLatest,
 } from './build-gallery.mjs';
 
 describe('parseDateAlt', () => {
@@ -283,5 +286,106 @@ describe('the manifest a build writes', () => {
         expect(item.description).toBe(`${LABEL} photo taken 11/12/2022 10:13`);
         expect(item.original).toBe(`/gallery/${GALLERY_ID}/display/${DATED}.webp`);
         expect(item.thumbnail).toBe(`/gallery/${GALLERY_ID}/thumbs/${DATED}.webp`);
+    });
+});
+
+/**
+ * Covers the "which gallery moved most recently" summary the home hero's CTA
+ * reads (src/components/common/latestGallery.js). Git commit date, not
+ * filesystem mtime, because Netlify clones fresh for every build and mtime
+ * would land every file at the same checkout time.
+ */
+describe('lastCommitDate', () => {
+    it('returns null for a path git has no history for', () => {
+        expect(lastCommitDate('src/assets/images/does-not-exist-00053')).toBeNull();
+    });
+
+    it('finds a real commit date for a tracked source directory', () => {
+        const date = lastCommitDate(GALLERIES[0].srcDir);
+
+        expect(date).not.toBeNull();
+        expect(new Date(date).toString()).not.toBe('Invalid Date');
+    });
+});
+
+describe('pickLatest', () => {
+    it('returns the entry with the newest updatedAt', () => {
+        const results = [
+            { id: 'a', label: 'A', updatedAt: '2024-01-01T00:00:00.000Z' },
+            { id: 'b', label: 'B', updatedAt: '2026-01-01T00:00:00.000Z' },
+            { id: 'c', label: 'C', updatedAt: '2025-01-01T00:00:00.000Z' },
+        ];
+
+        expect(pickLatest(results)).toEqual(results[1]);
+    });
+
+    it('returns null for an empty list', () => {
+        expect(pickLatest([])).toBeNull();
+    });
+});
+
+describe('buildGallery reports when its source last changed', () => {
+    it('returns id, label, and an ISO updatedAt', async () => {
+        const id = 'fixture-updated-00082';
+        const srcDir = await fs.mkdtemp(path.join(os.tmpdir(), 'gallery-updated-'));
+        const outDir = path.resolve('public/gallery', id);
+
+        try {
+            await sharp({ create: { width: 8, height: 8, channels: 3, background: '#333' } })
+                .jpeg()
+                .toFile(path.join(srcDir, 'a.jpg'));
+
+            const result = await buildGallery({ id, label: 'Fixture Updated', srcDir });
+
+            expect(result).toEqual({
+                id,
+                label: 'Fixture Updated',
+                updatedAt: expect.any(String),
+            });
+            expect(new Date(result.updatedAt).toString()).not.toBe('Invalid Date');
+        } finally {
+            await fs.rm(srcDir, { recursive: true, force: true });
+            await fs.rm(outDir, { recursive: true, force: true });
+        }
+    });
+});
+
+describe('writeLatest', () => {
+    const LATEST_PATH = path.resolve('public/gallery', 'latest.json');
+    let original;
+
+    beforeAll(async () => {
+        original = await fs.readFile(LATEST_PATH, 'utf8').catch(() => null);
+    });
+
+    afterAll(async () => {
+        if (original === null) {
+            await fs.rm(LATEST_PATH, { force: true });
+        } else {
+            await fs.writeFile(LATEST_PATH, original, 'utf8');
+        }
+    });
+
+    it('writes the newest entry as {slug, label, updatedAt}', async () => {
+        await writeLatest([
+            { id: 'older', label: 'Older', updatedAt: '2024-01-01T00:00:00.000Z' },
+            { id: 'newer', label: 'Newer', updatedAt: '2026-01-01T00:00:00.000Z' },
+        ]);
+
+        const written = JSON.parse(await fs.readFile(LATEST_PATH, 'utf8'));
+
+        expect(written).toEqual({
+            slug: 'newer',
+            label: 'Newer',
+            updatedAt: '2026-01-01T00:00:00.000Z',
+        });
+    });
+
+    it('writes nothing for an empty result list', async () => {
+        await fs.rm(LATEST_PATH, { force: true });
+
+        await writeLatest([]);
+
+        await expect(fs.access(LATEST_PATH)).rejects.toThrow();
     });
 });

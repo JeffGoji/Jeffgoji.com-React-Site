@@ -19,14 +19,16 @@ import { createRequire } from 'node:module';
 import { resolve, dirname } from 'node:path';
 
 import * as sass from 'sass';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { HEROES } from '../../../scripts/build-heroes.mjs';
 
 import Hero from './index';
 import { heroes, nightHero, withRenditions } from './heroes';
+import { galleryHubPath } from '../common/gallerySets';
+import { LATEST_GALLERY_FALLBACK, LATEST_GALLERY_PUBLIC_PATH } from '../common/latestGallery';
 
 /**
  * Resolved from the Vitest root rather than import.meta.url: under jsdom
@@ -75,8 +77,32 @@ const renderHero = () =>
 const heroImage = () => document.querySelector('.hero__media img');
 const nameplate = () => document.querySelector('.hero__nameplate-name').textContent;
 
+/** Mirrors YouTube/VideoTeaser.test.jsx's stubFetch — same runtime-manifest shape. */
+function stubFetch(response) {
+    const fetchImpl = vi.fn(async () => response);
+
+    vi.stubGlobal('fetch', fetchImpl);
+
+    return fetchImpl;
+}
+
+const latestGalleryResponseOf = (payload) => ({
+    ok: true,
+    json: async () => payload,
+});
+
+/**
+ * Resolves to the fallback gallery by default, so every test that does not
+ * care about the CTA's dynamic destination sees the same value it always
+ * displayed before this fetch existed.
+ */
+beforeEach(() => {
+    stubFetch(latestGalleryResponseOf(LATEST_GALLERY_FALLBACK));
+});
+
 afterEach(() => {
     cleanup();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
 });
 
@@ -407,14 +433,73 @@ describe('the hero markup is the mockups block', () => {
 });
 
 describe('both CTAs stay inside the SPA', () => {
-    it('routes to paths App.jsx serves', () => {
+    it('routes the garage CTA to a path App.jsx serves', () => {
         renderHero();
 
-        const targets = [...document.querySelectorAll('.hero__cta a')].map((anchor) =>
+        const [garage] = [...document.querySelectorAll('.hero__cta a')].map((anchor) =>
             anchor.getAttribute('href')
         );
 
-        expect(targets).toEqual(['/garage', '/totdgallery']);
+        expect(garage).toBe('/garage');
+    });
+
+    it('shows the fallback gallery before the fetch resolves', () => {
+        stubFetch(new Promise(() => {}));
+        renderHero();
+
+        const [, ghost] = document.querySelectorAll('.hero__cta a');
+
+        expect(ghost.getAttribute('href')).toBe(galleryHubPath(LATEST_GALLERY_FALLBACK.slug));
+        expect(ghost.textContent).toBe(`${LATEST_GALLERY_FALLBACK.label} gallery`);
+    });
+
+    it('reads the path scripts/build-gallery.mjs writes', async () => {
+        const fetchImpl = stubFetch(latestGalleryResponseOf(LATEST_GALLERY_FALLBACK));
+        renderHero();
+
+        await waitFor(() => expect(fetchImpl).toHaveBeenCalledWith(LATEST_GALLERY_PUBLIC_PATH));
+    });
+
+    /**
+     * The load-bearing case: uploading photos to a different gallery (or
+     * adding a brand new one) repoints and relabels the button with no code
+     * change, because the build script — not this component — decides which
+     * gallery is latest.
+     */
+    it('points at whichever gallery the build marked as latest', async () => {
+        stubFetch(
+            latestGalleryResponseOf({
+                slug: 'nd-miatasatthegap2026',
+                label: 'Miatas at the Gap 2026',
+            })
+        );
+        renderHero();
+
+        const link = await screen.findByRole('link', { name: 'Miatas at the Gap 2026 gallery' });
+
+        expect(link.getAttribute('href')).toBe(galleryHubPath('nd-miatasatthegap2026'));
+    });
+
+    it('falls back to the default gallery when the fetch fails', async () => {
+        stubFetch({ ok: false, json: async () => ({}) });
+        renderHero();
+
+        const link = await screen.findByRole('link', {
+            name: `${LATEST_GALLERY_FALLBACK.label} gallery`,
+        });
+
+        expect(link.getAttribute('href')).toBe(galleryHubPath(LATEST_GALLERY_FALLBACK.slug));
+    });
+
+    it('falls back to the default gallery when the response carries no usable slug', async () => {
+        stubFetch(latestGalleryResponseOf({ slug: '', label: '' }));
+        renderHero();
+
+        const link = await screen.findByRole('link', {
+            name: `${LATEST_GALLERY_FALLBACK.label} gallery`,
+        });
+
+        expect(link.getAttribute('href')).toBe(galleryHubPath(LATEST_GALLERY_FALLBACK.slug));
     });
 
     it('carries the mockups primary and ghost treatments', () => {

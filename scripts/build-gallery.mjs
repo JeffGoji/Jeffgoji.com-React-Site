@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import fg from "fast-glob";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -99,6 +100,73 @@ export const GALLERIES = [
 
 // Output under /public so it’s served as static files
 const OUT_ROOT = "public/gallery";
+
+/**
+ * The git commit date of the newest change under `srcDir`, or `null` if git
+ * has nothing to say (no repo, or no commit has touched the path yet).
+ *
+ * Filesystem mtime is not a usable substitute: Netlify clones the repo fresh
+ * for every build, which stamps every file with the checkout time and erases
+ * any real difference between a gallery updated last year and one updated
+ * yesterday. `execFileSync` (not a shelled-out string) so a `srcDir` with
+ * spaces — this repo's own working copy lives under one — never needs
+ * quoting.
+ */
+export function lastCommitDate(srcDir) {
+    try {
+        const out = execFileSync("git", ["log", "-1", "--format=%aI", "--", srcDir], {
+            stdio: ["ignore", "pipe", "ignore"],
+        })
+            .toString()
+            .trim();
+        return out || null;
+    } catch {
+        return null;
+    }
+}
+
+/** Fallback for `lastCommitDate`: the newest mtime among a gallery's own source files. */
+async function newestMtimeIso(files) {
+    let newest = 0;
+    for (const f of files) {
+        const { mtimeMs } = await fs.stat(f);
+        if (mtimeMs > newest) newest = mtimeMs;
+    }
+    return new Date(newest).toISOString();
+}
+
+/**
+ * Picks the entry with the newest `updatedAt`, or `null` for an empty list.
+ * Pure so the "which gallery is latest" decision is testable without a real
+ * build.
+ */
+export function pickLatest(results) {
+    return results.reduce(
+        (latest, r) => (!latest || new Date(r.updatedAt) > new Date(latest.updatedAt) ? r : latest),
+        null
+    );
+}
+
+/**
+ * Writes `public/gallery/latest.json`, the summary the home hero's CTA reads
+ * to point at whichever gallery moved most recently — see
+ * src/components/common/latestGallery.js.
+ */
+export async function writeLatest(results) {
+    const latest = pickLatest(results);
+    if (!latest) return;
+
+    await ensureDir(path.resolve(OUT_ROOT));
+    await fs.writeFile(
+        path.resolve(OUT_ROOT, "latest.json"),
+        JSON.stringify(
+            { slug: latest.id, label: latest.label, updatedAt: latest.updatedAt },
+            null,
+            2
+        ),
+        "utf8"
+    );
+}
 
 // Sizes
 const THUMB_W = 320;
@@ -214,6 +282,8 @@ export async function buildGallery(g) {
 
     files.sort((a, b) => sortKeys(path.basename(a), path.basename(b)));
 
+    const updatedAt = lastCommitDate(g.srcDir) ?? (await newestMtimeIso(files));
+
     const items = [];
     const skipped = [];
 
@@ -244,13 +314,17 @@ export async function buildGallery(g) {
     );
 
     console.log(`[gallery:${g.id}] done: ${items.length} items, skipped: ${skipped.length}`);
+
+    return { id: g.id, label: g.label, updatedAt };
 }
 
 async function main() {
     await ensureDir(path.resolve(OUT_ROOT));
+    const results = [];
     for (const g of GALLERIES) {
-        await buildGallery(g);
+        results.push(await buildGallery(g));
     }
+    await writeLatest(results);
 }
 
 /**
