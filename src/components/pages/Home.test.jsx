@@ -19,7 +19,7 @@ import { createRequire } from 'node:module';
 import { resolve, dirname } from 'node:path';
 
 import * as sass from 'sass';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
@@ -81,7 +81,24 @@ const renderHome = () =>
 
 const previewCards = (container) => [...container.querySelectorAll('.car-card')];
 
-afterEach(cleanup);
+/**
+ * The videos strip fetches /videos/manifest.json after mount. Stubbed to the
+ * shape a missing manifest takes, because that is Home's steady state until the
+ * playlist is configured and it is the branch this suite's composition
+ * assertions have to hold across — the section renders its head either way. The
+ * teaser's own populated behaviour is covered in YouTube/VideoTeaser.test.jsx.
+ */
+beforeEach(() => {
+    vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => ({ ok: false, json: async () => ({}) }))
+    );
+});
+
+afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+});
 
 describe('the home surface composes the four V2 sections', () => {
     it('mounts the hero, the driver intro, the garage preview and the videos', () => {
@@ -214,9 +231,15 @@ describe('the pre-V2 eager composition is retired', () => {
         expect(HOME_SOURCE).toContain("import CarCard from '../common/CarCard'");
     });
 
-    /** The videos section serves /youtube too; Home consumes it, it does not own it. */
-    it('takes the video grid from the module both surfaces share', () => {
-        expect(HOME_SOURCE).toContain("import VideoGrid from '../YouTube'");
+    /**
+     * The videos section reads the same build-time manifest /youtube reads, but
+     * through the teaser rather than the hub: the hub owns an <h1> and a filter
+     * bar, and mounting it here would give the page a second masthead under the
+     * hero — the same reason the garage strip is not the garage hub.
+     */
+    it('takes the videos strip from the teaser, not from the hub', () => {
+        expect(HOME_SOURCE).toContain("import VideoTeaser from '../YouTube/VideoTeaser'");
+        expect(HOME_SOURCE).not.toMatch(/from '\.\.\/YouTube'/);
     });
 });
 

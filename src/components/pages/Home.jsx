@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import Hero from '../Hero';
 import DriverIntro from '../DriverIntro';
-import VideoGrid from '../YouTube';
+import VideoTeaser from '../YouTube/VideoTeaser';
 import CarCard from '../common/CarCard';
 import carsData from '../Garage/Cars.json';
 
@@ -20,6 +20,10 @@ export const PREVIEW_COUNT = 3;
  * hub component here gave the page a second masthead with its own <h1> under
  * the hero's; the preview strip below reuses the shared CarCard directly
  * instead, so the hub's chrome stays on the route that owns it.
+ *
+ * The videos section follows the same rule for the same reason: /youtube's hub
+ * carries its own <h1> and filter bar, so Home mounts VideoTeaser — a three-card
+ * strip reading the same build-time manifest — rather than the hub itself.
  *
  * The strip does not filter the retired car out of the top three. CarCard reads
  * `bloglink` and renders a retired car as a plain <article> rather than a link,
@@ -54,7 +58,7 @@ function Home() {
                     </div>
                 </div>
             </section>
-            <VideoGrid />
+            <VideoTeaser />
         </main>
     );
 }

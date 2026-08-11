@@ -1,44 +1,62 @@
 import { useState } from 'react';
 
-/**
- * hqdefault is the one rendition YouTube guarantees for every video — maxres
- * 404s on anything never uploaded at 720p+, which would leave a broken poster.
- * It is 4:3 with letterbox bars; the 16:9 frame crops them off.
- */
-const posterUrlFor = (id) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-
-/**
- * autoplay=1 is what keeps the facade a one-click affordance: the click that
- * mounts the player is the click that starts it, rather than the visitor paying
- * for the swap with a second click on YouTube's own play button.
- */
-const embedUrlFor = (id) => `https://www.youtube.com/embed/${id}?autoplay=1`;
+import { VIDEO_COPY } from './videoCopy';
+import { embedUrlFor, formatPublished, posterUrlFor } from './videoFormat';
 
 /**
  * One video, mounted as a poster facade.
  *
- * The card owns whether it is playing; the grid hands it data and nothing else.
- * Until the visitor clicks, there is no iframe in the tree at all — the poster
- * is a plain <img>, so the surface costs three image requests instead of three
- * embedded YouTube players, each of which pulls its own document, player bundle
- * and cookies before anyone has asked to watch anything.
+ * FACADE, PRESERVED
+ * Until the visitor clicks there is no iframe in the tree at all, only a lazy
+ * <img>. A thirteen-card grid of eager embeds would pull thirteen YouTube
+ * documents, thirteen player bundles and thirteen sets of cookies before anyone
+ * asked to watch anything, and the hub only gets bigger from here. This is the
+ * one mechanism carried forward unchanged from the pre-hub VideoCard.
  *
- * The facade is a <button> rather than the mockup's inert <div>: it is the
- * click target, so it has to be reachable by keyboard and announce itself.
+ * TWO ACTIVATION MODES
+ * `onOpen` decides which. Without it the card swaps its own poster for a player
+ * in place, which is what the home teaser wants — one card, no overlay chrome.
+ * With it the card reports the click upward and stays a poster, which is how the
+ * hub keeps exactly one iframe in the document no matter how many cards are on
+ * screen, and how it avoids a grid cell turning into a player while its
+ * neighbours stay stills.
+ *
+ * The facade is a <button> rather than an inert <div>: it is the click target,
+ * so it has to be reachable by keyboard and announce itself.
+ *
+ * `size` drives density only. It never changes which metadata is present — a
+ * card that drops a field at one size makes that field look optional to whoever
+ * ports this next.
+ *
+ * The card owns whether it is playing and nothing else. Which cards exist, in
+ * what order, and which one the overlay is showing are all the hub's.
  *
  * @param {object} props
- * @param {import('./videos').Video} props.video
+ * @param {import('./videoManifest').VideoItem} props.video
+ * @param {'sm'|'md'|'lg'} [props.size]
+ * @param {(video: import('./videoManifest').VideoItem) => void} [props.onOpen]
+ * @param {boolean} [props.showSeries]
  */
-function VideoCard({ video }) {
+function VideoCard({ video, size = 'md', onOpen, showSeries = false }) {
     const [isPlaying, setIsPlaying] = useState(false);
 
+    const activate = () => {
+        if (onOpen) {
+            onOpen(video);
+
+            return;
+        }
+
+        setIsPlaying(true);
+    };
+
     return (
-        <article className="video">
+        <article className={`video video--${size}`}>
             {isPlaying ? (
                 <div className="video__frame">
                     <iframe
                         className="video__player"
-                        src={embedUrlFor(video.id)}
+                        src={embedUrlFor(video.videoId)}
                         title={video.title}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
@@ -47,24 +65,31 @@ function VideoCard({ video }) {
             ) : (
                 <button
                     type="button"
-                    className="video__frame"
-                    onClick={() => setIsPlaying(true)}
-                    aria-label={`Play ${video.title}`}
+                    className="video__frame video__frame--button media--editorial"
+                    onClick={activate}
+                    aria-label={`${VIDEO_COPY.card.playPrefix} ${video.title}`}
                 >
                     <img
                         className="video__poster"
-                        src={posterUrlFor(video.id)}
+                        src={posterUrlFor(video)}
                         alt=""
                         width="480"
                         height="360"
                         loading="lazy"
+                        decoding="async"
                     />
                     <span className="video__play" aria-hidden="true" />
                 </button>
             )}
+
             <div className="video__body">
-                <div className="card__kicker">{video.meta}</div>
-                <h4 className="video__title">{video.title}</h4>
+                {showSeries && video.seriesTitle && (
+                    <div className="card__kicker">{video.seriesTitle}</div>
+                )}
+                <h3 className="video__title">{video.title}</h3>
+                <p className="video__meta">
+                    <span>{formatPublished(video.publishedAt)}</span>
+                </p>
             </div>
         </article>
     );

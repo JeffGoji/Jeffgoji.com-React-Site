@@ -1,0 +1,910 @@
+/* ============================================================================
+   MOCKUP STYLES — Videos hub design exploration. Not loaded by the app.
+   ---------------------------------------------------------------------------
+   Every value here resolves through the V2 token layer in src/scss/_tokens.scss
+   (--ink-*, --goji-red, --space-*, --font-*, --radius-*, --dur-*). No literal
+   colours, no literal spacing: a mockup that hardcodes #1A1A1F is a mockup that
+   silently stops matching the site the next time the palette moves.
+
+   All net-new names are prefixed `vx-` so nothing here can collide with the
+   production `.video*` block in styles.scss. Unprefixed classes used by the
+   mockups -- .eyebrow, .chip, .spec-row, .label, .select, .btn--primary,
+   .btn--ghost, .card__kicker, .media--editorial -- are the SITE'S OWN and are
+   deliberately borrowed rather than reimplemented. That borrowing is the point:
+   if a mockup looks native it is because it is wearing the real component
+   language, not an approximation of it.
+   ============================================================================ */
+
+/* --- SHARED HUB CHROME --------------------------------------------------- */
+
+.vx-hub {
+    background: var(--color-bg);
+    color: var(--color-text);
+}
+
+.vx-hub__inner {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-5);
+}
+
+.vx-hub__head {
+    padding-block: var(--space-7);
+    border-bottom: var(--hairline);
+    background: var(--ink-1000);
+}
+
+.vx-hub__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--fs-h1);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-mega);
+    text-transform: uppercase;
+    color: var(--color-heading);
+}
+
+.vx-hub__subhead {
+    margin: var(--space-7) 0 var(--space-4);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-h3);
+    letter-spacing: var(--tracking-mega);
+    text-transform: uppercase;
+    color: var(--color-heading);
+}
+
+.vx-hub__lead {
+    max-width: 60ch;
+    margin-top: var(--space-4);
+    margin-bottom: 0;
+    font-size: var(--fs-lead);
+    color: var(--text-mid);
+}
+
+.vx-hub__channel {
+    color: var(--goji-red);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.vx-hub__channel:hover {
+    color: var(--goji-red-bright);
+}
+
+.vx-hub__chooser {
+    margin-top: var(--space-5);
+    align-items: center;
+}
+
+.vx-hub__select {
+    max-width: 320px;
+}
+
+.vx-hub__body {
+    padding-block: var(--space-7);
+}
+
+/* The same height reservation GalleryHub had to grow after Bug 00077: the list
+   arrives after mount, so a body holding one line of status text would inject a
+   full grid under the footer and shift the page by its whole height. */
+.vx-hub__body--reserved {
+    min-height: 100vh;
+}
+
+.vx-status {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text-lo);
+}
+
+/* --- CARD ---------------------------------------------------------------- */
+
+.vx-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--color-surface);
+    border: var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition:
+        border-color var(--dur) var(--ease-out),
+        transform var(--dur) var(--ease-out);
+}
+
+.vx-card:hover {
+    border-color: var(--ink-400);
+    transform: translateY(-2px);
+}
+
+/* The frame is a <button> until a player mounts, so it also has to undo the
+   chrome the user agent gives a button. */
+.vx-card__frame {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    border: 0;
+    background: var(--ink-800);
+    isolation: isolate;
+}
+
+.vx-card__frame--button {
+    cursor: pointer;
+}
+
+.vx-card__poster,
+.vx-card__player {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Production dims its poster to 0.5 so the play button holds contrast against a
+   bright frame grab. That is a heavy price on a hub whose whole job is to show
+   the photography, so the dimming moves into a bottom-weighted scrim below and
+   the poster keeps its own brightness. */
+.vx-card__poster {
+    object-fit: cover;
+    transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.vx-card__frame--button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+        180deg,
+        rgba(5, 5, 6, 0.1) 0%,
+        rgba(5, 5, 6, 0) 45%,
+        rgba(5, 5, 6, 0.75) 100%
+    );
+}
+
+.vx-card__frame--button:hover .vx-card__poster {
+    transform: scale(1.05);
+}
+
+.vx-card__frame--button:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+}
+
+.vx-card__play {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    width: 56px;
+    height: 56px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--goji-red);
+    color: var(--color-on-accent);
+    box-shadow: var(--shadow-card);
+    transition:
+        background var(--dur-fast),
+        transform var(--dur-fast) var(--ease-out);
+}
+
+.vx-card__play::after {
+    content: '';
+    margin-left: 4px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 16px solid var(--color-on-accent);
+}
+
+.vx-card__play--lg {
+    width: 76px;
+    height: 76px;
+}
+
+.vx-card__play--lg::after {
+    border-top-width: 14px;
+    border-bottom-width: 14px;
+    border-left-width: 22px;
+}
+
+.vx-card__frame--button:hover .vx-card__play,
+.vx-card__frame--button:focus-visible .vx-card__play {
+    background: var(--goji-red-bright);
+    transform: scale(1.06);
+}
+
+/* Duration reads in the timing-sheet voice the rest of the site uses for data,
+   which is what makes it legible as a fact rather than as a label. */
+.vx-card__duration {
+    position: absolute;
+    right: var(--space-2);
+    bottom: var(--space-2);
+    z-index: 2;
+    padding: 2px 7px;
+    border-radius: var(--radius-sm);
+    background: rgba(5, 5, 6, 0.78);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-hi);
+}
+
+.vx-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+/* Clamped at two lines so a long title cannot make one grid row taller than its
+   neighbours. Card titles are h3 for document order, not for size. */
+.vx-card__title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-h4);
+    line-height: var(--lh-snug);
+    color: var(--color-heading);
+}
+
+.vx-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    margin-top: auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-lo);
+}
+
+/* The duration is already burned into the poster badge; the meta line repeats it
+   only where the card is large enough that the badge sits far from the text. */
+.vx-card--sm .vx-card__meta-duration,
+.vx-card--md .vx-card__meta-duration {
+    display: none;
+}
+
+.vx-card--sm .vx-card__title {
+    font-size: var(--fs-body);
+}
+
+.vx-card--sm .vx-card__body {
+    padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
+.vx-card--lg .vx-card__title {
+    font-size: var(--fs-h3);
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
+.vx-card--lg .vx-card__body {
+    padding: var(--space-5) var(--space-6) var(--space-6);
+}
+
+/* --- GRIDS --------------------------------------------------------------- */
+
+/* auto-fill against a floor is the whole responsive story, exactly as
+   .gallery-grid does it: column count falls out of the measure at every width,
+   so no breakpoint is needed for the grid itself. */
+.vx-grid {
+    display: grid;
+    gap: var(--space-5);
+}
+
+.vx-grid--sm {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-4);
+}
+
+.vx-grid--md {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.vx-grid--lg {
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+}
+
+.vx-lead {
+    max-width: 720px;
+}
+
+/* --- OPTION A: FEATURED -------------------------------------------------- */
+
+.vx-featured {
+    border-bottom: var(--hairline);
+    background: linear-gradient(180deg, var(--ink-1000) 0%, var(--color-bg) 100%);
+}
+
+.vx-featured__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: center;
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-7) var(--space-5);
+}
+
+.vx-featured__frame {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    border: var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--ink-800);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.vx-featured__frame--button {
+    cursor: pointer;
+}
+
+.vx-featured__frame--button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(5, 5, 6, 0) 35%,
+        rgba(5, 5, 6, 0.55) 100%
+    );
+}
+
+.vx-featured__frame--button:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 3px;
+}
+
+.vx-featured__title {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--fs-h2);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-mega);
+    text-transform: uppercase;
+    color: var(--color-heading);
+}
+
+.vx-featured__desc {
+    max-width: 52ch;
+    margin: 0 0 var(--space-4);
+    color: var(--text-mid);
+}
+
+.vx-featured__specs {
+    margin-bottom: var(--space-5);
+}
+
+.vx-featured__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.vx-featured--skeleton {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: center;
+    margin-bottom: var(--space-7);
+    border: 0;
+    background: none;
+}
+
+/* --- OPTION A: RAILS ----------------------------------------------------- */
+
+.vx-rail {
+    padding-block: var(--space-6);
+    border-bottom: var(--hairline);
+}
+
+.vx-rail:last-child {
+    border-bottom: 0;
+}
+
+.vx-rail__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+}
+
+.vx-rail__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-h3);
+    letter-spacing: var(--tracking-mega);
+    text-transform: uppercase;
+    color: var(--color-heading);
+}
+
+.vx-rail__blurb {
+    max-width: 56ch;
+    margin: var(--space-1) 0 0;
+    font-size: var(--fs-sm);
+    color: var(--text-lo);
+}
+
+.vx-rail__controls {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.vx-rail__count {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+}
+
+.vx-rail__nav {
+    display: flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: var(--hairline);
+    border-radius: var(--radius-sm);
+    background: var(--ink-800);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--text-hi);
+    cursor: pointer;
+    transition:
+        border-color var(--dur-fast),
+        color var(--dur-fast);
+}
+
+.vx-rail__nav:hover {
+    border-color: var(--goji-red);
+    color: var(--goji-red-bright);
+}
+
+.vx-rail__nav:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+}
+
+/* scroll-padding matches the container inset so a snapped card lands flush with
+   the section head above it rather than against the viewport edge. */
+.vx-rail__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(260px, 1fr);
+    gap: var(--space-4);
+    overflow-x: auto;
+    padding-bottom: var(--space-3);
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--space-1);
+    scrollbar-color: var(--ink-400) transparent;
+}
+
+.vx-rail__item {
+    scroll-snap-align: start;
+}
+
+@media (min-width: 1024px) {
+    .vx-rail__track {
+        grid-auto-columns: minmax(0, calc(33.333% - var(--space-4)));
+    }
+}
+
+/* --- OPTION B: FILTER BAR ------------------------------------------------ */
+
+/* Sticky because the two chip rows are the only way back out of a filtered view,
+   and a visitor deep in a long grid should not have to scroll to the top to
+   change their mind. */
+.vx-filterbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding-block: var(--space-4);
+    border-bottom: var(--hairline);
+    background: rgba(15, 15, 18, 0.94);
+    backdrop-filter: blur(8px);
+}
+
+.vx-filterbar__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+    margin-bottom: var(--space-3);
+}
+
+.vx-filterbar__row:last-child {
+    margin-bottom: 0;
+}
+
+.vx-filterbar__row--end {
+    justify-content: flex-end;
+}
+
+.vx-filterbar__label {
+    min-width: 62px;
+}
+
+.vx-filterbar__count {
+    margin-right: auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+}
+
+.vx-filterbar__sort {
+    max-width: 200px;
+}
+
+.vx-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+/* .chip is a static data badge everywhere else on the site; as a control it also
+   needs a pointer, a hover and a pressed state that is not colour alone -- hence
+   the border weight change alongside the fill. */
+.vx-chip {
+    cursor: pointer;
+    transition:
+        background var(--dur-fast),
+        border-color var(--dur-fast),
+        color var(--dur-fast);
+}
+
+.vx-chip:hover {
+    border-color: var(--ink-400);
+    color: var(--text-hi);
+}
+
+.vx-chip:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+}
+
+.vx-chip--on {
+    background: var(--goji-red);
+    border-color: var(--goji-red);
+    color: var(--color-on-accent);
+    font-weight: 700;
+}
+
+.vx-chip--on:hover {
+    background: var(--goji-red-bright);
+    border-color: var(--goji-red-bright);
+    color: var(--color-on-accent);
+}
+
+.btn--sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--fs-xs);
+}
+
+.vx-filterbar__reset:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* --- OPTION B: PLAYER OVERLAY -------------------------------------------- */
+
+.vx-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-5);
+    background: rgba(5, 5, 6, 0.88);
+    overflow-y: auto;
+}
+
+.vx-modal__panel {
+    position: relative;
+    width: min(960px, 100%);
+    border: var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-pop);
+    overflow: hidden;
+}
+
+.vx-modal__panel:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 3px;
+}
+
+.vx-modal__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--ink-1000);
+}
+
+.vx-modal__close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    z-index: 2;
+    display: flex;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: var(--hairline);
+    border-radius: 50%;
+    background: rgba(5, 5, 6, 0.7);
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--text-hi);
+    cursor: pointer;
+}
+
+.vx-modal__close:hover {
+    border-color: var(--goji-red);
+    color: var(--goji-red-bright);
+}
+
+.vx-modal__close:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+}
+
+.vx-modal__body {
+    padding: var(--space-5) var(--space-6) var(--space-6);
+}
+
+.vx-modal__title {
+    margin: var(--space-2) 0 var(--space-4);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--fs-h3);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-mega);
+    text-transform: uppercase;
+    color: var(--color-heading);
+}
+
+.vx-modal__specs {
+    margin-bottom: var(--space-4);
+}
+
+.vx-modal__desc {
+    max-width: 68ch;
+    margin-bottom: var(--space-5);
+    font-size: var(--fs-read);
+    line-height: var(--lh-read);
+    color: var(--color-text);
+}
+
+/* --- STATES -------------------------------------------------------------- */
+
+.vx-state {
+    max-width: 60ch;
+    margin-block: var(--space-7);
+    padding: var(--space-6);
+    border: var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+}
+
+.vx-state--error {
+    border-left: var(--accent-bar);
+}
+
+.vx-state__title {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-h3);
+    text-transform: uppercase;
+    color: var(--color-heading);
+}
+
+.vx-state__body {
+    margin-bottom: var(--space-5);
+    color: var(--text-mid);
+}
+
+.vx-state__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+/* The shimmer is held behind the motion query for the same reason the editorial
+   grade's transitions are: a loading state that animates is the worst possible
+   thing to force on a visitor who asked for no animation. */
+.vx-skeleton {
+    pointer-events: none;
+}
+
+.vx-skeleton__block,
+.vx-skeleton__line {
+    background: linear-gradient(
+        90deg,
+        var(--ink-800) 0%,
+        var(--ink-600) 50%,
+        var(--ink-800) 100%
+    );
+    background-size: 200% 100%;
+    border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .vx-skeleton__block,
+    .vx-skeleton__line {
+        animation: vx-shimmer 1.6s linear infinite;
+    }
+}
+
+@keyframes vx-shimmer {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
+}
+
+.vx-skeleton__line {
+    height: 12px;
+    margin-bottom: var(--space-2);
+}
+
+.vx-skeleton__line--kicker {
+    width: 35%;
+    height: 9px;
+}
+
+.vx-skeleton__line--short {
+    width: 60%;
+}
+
+/* --- NAV COMPARISON ------------------------------------------------------ */
+
+.vx-navdemo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-5);
+    padding-block: var(--space-6);
+}
+
+.vx-navdemo__panel {
+    padding: var(--space-5);
+    border: var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+}
+
+.vx-navdemo__bar {
+    margin-block: var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    border: var(--hairline);
+    border-radius: var(--radius);
+    background: var(--ink-1000);
+}
+
+.vx-navdemo__note {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--text-lo);
+}
+
+/* --- PREVIEW HARNESS ----------------------------------------------------- */
+
+.vx-preview__bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 2px solid var(--goji-red);
+    background: var(--ink-1000);
+}
+
+.vx-preview__brand {
+    margin-right: auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--goji-red);
+}
+
+.vx-preview__group {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.vx-preview__stage {
+    border-top: var(--hairline);
+}
+
+/* --- RESPONSIVE ---------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .vx-featured__inner,
+    .vx-featured--skeleton {
+        grid-template-columns: 1fr;
+        gap: var(--space-5);
+    }
+
+    .vx-modal {
+        padding: 0;
+    }
+
+    .vx-modal__panel {
+        border-radius: 0;
+        min-height: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .vx-hub__head,
+    .vx-hub__body {
+        padding-block: var(--space-6);
+    }
+
+    .vx-grid--sm,
+    .vx-grid--md,
+    .vx-grid--lg {
+        grid-template-columns: 1fr;
+    }
+
+    .vx-rail__track {
+        grid-auto-columns: 78%;
+    }
+
+    /* The rail arrows are a mouse affordance. On touch the swipe is the gesture,
+       and two 34px targets in a row are a worse one. */
+    .vx-rail__nav {
+        display: none;
+    }
+
+    .vx-filterbar__row--end {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 360px) {
+    .vx-hub__inner,
+    .vx-featured__inner {
+        padding-inline: var(--space-4);
+    }
+}

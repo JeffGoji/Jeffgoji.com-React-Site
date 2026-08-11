@@ -4,25 +4,37 @@
  * Environment is pinned per-file, matching the convention the rest of the suite
  * uses.
  *
- * Covers Task 00031 at the card level: the facade holds the player out of the
- * document until the visitor asks for it, and the click hands over to the right
- * video. The grid's own contract lives in index.test.jsx.
+ * Covers the card's own contract: the facade holds the player out of the
+ * document until the visitor asks for it, and the click either swaps in place or
+ * reports upward depending on whether the surface owns an overlay. The hub's
+ * contract lives in index.test.jsx, the teaser's in VideoTeaser.test.jsx.
+ *
+ * Copy is asserted through VIDEO_COPY rather than as English literals, so
+ * rewording the site does not fail the suite.
  */
 
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
 import VideoCard from './VideoCard';
+import { VIDEO_COPY } from './videoCopy';
 
+/** One manifest item, exactly as scripts/build-videos.mjs emits it. */
 const VIDEO = {
-    id: 'UySrXUfHA_k',
+    videoId: 'UySrXUfHA_k',
     title: 'A run at the LSR PCA autocross',
-    meta: 'Autocross · March 2025',
+    description: 'A clean run at the LSR PCA event.',
+    publishedAt: '2025-03-04T18:00:00+00:00',
+    thumbnailUrl: 'https://i2.ytimg.com/vi/UySrXUfHA_k/hqdefault.jpg',
+    playlistId: 'PLtestPlaylist01',
+    seriesTitle: 'jeffgoji.com',
 };
+
+const PLAY_NAME = `${VIDEO_COPY.card.playPrefix} ${VIDEO.title}`;
 
 afterEach(cleanup);
 
-const renderCard = (video = VIDEO) => render(<VideoCard video={video} />);
+const renderCard = (props = {}) => render(<VideoCard video={VIDEO} {...props} />);
 
 describe('the facade costs nothing until it is clicked', () => {
     it('mounts no iframe', () => {
@@ -42,11 +54,22 @@ describe('the facade costs nothing until it is clicked', () => {
         expect(container.innerHTML).not.toContain('youtube.com/embed');
     });
 
-    it('shows the poster instead', () => {
+    it('shows the manifests own poster', () => {
         const { container } = renderCard();
 
         expect(container.querySelector('.video__poster').getAttribute('src')).toBe(
-            'https://img.youtube.com/vi/UySrXUfHA_k/hqdefault.jpg'
+            VIDEO.thumbnailUrl
+        );
+    });
+
+    /** hqdefault is the one rendition YouTube guarantees for every video. */
+    it('falls back to hqdefault when the manifest carried no thumbnail', () => {
+        const { container } = render(
+            <VideoCard video={{ ...VIDEO, thumbnailUrl: '' }} />
+        );
+
+        expect(container.querySelector('.video__poster').getAttribute('src')).toBe(
+            `https://img.youtube.com/vi/${VIDEO.videoId}/hqdefault.jpg`
         );
     });
 
@@ -86,7 +109,7 @@ describe('the facade is operable, not just clickable', () => {
     it('announces which video it plays', () => {
         renderCard();
 
-        expect(screen.getByRole('button', { name: `Play ${VIDEO.title}` })).toBeDefined();
+        expect(screen.getByRole('button', { name: PLAY_NAME })).toBeDefined();
     });
 
     /**
@@ -106,11 +129,59 @@ describe('the facade is operable, not just clickable', () => {
     });
 });
 
-describe('clicking hands over to the player', () => {
+describe('the body carries only what the feed can supply', () => {
+    it('heads the card at level 3, under whatever owns the surface', () => {
+        renderCard();
+
+        expect(screen.getByRole('heading', { level: 3 }).textContent).toBe(VIDEO.title);
+    });
+
+    it('prints the published month and year', () => {
+        const { container } = renderCard();
+
+        expect(container.querySelector('.video__meta').textContent).toBe('Mar 2025');
+    });
+
+    /**
+     * The RSS feed carries neither, and the CPO dropped both rather than
+     * hand-maintaining them. A formatter reappearing here would put an invented
+     * number on a card.
+     */
+    it('shows no duration badge and no view count', () => {
+        const { container } = renderCard();
+
+        expect(container.querySelector('.video__duration')).toBeNull();
+        expect(container.textContent).not.toMatch(/views/i);
+        expect(container.textContent).not.toMatch(/\d+:\d\d/);
+    });
+
+    /** One playlist means one series, so naming it on every card is noise. */
+    it('keeps the series kicker off by default', () => {
+        const { container } = renderCard();
+
+        expect(container.querySelector('.card__kicker')).toBeNull();
+    });
+
+    it('shows the series kicker when the surface asks for it', () => {
+        const { container } = renderCard({ showSeries: true });
+
+        expect(container.querySelector('.card__kicker').textContent).toBe(VIDEO.seriesTitle);
+    });
+
+    it('omits the kicker when the manifest carried no series title', () => {
+        const { container } = render(
+            <VideoCard video={{ ...VIDEO, seriesTitle: '' }} showSeries />
+        );
+
+        expect(container.querySelector('.card__kicker')).toBeNull();
+    });
+});
+
+describe('without an onOpen the card plays in place', () => {
     const play = () => {
         const rendered = renderCard();
 
-        fireEvent.click(screen.getByRole('button'));
+        fireEvent.click(screen.getByRole('button', { name: PLAY_NAME }));
 
         return rendered;
     };
@@ -121,11 +192,11 @@ describe('clicking hands over to the player', () => {
         expect(container.querySelectorAll('iframe')).toHaveLength(1);
     });
 
-    it('embeds the id it was given', () => {
+    it('embeds the id it was given, autoplaying', () => {
         const { container } = play();
 
         expect(container.querySelector('iframe').getAttribute('src')).toBe(
-            'https://www.youtube.com/embed/UySrXUfHA_k?autoplay=1'
+            `https://www.youtube.com/embed/${VIDEO.videoId}?autoplay=1`
         );
     });
 
@@ -156,9 +227,56 @@ describe('clicking hands over to the player', () => {
     });
 
     it('keeps the card body', () => {
-        const { container } = play();
+        play();
 
-        expect(container.querySelector('.card__kicker').textContent).toBe(VIDEO.meta);
-        expect(screen.getByRole('heading', { level: 4 }).textContent).toBe(VIDEO.title);
+        expect(screen.getByRole('heading', { level: 3 }).textContent).toBe(VIDEO.title);
+    });
+});
+
+describe('with an onOpen the card reports upward and stays a poster', () => {
+    it('hands the whole item to the caller', () => {
+        const onOpen = vi.fn();
+
+        renderCard({ onOpen });
+        fireEvent.click(screen.getByRole('button', { name: PLAY_NAME }));
+
+        expect(onOpen).toHaveBeenCalledWith(VIDEO);
+    });
+
+    /**
+     * This is the property the hub's single-overlay contract rests on: a grid of
+     * cards can be clicked through without any cell ever mounting a player.
+     */
+    it('mounts no player of its own', () => {
+        const { container } = renderCard({ onOpen: vi.fn() });
+
+        fireEvent.click(screen.getByRole('button', { name: PLAY_NAME }));
+
+        expect(container.querySelector('iframe')).toBeNull();
+        expect(container.querySelector('.video__poster')).not.toBeNull();
+    });
+});
+
+describe('density is the only thing size changes', () => {
+    it.each(['sm', 'md', 'lg'])('carries the %s modifier', (size) => {
+        const { container } = renderCard({ size });
+
+        expect(container.querySelector(`.video--${size}`)).not.toBeNull();
+    });
+
+    /**
+     * A card that drops a field at one size makes that field look optional to
+     * whoever ports this next.
+     */
+    it('shows the same fields at every size', () => {
+        for (const size of ['sm', 'md', 'lg']) {
+            const { container } = render(<VideoCard video={VIDEO} size={size} showSeries />);
+
+            expect(container.querySelector('.card__kicker')).not.toBeNull();
+            expect(container.querySelector('.video__title')).not.toBeNull();
+            expect(container.querySelector('.video__meta')).not.toBeNull();
+
+            cleanup();
+        }
     });
 });

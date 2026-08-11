@@ -607,21 +607,52 @@
   border-block: var(--hairline);
 }
 
+// auto-fill against a floor is the whole responsive story, exactly as
+// .gallery-grid does it: the column count falls out of the measure at every
+// width, so no breakpoint is needed for the grid itself. The unmodified class is
+// the medium density the home teaser uses; --sm is the hub's denser library
+// grid, --lg is reserved for a wider editorial treatment.
 .video-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-5);
 }
 
+.video-grid--sm {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+.video-grid--md {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.video-grid--lg {
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+}
+
 .video {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   background: var(--color-surface);
   border: var(--hairline);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  transition:
+    border-color var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+
+  &:hover {
+    border-color: var(--ink-400);
+    transform: translateY(-2px);
+  }
 }
 
 // The frame is a <button> until the player mounts — see VideoCard — so this also
-// has to undo the chrome the user agent gives a button.
+// has to undo the chrome the user agent gives a button. `isolation` keeps the
+// scrim's stacking context inside the frame rather than competing with the
+// filter bar's.
 .video__frame {
   position: relative;
   display: flex;
@@ -632,6 +663,16 @@
   padding: 0;
   border: 0;
   background: var(--ink-800);
+  isolation: isolate;
+}
+
+.video__frame--button {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+  }
 }
 
 .video__poster,
@@ -643,33 +684,70 @@
   border: 0;
 }
 
-// Dimmed so the play button keeps its contrast against a bright frame grab.
+// DESIGNER DEVIATION 1 OF 3 (videos hub port).
+// This used to be `opacity: 0.5` — the whole frame grab washed back so the play
+// glyph held its contrast. That is a heavy price on a surface whose entire job
+// is to show the photography, and it dimmed the parts of the frame the glyph
+// never covers. The dimming moves into the bottom-weighted scrim below: the
+// poster keeps its own brightness, the gradient buys contrast where the glyph
+// and the card edge actually are, and the top of the frame stays clean.
 .video__poster {
   object-fit: cover;
-  opacity: 0.5;
+  transition: transform var(--dur-slow) var(--ease-out);
 }
 
-// Positioned so it stacks above the poster. The mockups leave this static, which
-// puts the absolutely positioned poster in front of it — survivable there only
-// because the poster is half transparent and the button reads through it.
+.video__frame--button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 6, 0.1) 0%,
+    rgba(5, 5, 6, 0) 45%,
+    rgba(5, 5, 6, 0.75) 100%
+  );
+}
+
+.video__frame--button:hover .video__poster {
+  transform: scale(1.05);
+}
+
+// Positioned so it stacks above both the poster and the scrim. The mockups leave
+// this static, which puts the absolutely positioned poster in front of it.
 .video__play {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background: var(--goji-red);
   color: var(--color-on-accent);
+  box-shadow: var(--shadow-card);
+  transition:
+    background var(--dur-fast),
+    transform var(--dur-fast) var(--ease-out);
 
   &::after {
     content: "";
     margin-left: 4px;
-    border-top: 11px solid transparent;
-    border-bottom: 11px solid transparent;
-    border-left: 18px solid var(--color-on-accent);
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 16px solid var(--color-on-accent);
+  }
+}
+
+.video__play--lg {
+  width: 76px;
+  height: 76px;
+
+  &::after {
+    border-top-width: 14px;
+    border-bottom-width: 14px;
+    border-left-width: 22px;
   }
 }
 
@@ -677,9 +755,14 @@
 .video__frame:hover .video__play,
 .video__frame:focus-visible .video__play {
   background: var(--goji-red-bright);
+  transform: scale(1.06);
 }
 
 .video__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
   padding: var(--space-4) var(--space-5);
 }
 
@@ -691,9 +774,483 @@
   text-transform: uppercase;
 }
 
+// Clamped at two lines so a long title cannot make one grid row taller than its
+// neighbours. Card titles are h3 for document order, not for size.
 .video__title {
-  margin: 0.35rem 0 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
   font-size: var(--fs-h4);
+  line-height: var(--lh-snug);
+}
+
+.video__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-lo);
+}
+
+.video--sm {
+  .video__title {
+    font-size: var(--fs-body);
+  }
+
+  .video__body {
+    padding: var(--space-3) var(--space-4) var(--space-4);
+  }
+}
+
+.video--lg {
+  .video__title {
+    font-size: var(--fs-h3);
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .video__body {
+    padding: var(--space-5) var(--space-6) var(--space-6);
+  }
+}
+
+// The home teaser's head puts the onward link beside the section title, the same
+// row .garage-preview__head runs. Wrapping is what keeps 360 free of a
+// horizontal scroll.
+.videos-teaser__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+// --- VIDEOS HUB (/youtube) --------------------------------------------------
+// Ported from components/YouTube/mockups/videos-mockups.css. The mockup's `vx-`
+// prefix existed only so the exploration could not collide with the production
+// `.video*` block; on the way in the card names collapse ONTO that block, since
+// it is the production name for exactly this element, and the hub chrome takes
+// the `.videos-hub__*` shape `.gallery-hub__*` already established.
+
+.videos-hub__head {
+  padding-block: var(--space-7);
+  border-bottom: var(--hairline);
+  background: var(--ink-1000);
+}
+
+.videos-hub__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.videos-hub__body {
+  padding-block: var(--space-7);
+}
+
+// The same height reservation GalleryHub had to grow after Bug 00077: the list
+// arrives after mount, so a body holding one line of status text would inject a
+// full grid under the footer and shift the page by its whole height.
+.videos-hub__body--reserved {
+  min-height: 100vh;
+}
+
+.videos-hub__title {
+  font-size: var(--fs-h1);
+  text-transform: uppercase;
+}
+
+.videos-hub__lead {
+  max-width: 60ch;
+  margin-top: var(--space-4);
+  margin-bottom: 0;
+  font-size: var(--fs-lead);
+  color: var(--text-mid);
+}
+
+.videos-hub__channel {
+  color: var(--goji-red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: var(--goji-red-bright);
+  }
+}
+
+.videos-hub__status {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-lo);
+}
+
+// --- HUB: FEATURED HERO -----------------------------------------------------
+
+.videos-featured {
+  border-bottom: var(--hairline);
+  background: linear-gradient(180deg, var(--ink-1000) 0%, var(--color-bg) 100%);
+}
+
+.videos-featured__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: center;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-7) var(--space-5);
+}
+
+.videos-featured__frame {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--ink-800);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+// The hero's scrim is radial rather than bottom-weighted: its body copy sits
+// beside the frame, not over it, so the contrast has to be bought around the
+// centred play glyph instead of along the bottom edge.
+.videos-featured__frame--button {
+  cursor: pointer;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(5, 5, 6, 0) 35%,
+      rgba(5, 5, 6, 0.55) 100%
+    );
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 3px;
+  }
+}
+
+.videos-featured__title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-mega);
+  text-transform: uppercase;
+  color: var(--color-heading);
+}
+
+.videos-featured__desc {
+  max-width: 52ch;
+  margin: 0 0 var(--space-4);
+  color: var(--text-mid);
+}
+
+.videos-featured__specs {
+  margin-bottom: var(--space-5);
+}
+
+.videos-featured__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+// --- HUB: FILTER BAR --------------------------------------------------------
+// Sticky because the chip rows are the only way back out of a filtered view, and
+// a visitor deep in a long grid should not have to scroll to the top to change
+// their mind. Both chip rows render only when the manifest carries more than one
+// series / any tags at all — see components/YouTube/index.jsx.
+
+.videos-filterbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding-block: var(--space-4);
+  border-bottom: var(--hairline);
+  background: rgba(15, 15, 18, 0.94);
+  backdrop-filter: blur(8px);
+}
+
+.videos-filterbar__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-3);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.videos-filterbar__row--end {
+  justify-content: flex-end;
+}
+
+.videos-filterbar__label {
+  min-width: 62px;
+}
+
+.videos-filterbar__count {
+  margin-right: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+.videos-filterbar__sort {
+  max-width: 200px;
+}
+
+.videos-filterbar__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.videos-filterbar__reset:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+// --- HUB: PLAYER OVERLAY ----------------------------------------------------
+
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  background: rgba(5, 5, 6, 0.88);
+  overflow-y: auto;
+}
+
+.video-modal__panel {
+  position: relative;
+  width: min(960px, 100%);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-pop);
+  overflow: hidden;
+
+  &:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 3px;
+  }
+}
+
+.video-modal__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--ink-1000);
+}
+
+.video-modal__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 2;
+  display: flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: var(--hairline);
+  border-radius: 50%;
+  background: rgba(5, 5, 6, 0.7);
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--text-hi);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--goji-red);
+    color: var(--goji-red-bright);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+  }
+}
+
+.video-modal__body {
+  padding: var(--space-5) var(--space-6) var(--space-6);
+}
+
+.video-modal__title {
+  margin: var(--space-2) 0 var(--space-4);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-mega);
+  text-transform: uppercase;
+  color: var(--color-heading);
+}
+
+.video-modal__specs {
+  margin-bottom: var(--space-4);
+}
+
+.video-modal__desc {
+  max-width: 68ch;
+  margin-bottom: var(--space-5);
+  font-size: var(--fs-read);
+  line-height: var(--lh-read);
+  color: var(--color-text);
+}
+
+// --- HUB: STATES ------------------------------------------------------------
+
+.videos-state {
+  max-width: 60ch;
+  margin-block: var(--space-7);
+  padding: var(--space-6);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.videos-state--error {
+  border-left: var(--accent-bar);
+}
+
+.videos-state__title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  text-transform: uppercase;
+  color: var(--color-heading);
+}
+
+.videos-state__body {
+  margin-bottom: var(--space-5);
+  color: var(--text-mid);
+}
+
+.videos-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+// The shimmer is held behind the motion query for the same reason the editorial
+// grade's transitions are: a loading state that animates is the worst possible
+// thing to force on a visitor who asked for no animation.
+.video-skeleton {
+  pointer-events: none;
+}
+
+.video-skeleton__block,
+.video-skeleton__line {
+  background: linear-gradient(
+    90deg,
+    var(--ink-800) 0%,
+    var(--ink-600) 50%,
+    var(--ink-800) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .video-skeleton__block,
+  .video-skeleton__line {
+    animation: video-shimmer 1.6s linear infinite;
+  }
+}
+
+@keyframes video-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.video-skeleton__line {
+  height: 12px;
+  margin-bottom: var(--space-2);
+}
+
+.video-skeleton__line--kicker {
+  width: 35%;
+  height: 9px;
+}
+
+.video-skeleton__line--short {
+  width: 60%;
+}
+
+@media (max-width: 900px) {
+  .videos-featured__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  .video-modal {
+    padding: 0;
+  }
+
+  .video-modal__panel {
+    border-radius: 0;
+    min-height: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .videos-hub__head,
+  .videos-hub__body {
+    padding-block: var(--space-6);
+  }
+
+  .video-grid,
+  .video-grid--sm,
+  .video-grid--md,
+  .video-grid--lg {
+    grid-template-columns: 1fr;
+  }
+
+  .videos-filterbar__row--end {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  .videos-hub__inner,
+  .videos-featured__inner {
+    padding-inline: var(--space-4);
+  }
 }
 
 // Form controls, ported from the mockups' .label / .select pair
@@ -1150,6 +1707,11 @@ a {
 // 00030's mixin-based version, which also covers :focus) -- this branch's
 // duplicate copies were dropped at merge time.
 
+// DESIGNER DEVIATION 3 OF 3 (videos hub port) — already resident.
+// The videos-hub mockups declare `.btn--sm` as a net-new size variant. It landed
+// here first, for the garage preview's onward link, at byte-identical values.
+// Left as the single definition rather than duplicated into the videos block:
+// two rules for one variant is how the two sizes drift apart.
 .btn--sm {
   padding: var(--space-2) var(--space-4);
   font-size: var(--fs-xs);
@@ -1423,6 +1985,49 @@ a {
 .chip b {
   color: var(--text-hi);
   font-weight: 700;
+}
+
+// DESIGNER DEVIATION 2 OF 3 (videos hub port).
+// `.chip` is a static data badge everywhere else on the site. The videos hub's
+// filter rows are the first surface to reuse it as an INTERACTIVE control, so
+// this modifier adds the three things a badge does not have to carry: a pointer,
+// a hover, and a focus ring. The pressed state changes the border weight as well
+// as the fill, because state signalled by colour alone fails anyone who cannot
+// separate the two — and the markup pairs it with `aria-pressed`, which is what
+// carries the state to a screen reader (see FilterChip in YouTube/index.jsx).
+//
+// It is a modifier rather than a bare `button.chip` rule so that a future
+// non-interactive <button> wearing `.chip` does not silently inherit toggle
+// affordances it does not have.
+.chip--toggle {
+  cursor: pointer;
+  transition:
+    background var(--dur-fast),
+    border-color var(--dur-fast),
+    color var(--dur-fast);
+
+  &:hover {
+    border-color: var(--ink-400);
+    color: var(--text-hi);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--goji-red);
+    outline-offset: 2px;
+  }
+
+  &.is-on {
+    background: var(--goji-red);
+    border-color: var(--goji-red);
+    color: var(--color-on-accent);
+    font-weight: 700;
+
+    &:hover {
+      background: var(--goji-red-bright);
+      border-color: var(--goji-red-bright);
+      color: var(--color-on-accent);
+    }
+  }
 }
 
 // .eyebrow already ported above (Task 00030's block) and .section-head above

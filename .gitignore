@@ -35,3 +35,6 @@ public/hero/
 
 # Generated social-unfurl card (scripts/build-og-image.mjs)
 public/og/
+
+# Generated videos manifest (scripts/build-videos.mjs)
+public/videos/
