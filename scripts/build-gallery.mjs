@@ -69,6 +69,11 @@ export const GALLERIES = [
         srcDir: "src/assets/images/nd/HillCountry",
     },
     {
+        id: "nd-miatasatthegap2026",
+        label: "Miatas at the Gap 2026",
+        srcDir: "src/assets/images/nd/MiatasAtTheGap2026",
+    },
+    {
         id: "c8-autox",
         label: "C8 Autocross",
         srcDir: "src/assets/images/c8/autocross",

@@ -31,6 +31,12 @@ export const GALLERY_SETS = [
         legacyPath: '/nd-hillcountry',
     },
     {
+        slug: 'nd-miatasatthegap2026',
+        car: 'ND Miata',
+        label: 'ND — Miatas at the Gap 2026',
+        legacyPath: '/nd-miatasatthegap2026',
+    },
+    {
         slug: 'c8-autox',
         car: 'C8 Corvette',
         label: 'C8 — Autocross',

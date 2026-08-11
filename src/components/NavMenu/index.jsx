@@ -68,8 +68,14 @@ function NavMenu() {
                         <NavDropdown title="Articles" id="articles-nav-dropdown">
                             <NavDropdown.Item as={NavLink} to="/goodbye-c8" eventKey="/goodbye-c8">Goodbye C8</NavDropdown.Item>
                         </NavDropdown>
+                        {/* Each chassis submenu opens toward `start` (left), away from the
+                            viewport's right edge this whole panel hugs — `end` (right) was the
+                            original direction and clipped off-screen for any label long enough
+                            to run out of room before the viewport boundary (e.g. NC's
+                            "Yellowstone West Coast Trip 2015", ND's "Miatas at the Gap 2026"),
+                            forcing a page-wide horizontal scrollbar. */}
                         <NavDropdown title="Galleries" id="galleries-nav-dropdown">
-                            <Dropdown drop="end">
+                            <Dropdown drop="start">
                                 <Dropdown.Toggle variant="text" id="nb-gallery-dropdown-toggle">
                                     NB Mazdaspeed Miata
                                 </Dropdown.Toggle>
@@ -77,7 +83,7 @@ function NavMenu() {
                                     <Dropdown.Item as={Link} to={galleryHubPath('nb-hillcountry')} eventKey="nb-hillcountry">Texas Hill Country Trip 2023</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <Dropdown drop="end">
+                            <Dropdown drop="start">
                                 <Dropdown.Toggle variant="text" id="nc-gallery-dropdown-toggle">
                                     NC Miata
                                 </Dropdown.Toggle>
@@ -86,16 +92,17 @@ function NavMenu() {
                                     <Dropdown.Item as={Link} to={galleryHubPath('nc-yellowstone15')} eventKey="nc-yellowstone15">Yellowstone West Coast Trip 2015</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <Dropdown drop="end">
+                            <Dropdown drop="start">
                                 <Dropdown.Toggle variant="text" id="nd-gallery-dropdown-toggle">
                                     ND Miata
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     <Dropdown.Item as={Link} to={galleryHubPath('nd-hillcountry')} eventKey="nd-hillcountry">Texas Hill Country</Dropdown.Item>
                                     <Dropdown.Item as={Link} to={galleryHubPath('nd-totd2025')} eventKey="nd-totd2025">Tail of the Dragon 2025</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nd-miatasatthegap2026')} eventKey="nd-miatasatthegap2026">Miatas at the Gap 2026</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <Dropdown drop="end">
+                            <Dropdown drop="start">
                                 <Dropdown.Toggle variant="text" id="c8-gallery-dropdown-toggle">
                                     C8 Corvette
                                 </Dropdown.Toggle>

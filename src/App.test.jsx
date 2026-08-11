@@ -331,6 +331,7 @@ const SUBMENU_FOR_SLUG = {
     'nc-yellowstone15': 'nc-gallery-dropdown-toggle',
     'nd-hillcountry': 'nd-gallery-dropdown-toggle',
     'nd-totd2025': 'nd-gallery-dropdown-toggle',
+    'nd-miatasatthegap2026': 'nd-gallery-dropdown-toggle',
     'c8-autox': 'c8-gallery-dropdown-toggle',
 };
 
