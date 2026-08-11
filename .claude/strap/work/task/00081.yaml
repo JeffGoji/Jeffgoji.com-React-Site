@@ -1,0 +1,114 @@
+id: "00081"
+type: task
+title: "Add ND gallery \"Miatas at the Gap 2026\"; fix chassis-submenu overflow in Galleries nav"
+state: resolved
+parent: "00005"
+iteration: null
+area: null
+assigned_to: dev-lead
+tags: [AI, strap:task, "env:production"]
+links:
+  - target: "00003"
+    type: related
+original_estimate: null
+created_at: 2026-08-10T23:30:00Z
+created_by: dev-lead
+updated_at: 2026-08-11T00:20:00Z
+updated_by: dev-lead
+resolved_at: 2026-08-11T00:20:00Z
+closed_at: null
+description: |
+  | Field        | Value                       |
+  |--------------|-----------------------------|
+  | Authored By  | dev-lead                    |
+  | Authored At  | 2026-08-10T23:30:00Z        |
+  | Completed By | dev-lead                    |
+  | Completed At | 2026-08-11T00:20:00Z        |
+
+  ---
+
+  # Add ND gallery "Miatas at the Gap 2026"; fix chassis-submenu overflow in Galleries nav
+
+  ## Request
+
+  CPO asked to begin a new lightweight round of work (not a formal Requirement/Spec):
+  add a new ND-chassis photo gallery for "Miatas at the Gap 2026", built through the
+  same sharp/mozjpeg compression pipeline as every existing gallery, linked from the
+  navbar's Galleries dropdown under the ND Miata submenu. CPO to review live in the
+  browser before anything reached `main`.
+
+  ## What shipped
+
+  1. **New gallery, `nd-miatasatthegap2026`** — CPO supplied 31 camera-named JPEGs
+     into `src/assets/images/nd/MiatasAtTheGap2026/` (committed, matching this
+     project's convention of tracking gallery originals in git). Registered in
+     `scripts/build-gallery.mjs`'s `GALLERIES` array and `src/components/common/gallerySets.js`'s
+     `GALLERY_SETS`, and linked from the ND submenu in `src/components/NavMenu/index.jsx`.
+     `npm run gallery:build` processed all 31 items with 0 skipped; source payload
+     115 MB compressed to 52 MB in `public/gallery/nd-miatasatthegap2026/` (gitignored,
+     build-generated), in line with this pipeline's usual ~50%+ reduction.
+  2. **Bug found and fixed during CPO's own browser review**: the Galleries dropdown's
+     four chassis submenus (NB/NC/ND/C8) all opened with `drop="end"` (toward the
+     navbar's right edge, where the panel itself already sits with almost no margin
+     before the viewport boundary). A long enough label ran off-screen and forced a
+     page-wide horizontal scrollbar. This gallery's label ("Miatas at the Gap 2026")
+     made it obvious, but it was **not a regression from this task** — NC's existing
+     "Yellowstone West Coast Trip 2015" entry reproduced the identical overflow at
+     the same viewport width, confirmed via `document.documentElement.scrollWidth >
+     clientWidth` before the fix and `==` after. Fixed by flipping all four submenus
+     to `drop="start"`, opening them toward the roomy side of the nav instead.
+     Verified live in Chrome at ~1707px width (no overflow, both ND and NC submenus
+     render fully on-screen) and confirmed mobile is unaffected: Bootstrap's own
+     `.navbar-nav .dropdown-menu { position: static }` rule (only overridden to
+     `position: absolute` inside the `.navbar-expand-lg` media query) means `drop`
+     direction has zero effect below the navbar's 992px collapse breakpoint — CPO
+     separately confirmed correct behavior in mobile view.
+
+  ## Verification
+
+  - Full Vitest suite: 1071/1071 passing after both changes (one existing test,
+    `src/App.test.jsx`'s `SUBMENU_FOR_SLUG` map, needed the new slug added — a
+    data-driven redirect test, not new coverage).
+  - Live Chrome verification: nav dropdown → ND submenu → new gallery entry lands on
+    `/galleries?set=nd-miatasatthegap2026` with correct title/selector, all 31
+    thumbnails render, lightbox opens to full resolution with correct caption and a
+    working download-full-resolution link.
+  - CPO reviewed both the new gallery and the submenu-overflow fix live in browser
+    (desktop and mobile) before approving the push. "This is an excellent fix.
+    Approved 100%."
+
+  ## Impact
+
+  New gallery live for visitors browsing ND Miata content. The submenu-overflow fix
+  removes a pre-existing (if less visible) layout bug that also affected the NC
+  chassis submenu; no visitor-facing regression risk since mobile rendering is
+  architecturally untouched by the change.
+
+  ## Quality Checklist
+
+  - [x] Request and scope are stated as given by the CPO.
+  - [x] What shipped is broken into concrete, verifiable pieces.
+  - [x] The submenu-overflow bug's root cause is traced to a specific prop/CSS rule,
+        not just described symptomatically.
+  - [x] Confirmed the bug predates this task (NC reproduces identically) rather than
+        overstating it as introduced by the new gallery.
+  - [x] Verification section separates automated (Vitest) from manual (live Chrome)
+        confirmation.
+  - [x] CPO's direct approval quote is captured.
+comments:
+  - id: c1
+    author: dev-lead
+    timestamp: 2026-08-10T23:30:00Z
+    body: "[STRAP/agent:dev-lead] State: new. CPO asked to begin a new sprint: add an ND gallery for \"Miatas at the Gap 2026\" using the established compression pipeline, linked under the Galleries nav's ND submenu, with browser review gating any push to main. Asked CPO two clarifying questions: where source photos would come from (CPO: will add them manually to the source folder), and how formal to make this given the small scope (CPO: direct/lightweight, matching the recent Bug 00077-00080 precedent, over a full Requirement/Spec/Sprint cycle)."
+  - id: c2
+    author: dev-lead
+    timestamp: 2026-08-10T23:55:00Z
+    body: "[STRAP/agent:dev-lead] State: new -> active. Pre-wired the pipeline (build-gallery.mjs entry, gallerySets.js entry, NavMenu dropdown link, App.test.jsx redirect-map entry) ahead of the photos landing, using the fixed slug `nd-miatasatthegap2026`. Full suite green (1071/1071) before any photos existed. Once CPO confirmed 31 JPEGs were in `src/assets/images/nd/MiatasAtTheGap2026/`, ran `npm run gallery:build` (all 31 processed, 0 skipped, 115 MB -> 52 MB) and started the dev server for CPO's own review."
+  - id: c3
+    author: dev-lead
+    timestamp: 2026-08-11T00:10:00Z
+    body: "[STRAP/agent:dev-lead] CPO reported a bug during their own review: gallery submenu text runs off-screen and causes a page scrollbar, suggested possibly relocating the nav item. Investigated directly: reproduced live in Chrome, root-caused to `drop=\"end\"` on all four chassis Dropdown components popping toward the navbar's cramped right edge, confirmed via `scrollWidth`/`clientWidth` measurement, and confirmed this was a pre-existing latent bug (NC's \"Yellowstone West Coast Trip 2015\" already overflowed identically) rather than something new. Fixed by flipping all four to `drop=\"start\"` rather than reordering nav items, since that's viewport-width-independent. Verified the fix live (both ND and NC submenus, no overflow) and confirmed via Bootstrap's own CSS that mobile is architecturally unaffected (dropdown-menu is `position: static` below the navbar's lg breakpoint). Full suite still 1071/1071."
+  - id: c4
+    author: dev-lead
+    timestamp: 2026-08-11T00:20:00Z
+    body: "[STRAP/agent:dev-lead] State: active -> resolved. CPO tested both the new gallery and the nav fix live in browser, desktop and mobile, and approved: \"This is an excellent fix. Approved 100%.\" Committed (`a467cdd`, includes the 31 gallery source photos + the four code touch-points) and pushed directly to `main`, per this tail of work's established direct-to-main convention (no PR)."
