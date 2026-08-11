@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-08-11T01:49:22Z
+last_updated: 2026-08-11T02:07:59Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -14,9 +14,9 @@ The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern 
 
 ## Where we left off
 
-Session parked at a natural stopping point, not mid-task. This session's work: replaced the hand-curated 3-video `/youtube` page with a real video hub synced from the CPO's YouTube channel. Ruled out the paid YouTube Data API v3 (CPO didn't want the cost/key management) in favor of a free playlist-RSS-feed build step, mirroring `build-gallery.mjs`'s build-time-manifest pattern. Discovered mid-session that the CPO's channel is a personal account mixing private/unlisted music and movie-soundtrack playlists with car content — not a dedicated car channel — so "sync the whole channel" was wrong; CPO created a new public playlist ("jeffgoji.com", id `PLEXzlfrTFhoQ`, 13 real autocross videos) as the single source instead. A designer subagent explored 3 layout options (mockups preserved at `src/components/YouTube/mockups/`, never wired into routes/build); CPO picked "Filter Grid + featured hero," which a frontend-engineer subagent then ported to production. CPO reviewed the real build live in browser (desktop + mobile, played several videos) and approved. Committed and pushed direct-to-main (`c0d17ac`), then caught and fixed a TOML syntax bug in the CPO's own `netlify.toml` edit (unquoted string value would have broken every future Netlify build) in a follow-up commit (`ab3cb44`). **This `/context-prep` pass is itself the immediate next step after that push** — nothing is pending from it, except a live-production check (see Quick resume).
+Session parked at a natural stopping point, not mid-task. This session's work: replaced the hand-curated 3-video `/youtube` page with a real video hub synced from the CPO's YouTube channel. Ruled out the paid YouTube Data API v3 (CPO didn't want the cost/key management) in favor of a free playlist-RSS-feed build step, mirroring `build-gallery.mjs`'s build-time-manifest pattern. Discovered mid-session that the CPO's channel is a personal account mixing private/unlisted music and movie-soundtrack playlists with car content — not a dedicated car channel — so "sync the whole channel" was wrong; CPO created a new public playlist ("jeffgoji.com", id `PLEXzlfrTFhoQ`, 13 real autocross videos) as the single source instead. A designer subagent explored 3 layout options (mockups preserved at `src/components/YouTube/mockups/`, never wired into routes/build); CPO picked "Filter Grid + featured hero," which a frontend-engineer subagent then ported to production. CPO reviewed the real build live in browser (desktop + mobile, played several videos) and approved. Committed and pushed direct-to-main (`c0d17ac`), then caught and fixed a TOML syntax bug in the CPO's own `netlify.toml` edit (unquoted string value would have broken every future Netlify build) in a follow-up commit (`ab3cb44`). A first `/context-prep` pass followed that push, committed as `a5dbe05`. CPO then confirmed the Netlify production deploy succeeded and fully tested the live site — the one open item from that pass is now resolved; this is the follow-up pass recording that.
 
-**Current state**: `/youtube` is a real hub — featured hero, 13-video grid, newest/oldest sort, single shared overlay player (never more than one iframe mounted at once), all fed by `public/videos/manifest.json` (git-ignored, build-generated). Home's `#videos` teaser now sources the same manifest (3 newest) instead of a hardcoded list. `VIDEOS_PLAYLIST_ID` is committed in `netlify.toml` (not a secret, just a public playlist id) rather than requiring a manual Netlify UI env-var step. Locally verified: build passes, all 1183 Vitest tests pass, live dev-server review confirmed correct rendering, no console errors, correct facade→iframe lazy-load behavior on both the hero and grid cards.
+**Current state**: `/youtube` is a real hub, live in production and CPO-tested — featured hero, 13-video grid, newest/oldest sort, single shared overlay player (never more than one iframe mounted at once), all fed by `public/videos/manifest.json` (git-ignored, build-generated). Home's `#videos` teaser now sources the same manifest (3 newest) instead of a hardcoded list. `VIDEOS_PLAYLIST_ID` is committed in `netlify.toml` (not a secret, just a public playlist id) rather than requiring a manual Netlify UI env-var step. Verified end-to-end: local build passes, all 1183 Vitest tests pass, live dev-server review, and now the actual Netlify production deploy and live site, all confirmed working by the CPO.
 
 ## Files in flight
 
@@ -24,7 +24,6 @@ None. Working tree clean; `main` synced with origin; no worktrees or scratch bra
 
 ## Open decisions
 
-- **Netlify's first production deploy of this feature hasn't been verified yet.** The build now hard-fails if `VIDEOS_PLAYLIST_ID` is unset (`videos:build` vs. the softer `videos:build:optional` used by `npm run dev`) — confirm the next Netlify deploy actually succeeds and the live site shows the real 13-video hub, not a build failure or an empty-state hub.
 - **No lightweight tracking record (Bug/Task YAML) was created for the video-hub work**, unlike the ND-gallery addition which got Task 00081's "chore: resolve" commit. `.claude/strap/work/.next-id` is still `81`. Inconsistent with this tail of work's own precedent — CPO hasn't said whether that consistency matters enough to backfill one now.
 - **Two Lighthouse numbers were left un-transcribed** (carried over, untouched this session). `project-docs/v1-perf-baseline.md` only counts a measurement as durable once it lands in the "Phase-3 re-measurement" section. Numbers exist in an earlier session's conversation, not this file — a fresh harness run may be simpler than digging them up.
 - **What's New page's metric tiles are stale relative to reality** (carried over, untouched this session). `src/components/WhatsNew/data/metrics.js`'s image-payload tile is still `target: true` at `-50%`, when real numbers clear that. CPO hasn't said whether to update.
@@ -36,10 +35,9 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 
 ## Quick resume
 
-1. **Verify the live Netlify deploy**: check the production site's `/youtube` page actually renders the 13-video hub (not a build failure, not the empty state). If it failed, check Netlify's build log for `videos:build` output first.
-2. If CPO wants tracking consistency: file a quick Bug/Task YAML for the already-shipped video-hub work, mirroring Task 00081's after-the-fact pattern.
-3. If picking up the perf-baseline-doc gap: re-run `LH_DIR=/c/lh/node_modules node scripts/perf/lh-baseline.mjs` against a fresh `npm run build` + `vite preview --port 4173`, transcribe into `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section.
-4. Otherwise: if CPO doesn't want to action any open item above, this topic can likely go to `status: done` next `/context-prep` pass — nothing left undone that isn't already tracked as a known, accepted gap.
+1. If CPO wants tracking consistency: file a quick Bug/Task YAML for the already-shipped video-hub work, mirroring Task 00081's after-the-fact pattern.
+2. If picking up the perf-baseline-doc gap: re-run `LH_DIR=/c/lh/node_modules node scripts/perf/lh-baseline.mjs` against a fresh `npm run build` + `vite preview --port 4173`, transcribe into `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section.
+3. Otherwise: if CPO doesn't want to action any open item above, this topic can likely go to `status: done` next `/context-prep` pass — nothing left undone that isn't already tracked as a known, accepted gap.
 
 ## Critical context
 
