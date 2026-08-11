@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-08-10T23:15:00Z
+last_updated: 2026-08-11T01:49:22Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -10,59 +10,64 @@ linked_work_items: []
 
 ## What this is
 
-The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern dark motorsport-editorial look, image-loading/performance overhaul, and a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. **Features A, B, C, and D are all fully resolved and merged to `main`** (Spec 00002 itself is `resolved`). Post-launch, this initiative has settled into a tail of one-off Bug fixes surfaced by real Lighthouse audits and CPO manual testing. No active or new Feature/Bug/Task work items remain in `.claude/strap/work/` as of this writing — this continuation exists for the loose ends below, not for in-flight execution.
+The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern dark motorsport-editorial look, image-loading/performance overhaul, and a self-documenting "V2 What's New" page. Run through the STRAP pipeline with the agent team. **Features A, B, C, and D are all fully resolved and merged to `main`** (Spec 00002 itself is `resolved`). Post-launch, this initiative has settled into a tail of one-off Bug fixes and small feature/content additions, all handled directly (no Requirement/Spec ceremony) given their scope. No active work items remain in `.claude/strap/work/` as of this writing — this continuation exists for the loose ends below, not for in-flight execution.
 
 ## Where we left off
 
-Session parked at a natural stopping point, not mid-task. Prior session: ran a real Lighthouse audit, filed and fixed Bugs 00077/00078/00079 (CLS regression, perf-harness URL bug, gallery nav dropdown selection), PRs #30/#31, all merged. This session: CPO interrupted an unrelated `/context-fetch` to report the mobile nav accordion never retracts on selection — investigated directly (no specialist dispatch), traced the root cause through `react-bootstrap`/`@restart/ui` source (every nav item derives a `null` event key because it uses react-router's `to` prop instead of `href`, so both `NavItem` and `Nav`'s select handlers bail out before reaching `Navbar`'s `collapseOnSelect`), fixed by adding explicit `eventKey` props throughout `NavMenu/index.jsx`, added two regression tests (29/29 passing), and filed/resolved **Bug 00080** directly on `main` (commit `294bb4b` fix + `0e41440` tracking record, no PR, no branch). Verified live on production; CPO independently confirmed. **Session then ended without running `/context-prep`** — this pass is a catch-up, not new work.
+Session parked at a natural stopping point, not mid-task. This session's work: replaced the hand-curated 3-video `/youtube` page with a real video hub synced from the CPO's YouTube channel. Ruled out the paid YouTube Data API v3 (CPO didn't want the cost/key management) in favor of a free playlist-RSS-feed build step, mirroring `build-gallery.mjs`'s build-time-manifest pattern. Discovered mid-session that the CPO's channel is a personal account mixing private/unlisted music and movie-soundtrack playlists with car content — not a dedicated car channel — so "sync the whole channel" was wrong; CPO created a new public playlist ("jeffgoji.com", id `PLEXzlfrTFhoQ`, 13 real autocross videos) as the single source instead. A designer subagent explored 3 layout options (mockups preserved at `src/components/YouTube/mockups/`, never wired into routes/build); CPO picked "Filter Grid + featured hero," which a frontend-engineer subagent then ported to production. CPO reviewed the real build live in browser (desktop + mobile, played several videos) and approved. Committed and pushed direct-to-main (`c0d17ac`), then caught and fixed a TOML syntax bug in the CPO's own `netlify.toml` edit (unquoted string value would have broken every future Netlify build) in a follow-up commit (`ab3cb44`). **This `/context-prep` pass is itself the immediate next step after that push** — nothing is pending from it, except a live-production check (see Quick resume).
 
-**Final measured state**: gallery desktop CLS 1.024→0.003, Perf 75→99 (beats V1's 93) as of Bugs 00077-00079. Mobile nav accordion now correctly retracts on direct-link and gallery-leaf selection while staying open through Galleries/submenu toggles (Bug 00080, verified live). Two items remain open — see below — that predate this tail of work and are unrelated to any of the four Bugs fixed so far.
+**Current state**: `/youtube` is a real hub — featured hero, 13-video grid, newest/oldest sort, single shared overlay player (never more than one iframe mounted at once), all fed by `public/videos/manifest.json` (git-ignored, build-generated). Home's `#videos` teaser now sources the same manifest (3 newest) instead of a hardcoded list. `VIDEOS_PLAYLIST_ID` is committed in `netlify.toml` (not a secret, just a public playlist id) rather than requiring a manual Netlify UI env-var step. Locally verified: build passes, all 1183 Vitest tests pass, live dev-server review confirmed correct rendering, no console errors, correct facade→iframe lazy-load behavior on both the hero and grid cards.
 
 ## Files in flight
 
-None. Working tree is clean; `main` is fully synced with origin; no worktrees or scratch branches remain (all worktrees created this session were cleaned up after each merge).
+None. Working tree clean; `main` synced with origin; no worktrees or scratch branches remain.
 
 ## Open decisions
 
-- **Two Lighthouse numbers were left un-transcribed.** `project-docs/v1-perf-baseline.md` says a measurement only counts as durable once it lands in that doc's "Phase-3 re-measurement" section (Bug 00073's own finding — `lh-baseline.mjs` prints to stdout and writes no artifact). This session ran the harness three times post-fix but never wrote the results into the doc. If anyone runs `/dora-report`-style perf tracking or a future agent asks "has V2 been measured?", the honest answer is still "not durably" until this is done. Quick to do — the numbers are in this conversation's final comparison table.
-- **What's New page's metric tiles are stale relative to reality.** `src/components/WhatsNew/data/metrics.js`'s image-payload tile is still `target: true` (TARGET, not SHIPPED) at `-50%`. This session's real numbers show gallery mobile alone hit -96%, and home desktop/mobile both now clear 50%+ — genuinely flippable now, at least partially. CPO has not yet said whether to update the tiles or file a Task for it.
-- **Two AC gaps are open, unfiled, and pre-date this session's bug fixes** (confirmed not caused or fixable by Bugs 00077/00078/00079):
-  - Home mobile: Perf 73 (<80), LCP 6543ms (>2500ms target) — known root cause per earlier investigation is the CSS-background hero image lacking `fetchpriority`/preload; Lighthouse's `prioritize-lcp-image` audit already named this.
-  - Gallery desktop: image-byte reduction is 49.9%, just short of the 50% AC-006 bar — essentially a rounding-distance gap, not something either bug fix touched.
-  - CPO has not indicated whether either is worth filing as a Bug/Task.
+- **Netlify's first production deploy of this feature hasn't been verified yet.** The build now hard-fails if `VIDEOS_PLAYLIST_ID` is unset (`videos:build` vs. the softer `videos:build:optional` used by `npm run dev`) — confirm the next Netlify deploy actually succeeds and the live site shows the real 13-video hub, not a build failure or an empty-state hub.
+- **No lightweight tracking record (Bug/Task YAML) was created for the video-hub work**, unlike the ND-gallery addition which got Task 00081's "chore: resolve" commit. `.claude/strap/work/.next-id` is still `81`. Inconsistent with this tail of work's own precedent — CPO hasn't said whether that consistency matters enough to backfill one now.
+- **Two Lighthouse numbers were left un-transcribed** (carried over, untouched this session). `project-docs/v1-perf-baseline.md` only counts a measurement as durable once it lands in the "Phase-3 re-measurement" section. Numbers exist in an earlier session's conversation, not this file — a fresh harness run may be simpler than digging them up.
+- **What's New page's metric tiles are stale relative to reality** (carried over, untouched this session). `src/components/WhatsNew/data/metrics.js`'s image-payload tile is still `target: true` at `-50%`, when real numbers clear that. CPO hasn't said whether to update.
+- **Two AC gaps remain open, unfiled** (carried over, untouched this session, predate all recent bug fixes): home mobile LCP (6543ms vs. 2500ms target, root cause is the CSS-background hero image lacking `fetchpriority`/preload) and gallery desktop's 49.9%-vs-50% image-byte-reduction miss.
 
 ## Open work items
 
-None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are `resolved` (`.next-id` is `80`, matching Bug 00080 as the latest). PRs #28-#31 are all merged to `main`; Bug 00080 shipped without a PR (direct-to-main, per this tail of work's convention). If the two items above get actioned, they'd be new `/file-bugs` or `/new-requirement` intake, not a resume of existing work.
+None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are `resolved` (`.next-id` is still `81`). The video-hub work this session was handled entirely outside work-item tracking (see Open decisions above).
 
 ## Quick resume
 
-1. If picking up the perf-baseline-doc gap: read this conversation's final Lighthouse comparison table (or re-run `LH_DIR=/c/lh/node_modules node scripts/perf/lh-baseline.mjs` against a fresh `npm run build` + `vite preview --port 4173`) and transcribe into `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section.
-2. If picking up the What's New metric tiles: read `src/components/WhatsNew/data/metrics.js`'s existing `SOURCING` docblock (written by Tasks 00069/00073) before touching values — it documents exactly which numbers are safe to flip and why the other two aren't yet.
-3. If the CPO wants either open AC gap (home mobile LCP, gallery desktop's 49.9%-vs-50%) turned into real work: `/file-bugs` or `/new-requirement`, dev-lead's call per severity — home mobile is the more user-visible of the two.
-4. Otherwise: this topic can likely go to `status: done` next `/context-prep` pass if the CPO doesn't want to action either open item — the V2 initiative itself has nothing left undone.
+1. **Verify the live Netlify deploy**: check the production site's `/youtube` page actually renders the 13-video hub (not a build failure, not the empty state). If it failed, check Netlify's build log for `videos:build` output first.
+2. If CPO wants tracking consistency: file a quick Bug/Task YAML for the already-shipped video-hub work, mirroring Task 00081's after-the-fact pattern.
+3. If picking up the perf-baseline-doc gap: re-run `LH_DIR=/c/lh/node_modules node scripts/perf/lh-baseline.mjs` against a fresh `npm run build` + `vite preview --port 4173`, transcribe into `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section.
+4. Otherwise: if CPO doesn't want to action any open item above, this topic can likely go to `status: done` next `/context-prep` pass — nothing left undone that isn't already tracked as a known, accepted gap.
 
 ## Critical context
 
-- **`scripts/perf/lh-baseline.mjs` prints to stdout and writes no artifact.** A perf run that isn't manually transcribed into `v1-perf-baseline.md` leaves no durable record — confirmed as a real gap this session (see Open decisions).
-- **Lighthouse must be installed out-of-tree** (`C:\lh` this session) — it's a ~200MB dep deliberately excluded from `package.json`. On Windows the install path must be short (~66-char nested-package-json read fails past that). See `lh-baseline.mjs`'s own header comment for the exact install command.
-- **`gallery:build` takes ~13 minutes** (mozjpeg re-encoding 286 photos) — every `npm run build` this session paid that cost; budget for it when planning perf work.
-- **Vitest double-counts tests if a worktree still exists when running from the main checkout** — always `git worktree remove` before trusting a centralized test count.
-- **PR/merge convention for this tail of work**: task/fix branches → `main` directly (NOT via `feature/strap-onboarding`, which was Feature A-D's staging branch and has served its purpose — Bugs 00077/00078/00079 all branched straight off `main`). No standing integration branch is currently in play; `main` is the live trunk.
-- **`CreateTeam` is unavailable in this harness.** Workaround, confirmed reliable across ~50+ dispatches this project: manual `git worktree add -b <branch> <path> <base>` + named background `Agent` dispatch, `node_modules` linked via PowerShell `New-Item -ItemType Junction`. **One real trap hit this session**: never `git checkout -b <branch>` in the *primary* checkout and then try to `git worktree add -b <same-branch>` for a specialist — git can't check out one branch in two places, so it silently creates a different branch than intended. Cut the worktree's branch first, or use a distinct scratch name and rebase after.
-- **Netlify reports pending-not-failing PR checks on this repo** (`Header rules`, `Pages changed`, `Redirect rules`, `netlify/.../deploy-preview`) — `mergeStateStatus: UNSTABLE` from these alone is normal, not a merge blocker; confirm via `mergeable: MERGEABLE` instead.
-- **PUSH BEFORE YOU PR/merge** — local commits after a branch's last push are silently invisible to `gh`.
-- **Verify agent-reported numbers against the actual artifact before merging** — standing discipline all session; caught real issues in Bug 00070's content (a "six mechanisms" claim that should've been three) and Bug 00072's metric copy (an invented LCP baseline).
-- **react-bootstrap/`@restart/ui` derive selection `eventKey` from `href`, not react-router's `to`.** Any nav item using `to=` alone gets a `null` derived key, and both `NavItem` and `Nav`'s select handlers silently no-op on `null` — this is what made `collapseOnSelect` fully inert since the nav first shipped (Bug 00080). Any future nav/dropdown addition must set an explicit `eventKey` or it will silently fail to participate in selection.
-- **Don't forget `/context-prep` before ending a session** — this continuation itself went one full session stale (missed Bug 00080) because the prior session ended without running it; the committed and working-tree copies had drifted apart as a result.
+- **YouTube's playlist RSS feed (`youtube.com/feeds/videos.xml?playlist_id=<id>`) caps at 15 items and returns playlist order, not upload-date order** — `build-videos.mjs` sorts; a 16th video added to the playlist will silently not appear on the site without the paid Data API.
+- **That RSS feed never includes video duration or view count**, confirmed against live data — don't design any future video-hub feature (sort-by-duration, sort-by-views) assuming they're available without hand-maintaining them.
+- **TOML requires quoted string values** — an unquoted value in `netlify.toml` breaks the parser for the *entire file*, not just that key, failing every build. Caught this in the CPO's own edit this session.
+- **The CPO's YouTube channel (`@jeffgoji673`) is a personal account, not a dedicated car channel** — it mixes private/unlisted music and movie-soundtrack playlists with public car content. Never assume a playlist is public or on-topic; verify by loading the actual playlist page before wiring anything to it.
+- **`scripts/perf/lh-baseline.mjs` prints to stdout, writes no artifact** — durability requires manual transcription into `v1-perf-baseline.md`.
+- **Lighthouse must be installed out-of-tree** (`C:\lh`) — short path required on Windows (~66-char nested-package-json read fails past that).
+- **`gallery:build` takes ~13 minutes** (mozjpeg re-encoding); unlike it, `videos:build` is a cheap network fetch and is safe to chain directly into `npm run dev`.
+- **Vitest double-counts tests if a worktree still exists when running from the main checkout** — always `git worktree remove` first.
+- **PR/merge convention for this tail of work**: task/fix branches → `main` directly, no standing integration branch, no PR ceremony.
+- **`CreateTeam` is unavailable in this harness.** Workaround: manual `git worktree add -b <branch>` + named background `Agent` dispatch, `node_modules` linked via junction. Never `git checkout -b` in the primary checkout then `git worktree add -b` the same branch name.
+- **Netlify reports pending-not-failing PR checks** (`UNSTABLE` mergeStateStatus is normal) — confirm via `mergeable: MERGEABLE`.
+- **Push before you PR/merge** — local commits after last push are invisible to `gh`.
+- **Verify agent-reported numbers/claims against the actual artifact before merging** — standing discipline, caught real issues before in this tail of work.
+- **react-bootstrap/`@restart/ui` derive selection `eventKey` from `href`, not react-router's `to`** — any nav item using `to=` alone gets `null` and silently no-ops on select; any future nav/dropdown addition needs an explicit `eventKey`.
+- **Browser automation (claude-in-chrome) operates the user's actual Chrome session** — useful for looking up real external data (e.g. this session's YouTube playlist lookup) and for live-reviewing a running dev server together with the CPO, not just for testing.
+- **Don't forget `/context-prep` before ending a session** — this continuation went stale once already when a prior session skipped it.
 
 ## Source-of-truth pointers
 
-- `.claude/strap/project-docs/v1-perf-baseline.md` — the authoritative V1 comparison doc; Phase-3 section is where this session's numbers still need to land (see Open decisions).
-- `scripts/perf/lh-baseline.mjs` — the re-runnable Lighthouse harness; now correctly targets canonical `/galleries` (Bug 00078's fix).
-- `src/components/common/gallerySets.js` — `galleryHubPath(slug)`, the single mechanism both the nav and legacy redirects now use to preserve gallery-set identity (Bug 00079).
-- `src/components/NavMenu/index.jsx` — nav's `eventKey` props (Bug 00080) and `galleryHubPath()`-based `to=` targets (Bug 00079) now coexist on the same Dropdown.Items without conflict.
-- `src/components/WhatsNew/data/metrics.js` — What's New page's metric tiles; docblock explains current TARGET/SHIPPED sourcing, relevant to the open decision above.
-- `.claude/strap/work/bug/0007{7,8,9,80}.yaml` — full investigation + fix record for this tail of work's four Bugs, including root-cause chains and verification numbers.
-- `.claude/strap/state/{code,devops}-connection.yaml` — GitHub (JeffGoji/Jeffgoji.com-React-Site) + local strap-agile profiles.
-- PRs #28-#31 (all merged); Bug 00080 shipped direct-to-main with no PR.
+- `scripts/build-videos.mjs` — the RSS-feed build script; hand-parses YouTube's Atom feed (no XML dependency added), writes `public/videos/manifest.json`.
+- `src/components/YouTube/` — `index.jsx` (hub), `VideoTeaser.jsx` (Home's teaser), `FeaturedVideo.jsx`, `VideoPlayerModal.jsx`, `VideoCard.jsx`, `videoManifest.js` (runtime fetch), `videoFormat.js`, `videoCopy.js` (all user-visible strings, this repo's copy-indirection pattern in lieu of i18n).
+- `src/components/YouTube/mockups/` — the 3 design-exploration layout options, preserved for reference; never imported by production code or `vite build`.
+- `netlify.toml` — `VIDEOS_PLAYLIST_ID` now lives here (committed, not secret) rather than Netlify's UI env-var store.
+- `.claude/strap/project-docs/v1-perf-baseline.md` — authoritative V1 comparison doc; Phase-3 section still needs prior session's numbers transcribed.
+- `scripts/perf/lh-baseline.mjs` — re-runnable Lighthouse harness, targets canonical `/galleries`.
+- `src/components/common/gallerySets.js` / `GalleryHub.jsx` / `scripts/build-gallery.mjs` — the photo-gallery pattern the video hub's build-time-manifest approach mirrors.
+- `src/components/WhatsNew/data/metrics.js` — metric tiles, docblock explains TARGET/SHIPPED sourcing.
+- `.claude/strap/state/{code,devops}-connection.yaml` — GitHub (JeffGoji/Jeffgoji.com-React-Site) + local strap-agile connection profiles.
