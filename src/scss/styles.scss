@@ -1503,6 +1503,48 @@
   right: var(--space-5);
 }
 
+// Bug: on short mobile viewports, `.lightbox__stage`'s 78vh plus the caption
+// and download button in flow after it can add up to more than 100vh. The
+// overlay itself never scrolls (fixed, default overflow), so the excess
+// doesn't just get cut off visually -- `justify-content: center` overflows
+// it equally top and bottom, and the download button, last in flow, lands
+// past the bottom edge with no way to reach it.
+//
+// The stage shrinks first so the common case fits with no scrolling at all;
+// `overflow-y: auto` plus `flex-start` is the fallback for whatever still
+// doesn't, and switching away from `center` is what keeps that fallback from
+// clipping the top of the content instead of the bottom (flex's overflow
+// with `center` alignment isn't "safe" by default -- centered content that
+// outgrows a scrollable box loses access to whichever end the browser
+// decides to centre away from).
+//
+// Close and nav switch from absolute to fixed here for the same reason: both
+// position against `.lightbox`'s box either way since it's the nearest
+// positioned ancestor, but an absolutely positioned descendant still scrolls
+// with the rest of an overflow:auto box's content -- only fixed detaches it
+// from that scroll and keeps it where the mockup put it, pinned to the
+// viewport, while the visitor scrolls to reach the download button.
+@media (max-width: 768px) {
+  .lightbox {
+    overflow-y: auto;
+    justify-content: flex-start;
+    padding-block: var(--space-5);
+  }
+
+  .lightbox__stage {
+    max-height: 56vh;
+  }
+
+  .lightbox__stage .image-gallery-slide .image-gallery-image {
+    max-height: 56vh;
+  }
+
+  .lightbox__close,
+  .lightbox__nav {
+    position: fixed;
+  }
+}
+
 // Build-log reading surface, ported from the mockups' "Blog list" block
 // (assets/app.css:302-317) plus the blog.html banner. Task 00034.
 //
