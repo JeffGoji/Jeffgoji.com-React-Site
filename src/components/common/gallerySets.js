@@ -49,6 +49,12 @@ export const GALLERY_SETS = [
         legacyPath: '/msm-gallery',
     },
     {
+        slug: 'nb-autox',
+        car: 'NB Mazdaspeed Miata',
+        label: 'NB — Autocross 2008 - 2019',
+        legacyPath: '/nb-autox',
+    },
+    {
         slug: 'nc-eastcoast15',
         car: 'NC Miata',
         label: 'NC — East Coast Trip 2015',

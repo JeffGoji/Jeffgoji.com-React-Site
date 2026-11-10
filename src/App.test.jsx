@@ -327,6 +327,7 @@ describe('the nav offers exactly what the app registers', () => {
 /** Which per-chassis submenu each set's entry lives behind. */
 const SUBMENU_FOR_SLUG = {
     'nb-hillcountry': 'nb-gallery-dropdown-toggle',
+    'nb-autox': 'nb-gallery-dropdown-toggle',
     'nc-eastcoast15': 'nc-gallery-dropdown-toggle',
     'nc-yellowstone15': 'nc-gallery-dropdown-toggle',
     'nd-hillcountry': 'nd-gallery-dropdown-toggle',

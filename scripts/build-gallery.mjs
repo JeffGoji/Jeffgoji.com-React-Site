@@ -85,6 +85,11 @@ export const GALLERIES = [
         srcDir: "src/assets/images/nb/HillCountry",
     },
     {
+        id: "nb-autox",
+        label: "Autocross 2008 - 2019",
+        srcDir: "src/assets/images/nb/Autocross",
+    },
+    {
         id: "nc-eastcoast15",
         label: "NC East Coast Trip 2015",
         srcDir: "src/assets/images/nc/15east",
@@ -266,6 +271,8 @@ export async function buildGallery(g) {
         cwd: srcAbs,
         absolute: true,
         ignore: g.ignore ?? [],
+        // Camera exports like `DSC02132.JPG` carry an upper-case extension.
+        caseSensitiveMatch: false,
     });
 
     if (files.length === 0) {

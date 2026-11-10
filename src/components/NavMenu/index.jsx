@@ -81,6 +81,7 @@ function NavMenu() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     <Dropdown.Item as={Link} to={galleryHubPath('nb-hillcountry')} eventKey="nb-hillcountry">Texas Hill Country Trip 2023</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={galleryHubPath('nb-autox')} eventKey="nb-autox">Autocross 2008 - 2019</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Dropdown drop="start">

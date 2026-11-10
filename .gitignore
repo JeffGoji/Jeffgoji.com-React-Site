@@ -38,3 +38,6 @@ public/og/
 
 # Generated videos manifest (scripts/build-videos.mjs)
 public/videos/
+
+# Gallery source folders: video files are not part of the photo pipeline
+src/assets/images/**/*.mp4
