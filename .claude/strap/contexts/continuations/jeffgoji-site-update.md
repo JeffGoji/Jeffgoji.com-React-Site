@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-08-11T21:05:00Z
+last_updated: 2026-11-10T17:00:33Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -14,70 +14,74 @@ The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern 
 
 ## Where we left off
 
-Session parked at a natural stopping point, not mid-task. Two pieces of work landed, both pushed direct-to-main, working tree clean:
+Session parked at a natural stopping point, not mid-task. One piece of work landed, pushed direct-to-main (`24be52a`), working tree clean:
 
-1. **9 new photos added to the Miatas at the Gap 2026 gallery.** CPO dropped the files into `src/assets/images/nd/MiatasAtTheGap2026/`; ran `gallery:build` (confirmed 40 items, up from 31), ran the full suite (1183 passed), committed and pushed (`8da09bd`).
-2. **Home hero's gallery CTA made dynamic.** CPO's ask: the ghost button next to "Enter the garage" should always point at whichever gallery was most recently updated, with text like "Miatas at the Gap 2026 gallery" — not a hardcoded Tail of the Dragon link. Implemented and pushed (`4b43f26`):
-   - `scripts/build-gallery.mjs`'s `buildGallery()` now computes `updatedAt` per gallery via `git log -1 --format=%aI -- <srcDir>` (new `lastCommitDate()`), falling back to newest source-file mtime (`newestMtimeIso()`) only when git has nothing for the path. `main()` collects each gallery's `{id, label, updatedAt}` and `writeLatest()` picks the newest (`pickLatest()`) and writes `public/gallery/latest.json` — gitignored, same pattern as every other gallery/video manifest.
-   - New `src/components/common/latestGallery.js` — `loadLatestGallery()` fetches `/gallery/latest.json` at runtime, mirroring `YouTube/videoManifest.js`'s ok/fallback shape. `LATEST_GALLERY_FALLBACK` = `{slug: 'nd-totd2025', label: 'Tail of the Dragon 2025'}`, shown until the fetch resolves and on any failure.
-   - `Hero/index.jsx` fetches on mount, sets the ghost CTA's `to={galleryHubPath(latestGallery.slug)}` and text to `` `${latestGallery.label} gallery` `` — switched off the legacy `/totdgallery` path onto the same `galleryHubPath()` helper NavMenu already uses.
-   - 12 new tests (6 in `build-gallery.test.js` for `lastCommitDate`/`pickLatest`/`writeLatest`/`buildGallery`'s return shape, 6 in `Hero/index.test.jsx` for the fallback/resolved/failure states) — full suite now 1195 passing.
-   - Verified live: ran `npm run gallery:build` for real data, started `npm run dev`, used claude-in-chrome to confirm the home page actually renders "MIATAS AT THE GAP 2026 GALLERY" linking to `/galleries?set=nd-miatasatthegap2026`, and clicked through to confirm the gallery itself renders correctly (the 40-item set, `01`–`12` visible above the fold). Dev server stopped afterward.
+**New gallery: NB "Autocross 2008 - 2019"** (79 photos). CPO dropped the photos into `src/assets/images/nb/Autocross/` and asked for a gallery named "Autocross 2008 - 2019".
+- Registered in all four places a gallery must be:
+  - `scripts/build-gallery.mjs` `GALLERIES`: `{ id: "nb-autox", label: "Autocross 2008 - 2019", srcDir: "src/assets/images/nb/Autocross" }` (placed after `nb-hillcountry`).
+  - `src/components/common/gallerySets.js` `GALLERY_SETS`: slug `nb-autox`, car `NB Mazdaspeed Miata`, label `NB — Autocross 2008 - 2019` (car-prefix convention), `legacyPath: '/nb-autox'` (no real pre-V2 route existed; mirrors `c8-autox`'s pattern — `App.jsx` builds a redirect from every `legacyPath`).
+  - `src/components/NavMenu/index.jsx`: new `Dropdown.Item` "Autocross 2008 - 2019" in the NB submenu.
+  - `src/App.test.jsx` `SUBMENU_FOR_SLUG`: `'nb-autox': 'nb-gallery-dropdown-toggle'`.
+- **Fixed a latent pipeline gap**: the fast-glob in `buildGallery()` was case-sensitive, so `DSC02132.JPG` and `P2010075.JPG` were silently dropped (77 of 79). Added `caseSensitiveMatch: false`. Verified no other gallery source dir has upper-case extensions, so no other gallery's count changes.
+- **Gitignored video in gallery sources**: `src/assets/images/**/*.mp4` added to `.gitignore` — the folder contained `GOPR0466_1.mp4` (129 MB, over GitHub's 100 MB per-file limit, and not consumed by the photo pipeline). The file remains on disk locally, untracked.
+- Verified: full suite 1200 passing (up from 1195); single-gallery build run directly via `buildGallery(GALLERIES.find(g => g.id === 'nb-autox'))` → 79 items, 0 skipped.
+- **Not verified**: Netlify production deploy of `24be52a`; no browser check of the new gallery was done this session (local or prod).
+- Expected side effect: the home hero's dynamic CTA (`latest.json`) should now resolve to `nb-autox` / "Autocross 2008 - 2019 gallery", since its srcDir is now the most recently git-committed gallery source.
 
-**Current state**: both pieces are live in production once Netlify's next build runs (not yet confirmed deployed as of this writing — see Quick resume). `latest.json` currently resolves to `nd-miatasatthegap2026` because it's the most recently git-committed gallery source directory.
+Also noted: the CPO initially referred to a `msmautocross` folder — that exists only in a different, older checkout (`Documents\WebProjects\Jeffgoji.com-React-Site\src\assets\images\nb\msmautocross`), not this repo. The CPO then clarified the folder is `nb/Autocross` in this repo.
 
 ## Files in flight
 
-None. Working tree clean; `main` synced with origin (`4b43f26`); no worktrees or scratch branches remain.
+None. Working tree clean; `main` synced with origin (`24be52a`); no worktrees or scratch branches.
 
 ## Open decisions
 
-- **No lightweight tracking record (Bug/Task YAML) was created for either piece of work this session**, continuing the precedent set by the video-hub work (still no backfill for that either). `.claude/strap/work/.next-id` is still `81`. CPO hasn't said whether tracking consistency matters enough to backfill any of these three untracked changes.
-- **Two Lighthouse numbers remain un-transcribed** (carried over, untouched across three sessions now). `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section is still incomplete.
-- **What's New page's metric tiles are stale relative to reality** (carried over, untouched). `src/components/WhatsNew/data/metrics.js`'s image-payload tile is still `target: true` at `-50%`.
-- **Two AC gaps remain open, unfiled** (carried over, predate all recent work): home mobile LCP (6543ms vs. 2500ms target, CSS-background hero image lacking `fetchpriority`/preload) and gallery desktop's 49.9%-vs-50% image-byte-reduction miss.
-- **New-gallery registration is still a manual two-file step** (`GALLERIES` in `build-gallery.mjs` + `GALLERY_SETS` in `gallerySets.js`), unchanged by the dynamic-CTA work — flagged to the CPO as a reminder, not a defect; the dynamic CTA only decides *which already-registered* gallery is newest.
+- **No lightweight tracking record (Bug/Task YAML) has been created** for the four recent untracked changes (video hub, Miatas-at-the-Gap photo upload, dynamic CTA, NB Autocross gallery). `.claude/strap/work/.next-id` is still `81`. CPO hasn't said whether tracking consistency matters enough to backfill.
+- **Two Lighthouse numbers remain un-transcribed** (carried over). `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section is still incomplete.
+- **What's New page's metric tiles are stale relative to reality** (carried over). `src/components/WhatsNew/data/metrics.js`'s image-payload tile is still `target: true` at `-50%`.
+- **Two AC gaps remain open, unfiled** (carried over): home mobile LCP (6543ms vs. 2500ms target, CSS-background hero image lacking `fetchpriority`/preload) and gallery desktop's 49.9%-vs-50% image-byte-reduction miss.
+- **New-gallery registration is still a manual four-file step** (`GALLERIES`, `GALLERY_SETS`, NavMenu item, `SUBMENU_FOR_SLUG` in `App.test.jsx`) — reminder, not a defect.
+- **Where the CPO wants the GoPro video** (`GOPR0466_1.mp4`) — if it should appear on the site, it belongs on YouTube/the video hub playlist, not in the repo.
 
 ## Open work items
 
-None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are `resolved` (`.next-id` is still `81`).
+None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are `resolved` (`.next-id` is `81`).
 
 ## Quick resume
 
-1. **Confirm the Netlify deploy** picked up both commits (`8da09bd`, `4b43f26`) and that production's home page actually shows the dynamic CTA and the 40-photo gallery — this session verified locally via dev server, not against production.
-2. If CPO wants tracking consistency: file Bug/Task YAML entries for the three untracked changes (video hub, photo upload, dynamic CTA), mirroring Task 00081's after-the-fact pattern.
+1. **Confirm the Netlify deploy** of `24be52a`: production `/galleries?set=nb-autox` shows 79 photos, the NB nav submenu lists "Autocross 2008 - 2019", and the home hero ghost CTA reads "Autocross 2008 - 2019 gallery".
+2. If CPO wants tracking consistency: file Bug/Task YAML entries for the four untracked changes, mirroring Task 00081's after-the-fact pattern.
 3. If picking up the perf-baseline-doc gap: re-run `LH_DIR=/c/lh/node_modules node scripts/perf/lh-baseline.mjs` against a fresh `npm run build` + `vite preview --port 4173`, transcribe into `v1-perf-baseline.md`'s Phase-3 section.
-4. Otherwise: if CPO doesn't want to action any open item above, this topic can likely go to `status: done` next pass — nothing left undone that isn't already a known, accepted gap.
 
 ## Critical context
 
-- **`public/gallery/latest.json` is derived from git commit history on the gallery's `srcDir`, not filesystem mtime** — deliberate, because Netlify clones fresh for every build and mtime would stamp every file with checkout time, erasing any real difference between galleries. `lastCommitDate()` in `build-gallery.mjs` runs `git log -1 --format=%aI -- <path>` via `execFileSync` (never a shelled string, to survive spaces in the repo's own path). Falls back to newest source-file mtime only when git has no history for that path at all.
-- **The home hero's ghost CTA is now 100% data-driven** — it will silently repoint itself to whatever gallery was git-committed most recently, including a gallery nobody intended as "featured." If the CPO ever wants a *pinned* gallery instead of "most recent," that requires a product decision, not a bug fix.
-- **YouTube's playlist RSS feed caps at 15 items and returns playlist order, not upload-date order** — `build-videos.mjs` sorts; a 16th video added to the playlist will silently not appear on the site without the paid Data API.
-- **That RSS feed never includes video duration or view count** — don't design any future video-hub feature assuming they're available without hand-maintaining them.
-- **TOML requires quoted string values** — an unquoted value in `netlify.toml` breaks the parser for the *entire file*.
-- **`scripts/perf/lh-baseline.mjs` prints to stdout, writes no artifact** — durability requires manual transcription into `v1-perf-baseline.md`.
-- **Lighthouse must be installed out-of-tree** (`C:\lh`) — short path required on Windows.
-- **`gallery:build` takes ~13 minutes** (mozjpeg re-encoding); `videos:build` is a cheap network fetch, safe to chain into `npm run dev`. Plain `npm run dev` does NOT rebuild galleries — run `gallery:build` explicitly first if you need fresh manifests/`latest.json` locally.
-- **Vitest double-counts tests if a worktree still exists when running from the main checkout** — always `git worktree remove` first.
-- **PR/merge convention for this tail of work**: task/fix branches → `main` directly, no standing integration branch, no PR ceremony.
-- **`CreateTeam` is unavailable in this harness.** Workaround: manual `git worktree add -b <branch>` + named background `Agent` dispatch.
-- **Netlify reports pending-not-failing PR checks** (`UNSTABLE` mergeStateStatus is normal) — confirm via `mergeable: MERGEABLE`.
-- **Push before you PR/merge** — local commits after last push are invisible to `gh`.
-- **Verify agent-reported numbers/claims against the actual artifact before merging** — standing discipline.
-- **react-bootstrap/`@restart/ui` derive selection `eventKey` from `href`, not react-router's `to`** — any nav item using `to=` alone gets `null` and silently no-ops on select.
-- **Browser automation (claude-in-chrome) is useful for both live external lookups and live-reviewing a running dev server** — used this session to confirm the dynamic CTA actually renders and links correctly before pushing.
+- **Adding a gallery = four edits**: `GALLERIES` in `build-gallery.mjs`, `GALLERY_SETS` in `gallerySets.js` (needs a `legacyPath` starting with `/` — a test enforces it, and `App.jsx` redirects from it), a NavMenu `Dropdown.Item`, and `SUBMENU_FOR_SLUG` in `App.test.jsx`.
+- **Build a single gallery without the 13-minute full run**: `node --input-type=module -e "import {GALLERIES,buildGallery} from './scripts/build-gallery.mjs'; await buildGallery(GALLERIES.find(g=>g.id==='<id>'))"` (does not rewrite `latest.json`).
+- **The gallery glob is now case-insensitive** (`caseSensitiveMatch: false`) — upper-case `.JPG` camera exports are included; output filenames keep the original case (`DSC02132.JPG.webp`).
+- **GitHub rejects files over 100 MB** — check source-folder drops for videos/huge files before `git add`; `*.mp4` under `src/assets/images/` is now gitignored.
+- **No Python on this machine** — use Node or the Edit tool for scripted edits.
+- **An older duplicate checkout exists at `Documents\WebProjects\Jeffgoji.com-React-Site`** — not this repo; don't edit or pull assets from it unless the CPO asks.
+- **`public/gallery/latest.json` is derived from git commit history on each gallery's `srcDir`, not filesystem mtime** — Netlify clones fresh, so mtime would be meaningless.
+- **The home hero's ghost CTA is 100% data-driven** — it silently repoints to whichever gallery was committed most recently; a pinned gallery would be a product decision.
+- **YouTube's playlist RSS feed caps at 15 items, returns playlist order, and never includes duration or view count**.
+- **TOML requires quoted string values** — an unquoted value in `netlify.toml` breaks the whole file.
+- **`scripts/perf/lh-baseline.mjs` prints to stdout, writes no artifact**; Lighthouse must be installed out-of-tree (`C:\lh`).
+- **`gallery:build` takes ~13 minutes** (mozjpeg); plain `npm run dev` does NOT rebuild galleries.
+- **Vitest double-counts tests if a worktree still exists** — `git worktree remove` first.
+- **PR/merge convention for this tail of work**: direct to `main`, no PR ceremony, but push only when the CPO says so.
+- **`CreateTeam` is unavailable in this harness** — use `git worktree add -b <branch>` + named background `Agent` dispatch.
+- **react-bootstrap derives selection `eventKey` from `href`, not react-router's `to`** — nav items need an explicit `eventKey`.
 - **Don't forget `/context-prep` before ending a session.**
 
 ## Source-of-truth pointers
 
-- `scripts/build-gallery.mjs` — gallery build pipeline; now also owns `lastCommitDate()`, `pickLatest()`, `writeLatest()` and writes `public/gallery/latest.json`.
-- `src/components/common/latestGallery.js` — runtime fetch of `latest.json`, mirrors `YouTube/videoManifest.js`.
-- `src/components/Hero/index.jsx` — home hero; ghost CTA now reads `latestGallery` state.
-- `src/components/common/gallerySets.js` — `GALLERY_SETS` + `galleryHubPath(slug)`; must stay in sync with `GALLERIES` in `build-gallery.mjs` (enforced by a test in `build-gallery.test.js`).
-- `src/components/YouTube/` — video hub components; `videoManifest.js`'s fetch pattern is what `latestGallery.js` mirrors.
+- `scripts/build-gallery.mjs` — gallery build pipeline: `GALLERIES`, `buildGallery()`, `lastCommitDate()`, `pickLatest()`, `writeLatest()`.
+- `src/components/common/gallerySets.js` — `GALLERY_SETS` + `galleryHubPath(slug)`; must stay in sync with `GALLERIES`.
+- `src/components/NavMenu/index.jsx` — per-chassis gallery submenus.
+- `src/App.test.jsx` — `SUBMENU_FOR_SLUG` and legacy-path redirect tests.
+- `src/components/common/latestGallery.js` + `src/components/Hero/index.jsx` — dynamic newest-gallery CTA.
+- `src/components/YouTube/` — video hub; `videoManifest.js` is the fetch pattern `latestGallery.js` mirrors.
 - `netlify.toml` — `VIDEOS_PLAYLIST_ID` committed here (not secret).
-- `.claude/strap/project-docs/v1-perf-baseline.md` — authoritative V1 comparison doc; Phase-3 section still needs prior-session numbers transcribed.
-- `scripts/perf/lh-baseline.mjs` — re-runnable Lighthouse harness, targets canonical `/galleries`.
-- `src/components/WhatsNew/data/metrics.js` — metric tiles, docblock explains TARGET/SHIPPED sourcing.
+- `.claude/strap/project-docs/v1-perf-baseline.md` — V1 comparison doc; Phase-3 section incomplete.
+- `src/components/WhatsNew/data/metrics.js` — What's New metric tiles.
 - `.claude/strap/state/{code,devops}-connection.yaml` — GitHub (JeffGoji/Jeffgoji.com-React-Site) + local strap-agile connection profiles.
