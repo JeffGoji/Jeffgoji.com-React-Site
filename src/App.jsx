@@ -16,6 +16,7 @@ import Intro from './components/pages/Intro'
 import YouTube from './components/YouTube'
 import Suspension from './components/Suspension'
 import WhatsNew from './components/WhatsNew'
+import WhatsNewV2Launch from './components/WhatsNew/V2Launch'
 
 // Blog links
 import NaMiata from './components/pages/NaMiata'
@@ -132,6 +133,7 @@ function App() {
           <Route path="suspension" element={<Suspension />} />
           <Route path="galleries" element={<GalleryHubRoute />} />
           <Route path="whats-new" element={<WhatsNew />} />
+          <Route path="whats-new/v2-launch" element={<WhatsNewV2Launch />} />
           {LEGACY_GALLERY_REDIRECTS.map(({ path, slug }) => (
             <Route key={path} path={path} element={<LegacyGalleryRedirect slug={slug} />} />
           ))}

@@ -187,7 +187,7 @@ function BlogList({
                         </div>
 
                         {posts.map((post) => (
-                            <article className="post" key={post.id}>
+                            <article className="post" id={`post-${post.id}`} key={post.id}>
                                 <div className="post__media media--editorial">
                                     <ResponsiveImage
                                         src={post.picture}

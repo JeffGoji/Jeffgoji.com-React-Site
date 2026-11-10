@@ -1,203 +1,195 @@
 /**
  * @vitest-environment jsdom
  *
- * Environment is pinned per-file, matching the convention the rest of the suite
- * uses.
- *
- * Covers Task 00064: the page shell. The two regions and the landmark shape are
- * what this file guards — the tiles inside the cluster (Task 00067) and the rows
- * inside the ledger (Task 00068) are asserted in their own components' tests.
- *
- * The route registration is asserted at App level rather than here; that is Task
- * 00066's contribution to the shared route-parity guard in src/App.test.jsx.
- *
- * jsdom performs no layout, so the ported-band assertions read the compiled
- * stylesheet rather than measuring a rendered box — the same trade
- * Hero/index.test.jsx and src/scss/styles.test.js make.
+ * Covers the November 2026 What's New redesign: the dated recent-updates
+ * timeline. The archived V2 launch page has its own suite in V2Launch.test.jsx;
+ * that every timeline link resolves to a served route is asserted at App level
+ * in src/App.test.jsx.
  */
 
-import { createRequire } from 'node:module';
-import { resolve, dirname } from 'node:path';
-
-import * as sass from 'sass';
 import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
-import WhatsNew from './index';
-import { metrics } from './data/metrics';
-import { whatsNew } from './data/whatsNew';
-
-/**
- * Resolved from the Vitest root rather than import.meta.url: under jsdom
- * import.meta.url is a document-relative http URL, not a file URL.
- */
-const ROOT = process.cwd();
-const SCSS_DIR = resolve(ROOT, 'src/scss');
-const NODE_MODULES = dirname(
-    dirname(createRequire(resolve(ROOT, 'index.html')).resolve('bootstrap/package.json'))
-);
-
-const css = sass.compile(resolve(SCSS_DIR, 'styles.scss'), {
-    loadPaths: [SCSS_DIR, NODE_MODULES],
-    quietDeps: true,
-    logger: sass.Logger.silent,
-}).css;
-
-const escapeForRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-/** Reads one top-level rule's declarations; see the twin in styles.test.js. */
-function topLevelDeclarationsOf(selector) {
-    const match = css.match(new RegExp(`^${escapeForRegExp(selector)} \\{([^{}]*)\\}`, 'm'));
-
-    expect(match, `no top-level ${selector} rule emitted`).not.toBeNull();
-
-    return new Map(
-        match[1]
-            .split(';')
-            .filter((declaration) => declaration.includes(':'))
-            .map((declaration) => {
-                const [name, ...rest] = declaration.split(':');
-
-                return [name.trim(), rest.join(':').trim().replace(/\s+/g, ' ')];
-            })
-            .filter(([name]) => name)
-    );
-}
+import WhatsNew, { formatDate, groupByMonth } from './index';
+import { recentUpdates } from './data/recentUpdates';
 
 afterEach(cleanup);
 
-describe('the page mounts both regions of the mockup', () => {
-    it('paints the dashboard band', () => {
-        const { container } = render(<WhatsNew />);
+const renderPage = (props) =>
+    render(
+        <MemoryRouter>
+            <WhatsNew {...props} />
+        </MemoryRouter>
+    );
 
-        expect(container.querySelector('header.wn-dash')).not.toBeNull();
-    });
+const FIXTURE = [
+    {
+        date: '2026-06-02',
+        category: 'Fixes',
+        title: 'Older fix',
+        summary: 'A fix.',
+        links: [{ label: 'Fix link', to: '/galleries' }],
+    },
+    {
+        date: '2026-08-10',
+        category: 'Videos',
+        title: 'Newest video',
+        summary: 'Video hub.',
+        links: [{ label: 'Watch', to: '/youtube' }],
+    },
+    {
+        date: '2026-08-01',
+        category: 'Galleries',
+        title: 'August gallery',
+        summary: '<img src=x onerror=alert(1)>',
+        links: [
+            { label: 'Open', to: '/galleries?set=nb-autox' },
+            { label: 'Also', to: '/garage' },
+        ],
+    },
+];
 
-    it('paints the ledger section', () => {
-        const { container } = render(<WhatsNew />);
-
-        expect(container.querySelector('section.section .wn-ledger__inner')).not.toBeNull();
-    });
-
-    it('opens the band with the masthead and its lead', () => {
-        render(<WhatsNew />);
-
-        expect(screen.getByRole('heading', { level: 1 }).className).toContain('wn-dash__title');
-        expect(screen.getByText(/no vapourware/i)).not.toBeNull();
-    });
-
-    /**
-     * The honesty note is the reason the TARGET badges are allowed to ship at
-     * all (AC-015), so it is part of the shell's contract rather than the tiles'.
-     */
-    it('carries the TARGET caption under the cluster', () => {
-        const { container } = render(<WhatsNew />);
-
-        const caption = container.querySelector('.wn-dash .tele-caption');
-
-        expect(caption).not.toBeNull();
-        expect(caption.textContent).toMatch(/marked TARGET/);
-    });
-
-    it('closes the ledger with the goal legend', () => {
-        const { container } = render(<WhatsNew />);
-
-        const legend = container.querySelector('.wn-ledger__inner .wn-legend');
-
-        expect(legend).not.toBeNull();
-        expect(legend.textContent).toMatch(/GOAL 1/);
-    });
-});
-
-describe('the page composes the two clusters', () => {
-    it('hands the dashboard band the instrument cluster', () => {
-        const { container } = render(<WhatsNew />);
-
-        expect(container.querySelector('.wn-dash__inner .tele-grid')).not.toBeNull();
-    });
-
-    it('hands the ledger section the changelog', () => {
-        const { container } = render(<WhatsNew />);
-
-        expect(container.querySelector('.wn-ledger__inner .changelog')).not.toBeNull();
-    });
-
-    /**
-     * The page is where both data modules are read; the clusters take their
-     * rows as props. Asserting the counts against the modules rather than a
-     * literal is what lets tech-writer add a metric or an entry (Story 00063)
-     * without touching a test. Both clusters are wired as of Task 00068 (the
-     * second of the two to land) -- there is no longer an "unwired" state for
-     * either to be caught empty in.
-     */
-    it('feeds the cluster the telemetry module', () => {
-        const { container } = render(<WhatsNew />);
-
-        expect(container.querySelectorAll('.tele-grid > .tele-tile')).toHaveLength(metrics.length);
-    });
-
-    it('feeds the ledger the whatsNew entries from the data module', () => {
-        const { container } = render(<WhatsNew />);
-
-        expect(container.querySelectorAll('.changelog .cl-item')).toHaveLength(whatsNew.length);
-    });
-});
-
-/**
- * The mockup hangs its `<header class="wn-dash">` off <body>, where it would map
- * to the banner landmark and rival the shell's own. Nesting it inside the page's
- * one <main> is the deviation that keeps a single banner, and it is only ever
- * visible from the DOM shape, so it is asserted here.
- */
-describe('the page contributes one main landmark and no banner', () => {
-    it('mounts exactly one main', () => {
-        render(<WhatsNew />);
+describe('the page shell', () => {
+    it('mounts one main with the dashboard band inside it', () => {
+        const { container } = renderPage();
 
         expect(screen.getAllByRole('main')).toHaveLength(1);
+        expect(container.querySelector('main > header.wn-dash')).not.toBeNull();
+        expect(screen.getByRole('heading', { level: 1 })).not.toBeNull();
     });
 
-    it('keeps the dashboard header inside that main', () => {
-        const { container } = render(<WhatsNew />);
+    it('names the covered date range from the data', () => {
+        const { container } = renderPage({ updates: FIXTURE });
 
-        expect(container.querySelector('main > header.wn-dash')).not.toBeNull();
+        expect(container.querySelector('.wn-dash .eyebrow').textContent).toMatch(
+            /June 2026 – August 2026/
+        );
+    });
+
+    it('links to the archived V2 launch ledger', () => {
+        renderPage();
+
+        expect(
+            screen.getByRole('link', { name: /original launch ledger/i }).getAttribute('href')
+        ).toBe('/whats-new/v2-launch');
     });
 });
 
-describe('the dashboard band is ported from the mockup (assets/app.css:376-394)', () => {
-    it('carries the carbon wash and the closing hairline', () => {
-        const band = topLevelDeclarationsOf('.wn-dash');
+describe('the latest card', () => {
+    it('features the newest update regardless of authored order', () => {
+        const { container } = renderPage({ updates: FIXTURE });
 
-        expect(band.get('background')).toContain('var(--goji-red-ink)');
-        expect(band.get('background')).toContain('var(--ink-1000)');
-        expect(band.get('border-bottom')).toBe('var(--hairline)');
-        expect(band.get('padding-block')).toBe('var(--space-9) var(--space-8)');
-        expect(band.get('overflow')).toBe('hidden');
+        const latest = container.querySelector('.ru-latest');
+        expect(latest.textContent).toContain('Newest video');
+        expect(within(latest).getByRole('link', { name: 'Watch' }).getAttribute('href')).toBe(
+            '/youtube'
+        );
+    });
+});
+
+describe('the timeline', () => {
+    it('renders one card per update, newest first', () => {
+        const { container } = renderPage({ updates: FIXTURE });
+
+        const titles = [...container.querySelectorAll('.ru-card__title')].map((h) => h.textContent);
+        expect(titles).toEqual(['Newest video', 'August gallery', 'Older fix']);
     });
 
-    /**
-     * The gridline wash is absolutely positioned over the whole band, so a
-     * non-positioned inner would let it paint on top of the copy.
-     */
-    it('lifts the cluster above the gridline wash', () => {
-        expect(topLevelDeclarationsOf('.wn-dash::before').get('position')).toBe('absolute');
-        expect(topLevelDeclarationsOf('.wn-dash__inner').get('position')).toBe('relative');
+    it('groups cards under month headings', () => {
+        const { container } = renderPage({ updates: FIXTURE });
+
+        const months = [...container.querySelectorAll('.ru-month__title')].map((h) => h.textContent);
+        expect(months).toEqual(['August 2026', 'June 2026']);
     });
 
-    /**
-     * The mockups' `.container` is Bootstrap's class name too, so the measure is
-     * repeated per block instead — the same trade `.garage-preview__inner` makes.
-     */
-    it.each(['.wn-dash__inner', '.wn-ledger__inner'])('carries the measure on %s', (selector) => {
-        const inner = topLevelDeclarationsOf(selector);
+    it('renders every link of every update as a direct link', () => {
+        const { container } = renderPage({ updates: FIXTURE });
 
-        expect(inner.get('max-width')).toBe('var(--container-max)');
-        expect(inner.get('margin-inline')).toBe('auto');
-        expect(inner.get('padding-inline')).toBe('var(--space-5)');
+        const hrefs = [...container.querySelectorAll('.ru-list a')].map((a) => a.getAttribute('href'));
+        expect(hrefs).toEqual(['/youtube', '/galleries?set=nb-autox', '/garage', '/galleries']);
     });
 
-    /** The legend rides `.card__text` and only wins its size from below it. */
-    it('emits the goal legend after the card text it overrides', () => {
-        expect(topLevelDeclarationsOf('.wn-legend').get('font-size')).toBe('var(--fs-xs)');
-        expect(css.indexOf('.wn-legend')).toBeGreaterThan(css.indexOf('.card__text'));
+    it('carries a machine-readable date on each card', () => {
+        const { container } = renderPage({ updates: FIXTURE });
+
+        expect(container.querySelector('.ru-list time').getAttribute('datetime')).toBe('2026-08-10');
+    });
+
+    it('renders entry text as text, never as HTML', () => {
+        const { container } = renderPage({ updates: FIXTURE });
+
+        expect(container.querySelector('.ru-list img')).toBeNull();
+        expect(container.textContent).toContain('<img src=x onerror=alert(1)>');
+    });
+
+    it('renders the full content module', () => {
+        const { container } = renderPage();
+
+        expect(container.querySelectorAll('.ru-list .ru-item')).toHaveLength(recentUpdates.length);
+    });
+
+    it('shows an empty state when there is nothing to show', () => {
+        const { container } = renderPage({ updates: [] });
+
+        expect(container.querySelector('.ru-latest')).toBeNull();
+        expect(container.querySelector('.ru-empty')).not.toBeNull();
+    });
+});
+
+describe('the category filters', () => {
+    it('offers All plus only the categories that have updates', () => {
+        renderPage({ updates: FIXTURE });
+
+        const group = screen.getByRole('group', { name: /filter updates/i });
+        const labels = within(group).getAllByRole('button').map((b) => b.textContent);
+        expect(labels).toEqual(['All', 'Galleries', 'Videos', 'Fixes']);
+    });
+
+    it('narrows the timeline to one category and back', () => {
+        const { container } = renderPage({ updates: FIXTURE });
+        const group = screen.getByRole('group', { name: /filter updates/i });
+
+        fireEvent.click(within(group).getByRole('button', { name: 'Fixes' }));
+        expect([...container.querySelectorAll('.ru-card__title')].map((h) => h.textContent)).toEqual([
+            'Older fix',
+        ]);
+        expect(within(group).getByRole('button', { name: 'Fixes' }).getAttribute('aria-pressed')).toBe(
+            'true'
+        );
+
+        fireEvent.click(within(group).getByRole('button', { name: 'All' }));
+        expect(container.querySelectorAll('.ru-card__title')).toHaveLength(3);
+    });
+
+    it('counts updates per category in the stats strip', () => {
+        const { container } = renderPage({ updates: FIXTURE });
+
+        const stats = Object.fromEntries(
+            [...container.querySelectorAll('.ru-stat')].map((s) => [
+                s.querySelector('dt').textContent,
+                s.querySelector('dd').textContent,
+            ])
+        );
+        expect(stats).toEqual({ Updates: '3', Galleries: '1', Videos: '1', Fixes: '1' });
+    });
+});
+
+describe('date helpers', () => {
+    it('formats ISO dates without a timezone shift', () => {
+        expect(formatDate('2026-11-10')).toBe('Nov 10, 2026');
+        expect(formatDate('2026-05-01')).toBe('May 1, 2026');
+    });
+
+    it('groups consecutive updates by month', () => {
+        const groups = groupByMonth([
+            { date: '2026-08-10' },
+            { date: '2026-08-01' },
+            { date: '2026-05-27' },
+        ]);
+        expect(groups.map((g) => [g.label, g.items.length])).toEqual([
+            ['August 2026', 2],
+            ['May 2026', 1],
+        ]);
     });
 });

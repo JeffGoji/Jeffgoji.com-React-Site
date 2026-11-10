@@ -45,6 +45,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { GALLERY_SETS } from './components/common/gallerySets';
+import { recentUpdates } from './components/WhatsNew/data/recentUpdates';
 
 /** What the stub hub reports when it was handed no set to open on. */
 const HUB_DEFAULT = '(default)';
@@ -297,7 +298,34 @@ describe('the nav offers exactly what the app registers', () => {
 
         expect(window.location.pathname).toBe('/whats-new');
         expect(container.querySelector('main > header.wn-dash')).not.toBeNull();
-        expect(container.querySelector('main .wn-ledger__inner')).not.toBeNull();
+        expect(container.querySelector('main .ru-list')).not.toBeNull();
+    });
+
+    /**
+     * The November 2026 redesign kept the V2 launch page as a backup at its own
+     * route, and the new page links to it, so it must stay served.
+     */
+    it('keeps the archived V2 launch ledger served at /whats-new/v2-launch', () => {
+        const { container } = renderAt('/whats-new/v2-launch');
+
+        expect(container.querySelector('main > header.wn-dash')).not.toBeNull();
+        expect(container.querySelector('main .wn-ledger__inner .changelog')).not.toBeNull();
+    });
+
+    /**
+     * Every link on the What's New timeline must resolve to a page the shell
+     * serves, or the "direct link" promise is a 404. There is no catch-all
+     * route, so an unmatched path leaves the shell holding only its header and
+     * footer; a matched one adds the page between them.
+     */
+    it.each(
+        [...new Set(recentUpdates.flatMap((update) => update.links.map((link) => link.to)))]
+    )("serves the What's New link %s", (to) => {
+        const { container } = renderAt(to);
+        const [path] = to.split(/[?#]/);
+
+        expect(window.location.pathname).toBe(path);
+        expect(container.querySelector('.container-fluid').children.length).toBeGreaterThan(2);
     });
 
     /**
@@ -306,11 +334,14 @@ describe('the nav offers exactly what the app registers', () => {
      * assembled. Counted from the composed tree for the same reason Task 00035's
      * blog case is.
      */
-    it("contributes exactly one main landmark on What's New", () => {
-        renderAt('/whats-new');
+    it.each(['/whats-new', '/whats-new/v2-launch'])(
+        'contributes exactly one main landmark on %s',
+        (path) => {
+            renderAt(path);
 
-        expect(screen.getAllByRole('main')).toHaveLength(1);
-    });
+            expect(screen.getAllByRole('main')).toHaveLength(1);
+        }
+    );
 
     /**
      * Standing regression guard for Task 00020's removal of the "NA Miata

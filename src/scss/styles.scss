@@ -2767,3 +2767,217 @@ a {
     gap: 2px;
   }
 }
+
+// ---------------------------------------------------------------------------
+// What's New: recent-updates timeline (November 2026 redesign).
+//
+// The page keeps the V2 launch page's `.wn-dash` band and `.wn-ledger__inner`
+// measure, so only the new pieces live here under `ru-` (recent updates). The
+// archived launch page at /whats-new/v2-launch still uses the `.tele-*` and
+// `.cl-*` rules above, untouched.
+// ---------------------------------------------------------------------------
+
+// Lets a `#post-<id>` deep link from the timeline land below the sticky nav.
+.post {
+  scroll-margin-top: calc(var(--nav-h) + var(--space-4));
+}
+
+.ru-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 0;
+}
+
+.ru-stat {
+  min-width: 110px;
+  padding: var(--space-3) var(--space-4);
+  border: var(--hairline);
+  border-radius: var(--radius);
+  background: rgba(20, 20, 24, 0.7);
+
+  dt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+  }
+
+  dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--fs-h2);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text-hi);
+  }
+}
+
+.ru-latest {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  border: 1px solid var(--goji-red);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(58, 7, 5, 0.85), var(--ink-800) 70%);
+  box-shadow: var(--shadow-card);
+}
+
+.ru-latest__flag {
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--goji-red);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-on-accent);
+}
+
+.ru-latest__title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-h2);
+  text-transform: uppercase;
+  color: var(--text-hi);
+}
+
+.ru-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+
+  .cl-head__title {
+    margin: 0;
+  }
+}
+
+.ru-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ru-month {
+  margin-top: var(--space-7);
+}
+
+.ru-month__title {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 1;
+  margin: 0 0 var(--space-4);
+  padding-block: var(--space-2);
+  background: var(--color-bg);
+  border-bottom: var(--hairline);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+.ru-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ru-item {
+  display: flex;
+}
+
+.ru-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-5);
+  border: var(--hairline);
+  border-left: var(--accent-bar);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  transition: border-color var(--dur), transform var(--dur) var(--ease-out);
+
+  &:hover {
+    border-color: var(--ink-400);
+    border-left-color: var(--goji-red-bright);
+  }
+}
+
+.ru-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.ru-date {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-lo);
+}
+
+.ru-tag {
+  padding: 2px 8px;
+  border: 1px solid var(--ink-500);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--goji-red-bright);
+}
+
+.ru-card__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h4);
+  text-transform: uppercase;
+  color: var(--text-hi);
+}
+
+.ru-card__body {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--text-mid);
+}
+
+// Pushed to the bottom of the card so buttons line up across a row.
+.ru-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+.ru-empty,
+.ru-archive {
+  margin-top: var(--space-7);
+  font-size: var(--fs-sm);
+  color: var(--text-lo);
+  text-align: center;
+
+  a {
+    color: var(--goji-red-bright);
+  }
+}
+
+@media (max-width: 768px) {
+  .ru-list {
+    grid-template-columns: 1fr;
+  }
+
+  .ru-latest {
+    padding: var(--space-5);
+  }
+}
