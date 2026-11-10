@@ -445,7 +445,18 @@ describe('the overlay covers the viewport at any size', () => {
 
     it('fits the frame inside the stage without cropping it', () => {
         expect(css).toMatch(
-            /\.lightbox__stage \.image-gallery-slide \.image-gallery-image \{[^}]*object-fit: contain/
+            /\.lightbox__stage \.image-gallery-content \.image-gallery-slide \.image-gallery-image \{[^}]*object-fit: contain/
+        )
+    })
+
+    // Bug: react-image-gallery's `.image-gallery-content .image-gallery-slide
+    // .image-gallery-image { max-height: calc(100vh - 80px) }` tied the old
+    // three-class selector and won on stylesheet order, so the frame outgrew
+    // the 78vh stage on wide, short viewports and covered the download button.
+    // The cap has to sit on a selector strictly more specific than the library's.
+    it("caps the frame at the stage height with a selector that beats the library's", () => {
+        expect(css).toMatch(
+            /\.lightbox__stage \.image-gallery-content \.image-gallery-slide \.image-gallery-image \{[^}]*max-height: 78vh/
         )
     })
 

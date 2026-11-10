@@ -1441,16 +1441,30 @@
   max-height: 78vh;
 }
 
+// The background is the overlay's own near-black, made opaque. A frame whose
+// aspect doesn't match the stage is letterboxed by `object-fit: contain`, and
+// the editorial grade's `::after` -- a white-centred radial gradient that
+// multiplies against the photo -- has nothing to multiply against there
+// (`.media--editorial` isolates its blend), so on a transparent frame the
+// letterbox painted as bright white bands either side of the photo.
 .lightbox__frame {
   display: block;
   overflow: hidden;
   border-radius: var(--radius);
   line-height: 0;
+  background: rgb(3, 3, 4);
 }
 
 // Out-specifies react-image-gallery's own
-// `.image-gallery-slide .image-gallery-image`, which crops to the slide box.
-.lightbox__stage .image-gallery-slide .image-gallery-image {
+// `.image-gallery-content .image-gallery-slide .image-gallery-image`
+// (`max-height: calc(100vh - 80px)`). That rule is three classes deep too, and
+// the library's stylesheet is imported from GalleryLightbox.jsx, so it lands
+// later in the bundle and wins a specificity tie. Bug: when it won, the image
+// grew past the stage's 78vh on wide, short viewports and spilled down over the
+// caption and download button, swallowing their clicks. Naming
+// `.image-gallery-content` here makes this rule four classes deep, so it wins
+// regardless of stylesheet order.
+.lightbox__stage .image-gallery-content .image-gallery-slide .image-gallery-image {
   max-height: 78vh;
   object-fit: contain;
 }
@@ -1535,7 +1549,7 @@
     max-height: 56vh;
   }
 
-  .lightbox__stage .image-gallery-slide .image-gallery-image {
+  .lightbox__stage .image-gallery-content .image-gallery-slide .image-gallery-image {
     max-height: 56vh;
   }
 
