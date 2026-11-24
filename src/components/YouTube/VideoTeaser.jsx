@@ -7,8 +7,13 @@ import { CHANNEL_FALLBACK, loadVideoManifest } from './videoManifest';
 import { VIDEO_COPY } from './videoCopy';
 import { byNewest } from './videoFormat';
 
-/** How many uploads the home strip previews. The hub at /youtube carries them all. */
-export const TEASER_COUNT = 3;
+/**
+ * How many uploads the home strip previews. The hub at /youtube carries them all.
+ * Four, not the mockup's three: the video grid lays out four columns on a wide
+ * screen, so three left an empty slot (the same call the CPO made for the car
+ * strip above it). Narrower screens wrap the extra card onto the next row.
+ */
+export const TEASER_COUNT = 4;
 
 /**
  * The home page's videos section.
@@ -21,7 +26,7 @@ export const TEASER_COUNT = 3;
  * stays on the route that owns it.
  *
  * The cards carry no `onOpen`, so they play in place. The overlay exists to stop
- * a long grid from accumulating live players; three cards on a home page do not
+ * a long grid from accumulating live players; four cards on a home page do not
  * need it, and an overlay is a heavier interaction than a home teaser earns.
  *
  * DEGRADATION

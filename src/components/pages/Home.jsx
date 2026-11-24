@@ -25,7 +25,7 @@ export const PREVIEW_COUNT = 5;
  * instead, so the hub's chrome stays on the route that owns it.
  *
  * The videos section follows the same rule for the same reason: /youtube's hub
- * carries its own <h1> and filter bar, so Home mounts VideoTeaser — a three-card
+ * carries its own <h1> and filter bar, so Home mounts VideoTeaser — a four-card
  * strip reading the same build-time manifest — rather than the hub itself.
  *
  * The strip does not filter the retired car out. CarCard reads

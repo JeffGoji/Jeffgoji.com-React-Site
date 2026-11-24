@@ -18,6 +18,9 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter } from 'react-router-dom';
 
 import VideoTeaser, { TEASER_COUNT } from './VideoTeaser';
+
+/** Pinned so a change to the count is a deliberate edit here, not a silent drift. */
+const EXPECTED_TEASER_COUNT = 4;
 import { VIDEO_COPY } from './videoCopy';
 import { CHANNEL_FALLBACK, MANIFEST_PUBLIC_PATH } from './videoManifest';
 
@@ -88,20 +91,32 @@ describe('the teaser is the same manifest, read smaller', () => {
         await waitFor(() => expect(fetchImpl).toHaveBeenCalledWith(MANIFEST_PUBLIC_PATH));
     });
 
+    /** A wide screen's video grid lays out four columns; three left an empty slot. */
+    it('previews four uploads, a full row on a wide screen', () => {
+        expect(TEASER_COUNT).toBe(EXPECTED_TEASER_COUNT);
+    });
+
     it('shows the most recent uploads and no more', async () => {
         const { container } = renderTeaser();
 
         await waitFor(() => expect(cardsIn(container)).toHaveLength(TEASER_COUNT));
         expect(
             cardsIn(container).map((card) => card.querySelector('.video__title').textContent)
-        ).toEqual(['Video first000000', 'Video second00000', 'Video third000000']);
+        ).toEqual([
+            'Video first000000',
+            'Video second00000',
+            'Video third000000',
+            'Video fourth00000',
+        ]);
     });
 
     /** Home already carries the hero's h1; a second masthead is what this avoids. */
     it('heads its section at level 2, never level 1', async () => {
         renderTeaser();
 
-        await waitFor(() => expect(screen.getAllByRole('heading', { level: 3 }).length).toBe(3));
+        await waitFor(() =>
+            expect(screen.getAllByRole('heading', { level: 3 }).length).toBe(TEASER_COUNT)
+        );
         expect(screen.queryByRole('heading', { level: 1 })).toBeNull();
         expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(
             VIDEO_COPY.teaser.title
@@ -144,7 +159,7 @@ describe('the teaser costs no players', () => {
 
     /**
      * No overlay here: the overlay exists to stop a long grid accumulating live
-     * players, and three cards do not need a heavier interaction than a swap.
+     * players, and four cards do not need a heavier interaction than a swap.
      */
     it('plays in place rather than opening the hubs overlay', async () => {
         const { container } = renderTeaser();
