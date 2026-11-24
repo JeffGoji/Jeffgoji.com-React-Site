@@ -1469,8 +1469,12 @@
   object-fit: contain;
 }
 
+// Centred so a caption that wraps (long set names on a phone) stays balanced
+// under the photo instead of hugging one edge; a one-line caption looks the same
+// either way, since `.lightbox` already centres the block itself.
 .lightbox__cap {
   margin-top: var(--space-4);
+  text-align: center;
   font-family: var(--font-mono);
   font-size: var(--fs-sm);
   color: var(--text-mid);
@@ -1538,14 +1542,33 @@
 // with the rest of an overflow:auto box's content -- only fixed detaches it
 // from that scroll and keeps it where the mockup put it, pinned to the
 // viewport, while the visitor scrolls to reach the download button.
+//
+// Bug: pinned at `top: 50%`, the nav arrows landed on the download button on
+// short phones (360x640): the button sits near mid-screen there, and the arrows
+// covered both of its ends, so a tap near either end changed slide instead of
+// downloading. The arrows drop to the bottom corners instead, and the overlay's
+// bottom padding reserves their height plus a gap, so the scrollable content
+// can always be scrolled clear of them.
+//
+// Bug: the overlay had no inline padding, so a caption that wrapped took the
+// full viewport width and its first line touched the screen edge.
 @media (max-width: 768px) {
   .lightbox {
     overflow-y: auto;
     justify-content: flex-start;
-    padding-block: var(--space-5);
+    padding: var(--space-5) var(--space-4) calc(52px + 2 * var(--space-5));
   }
 
+  .lightbox__nav {
+    top: auto;
+    bottom: var(--space-5);
+    transform: none;
+  }
+
+  // 100% of the padded overlay rather than 92vw: with the inline padding above,
+  // 92vw plus the padding outgrew the viewport and the overlay scrolled sideways.
   .lightbox__stage {
+    width: 100%;
     max-height: 56vh;
   }
 

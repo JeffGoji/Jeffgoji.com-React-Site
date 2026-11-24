@@ -464,4 +464,47 @@ describe('the overlay covers the viewport at any size', () => {
         expect(css).toMatch(/\.lightbox__nav--prev \{[^}]*left: var\(--space-5\)/)
         expect(css).toMatch(/\.lightbox__nav--next \{[^}]*right: var\(--space-5\)/)
     })
+
+    it('centres a caption that wraps', () => {
+        expect(css).toMatch(/\.lightbox__cap \{[^}]*text-align: center/)
+    })
+})
+
+/**
+ * Bug: on a 360x640 phone the arrows, pinned at mid-screen, covered both ends
+ * of the download button. Reads the compiled ≤768px block, since jsdom has no
+ * layout to measure the overlap itself.
+ */
+describe('on phones the nav arrows stay clear of the download button', () => {
+    const mobile = (() => {
+        const start = css.indexOf('@media (max-width: 768px)', css.indexOf('.lightbox__download'))
+        expect(start, 'no ≤768px lightbox block emitted').toBeGreaterThan(-1)
+
+        let depth = 0
+        for (let i = css.indexOf('{', start); i < css.length; i++) {
+            if (css[i] === '{') depth++
+            if (css[i] === '}' && --depth === 0) return css.slice(start, i + 1)
+        }
+
+        return ''
+    })()
+
+    it('pins the arrows to the bottom corners instead of mid-screen', () => {
+        expect(mobile).toMatch(/\.lightbox__nav \{[^}]*top: auto/)
+        expect(mobile).toMatch(/\.lightbox__nav \{[^}]*bottom: var\(--space-5\)/)
+        expect(mobile).toMatch(/\.lightbox__nav \{[^}]*transform: none/)
+    })
+
+    it('reserves room under the content so it can scroll clear of the arrows', () => {
+        expect(mobile).toMatch(/\.lightbox \{[^}]*padding: [^;]*calc\(52px \+ 2 \* var\(--space-5\)\)/)
+    })
+
+    it('pads the overlay sides so nothing touches the screen edge', () => {
+        expect(mobile).toMatch(/\.lightbox \{[^}]*padding: var\(--space-5\) var\(--space-4\)/)
+    })
+
+    /** 92vw plus that padding is wider than the screen; the overlay scrolled sideways. */
+    it('fits the stage inside the padding instead of sizing it off the viewport', () => {
+        expect(mobile).toMatch(/\.lightbox__stage \{[^}]*width: 100%/)
+    })
 })
