@@ -17,6 +17,7 @@ import { cleanup, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import CarCard, { isRetired } from './CarCard';
+import { CAR_CARD_SIZES, carSrcSetFrom, resolveCarImage, resolveCarSrcSet } from './carImages';
 import carsData from '../Garage/Cars.json';
 
 /**
@@ -211,12 +212,12 @@ describe('the preview variant is the compact home-strip card', () => {
 });
 
 /**
- * Task 00058. The portrait routes through the shared <ResponsiveImage>. It
- * carries no candidate list: Cars.json's five photos are Vite asset imports and
- * no build script renders width variants of them. Two of the five share a
- * source file with the hero ladder, so renditions for those two exist under
- * /hero/ -- but they are addressed by hero key and reached through a runtime
- * manifest fetch, which is not a coupling a card should own.
+ * Task 00058, then the card ladder. The portrait routes through the shared
+ * <ResponsiveImage>, with the 400/800/1200w webp ladder scripts/build-car-cards.mjs
+ * builds from Cars.json. public/cars/ is generated and gitignored, so these
+ * assertions hold whether or not the pipeline has run in this checkout: with a
+ * manifest the card advertises exactly its ladder plus the grid's sizes hint,
+ * without one it falls back to the bundled JPG alone.
  */
 describe('the portrait renders through the shared responsive primitive', () => {
     it('leaves no bare img on the card', () => {
@@ -226,14 +227,22 @@ describe('the portrait renders through the shared responsive primitive', () => {
     });
 
     it.each(['hub', 'preview'])(
-        'advertises no candidates in the %s variant, since none are built',
+        'advertises the car ladder, and the grid sizes hint with it, in the %s variant',
         (variant) => {
             renderCard(live, variant);
 
             const image = screen.getByRole('img');
+            const ladder = resolveCarSrcSet(live.img);
 
-            expect(image.hasAttribute('srcset')).toBe(false);
-            expect(image.hasAttribute('sizes')).toBe(false);
+            if (ladder) {
+                expect(image.getAttribute('srcset')).toBe(ladder);
+                expect(image.getAttribute('sizes')).toBe(CAR_CARD_SIZES);
+            } else {
+                expect(image.hasAttribute('srcset')).toBe(false);
+                expect(image.hasAttribute('sizes')).toBe(false);
+            }
+
+            expect(image.getAttribute('src')).toBe(resolveCarImage(live.img));
         }
     );
 
@@ -241,6 +250,31 @@ describe('the portrait renders through the shared responsive primitive', () => {
         renderCard(live, 'preview');
 
         expect(screen.getByRole('img').getAttribute('loading')).toBe('lazy');
+    });
+});
+
+describe('the card ladder lookup', () => {
+    const CARDS = {
+        'na/night4.jpg': { srcSet: '/cars/na-night4-400.webp 400w, /cars/na-night4-1024.webp 1024w' },
+    };
+
+    it('returns the ladder the manifest names for that car, verbatim', () => {
+        expect(carSrcSetFrom('na/night4.jpg', CARDS)).toBe(CARDS['na/night4.jpg'].srcSet);
+    });
+
+    it('returns nothing for a car the manifest does not list', () => {
+        expect(carSrcSetFrom('c8/c8-002.jpg', CARDS)).toBeUndefined();
+    });
+
+    it('returns nothing when the pipeline has not run', () => {
+        expect(carSrcSetFrom('na/night4.jpg', {})).toBeUndefined();
+        expect(carSrcSetFrom('na/night4.jpg', undefined)).toBeUndefined();
+    });
+
+    /** A breakpoint missing from the hint makes the browser assume 100vw and over-fetch. */
+    it('describes every column count the garage grid can lay out', () => {
+        expect(CAR_CARD_SIZES.split(',')).toHaveLength(4);
+        expect(CAR_CARD_SIZES.trim().endsWith('280px')).toBe(true);
     });
 });
 

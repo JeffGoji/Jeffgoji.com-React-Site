@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { resolveCarImage } from './carImages';
+import { CAR_CARD_SIZES, resolveCarImage, resolveCarSrcSet } from './carImages';
 import ResponsiveImage from './ResponsiveImage';
 
 /**
@@ -30,14 +30,11 @@ export const isRetired = (bloglink) => bloglink === RETIRED_BLOGLINK;
  * one, and centralising it keeps a consumer from silently rendering a broken
  * portrait.
  *
- * The portrait renders through <ResponsiveImage> (Task 00058) with no candidate
- * list. Two of the five Cars.json photos happen to share a source file with the
- * hero ladder (`ncEdit.jpg`, `c8/c8-002.jpg`), so renditions for those two do
- * exist under `/hero/` -- but they are addressed by hero key, not by car, and
- * reaching them means fetching `public/hero/manifest.json` at runtime. Wiring a
- * fetch into this component to widen two cards out of five would buy an
- * inconsistent surface and a coupling to another surface's pipeline; the
- * portraits want a pipeline of their own, keyed off Cars.json.
+ * The portrait renders through <ResponsiveImage> with the card ladder that
+ * scripts/build-car-cards.mjs builds from Cars.json (400/800/1200w webp, read
+ * through carImages.js). Without it every card shipped its full-size JPG — up to
+ * 714KB for a 280px-wide thumbnail. When the pipeline has not run there is no
+ * srcset and the card falls back to that bundled JPG, as before.
  *
  * variant `hub` (the /garage page) carries the number tag and a build-log call
  * to action; variant `preview` (the home garage strip) drops both and makes the
@@ -83,6 +80,8 @@ function CarCard({
             <div className="card__media media--editorial">
                 <ResponsiveImage
                     src={resolveCarImage(img)}
+                    srcSet={resolveCarSrcSet(img)}
+                    sizes={CAR_CARD_SIZES}
                     alt={`${name} - ${label}`}
                     loading="lazy"
                 />

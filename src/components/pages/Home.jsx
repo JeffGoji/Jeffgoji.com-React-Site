@@ -7,10 +7,13 @@ import CarCard from '../common/CarCard';
 import carsData from '../Garage/Cars.json';
 
 /**
- * How many cars the home strip previews (home.html:121). The hub at /garage
- * carries the whole stable; this is a taste of it, not a second copy.
+ * How many cars the home strip previews. The mockup (home.html:121) showed
+ * three, but on a wide screen the auto-fill grid lays out four columns, so three
+ * left an empty slot; the CPO chose to show the whole five-car stable and let
+ * the fifth card wrap onto its own row. The hub at /garage still carries the
+ * fuller hub cards (number tags, build-log buttons).
  */
-export const PREVIEW_COUNT = 3;
+export const PREVIEW_COUNT = 5;
 
 /**
  * The V2 home surface, composed from home.html's four sections in the mockup's
@@ -25,7 +28,7 @@ export const PREVIEW_COUNT = 3;
  * carries its own <h1> and filter bar, so Home mounts VideoTeaser — a three-card
  * strip reading the same build-time manifest — rather than the hub itself.
  *
- * The strip does not filter the retired car out of the top three. CarCard reads
+ * The strip does not filter the retired car out. CarCard reads
  * `bloglink` and renders a retired car as a plain <article> rather than a link,
  * so the slice can stay a straight read of the data's own order.
  *

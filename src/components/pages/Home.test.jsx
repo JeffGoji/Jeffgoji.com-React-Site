@@ -144,11 +144,11 @@ describe('the home surface composes the four V2 sections', () => {
 });
 
 describe('the garage preview is a taste of the hub, not a copy of it', () => {
-    it('shows the top three cars', () => {
+    it('shows the top five cars', () => {
         const { container } = renderHome();
 
-        expect(previewCards(container)).toHaveLength(PREVIEW_COUNT);
-        expect(PREVIEW_COUNT).toBeLessThan(carsData.cars.length);
+        expect(PREVIEW_COUNT).toBe(5);
+        expect(previewCards(container)).toHaveLength(Math.min(PREVIEW_COUNT, carsData.cars.length));
     });
 
     it('shows them in the data order, from the top', () => {
@@ -187,8 +187,8 @@ describe('the garage preview is a taste of the hub, not a copy of it', () => {
     });
 
     /**
-     * The retired car sits inside the top three, so the strip is deliberately
-     * two links and one plain article. Anything that made all three links would
+     * The retired car sits inside the strip, so it is deliberately four links
+     * and one plain article. Anything that made every card a link would
      * be routing the reader home from the retired card for no reason.
      */
     it('leaves the retired car off a link', () => {
@@ -197,7 +197,7 @@ describe('the garage preview is a taste of the hub, not a copy of it', () => {
         const shown = carsData.cars.slice(0, PREVIEW_COUNT);
         const retired = shown.findIndex((car) => isRetired(car.bloglink));
 
-        expect(retired, 'the top three no longer include the retired car').toBeGreaterThan(-1);
+        expect(retired, 'the strip no longer includes the retired car').toBeGreaterThan(-1);
         expect(previewCards(container)[retired].tagName).toBe('ARTICLE');
     });
 
@@ -209,7 +209,12 @@ describe('the garage preview is a taste of the hub, not a copy of it', () => {
         const links = previewCards(container).filter((card) => card.tagName === 'A');
 
         expect(links).toHaveLength(live.length);
-        expect(links.map((link) => link.getAttribute('href'))).toEqual(['/na-blog', '/msm-blog']);
+        expect(links.map((link) => link.getAttribute('href'))).toEqual([
+            '/na-blog',
+            '/msm-blog',
+            '/nd-blog',
+            '/c8-blog',
+        ]);
     });
 });
 
@@ -218,7 +223,10 @@ describe('the pre-V2 eager composition is retired', () => {
         const { container } = renderHome();
 
         expect(container.querySelector('.garage__head')).toBeNull();
-        expect(previewCards(container)).not.toHaveLength(carsData.cars.length);
+        // The strip now shows every car by choice, so a count can no longer tell
+        // the two apart; the hub's own card variant and number tags still can.
+        expect(container.querySelector('.car-card--hub')).toBeNull();
+        expect(container.querySelector('.numtag')).toBeNull();
     });
 
     it('imports neither the hub nor the pre-V2 splash', () => {
