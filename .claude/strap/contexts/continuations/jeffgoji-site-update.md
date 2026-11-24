@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-11-24T01:48:39Z
+last_updated: 2026-11-24T01:54:29Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -14,7 +14,7 @@ The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern 
 
 ## Where we left off
 
-Session parked at a natural stopping point, not mid-task. Everything from this session is pushed and **verified live on prod**.
+Session parked at a natural stopping point, not mid-task. Every site change from this session is on `main` and **verified live on prod**. At the end of the session the CPO switched the repo to a **branch-per-change, single release PR** workflow (see Critical context); an open, unpushed `release/2026-11-24` branch is waiting for the next changes.
 
 **Hero banner update** — `46195ec`, live on jeffgoji.com ~6 min after push.
 - 14 frames now (was 5): +4 Kasumi Dragon action shots (`nd/TOTD2025/action/5065071`, `5065082`; `nd/MiatasAtTheGap2026/5411760`, `5411766`), +3 Kiryu autocross (`nb/Autocross/FB_IMG_1549249769761`, `…1606693558455`, `…1537141551937`), +2 Panda autocross (`c8/autocross/BMWCCAAutoX Feb-4057`, `Feb-4163`). The CPO approved all nine from contact sheets.
@@ -43,7 +43,12 @@ Session parked at a natural stopping point, not mid-task. Everything from this s
 
 ## Files in flight
 
-None. `main` synced with origin at `cdc8f0e` (plus this continuation commit). The CPO's Claude Code status line was also set up this session, outside the repo — see Critical context.
+- `main` is synced with origin at `6a90879`; nothing is uncommitted.
+- **`release/2026-11-24` — local only, not pushed, no PR yet** (CPO: "keep it open for the next changes"). It holds two merged change branches, both notes-only:
+  - `chore/notes-branch-workflow` — records the new workflow in Critical context.
+  - `chore/context-prep-2026-11-24` — this continuation update.
+- Both `chore/*` branches are also local only.
+- The CPO's Claude Code status line was also set up this session, outside the repo — see Critical context.
 
 ## Open decisions
 
@@ -59,9 +64,10 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 
 ## Quick resume
 
-1. `git pull` first — this checkout has drifted behind origin before.
-2. Ask the CPO what's next — every prod item from this session is shipped and verified; nothing is pending.
-3. If the CPO wants tracking consistency: file Bug/Task YAML for the ten untracked changes, mirroring Task 00081's after-the-fact pattern.
+1. `git switch main && git pull` — this checkout has drifted behind origin before. Confirm `release/2026-11-24` still exists locally (`git branch --list 'release/*'`).
+2. Ask the CPO what's next. Start each change with `git switch -c <feat|fix|chore>/<slug> main`, then `git switch release/2026-11-24 && git merge --no-ff <branch>`.
+3. When the CPO says the batch is ready: push the change branches and `release/2026-11-24`, open the PR to `main` with `gh pr create` (the `gh` CLI is authenticated as JeffGoji with `repo` scope), check its Netlify deploy preview, then tell the CPO it's ready to merge. Watch the production deploy after they merge.
+4. If the CPO wants tracking consistency: file Bug/Task YAML for the ten untracked changes, mirroring Task 00081's after-the-fact pattern.
 
 ## Critical context
 
@@ -76,7 +82,7 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 - **Chrome may have DevTools device emulation on** (393×852 @3x) — `resize_window` then does nothing; check `innerWidth`/`devicePixelRatio` before trusting a layout. It was off at session end.
 - **Chrome automation screenshots can lag a resize** — re-read `innerWidth` before trusting a screenshot's layout.
 - **Netlify serves the SPA's HTML with HTTP 200 for ANY unknown path** — a 200 on `/cars/x.webp` or `/hero/x.webp` proves nothing; check `content-type` is `image/webp` (or decode it in the browser) before calling an asset live.
-- **Push only when nothing is building**: before a push, confirm the live bundle already contains origin/main's newest user-visible commit; hold new commits locally until then.
+- **One production build at a time**: under the branch/PR convention only the CPO's merge to `main` starts a production build (branch pushes at most build a deploy preview). Before telling the CPO a release PR is ready to merge, confirm the live bundle already carries `main`'s newest user-visible change, so the merge never overlaps a build.
 - **Netlify gives no GitHub commit status here** — confirm a deploy by polling prod: the hashed `assets/index-*.js` (or `.css`) name changes, then grep it (or `/hero/manifest.json`) for the new content. Recent deploys took 3-18 minutes. The CPO was told how to enable Netlify's "GitHub commit status" deploy notification (Site configuration → Notifications) but has not set it up yet.
 - **Checking the lightbox at phone sizes**: in a same-origin iframe at the target size, open `/galleries`, click `button.thumb`, then probe six points on `.lightbox__download` with `elementFromPoint` (after ~900ms per slide) and also after scrolling `.lightbox` to its bottom — the centre alone passed while the ends were covered.
 - **On ≤768px the lightbox arrows are bottom-pinned and the overlay is padded** — moving them back toward mid-screen re-covers the download button on short phones; tests in `GalleryLightbox.test.jsx` guard the compiled ≤768px block.
@@ -102,7 +108,7 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 - **`gallery:build` takes ~13 minutes**; plain `npm run dev` does NOT rebuild galleries (it does run `hero:build`).
 - **Vitest double-counts tests if a worktree still exists** — `git worktree remove` first.
 - **`scripts/build-heroes.mjs` has 3 pre-existing `no-undef` lint errors on `process`** — not a regression.
-- **PR/merge convention**: small changes go direct to `main`; larger ones go through a PR the CPO reviews. Push or merge only when the CPO says so.
+- **Branch/PR convention (CPO, 2026-11-24) — nothing is committed to `main` directly.** Each change gets its own branch off `main` (`feat/…`, `fix/…`, `chore/…`, including `/context-prep` notes). Finished change branches merge `--no-ff` into a shared `release/<YYYY-MM-DD>` integration branch, which has exactly one PR to `main`. Claude opens the PR and reports when it's ready; **the CPO reviews and merges it** — that merge is what starts the Netlify production build. Check the PR's Netlify deploy preview before handing it over.
 - **`CreateTeam` is unavailable in this harness** — use `git worktree add -b <branch>` + named background `Agent` dispatch.
 - **react-bootstrap derives selection `eventKey` from `href`, not react-router's `to`** — nav items need an explicit `eventKey`.
 - **Don't forget `/context-prep` before ending a session.**
