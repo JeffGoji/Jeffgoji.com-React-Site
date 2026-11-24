@@ -44,7 +44,7 @@ export const HERO_WIDTHS = [480, 960, 1600];
 const QUALITY = 78;
 
 /**
- * One entry per car in `src/components/Hero/heroes.js`. `key` must match that
+ * One entry per frame in `src/components/Hero/heroes.js`. `key` must match that
  * file's `key` field verbatim — it is the slug the emitted URLs are addressed
  * by, so a mismatch produces renditions no hero entry can reach. The source
  * paths are duplicated from heroes.js by necessity: that module imports its
@@ -54,9 +54,18 @@ const QUALITY = 78;
 export const HEROES = [
     { key: "na", src: "src/assets/images/na/night1.jpg" },
     { key: "msm", src: "src/assets/images/nb/HoosierWet01.jpg" },
+    { key: "msm-wet-spray", src: "src/assets/images/nb/Autocross/FB_IMG_1549249769761.jpg" },
+    { key: "msm-pan", src: "src/assets/images/nb/Autocross/FB_IMG_1606693558455.jpg" },
+    { key: "msm-braking", src: "src/assets/images/nb/Autocross/FB_IMG_1537141551937.jpg" },
     { key: "nc", src: "src/assets/images/ncEdit.jpg" },
     { key: "nd", src: "src/assets/images/nd/nd-001.jpg" },
+    { key: "nd-dragon-esses", src: "src/assets/images/nd/TOTD2025/action/5065071.jpg" },
+    { key: "nd-dragon-sweeper", src: "src/assets/images/nd/TOTD2025/action/5065082.jpg" },
+    { key: "nd-gap-lean", src: "src/assets/images/nd/MiatasAtTheGap2026/5411760.jpg" },
+    { key: "nd-gap-curve", src: "src/assets/images/nd/MiatasAtTheGap2026/5411766.jpg" },
     { key: "c8", src: "src/assets/images/c8/c8-002.jpg" },
+    { key: "c8-turn-in", src: "src/assets/images/c8/autocross/BMWCCAAutoX Feb-4057.jpg" },
+    { key: "c8-pan", src: "src/assets/images/c8/autocross/BMWCCAAutoX Feb-4163.jpg" },
 ];
 
 /**

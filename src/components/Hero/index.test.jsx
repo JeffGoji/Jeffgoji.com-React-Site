@@ -27,6 +27,7 @@ import { HEROES } from '../../../scripts/build-heroes.mjs';
 
 import Hero from './index';
 import { heroes, nightHero, withRenditions } from './heroes';
+import { pickShot } from './pickShot';
 import { galleryHubPath } from '../common/gallerySets';
 import { LATEST_GALLERY_FALLBACK, LATEST_GALLERY_PUBLIC_PATH } from '../common/latestGallery';
 
@@ -130,9 +131,73 @@ describe('the rotation only ever lands on a shot from the list', () => {
         expect(heroImage().getAttribute('alt')).toBe(heroes[heroes.length - 1].alt);
     });
 
-    it('carries one entry per car in the garage', () => {
-        expect(heroes).toHaveLength(5);
+    it('carries at least one frame for every car in the garage', () => {
+        expect(new Set(heroes.map((shot) => shot.name))).toEqual(
+            new Set(['Miyoshi', 'Kiryu', 'Ryoko', 'Kasumi', 'Panda'])
+        );
+    });
+
+    it('gives every frame its own key', () => {
         expect(new Set(heroes.map((shot) => shot.key)).size).toBe(heroes.length);
+    });
+
+    /** pickShot groups by name, so a car's frames must agree on the nameplate. */
+    it('keeps one chassis label per car', () => {
+        const chassisByCar = new Map();
+
+        for (const shot of heroes) {
+            chassisByCar.set(shot.name, (chassisByCar.get(shot.name) ?? new Set()).add(shot.car));
+        }
+
+        for (const [car, chassis] of chassisByCar) {
+            expect(chassis.size, `${car} has frames with differing chassis labels`).toBe(1);
+        }
+    });
+});
+
+describe('every car gets an equal chance, however many frames it has', () => {
+    const frame = (name, n) => ({ name, key: `${name}-${n}` });
+
+    /** One frame for A, three for B: a flat pick would give B three quarters. */
+    const UNEVEN = [frame('A', 0), frame('B', 0), frame('B', 1), frame('B', 2)];
+
+    it('splits the roll into equal bands per car', () => {
+        expect(pickShot(UNEVEN, 0).name).toBe('A');
+        expect(pickShot(UNEVEN, 0.4999).name).toBe('A');
+        expect(pickShot(UNEVEN, 0.5).name).toBe('B');
+        expect(pickShot(UNEVEN, 0.999999).name).toBe('B');
+    });
+
+    it('spreads a car band evenly across that car frames', () => {
+        expect(pickShot(UNEVEN, 0.5).key).toBe('B-0');
+        expect(pickShot(UNEVEN, 0.7).key).toBe('B-1');
+        expect(pickShot(UNEVEN, 0.9).key).toBe('B-2');
+    });
+
+    it('never indexes past the end, even at the top of the range', () => {
+        expect(pickShot(UNEVEN, 0.999999999999).key).toBe('B-2');
+    });
+
+    /** Sweeps the roll finely over the real list and counts what lands. */
+    it('lands on each real car equally often and can reach every frame', () => {
+        const STEPS = 100_000;
+        const perCar = new Map();
+        const seen = new Set();
+
+        for (let i = 0; i < STEPS; i++) {
+            const shot = pickShot(heroes, i / STEPS);
+
+            perCar.set(shot.name, (perCar.get(shot.name) ?? 0) + 1);
+            seen.add(shot.key);
+        }
+
+        const cars = new Set(heroes.map((shot) => shot.name)).size;
+
+        for (const [car, count] of perCar) {
+            expect(Math.abs(count - STEPS / cars), `${car} is over- or under-weighted`).toBeLessThanOrEqual(1);
+        }
+
+        expect(seen.size).toBe(heroes.length);
     });
 });
 
@@ -369,6 +434,66 @@ describe('the frame renders through the shared responsive image', () => {
         await renderStubbed({ ...base, srcSet: '/hero/stub-480.webp 480w' });
 
         expect(heroImage().getAttribute('loading')).toBe('eager');
+    });
+});
+
+describe('a shot can aim its crop at the car', () => {
+    async function renderStubbed(heroesList, fallback) {
+        vi.resetModules();
+        vi.doMock('./heroes', () => ({ heroes: heroesList, nightHero: fallback }));
+
+        const { default: StubbedHero } = await import('./index');
+
+        render(
+            <MemoryRouter>
+                <StubbedHero />
+            </MemoryRouter>
+        );
+    }
+
+    const frame = (key, focus) => ({
+        key,
+        img: `/${key}.jpg`,
+        name: key,
+        car: `${key} chassis`,
+        alt: `The ${key} frame`,
+        ...(focus ? { focus } : {}),
+    });
+
+    afterEach(() => {
+        vi.doUnmock('./heroes');
+        vi.resetModules();
+    });
+
+    it('applies the focus as the object-position', async () => {
+        const aimed = frame('aimed', '70% 80%');
+        await renderStubbed([aimed], aimed);
+
+        expect(heroImage().style.objectPosition).toBe('70% 80%');
+    });
+
+    it('leaves the crop centered when a shot sets no focus', async () => {
+        const plain = frame('plain');
+        await renderStubbed([plain], plain);
+
+        expect(heroImage().getAttribute('style')).toBeNull();
+    });
+
+    /** The fallback frame is a different photo; the failed one's aim is wrong for it. */
+    it('drops the failed frame focus when it swaps in the fallback', async () => {
+        await renderStubbed([frame('aimed', '70% 80%')], frame('night'));
+
+        fireEvent.error(heroImage());
+
+        expect(heroImage().getAttribute('src')).toBe('/night.jpg');
+        expect(heroImage().style.objectPosition).toBe('');
+    });
+
+    /** Catches a typo like '70%,80%' that the browser would silently ignore. */
+    it('writes every real focus as two percentages', () => {
+        for (const shot of heroes.filter((entry) => entry.focus)) {
+            expect(shot.focus, shot.key).toMatch(/^\d{1,3}% \d{1,3}%$/);
+        }
     });
 });
 

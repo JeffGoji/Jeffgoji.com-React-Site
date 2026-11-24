@@ -3,6 +3,15 @@ import naNight from '../../assets/images/na/night1.jpg'
 import msmWet from '../../assets/images/nb/HoosierWet01.jpg'
 import ncOverlook from '../../assets/images/ncEdit.jpg'
 import ndBackRoad from '../../assets/images/nd/nd-001.jpg'
+import msmWetSpray from '../../assets/images/nb/Autocross/FB_IMG_1549249769761.jpg'
+import msmPan from '../../assets/images/nb/Autocross/FB_IMG_1606693558455.jpg'
+import msmBraking from '../../assets/images/nb/Autocross/FB_IMG_1537141551937.jpg'
+import ndDragonEsses from '../../assets/images/nd/TOTD2025/action/5065071.jpg'
+import ndDragonSweeper from '../../assets/images/nd/TOTD2025/action/5065082.jpg'
+import ndGapLean from '../../assets/images/nd/MiatasAtTheGap2026/5411760.jpg'
+import ndGapCurve from '../../assets/images/nd/MiatasAtTheGap2026/5411766.jpg'
+import c8TurnIn from '../../assets/images/c8/autocross/BMWCCAAutoX Feb-4057.jpg'
+import c8Pan from '../../assets/images/c8/autocross/BMWCCAAutoX Feb-4163.jpg'
 
 /**
  * The width ladders scripts/build-heroes.mjs emitted on the last build, keyed by
@@ -48,26 +57,33 @@ export function withRenditions(shots, ladders) {
 
 /**
  * The rotating hero's shot list — the "Random-Background-Feature" from Spec
- * 00002. One frame per car in the garage; the Hero picks one per session so a
- * return visit lands on a different car.
+ * 00002. Every car in the garage has at least one frame and some have several;
+ * the Hero picks one per session through pickShot, which gives each car an
+ * equal chance however many frames it carries. `name` is what groups frames
+ * into a car, so every frame of one car must spell it identically.
  *
- * These are the designer's locked picks: every file here is byte-identical to
- * the corresponding assets/img/hero-*.jpg in the spec-00002 mockup, so the
- * frames are ported by reference to the real in-repo photo rather than by
- * copying the mockup's duplicate (production never imports from a mockup path).
- * The `alt` strings are the designer's, verbatim from the mockup's mock-data.js.
+ * The first frame of each car is the designer's locked pick: byte-identical to
+ * the corresponding assets/img/hero-*.jpg in the spec-00002 mockup, ported by
+ * reference to the real in-repo photo rather than by copying the mockup's
+ * duplicate (production never imports from a mockup path), with the designer's
+ * `alt` verbatim from the mockup's mock-data.js. The frames after it are the
+ * autocross and Tail of the Dragon action shots added on 2026-11-23.
  *
  * `srcSet` is absent whenever the pipeline has not run, and the Hero then omits
  * the srcset/sizes pair entirely — a srcset naming renditions that do not exist
  * would 404 and trip the error fallback.
  *
  * @typedef {object} HeroShot
- * @property {string} key   Stable identity for the car, used as the React key.
+ * @property {string} key   Stable identity for the frame; also the slug its renditions are named by.
  * @property {string} img   Resolved URL of the full-size frame.
  * @property {string} [srcSet] Candidate-set descriptor, once renditions exist.
  * @property {string} name  The car's name, as the nameplate shows it.
  * @property {string} car   The chassis, as the nameplate shows it.
  * @property {string} alt   Descriptive alternative text for the frame.
+ * @property {string} [focus] CSS object-position for the crop, as "x% y%".
+ *   The hero is wider than the photo on desktop, so only y matters there; on a
+ *   phone it is taller, so only x does. One value therefore aims both crops.
+ *   Omitted means centered. Set by eye against the car's position in frame.
  *
  * @type {HeroShot[]}
  */
@@ -87,6 +103,30 @@ const SHOTS = [
         alt: 'Kiryu, the NB Mazdaspeed Miata, throwing a wall of spray through a wet autocross course',
     },
     {
+        key: 'msm-wet-spray',
+        img: msmWetSpray,
+        name: 'Kiryu',
+        car: 'NB Mazdaspeed',
+        alt: 'Kiryu, the NB Mazdaspeed Miata, kicking up spray from its rear tires on a rain-soaked autocross course',
+        focus: '35% 75%',
+    },
+    {
+        key: 'msm-pan',
+        img: msmPan,
+        name: 'Kiryu',
+        car: 'NB Mazdaspeed',
+        alt: 'Kiryu, the NB Mazdaspeed Miata, at speed on a dry autocross course against a motion-blurred background',
+        focus: '70% 75%',
+    },
+    {
+        key: 'msm-braking',
+        img: msmBraking,
+        name: 'Kiryu',
+        car: 'NB Mazdaspeed',
+        alt: 'Kiryu, the NB Mazdaspeed Miata, nose down under braking as it turns through an autocross course',
+        focus: '35% 90%',
+    },
+    {
         key: 'nc',
         img: ncOverlook,
         name: 'Ryoko',
@@ -101,11 +141,57 @@ const SHOTS = [
         alt: 'Kasumi, the 2023 ND MX-5 RF, on an open country back road under an open sky',
     },
     {
+        key: 'nd-dragon-esses',
+        img: ndDragonEsses,
+        name: 'Kasumi',
+        car: 'ND MX-5 RF',
+        alt: 'Kasumi, the 2023 ND MX-5 RF, powering out of a tight bend on the Tail of the Dragon with the double yellow sweeping behind',
+    },
+    {
+        key: 'nd-dragon-sweeper',
+        img: ndDragonSweeper,
+        name: 'Kasumi',
+        car: 'ND MX-5 RF',
+        alt: 'Kasumi, the 2023 ND MX-5 RF, carving a curve on the Tail of the Dragon beneath a shaded tree line',
+        focus: '39% 50%',
+    },
+    {
+        key: 'nd-gap-lean',
+        img: ndGapLean,
+        name: 'Kasumi',
+        car: 'ND MX-5 RF',
+        alt: 'Kasumi, the 2023 ND MX-5 RF, leaning into a corner on the Tail of the Dragon against dense green forest',
+    },
+    {
+        key: 'nd-gap-curve',
+        img: ndGapCurve,
+        name: 'Kasumi',
+        car: 'ND MX-5 RF',
+        alt: 'Kasumi, the 2023 ND MX-5 RF, rounding a wooded curve on the Tail of the Dragon',
+        focus: '32% 50%',
+    },
+    {
         key: 'c8',
         img: c8Driveway,
         name: 'Panda',
         car: 'C8 Corvette Z51',
         alt: 'Panda, the 2023 C8 Corvette Z51, on a tree-lined driveway in soft evening light',
+    },
+    {
+        key: 'c8-turn-in',
+        img: c8TurnIn,
+        name: 'Panda',
+        car: 'C8 Corvette Z51',
+        alt: 'Panda, the 2023 C8 Corvette Z51, wearing number 635 as it turns in on an autocross course past a course worker',
+        focus: '58% 50%',
+    },
+    {
+        key: 'c8-pan',
+        img: c8Pan,
+        name: 'Panda',
+        car: 'C8 Corvette Z51',
+        alt: 'Panda, the 2023 C8 Corvette Z51, at speed on an autocross course against a motion-blurred background',
+        focus: '79% 80%',
     },
 ]
 

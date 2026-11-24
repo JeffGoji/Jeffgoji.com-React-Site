@@ -6,9 +6,13 @@ import { galleryHubPath } from '../common/gallerySets'
 import { LATEST_GALLERY_FALLBACK, loadLatestGallery } from '../common/latestGallery'
 
 import { heroes, nightHero } from './heroes'
+import { pickShot } from './pickShot'
 
-/** Reads once per mount, through useState's lazy initializer — see below. */
-const pickHero = () => heroes[Math.floor(Math.random() * heroes.length)]
+/**
+ * Reads once per mount, through useState's lazy initializer — see below. Each
+ * car gets an equal chance however many frames it has; see pickShot.
+ */
+const pickHero = () => pickShot(heroes, Math.random())
 
 /**
  * The home surface's rotating hero, ported from the mockups' home.html hero
@@ -28,6 +32,10 @@ const pickHero = () => heroes[Math.floor(Math.random() * heroes.length)]
  *
  * The nameplate keeps naming the picked car even after a load failure swaps the
  * frame, matching the mockup — it labels the rotation, not the pixels.
+ *
+ * A shot's optional `focus` aims the cover crop so the car stays in view; it is
+ * read from `shown`, not `hero`, so a fallback swap never inherits the failed
+ * frame's crop.
  *
  * The frame loads eagerly: it is the home surface's LCP element, and
  * ResponsiveImage defers by default. `sizes` is a flat `100vw` because the block
@@ -71,6 +79,7 @@ function Hero() {
                     sizes="100vw"
                     alt={shown.alt}
                     loading="eager"
+                    style={shown.focus ? { objectPosition: shown.focus } : undefined}
                     onError={() => setFailed(true)}
                 />
             </div>
