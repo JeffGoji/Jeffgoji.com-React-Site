@@ -38,6 +38,14 @@ export const CATEGORIES = ['Galleries', 'Videos', 'Build logs', 'Site', 'Fixes']
 /** @type {RecentUpdate[]} */
 export const recentUpdates = [
     {
+        date: '2026-11-23',
+        category: 'Site',
+        title: 'Nine new action shots in the home page banner',
+        summary:
+            'The rotating banner on the home page grew from five photos to fourteen: Kasumi on the Tail of the Dragon in 2025 and 2026, plus autocross runs in Kiryu and Panda. Every car still gets an equal turn, and each new photo is framed to keep the car in view on phones and desktops.',
+        links: [{ label: 'See the banner', to: '/' }],
+    },
+    {
         date: '2026-11-10',
         category: 'Galleries',
         title: 'New gallery: NB Autocross 2008–2019',
