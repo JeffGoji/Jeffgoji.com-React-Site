@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-11-24T01:09:31Z
+last_updated: 2026-11-24T01:12:39Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -36,7 +36,7 @@ Session parked at a natural stopping point, not mid-task. Everything from this s
 
 ## Files in flight
 
-None. `main` synced with origin at `0d4e945` (plus this continuation commit).
+None. `main` synced with origin at `22e47b0` (plus this continuation commit). The CPO's Claude Code status line was also set up this session, outside the repo — see Critical context.
 
 ## Open decisions
 
@@ -72,6 +72,9 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 - **TaskStop on a backgrounded `npx vite` kills the shell but can orphan the node process** — check `netstat -ano | grep :5179` and stop the PID (confirm its command line is vite first).
 - **Push one change at a time when watching a deploy** — a second push mid-build can cancel or queue the first.
 - **Python 3.12 is installed but has no PIL**; use the project's `sharp` (Node) for image work. Write multi-line scripts to the scratchpad and run them — inline heredocs with mixed quotes break in Git Bash.
+- **`jq` is not installed on this machine** — anything that shells out to `jq` silently produces empty output; use `node` to parse JSON instead.
+- **The CPO's status line is user-level, not in this repo**: `~/.claude/settings.json` `statusLine` runs `node "C:/Users/viper.DESKTOP-PMANIC7/.claude/statusline.js"`, printing `<model> | Context: <n>%`. Auto mode can't be shown (the status-line JSON has no permission-mode field), so the CPO had the placeholder removed.
+- **The `statusline-setup` agent has only Read/Edit** — it cannot run or test its own command; test it yourself by piping sample JSON into the script.
 - **`nd/TOTD2025` contains at least one JPEG with bad SOS parameters** — `sharp` needs `{ failOn: 'none' }` to read the whole folder.
 - **Adding a gallery = four edits**: `GALLERIES` in `build-gallery.mjs`, `GALLERY_SETS` in `gallerySets.js` (needs a `legacyPath` starting with `/`), a NavMenu `Dropdown.Item`, and `SUBMENU_FOR_SLUG` in `App.test.jsx`.
 - **Build a single gallery without the 13-minute full run**: `node --input-type=module -e "import {GALLERIES,buildGallery} from './scripts/build-gallery.mjs'; await buildGallery(GALLERIES.find(g=>g.id==='<id>'))"` (does not rewrite `latest.json`).
