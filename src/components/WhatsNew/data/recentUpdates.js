@@ -39,6 +39,17 @@ export const CATEGORIES = ['Galleries', 'Videos', 'Build logs', 'Site', 'Fixes']
 export const recentUpdates = [
     {
         date: '2026-11-23',
+        category: 'Site',
+        title: 'The home page shows the whole garage, and car photos load faster',
+        summary:
+            'The Car Blogs strip on the home page now shows all five cars instead of three, so wide screens no longer have an empty slot. The car photos on the home page and the Car Blogs page are also served as smaller, sharper web images sized to each screen, cutting their download by 75 to 95 percent depending on the device.',
+        links: [
+            { label: 'See the home page', to: '/' },
+            { label: 'Browse the car blogs', to: '/garage' },
+        ],
+    },
+    {
+        date: '2026-11-23',
         category: 'Fixes',
         title: 'Gallery arrows no longer cover the download button on phones',
         summary:
