@@ -30,14 +30,14 @@ Session parked at a natural stopping point, not mid-task. Everything from this s
 - At 360x640 the nav arrows (pinned `top: 50%` on ≤768px) covered both ends of the download button — taps there changed slide. Arrows now sit at `bottom: var(--space-5)`, and `.lightbox` reserves `calc(52px + 2 * var(--space-5))` bottom padding so content scrolls clear of them.
 - A wrapping caption touched the screen edge (no inline padding). `.lightbox` now pads `var(--space-4)` inline, `.lightbox__stage` is `width: 100%` on ≤768px (92vw + padding caused sideways scroll), and `.lightbox__cap` is `text-align: center`.
 - Verified on prod at 320x568, 360x640, 393x852, 740x360 (incl. scrolled): 0/6 probe points on the button covered, no horizontal scroll, caption ≥26px from each edge, full-res download returns 200. Desktop unchanged.
+- What's New entry "Gallery arrows no longer cover the download button on phones" (2026-11-23, Fixes, link `/galleries`) added and pushed at the CPO's request; it is now the Latest card.
 
 ## Files in flight
 
-None. `main` synced with origin at `d4506d7` (plus this continuation commit).
+None. `main` synced with origin (fix `d4506d7`, What's New entry, and continuation commits).
 
 ## Open decisions
 
-- **No `recentUpdates.js` entry for the lightbox mobile fix** (`d4506d7`). The CPO asked only for the fix; ask whether to add one (category `Fixes`, link `/galleries`) or fold it into the existing Nov 10 download-button entry.
 - **No lightweight tracking record (Bug/Task YAML) exists** for the eight recent untracked changes (video hub, Miatas-at-the-Gap photo upload, dynamic CTA, NB Autocross gallery, lightbox download-button fix, What's New redesign, hero photos, lightbox mobile fix). `.claude/strap/work/.next-id` is still `81`. The CPO hasn't said whether to backfill.
 - **Two Lighthouse numbers remain un-transcribed** (carried over). `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section is incomplete.
 - **The archived V2 launch page's metric tiles are stale** (carried over, low priority). `src/components/WhatsNew/data/metrics.js` only feeds `/whats-new/v2-launch`.
@@ -51,7 +51,7 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 ## Quick resume
 
 1. `git pull` first — this checkout has drifted behind origin before.
-2. Ask the CPO about a What's New entry for the lightbox mobile fix; if yes, add it to the top of `src/components/WhatsNew/data/recentUpdates.js` and run `npx vitest run src/App.test.jsx src/components/WhatsNew`.
+2. Confirm the "Gallery arrows no longer cover the download button on phones" What's New entry is live (Latest card on `/whats-new`), if not already confirmed.
 3. If the CPO wants tracking consistency: file Bug/Task YAML for the eight untracked changes, mirroring Task 00081's after-the-fact pattern.
 
 ## Critical context
