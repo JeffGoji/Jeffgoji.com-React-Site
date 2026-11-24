@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-11-24T00:32:14Z
+last_updated: 2026-11-24T00:56:04Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -26,13 +26,19 @@ Session parked at a natural stopping point, not mid-task. Everything from this s
 
 **Prod verification (2026-11-24)** at 1568px desktop and 393px phone: c8-turn-in, nd-dragon-sweeper, msm-braking (desktop) and msm-wet-spray, c8-pan, nd-gap-lean (phone) all loaded with the expected `object-position`; `/whats-new` Latest card and timeline correct at both widths; no horizontal overflow anywhere. The What's New redesign (PR #32) is also confirmed live.
 
+**Lightbox mobile fix** — `d4506d7`, live ~9 min after push. The CPO's phone spot-check request found two bugs on prod:
+- At 360x640 the nav arrows (pinned `top: 50%` on ≤768px) covered both ends of the download button — taps there changed slide. Arrows now sit at `bottom: var(--space-5)`, and `.lightbox` reserves `calc(52px + 2 * var(--space-5))` bottom padding so content scrolls clear of them.
+- A wrapping caption touched the screen edge (no inline padding). `.lightbox` now pads `var(--space-4)` inline, `.lightbox__stage` is `width: 100%` on ≤768px (92vw + padding caused sideways scroll), and `.lightbox__cap` is `text-align: center`.
+- Verified on prod at 320x568, 360x640, 393x852, 740x360 (incl. scrolled): 0/6 probe points on the button covered, no horizontal scroll, caption ≥26px from each edge, full-res download returns 200. Desktop unchanged.
+
 ## Files in flight
 
-None. `main` synced with origin at `dc5c7ee` (plus this continuation commit).
+None. `main` synced with origin at `d4506d7` (plus this continuation commit).
 
 ## Open decisions
 
-- **No lightweight tracking record (Bug/Task YAML) exists** for the seven recent untracked changes (video hub, Miatas-at-the-Gap photo upload, dynamic CTA, NB Autocross gallery, lightbox download-button fix, What's New redesign, hero photos). `.claude/strap/work/.next-id` is still `81`. The CPO hasn't said whether to backfill.
+- **No `recentUpdates.js` entry for the lightbox mobile fix** (`d4506d7`). The CPO asked only for the fix; ask whether to add one (category `Fixes`, link `/galleries`) or fold it into the existing Nov 10 download-button entry.
+- **No lightweight tracking record (Bug/Task YAML) exists** for the eight recent untracked changes (video hub, Miatas-at-the-Gap photo upload, dynamic CTA, NB Autocross gallery, lightbox download-button fix, What's New redesign, hero photos, lightbox mobile fix). `.claude/strap/work/.next-id` is still `81`. The CPO hasn't said whether to backfill.
 - **Two Lighthouse numbers remain un-transcribed** (carried over). `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section is incomplete.
 - **The archived V2 launch page's metric tiles are stale** (carried over, low priority). `src/components/WhatsNew/data/metrics.js` only feeds `/whats-new/v2-launch`.
 - **Two AC gaps remain open, unfiled** (carried over): home mobile LCP (6543ms vs. 2500ms target) and gallery desktop's 49.9%-vs-50% image-byte-reduction miss. The new hero frames are 1600w webp like the old ones, so LCP payload is unchanged in kind.
@@ -45,8 +51,8 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 ## Quick resume
 
 1. `git pull` first — this checkout has drifted behind origin before.
-2. Ask the CPO whether the lightbox download button passed a phone spot-check on prod (the last unconfirmed prod item); if not, check it at 393px using the iframe technique in Critical context.
-3. If the CPO wants tracking consistency: file Bug/Task YAML for the seven untracked changes, mirroring Task 00081's after-the-fact pattern.
+2. Ask the CPO about a What's New entry for the lightbox mobile fix; if yes, add it to the top of `src/components/WhatsNew/data/recentUpdates.js` and run `npx vitest run src/App.test.jsx src/components/WhatsNew`.
+3. If the CPO wants tracking consistency: file Bug/Task YAML for the eight untracked changes, mirroring Task 00081's after-the-fact pattern.
 
 ## Critical context
 
@@ -58,7 +64,10 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 - **Verifying a random hero pick on prod**: put a same-origin `<iframe>` over the page and reload it until `.hero__media img`'s `currentSrc` names the wanted key — real pick, real focus, no code override. Size the iframe to 393×852 for phone, full window for desktop.
 - **Chrome may have DevTools device emulation on** (393×852 @3x) — `resize_window` then does nothing; check `innerWidth`/`devicePixelRatio` before trusting a layout. It was off at session end.
 - **Chrome automation screenshots can lag a resize** — re-read `innerWidth` before trusting a screenshot's layout.
-- **Netlify gives no GitHub commit status here** — confirm a deploy by polling prod: the hashed `assets/index-*.js` name changes, then grep it (or `/hero/manifest.json`) for the new content. Recent deploys took 6 and 18 minutes.
+- **Netlify gives no GitHub commit status here** — confirm a deploy by polling prod: the hashed `assets/index-*.js` (or `.css`) name changes, then grep it (or `/hero/manifest.json`) for the new content. Recent deploys took 6, 18 and 9 minutes.
+- **Checking the lightbox at phone sizes**: in a same-origin iframe at the target size, open `/galleries`, click `button.thumb`, then probe six points on `.lightbox__download` with `elementFromPoint` (after ~900ms per slide) and also after scrolling `.lightbox` to its bottom — the centre alone passed while the ends were covered.
+- **On ≤768px the lightbox arrows are bottom-pinned and the overlay is padded** — moving them back toward mid-screen re-covers the download button on short phones; tests in `GalleryLightbox.test.jsx` guard the compiled ≤768px block.
+- **TaskStop on a backgrounded `npx vite` kills the shell but can orphan the node process** — check `netstat -ano | grep :5179` and stop the PID (confirm its command line is vite first).
 - **Push one change at a time when watching a deploy** — a second push mid-build can cancel or queue the first.
 - **Python 3.12 is installed but has no PIL**; use the project's `sharp` (Node) for image work. Write multi-line scripts to the scratchpad and run them — inline heredocs with mixed quotes break in Git Bash.
 - **`nd/TOTD2025` contains at least one JPEG with bad SOS parameters** — `sharp` needs `{ failOn: 'none' }` to read the whole folder.
