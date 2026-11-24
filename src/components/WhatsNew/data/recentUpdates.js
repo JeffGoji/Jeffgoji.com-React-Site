@@ -39,6 +39,17 @@ export const CATEGORIES = ['Galleries', 'Videos', 'Build logs', 'Site', 'Fixes']
 export const recentUpdates = [
     {
         date: '2026-11-23',
+        category: 'Videos',
+        title: 'Four of the latest videos on the home page',
+        summary:
+            'The videos section at the bottom of the home page now shows the four newest uploads instead of three, filling a full row on wide screens.',
+        links: [
+            { label: 'See the home page', to: '/' },
+            { label: 'Watch all videos', to: '/youtube' },
+        ],
+    },
+    {
+        date: '2026-11-23',
         category: 'Site',
         title: 'The home page shows the whole garage, and car photos load faster',
         summary:
