@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-11-24T01:12:39Z
+last_updated: 2026-11-24T01:48:39Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -34,13 +34,20 @@ Session parked at a natural stopping point, not mid-task. Everything from this s
 
 **Permission allowlist** — `0d4e945`. `/fewer-permission-prompts` scanned all 14 transcripts (2 projects) and added `PowerShell(Get-ChildItem *)`, `PowerShell(Get-Content *)`, `PowerShell(Test-Path *)` to `.claude/settings.json`. The file was rewritten from PowerShell's odd JSON indentation to standard 4-space JSON; all prior keys and 18 rules are unchanged. The `PowerShell(...)` rule form is unverified — if prompts persist for those cmdlets, the form is wrong (harmless either way).
 
+**Home strips filled out + car card renditions** — CPO noticed the home page showed 3 of everything while a wide screen's grids lay out 4 columns.
+- **Car cards**: new `scripts/build-car-cards.mjs` reads `Cars.json` directly (no duplicated list) and writes a 400/800/1200w webp ladder (capped at source width, quality 74) plus `public/cars/manifest.json`, gitignored, run by `npm run build`/`dev` as `cars:build`. `carImages.js` reads the manifest via `import.meta.glob` (`resolveCarSrcSet`, `CAR_CARD_SIZES` matching the garage grid's 1/2/3/4 columns); `CarCard` passes srcSet + sizes. Five cards at 2.25x went from 1.9 MB of full-size JPGs (Panda's alone 714 KB) to 274 KB; ~73 KB at 1x. Applies to `/garage` too. — `ff6b954`
+- **Home car strip shows all five** (`PREVIEW_COUNT` 3 → 5, CPO choice): four across on wide screens, Panda wraps to its own row (CPO explicitly fine with that). — `ff6b954`
+- **Home video strip shows four** (`TEASER_COUNT` 3 → 4). — `e8c67d8`
+- What's New entries: "The home page shows the whole garage, and car photos load faster" (Site, `1e4cdf7`) and "Four of the latest videos on the home page" (Videos, `cdc8f0e`, now the Latest card).
+- All verified on prod at 1568px and 393px: 5 cards loading 800w webp, 4 videos, What's New order correct, no horizontal overflow. Deploys took 3 and 9 min.
+
 ## Files in flight
 
-None. `main` synced with origin at `22e47b0` (plus this continuation commit). The CPO's Claude Code status line was also set up this session, outside the repo — see Critical context.
+None. `main` synced with origin at `cdc8f0e` (plus this continuation commit). The CPO's Claude Code status line was also set up this session, outside the repo — see Critical context.
 
 ## Open decisions
 
-- **No lightweight tracking record (Bug/Task YAML) exists** for the eight recent untracked changes (video hub, Miatas-at-the-Gap photo upload, dynamic CTA, NB Autocross gallery, lightbox download-button fix, What's New redesign, hero photos, lightbox mobile fix). `.claude/strap/work/.next-id` is still `81`. The CPO hasn't said whether to backfill.
+- **No lightweight tracking record (Bug/Task YAML) exists** for the ten recent untracked changes (video hub, Miatas-at-the-Gap photo upload, dynamic CTA, NB Autocross gallery, lightbox download-button fix, What's New redesign, hero photos, lightbox mobile fix, car card renditions + five-car strip, four-video strip). `.claude/strap/work/.next-id` is still `81`. The CPO hasn't said whether to backfill.
 - **Two Lighthouse numbers remain un-transcribed** (carried over). `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section is incomplete.
 - **The archived V2 launch page's metric tiles are stale** (carried over, low priority). `src/components/WhatsNew/data/metrics.js` only feeds `/whats-new/v2-launch`.
 - **Two AC gaps remain open, unfiled** (carried over): home mobile LCP (6543ms vs. 2500ms target) and gallery desktop's 49.9%-vs-50% image-byte-reduction miss. The new hero frames are 1600w webp like the old ones, so LCP payload is unchanged in kind.
@@ -54,11 +61,13 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 
 1. `git pull` first — this checkout has drifted behind origin before.
 2. Ask the CPO what's next — every prod item from this session is shipped and verified; nothing is pending.
-3. If the CPO wants tracking consistency: file Bug/Task YAML for the eight untracked changes, mirroring Task 00081's after-the-fact pattern.
+3. If the CPO wants tracking consistency: file Bug/Task YAML for the ten untracked changes, mirroring Task 00081's after-the-fact pattern.
 
 ## Critical context
 
 - **Shipping anything user-visible = add a `recentUpdates.js` entry** at the top of the array (date = commit date, one of `CATEGORIES`, title, summary, links). Gallery links via `galleryHubPath(slug)`; blog posts via `/<blog>#post-<id>`. `App.test.jsx` fails if a link's route doesn't exist.
+- **Car card photos come from `Cars.json` alone** — adding or changing a car's `img` needs no pipeline edit; `cars:build` picks it up. The bundled JPG stays the `src` fallback when `public/cars/` is absent (fresh clone, tests).
+- **Home strip counts are product choices**: `PREVIEW_COUNT` (cars, 5) in `pages/Home.jsx` and `TEASER_COUNT` (videos, 4) in `YouTube/VideoTeaser.jsx`; tests pin both.
 - **Adding a hero frame = two lists**: `SHOTS` in `src/components/Hero/heroes.js` and `HEROES` in `scripts/build-heroes.mjs`, with identical `key`s (a test enforces it); then `npm run hero:build`.
 - **Hero frames group by `name`** — every frame of one car must spell `name` and `car` identically or pickShot treats it as a separate car (a test enforces one chassis per name).
 - **Keep each car's designer frame first** in `SHOTS`; `nightHero` is looked up by key `na`, and tests rely on 0.5 landing on the NC frame (car index 2 of 5).
@@ -66,7 +75,9 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 - **Verifying a random hero pick on prod**: put a same-origin `<iframe>` over the page and reload it until `.hero__media img`'s `currentSrc` names the wanted key — real pick, real focus, no code override. Size the iframe to 393×852 for phone, full window for desktop.
 - **Chrome may have DevTools device emulation on** (393×852 @3x) — `resize_window` then does nothing; check `innerWidth`/`devicePixelRatio` before trusting a layout. It was off at session end.
 - **Chrome automation screenshots can lag a resize** — re-read `innerWidth` before trusting a screenshot's layout.
-- **Netlify gives no GitHub commit status here** — confirm a deploy by polling prod: the hashed `assets/index-*.js` (or `.css`) name changes, then grep it (or `/hero/manifest.json`) for the new content. Recent deploys took 6, 18, 9 and 9 minutes. The CPO was told how to enable Netlify's "GitHub commit status" deploy notification (Site configuration → Notifications) but has not set it up yet.
+- **Netlify serves the SPA's HTML with HTTP 200 for ANY unknown path** — a 200 on `/cars/x.webp` or `/hero/x.webp` proves nothing; check `content-type` is `image/webp` (or decode it in the browser) before calling an asset live.
+- **Push only when nothing is building**: before a push, confirm the live bundle already contains origin/main's newest user-visible commit; hold new commits locally until then.
+- **Netlify gives no GitHub commit status here** — confirm a deploy by polling prod: the hashed `assets/index-*.js` (or `.css`) name changes, then grep it (or `/hero/manifest.json`) for the new content. Recent deploys took 3-18 minutes. The CPO was told how to enable Netlify's "GitHub commit status" deploy notification (Site configuration → Notifications) but has not set it up yet.
 - **Checking the lightbox at phone sizes**: in a same-origin iframe at the target size, open `/galleries`, click `button.thumb`, then probe six points on `.lightbox__download` with `elementFromPoint` (after ~900ms per slide) and also after scrolling `.lightbox` to its bottom — the centre alone passed while the ends were covered.
 - **On ≤768px the lightbox arrows are bottom-pinned and the overlay is padded** — moving them back toward mid-screen re-covers the download button on short phones; tests in `GalleryLightbox.test.jsx` guard the compiled ≤768px block.
 - **TaskStop on a backgrounded `npx vite` kills the shell but can orphan the node process** — check `netstat -ano | grep :5179` and stop the PID (confirm its command line is vite first).
@@ -100,6 +111,7 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 
 - `src/components/Hero/heroes.js` — hero shot list (`SHOTS`, `focus`, `nightHero`, `withRenditions`).
 - `src/components/Hero/pickShot.js` — equal-chance-per-car pick.
+- `scripts/build-car-cards.mjs` + `src/components/common/carImages.js` — car card webp ladder (`public/cars/`) and its consumer (`resolveCarSrcSet`, `CAR_CARD_SIZES`).
 - `src/components/Hero/index.jsx` — hero render, fallback swap, focus application, dynamic CTA.
 - `scripts/build-heroes.mjs` — `HEROES` rendition list (480/960/1600 webp → `public/hero/`).
 - `scripts/build-gallery.mjs` — gallery build pipeline: `GALLERIES`, `buildGallery()`, `pickLatest()`, `writeLatest()`.
