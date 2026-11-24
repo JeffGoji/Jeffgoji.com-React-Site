@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-11-24T01:53:03Z
+last_updated: 2026-11-24T01:54:29Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -14,7 +14,7 @@ The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern 
 
 ## Where we left off
 
-Session parked at a natural stopping point, not mid-task. Everything from this session is pushed and **verified live on prod**.
+Session parked at a natural stopping point, not mid-task. Every site change from this session is on `main` and **verified live on prod**. At the end of the session the CPO switched the repo to a **branch-per-change, single release PR** workflow (see Critical context); an open, unpushed `release/2026-11-24` branch is waiting for the next changes.
 
 **Hero banner update** — `46195ec`, live on jeffgoji.com ~6 min after push.
 - 14 frames now (was 5): +4 Kasumi Dragon action shots (`nd/TOTD2025/action/5065071`, `5065082`; `nd/MiatasAtTheGap2026/5411760`, `5411766`), +3 Kiryu autocross (`nb/Autocross/FB_IMG_1549249769761`, `…1606693558455`, `…1537141551937`), +2 Panda autocross (`c8/autocross/BMWCCAAutoX Feb-4057`, `Feb-4163`). The CPO approved all nine from contact sheets.
@@ -43,7 +43,12 @@ Session parked at a natural stopping point, not mid-task. Everything from this s
 
 ## Files in flight
 
-None. `main` synced with origin at `cdc8f0e` (plus this continuation commit). The CPO's Claude Code status line was also set up this session, outside the repo — see Critical context.
+- `main` is synced with origin at `6a90879`; nothing is uncommitted.
+- **`release/2026-11-24` — local only, not pushed, no PR yet** (CPO: "keep it open for the next changes"). It holds two merged change branches, both notes-only:
+  - `chore/notes-branch-workflow` — records the new workflow in Critical context.
+  - `chore/context-prep-2026-11-24` — this continuation update.
+- Both `chore/*` branches are also local only.
+- The CPO's Claude Code status line was also set up this session, outside the repo — see Critical context.
 
 ## Open decisions
 
@@ -59,9 +64,10 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 
 ## Quick resume
 
-1. `git pull` first — this checkout has drifted behind origin before.
-2. Ask the CPO what's next — every prod item from this session is shipped and verified; nothing is pending.
-3. If the CPO wants tracking consistency: file Bug/Task YAML for the ten untracked changes, mirroring Task 00081's after-the-fact pattern.
+1. `git switch main && git pull` — this checkout has drifted behind origin before. Confirm `release/2026-11-24` still exists locally (`git branch --list 'release/*'`).
+2. Ask the CPO what's next. Start each change with `git switch -c <feat|fix|chore>/<slug> main`, then `git switch release/2026-11-24 && git merge --no-ff <branch>`.
+3. When the CPO says the batch is ready: push the change branches and `release/2026-11-24`, open the PR to `main` with `gh pr create` (the `gh` CLI is authenticated as JeffGoji with `repo` scope), check its Netlify deploy preview, then tell the CPO it's ready to merge. Watch the production deploy after they merge.
+4. If the CPO wants tracking consistency: file Bug/Task YAML for the ten untracked changes, mirroring Task 00081's after-the-fact pattern.
 
 ## Critical context
 
