@@ -39,6 +39,14 @@ export const CATEGORIES = ['Galleries', 'Videos', 'Build logs', 'Site', 'Fixes']
 export const recentUpdates = [
     {
         date: '2026-11-23',
+        category: 'Fixes',
+        title: 'Gallery arrows no longer cover the download button on phones',
+        summary:
+            'On shorter phone screens, the previous and next arrows in the photo viewer sat on top of both ends of the download button, so tapping near its edges changed photo instead of downloading. The arrows now sit in the bottom corners, and the photo caption no longer runs into the edge of the screen.',
+        links: [{ label: 'Try it in the galleries', to: '/galleries' }],
+    },
+    {
+        date: '2026-11-23',
         category: 'Site',
         title: 'Nine new action shots in the home page banner',
         summary:
