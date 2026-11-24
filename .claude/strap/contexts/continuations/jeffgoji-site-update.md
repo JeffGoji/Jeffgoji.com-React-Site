@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-11-24T00:03:20Z
+last_updated: 2026-11-24T00:32:14Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -14,28 +14,28 @@ The V2 initiative for jeffgoji.com: a full "new everything" redesign — modern 
 
 ## Where we left off
 
-Session parked at a natural stopping point, not mid-task. The home hero banner gained nine new photos and was pushed straight to `main` as `46195ec` ("feat: add autocross and Tail of the Dragon shots to the home hero"), at the CPO's request. Full suite 1261 passing after rebasing onto origin. Netlify prod deploy was not checked from this session.
+Session parked at a natural stopping point, not mid-task. Everything from this session is pushed and **verified live on prod**.
 
-**Hero banner update** (CPO request: more pictures, preferring autocross action and Kasumi on the Tail of the Dragon).
-- 14 frames now (was 5): +4 Kasumi Dragon action shots (`nd/TOTD2025/action/5065071`, `5065082`; `nd/MiatasAtTheGap2026/5411760`, `5411766`), +3 Kiryu autocross (`nb/Autocross/FB_IMG_1549249769761`, `…1606693558455`, `…1537141551937`), +2 Panda autocross (`c8/autocross/BMWCCAAutoX Feb-4057`, `Feb-4163`). Picked from contact sheets; the CPO approved all nine.
-- **Equal chance per car** (CPO choice): new `src/components/Hero/pickShot.js` groups frames by `name`, picks a car, then a frame within it — from one `Math.random()` roll, so "one roll per mount" still holds. Each car = 1/5; Kasumi's 5 frames are 1/25 each.
-- **Per-frame `focus`** (CSS `object-position`, `"x% y%"`): 7 new frames set one, tuned by eye in Chrome at 393px and 1568px. Desktop hero is wider than the photo so only y matters; phone hero is taller so only x does. Hero applies it from `shown`, so a fallback swap to `nightHero` drops it.
-- On phones the car still sits behind the lead copy in most frames — unfixable by focus (photo fills full height); the original 5 frames behave the same.
-- Tests in `Hero/index.test.jsx`: per-car equality sweep, every frame reachable, unique keys, one chassis label per car, focus applied / absent / dropped on fallback / well-formed.
+**Hero banner update** — `46195ec`, live on jeffgoji.com ~6 min after push.
+- 14 frames now (was 5): +4 Kasumi Dragon action shots (`nd/TOTD2025/action/5065071`, `5065082`; `nd/MiatasAtTheGap2026/5411760`, `5411766`), +3 Kiryu autocross (`nb/Autocross/FB_IMG_1549249769761`, `…1606693558455`, `…1537141551937`), +2 Panda autocross (`c8/autocross/BMWCCAAutoX Feb-4057`, `Feb-4163`). The CPO approved all nine from contact sheets.
+- **Equal chance per car** (CPO choice): `src/components/Hero/pickShot.js` groups frames by `name`, picks a car, then a frame — from one `Math.random()` roll. Each car = 1/5.
+- **Per-frame `focus`** (CSS `object-position`, `"x% y%"`): 7 new frames set one, tuned by eye at 393px and 1568px. Desktop crop uses only y; phone crop uses only x. Applied from `shown`, so a fallback swap to `nightHero` drops it.
+- On phones the car still sits behind the lead copy in most frames — unfixable by focus; the original 5 frames behave the same.
 
-**This checkout was behind origin** at session start (missing PR #32, the What's New redesign). The first push was rejected; the single local commit was rebased onto `origin/main` (no file overlap) and re-tested before pushing.
+**What's New entry** — `dc5c7ee`, live ~18 min after push. "Nine new action shots in the home page banner" (2026-11-23, Site, link `/`) is the Latest card; counts now 15 updates / 5 Site.
+
+**Prod verification (2026-11-24)** at 1568px desktop and 393px phone: c8-turn-in, nd-dragon-sweeper, msm-braking (desktop) and msm-wet-spray, c8-pan, nd-gap-lean (phone) all loaded with the expected `object-position`; `/whats-new` Latest card and timeline correct at both widths; no horizontal overflow anywhere. The What's New redesign (PR #32) is also confirmed live.
 
 ## Files in flight
 
-None. `main` synced with origin at `46195ec`. `public/hero/` (gitignored) was rebuilt locally with 27 new renditions; Netlify regenerates it during `npm run build`.
+None. `main` synced with origin at `dc5c7ee` (plus this continuation commit).
 
 ## Open decisions
 
-- **No `recentUpdates.js` entry was added for the hero update** — the Critical-context rule below says it should have been. Ask the CPO whether to add one (category likely "Site"/"Home"; link `/`).
 - **No lightweight tracking record (Bug/Task YAML) exists** for the seven recent untracked changes (video hub, Miatas-at-the-Gap photo upload, dynamic CTA, NB Autocross gallery, lightbox download-button fix, What's New redesign, hero photos). `.claude/strap/work/.next-id` is still `81`. The CPO hasn't said whether to backfill.
 - **Two Lighthouse numbers remain un-transcribed** (carried over). `.claude/strap/project-docs/v1-perf-baseline.md`'s Phase-3 section is incomplete.
 - **The archived V2 launch page's metric tiles are stale** (carried over, low priority). `src/components/WhatsNew/data/metrics.js` only feeds `/whats-new/v2-launch`.
-- **Two AC gaps remain open, unfiled** (carried over): home mobile LCP (6543ms vs. 2500ms target) and gallery desktop's 49.9%-vs-50% image-byte-reduction miss. Note: the hero's new frames are 1600w webp like the old ones, so LCP payload is unchanged in kind.
+- **Two AC gaps remain open, unfiled** (carried over): home mobile LCP (6543ms vs. 2500ms target) and gallery desktop's 49.9%-vs-50% image-byte-reduction miss. The new hero frames are 1600w webp like the old ones, so LCP payload is unchanged in kind.
 - **Where the CPO wants the GoPro video** (`GOPR0466_1.mp4`) — belongs on YouTube/the video hub playlist, not in the repo.
 
 ## Open work items
@@ -45,28 +45,29 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 ## Quick resume
 
 1. `git pull` first — this checkout has drifted behind origin before.
-2. Ask the CPO about a `recentUpdates.js` entry for the hero photos; if yes, add it at the top of the array and run `npx vitest run src/App.test.jsx src/components/WhatsNew`.
-3. Confirm prod after the Netlify deploy: reload `/` several times; a new frame should load `/hero/<key>-1600.webp` and, for focused frames, carry an inline `object-position`. Also still unconfirmed: the What's New redesign on prod and the lightbox download button at phone width.
-4. If the CPO wants tracking consistency: file Bug/Task YAML for the seven untracked changes, mirroring Task 00081's after-the-fact pattern.
+2. Ask the CPO whether the lightbox download button passed a phone spot-check on prod (the last unconfirmed prod item); if not, check it at 393px using the iframe technique in Critical context.
+3. If the CPO wants tracking consistency: file Bug/Task YAML for the seven untracked changes, mirroring Task 00081's after-the-fact pattern.
 
 ## Critical context
 
-- **Shipping anything user-visible = add a `recentUpdates.js` entry** at the top of the array (date, one of `CATEGORIES`, title, summary, links). Gallery links go through `galleryHubPath(slug)`; blog posts via `/<blog>#post-<id>`. `App.test.jsx` fails if a link's route doesn't exist.
+- **Shipping anything user-visible = add a `recentUpdates.js` entry** at the top of the array (date = commit date, one of `CATEGORIES`, title, summary, links). Gallery links via `galleryHubPath(slug)`; blog posts via `/<blog>#post-<id>`. `App.test.jsx` fails if a link's route doesn't exist.
 - **Adding a hero frame = two lists**: `SHOTS` in `src/components/Hero/heroes.js` and `HEROES` in `scripts/build-heroes.mjs`, with identical `key`s (a test enforces it); then `npm run hero:build`.
 - **Hero frames group by `name`** — every frame of one car must spell `name` and `car` identically or pickShot treats it as a separate car (a test enforces one chassis per name).
 - **Keep each car's designer frame first** in `SHOTS`; `nightHero` is looked up by key `na`, and tests rely on 0.5 landing on the NC frame (car index 2 of 5).
 - **Hero crop on phones is portrait** (~393×613): frames with the car off-centre need a `focus` x value or only the middle of the car shows.
-- **Chrome may have DevTools device emulation pinned on** (393×852 @3x): `resize_window` then has no effect; check `innerWidth`, and for desktop render the page in a 1568px iframe scaled with `transform`.
+- **Verifying a random hero pick on prod**: put a same-origin `<iframe>` over the page and reload it until `.hero__media img`'s `currentSrc` names the wanted key — real pick, real focus, no code override. Size the iframe to 393×852 for phone, full window for desktop.
+- **Chrome may have DevTools device emulation on** (393×852 @3x) — `resize_window` then does nothing; check `innerWidth`/`devicePixelRatio` before trusting a layout. It was off at session end.
 - **Chrome automation screenshots can lag a resize** — re-read `innerWidth` before trusting a screenshot's layout.
+- **Netlify gives no GitHub commit status here** — confirm a deploy by polling prod: the hashed `assets/index-*.js` name changes, then grep it (or `/hero/manifest.json`) for the new content. Recent deploys took 6 and 18 minutes.
+- **Push one change at a time when watching a deploy** — a second push mid-build can cancel or queue the first.
 - **Python 3.12 is installed but has no PIL**; use the project's `sharp` (Node) for image work. Write multi-line scripts to the scratchpad and run them — inline heredocs with mixed quotes break in Git Bash.
+- **`nd/TOTD2025` contains at least one JPEG with bad SOS parameters** — `sharp` needs `{ failOn: 'none' }` to read the whole folder.
 - **Adding a gallery = four edits**: `GALLERIES` in `build-gallery.mjs`, `GALLERY_SETS` in `gallerySets.js` (needs a `legacyPath` starting with `/`), a NavMenu `Dropdown.Item`, and `SUBMENU_FOR_SLUG` in `App.test.jsx`.
 - **Build a single gallery without the 13-minute full run**: `node --input-type=module -e "import {GALLERIES,buildGallery} from './scripts/build-gallery.mjs'; await buildGallery(GALLERIES.find(g=>g.id==='<id>'))"` (does not rewrite `latest.json`).
 - **The gallery glob is case-insensitive** — upper-case `.JPG` exports are included; output filenames keep the original case.
-- **`nd/TOTD2025` contains at least one JPEG with bad SOS parameters** — `sharp` needs `{ failOn: 'none' }` to read the whole folder.
 - **GitHub rejects files over 100 MB** — check source-folder drops before `git add`; `*.mp4` under `src/assets/images/` is gitignored.
 - **Overriding react-image-gallery CSS needs more than three classes** — its rules load after `styles.scss`, so a specificity tie silently loses.
 - **`.media--editorial` isolates a white-centred `multiply` overlay** — give graded wrappers an opaque dark background.
-- **Prod deploys are Netlify (no GitHub Actions)** — to confirm one, poll the hashed `assets/index-*.css` name until it changes.
 - **Lightbox hit-testing in Chrome automation**: wait ~700ms after a slide nav before `elementFromPoint`.
 - **An older duplicate checkout exists at `Documents\WebProjects\Jeffgoji.com-React-Site`** — not this repo; don't edit it unless the CPO asks.
 - **`public/gallery/latest.json` is derived from git commit history**, not mtime — Netlify clones fresh.
@@ -88,7 +89,7 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 - `src/components/Hero/index.jsx` — hero render, fallback swap, focus application, dynamic CTA.
 - `scripts/build-heroes.mjs` — `HEROES` rendition list (480/960/1600 webp → `public/hero/`).
 - `scripts/build-gallery.mjs` — gallery build pipeline: `GALLERIES`, `buildGallery()`, `pickLatest()`, `writeLatest()`.
-- `src/components/common/GalleryLightbox.jsx` + `src/scss/styles.scss` (`.lightbox*`, `.hero*`) — lightbox and hero styles.
+- `src/components/common/GalleryLightbox.jsx` + `src/scss/styles.scss` (`.lightbox*`, `.hero*`, `ru-*`) — lightbox, hero and What's New styles.
 - `src/scss/_grade.scss` — editorial grade (`.media--editorial*`).
 - `src/components/common/gallerySets.js` — `GALLERY_SETS` + `galleryHubPath(slug)`.
 - `src/components/NavMenu/index.jsx` — per-chassis gallery submenus.
