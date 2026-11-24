@@ -1,6 +1,6 @@
 ---
 topic: jeffgoji-site-update
-last_updated: 2026-11-24T00:56:04Z
+last_updated: 2026-11-24T01:09:31Z
 last_author: dev-lead
 status: parked
 linked_work_items: []
@@ -30,11 +30,13 @@ Session parked at a natural stopping point, not mid-task. Everything from this s
 - At 360x640 the nav arrows (pinned `top: 50%` on ≤768px) covered both ends of the download button — taps there changed slide. Arrows now sit at `bottom: var(--space-5)`, and `.lightbox` reserves `calc(52px + 2 * var(--space-5))` bottom padding so content scrolls clear of them.
 - A wrapping caption touched the screen edge (no inline padding). `.lightbox` now pads `var(--space-4)` inline, `.lightbox__stage` is `width: 100%` on ≤768px (92vw + padding caused sideways scroll), and `.lightbox__cap` is `text-align: center`.
 - Verified on prod at 320x568, 360x640, 393x852, 740x360 (incl. scrolled): 0/6 probe points on the button covered, no horizontal scroll, caption ≥26px from each edge, full-res download returns 200. Desktop unchanged.
-- What's New entry "Gallery arrows no longer cover the download button on phones" (2026-11-23, Fixes, link `/galleries`) added and pushed at the CPO's request; it is now the Latest card.
+- What's New entry "Gallery arrows no longer cover the download button on phones" (2026-11-23, Fixes, link `/galleries`) — `58c2f24`, live ~9 min after push and verified on prod at 393px and 1568px: Latest card, first in timeline, link to `/galleries`, no horizontal overflow.
+
+**Permission allowlist** — `0d4e945`. `/fewer-permission-prompts` scanned all 14 transcripts (2 projects) and added `PowerShell(Get-ChildItem *)`, `PowerShell(Get-Content *)`, `PowerShell(Test-Path *)` to `.claude/settings.json`. The file was rewritten from PowerShell's odd JSON indentation to standard 4-space JSON; all prior keys and 18 rules are unchanged. The `PowerShell(...)` rule form is unverified — if prompts persist for those cmdlets, the form is wrong (harmless either way).
 
 ## Files in flight
 
-None. `main` synced with origin (fix `d4506d7`, What's New entry, and continuation commits).
+None. `main` synced with origin at `0d4e945` (plus this continuation commit).
 
 ## Open decisions
 
@@ -51,7 +53,7 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 ## Quick resume
 
 1. `git pull` first — this checkout has drifted behind origin before.
-2. Confirm the "Gallery arrows no longer cover the download button on phones" What's New entry is live (Latest card on `/whats-new`), if not already confirmed.
+2. Ask the CPO what's next — every prod item from this session is shipped and verified; nothing is pending.
 3. If the CPO wants tracking consistency: file Bug/Task YAML for the eight untracked changes, mirroring Task 00081's after-the-fact pattern.
 
 ## Critical context
@@ -64,7 +66,7 @@ None active. All Feature/Story/Task/Bug work items in `.claude/strap/work/` are 
 - **Verifying a random hero pick on prod**: put a same-origin `<iframe>` over the page and reload it until `.hero__media img`'s `currentSrc` names the wanted key — real pick, real focus, no code override. Size the iframe to 393×852 for phone, full window for desktop.
 - **Chrome may have DevTools device emulation on** (393×852 @3x) — `resize_window` then does nothing; check `innerWidth`/`devicePixelRatio` before trusting a layout. It was off at session end.
 - **Chrome automation screenshots can lag a resize** — re-read `innerWidth` before trusting a screenshot's layout.
-- **Netlify gives no GitHub commit status here** — confirm a deploy by polling prod: the hashed `assets/index-*.js` (or `.css`) name changes, then grep it (or `/hero/manifest.json`) for the new content. Recent deploys took 6, 18 and 9 minutes.
+- **Netlify gives no GitHub commit status here** — confirm a deploy by polling prod: the hashed `assets/index-*.js` (or `.css`) name changes, then grep it (or `/hero/manifest.json`) for the new content. Recent deploys took 6, 18, 9 and 9 minutes. The CPO was told how to enable Netlify's "GitHub commit status" deploy notification (Site configuration → Notifications) but has not set it up yet.
 - **Checking the lightbox at phone sizes**: in a same-origin iframe at the target size, open `/galleries`, click `button.thumb`, then probe six points on `.lightbox__download` with `elementFromPoint` (after ~900ms per slide) and also after scrolling `.lightbox` to its bottom — the centre alone passed while the ends were covered.
 - **On ≤768px the lightbox arrows are bottom-pinned and the overlay is padded** — moving them back toward mid-screen re-covers the download button on short phones; tests in `GalleryLightbox.test.jsx` guard the compiled ≤768px block.
 - **TaskStop on a backgrounded `npx vite` kills the shell but can orphan the node process** — check `netstat -ano | grep :5179` and stop the PID (confirm its command line is vite first).
